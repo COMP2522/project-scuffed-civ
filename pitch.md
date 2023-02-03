@@ -23,10 +23,10 @@ Test Maker: Keagan
 
   
 **Milestones:**  
-1. visible map
-2. Entities can be selected and moved
-3. Entitities can be created in game
-4. resources implemented that Entitites can collect and creating Entities requires resources
-5. player vs player implemented through server and through couch co-op
-6. Map generates randomly
+1. visible map (first week)
+2. Entities can be selected and moved (second week)
+3. Entitities can be created in game (third week)
+4. resources implemented that Entitites can collect and creating Entities requires resources (fourth week)
+5. player vs player implemented through server and through couch co-op (fifth week)
+6. Map generates randomly (sixth week)
 7. finished
