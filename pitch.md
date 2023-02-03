@@ -19,8 +19,10 @@ we will solve with a majority consensus vote.
   
 **Roles and Responsibilities:**  
 UI/UX: Brendan  
-Test Maker: Keagan
-
+Test Maker: Keagan  
+Backend: Cameron  
+Architect: Blaine  
+Graphic Designer: Emma  
   
 **Milestones:**  
 1. visible map (first week)
