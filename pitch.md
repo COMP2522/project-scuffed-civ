@@ -18,5 +18,15 @@ going. We will also continuously use Discord to stay up to date. For issues wher
 we will solve with a majority consensus vote.
   
 **Roles and Responsibilities:**  
+UI/UX: Brendan  
+Test Maker: Keagan
 
+  
 **Milestones:**  
+1. visible map
+2. Entities can be selected and moved
+3. Entitities can be created in game
+4. resources implemented that Entitites can collect and creating Entities requires resources
+5. player vs player implemented through server and through couch co-op
+6. Map generates randomly
+7. finished
