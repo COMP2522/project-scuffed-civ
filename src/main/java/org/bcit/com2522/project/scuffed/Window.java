@@ -1,4 +1,4 @@
-package org.bcit.com2522.labs.lab03;
+package org.bcit.com2522.project.scuffed;
 
 import processing.core.PApplet;
 import processing.core.PVector;
