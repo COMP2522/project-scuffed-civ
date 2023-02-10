@@ -31,9 +31,8 @@ public class Window extends PApplet {
    * Called once at the beginning of the program.
    */
   public void settings() {
-    size(640, 360);
+    size(1080, 720);
   }
-
 
   /**
    * Called once at the beginning of the program.
