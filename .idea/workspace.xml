@@ -110,7 +110,7 @@
       <recent name="org.bcit.com2522.labs.lab03" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.project-scuffed-civ [build]">
+  <component name="RunManager">
     <configuration name="BouncyBubbles" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-18" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
