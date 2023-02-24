@@ -1,13 +1,8 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import processing.core.PApplet;
-import processing.core.PVector;
-import processing.event.KeyEvent;
 
-import java.awt.*;
-import java.lang.annotation.Documented;
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  *
@@ -18,7 +13,9 @@ public class Window extends PApplet {
 
   //Map map;
 
-  boolean inGame = true;
+  boolean inGame = false;
+
+  Menu menu;
 
   Socket socket;
 
@@ -46,6 +43,8 @@ public class Window extends PApplet {
     gameState = new GameState(this);
 
     gameState.init();
+
+    menu = new Menu(this);
   }
 
   @Override
@@ -60,6 +59,8 @@ public class Window extends PApplet {
       Position position = new Position((int) (mouseX / 32), (int) (mouseY / 32));
 
       gameState.clicked(position);
+    } else {
+      menu.clicked();
     }
   }
 
@@ -72,7 +73,7 @@ public class Window extends PApplet {
     if(inGame){
       gameState.draw();
     } else {
-      //menu.draw();
+      menu.draw();
     }
   }
 

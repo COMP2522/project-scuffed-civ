@@ -31,19 +31,25 @@ public class GameState { //everything manager this is the player manager
     }
 
     public void clicked(Position position) {
-
         if(entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
             //players.get(currentTurn.getPlayerNum()).addEntity(position);
-            entities[position.getY()][position.getX()] = new Entity(scene, position, currentTurn);
-        } else if (entities[position.getX()][position.getY()].getOwner() == currentTurn) { //select existing entity
-            selected = map.contains(position);
+            entities[position.getX()][position.getY()] = new Entity(scene, position, currentTurn);
+            System.out.println("making an entity");
+        } else if (entities[position.getX()][position.getY()] != null) { //select existing entity
+            //.getOwner().equals(currentTurn)
+            selected = entities[position.getX()][position.getY()];
             System.out.println("selected");
-        } else if (map.contains(position) == null && selected != null) { //move selected entity
+        } else if (entities[position.getX()][position.getY()] == null && selected != null) { //move selected entity
             entities[selected.getPosition().getX()][selected.getPosition().getY()] = null;
             selected.moveTo(position);
-            entities[selected.getPosition().getX()][selected.getPosition().getY()] = selected;
+            entities[position.getX()][position.getY()] = selected;
             System.out.println("trying to move");
+            selected = null;
         }
+        else {
+            System.out.println("else");
+        }
+
     }
 
     public static void nextTurn(){
@@ -53,7 +59,7 @@ public class GameState { //everything manager this is the player manager
     public void draw() {
         map.draw();
         for (Player player: players)
-            player.draw();
+            player.draw(); //player overlay maybe? idk what this would be its doing nothing rn
 
         for (Entity[] row: entities) {
             for (Entity entity: row) {

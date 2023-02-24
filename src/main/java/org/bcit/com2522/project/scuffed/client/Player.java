@@ -9,7 +9,7 @@ public class Player { //should have a player manager (later)
   //private ArrayList<Entity> entities;
   private int resources;
 
-  //private int playerNum;
+  private int playerNum;
   Window scene;
 
   Map map;
@@ -26,9 +26,18 @@ public class Player { //should have a player manager (later)
 
   }
 
-//  public int getPlayerNum() {
-//    return playerNum;
-//  }
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Player) {
+      Player temp = (Player) obj;
+      return temp.getPlayerNum() == this.getPlayerNum();
+    }
+    return false;
+  }
+
+  public int getPlayerNum() {
+    return playerNum;
+  }
 
   public void draw() {
 //    if(entities != null) {
