@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
-
+ *
  * @author bean
  *
  */
@@ -17,7 +17,7 @@ public class Window extends PApplet {
 
   Map map;
 
-  boolean inGame;
+  boolean inGame = true;
 
   Socket socket;
 
@@ -37,7 +37,7 @@ public class Window extends PApplet {
   }
 
   public void init() {
-
+    map = new Map(this);
   }
 
   @Override
