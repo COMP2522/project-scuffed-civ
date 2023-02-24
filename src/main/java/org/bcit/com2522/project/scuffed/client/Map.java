@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.random.*;
 import java.awt.*;
 
+import static processing.awt.ShimAWT.loadImage;
 import static processing.core.PApplet.*;
 import static processing.core.PApplet.sin;
 
@@ -21,10 +22,10 @@ public class Map {
     private Color color;
 
     public Map (Window scene, int width, int height) {
-        grass = loadImage("tile_grass.png");
-        rocks = loadImage("\\sprites\\tile_grass.png");
-        sand = loadImage("\\sprites\\tile_grass.png");
-        water = loadImage("\\sprites\\tile_grass.png");
+        grass = loadImage(scene, "sprites/Menu/tile_grass.png");
+//        rocks = loadImage("\\sprites\\tile_grass.png");
+//        sand = loadImage("\\sprites\\tile_grass.png");
+//        water = loadImage("\\sprites\\tile_grass.png");
 
         this.scene = scene;
 
@@ -34,5 +35,6 @@ public class Map {
     public void draw() {
         this.scene.fill(color.getRed());
         this.scene.circle(50, 50, 50);
+        this.scene.image(grass, 500,500);
     }
 }
