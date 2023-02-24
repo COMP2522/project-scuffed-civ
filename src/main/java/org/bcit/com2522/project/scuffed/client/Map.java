@@ -11,13 +11,15 @@ import static processing.awt.ShimAWT.loadImage;
 import static processing.core.PApplet.*;
 import static processing.core.PApplet.sin;
 
-public class Map {
+public class Map { //this is a tile manager
     PImage grass;
     PImage rocks;
     PImage sand;
     PImage water;
     Tile[][] tiles;
     Window scene;
+
+    Player player;
 
     private Color color;
 
@@ -39,6 +41,10 @@ public class Map {
         this.scene = scene;
 
         this.color = (Color.red);
+    }
+
+    public Entity contains(Position position) {
+        return tiles[position.getX()][position.getY()].getEntity();
     }
 
     public void draw() {

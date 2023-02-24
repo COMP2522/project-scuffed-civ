@@ -5,6 +5,7 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 
 import java.awt.*;
+import java.lang.annotation.Documented;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -15,11 +16,15 @@ import java.util.ArrayList;
  */
 public class Window extends PApplet {
 
-  Map map;
+  //Map map;
 
   boolean inGame = true;
 
   Socket socket;
+
+  //ArrayList<Player> players = new ArrayList<Player>();
+
+  GameState gameState;
 
   /**
    * Called once at the beginning of the program.
@@ -37,12 +42,25 @@ public class Window extends PApplet {
   }
 
   public void init() {
-    map = new Map(this, 20, 20);
+    //map = new Map(this, 20, 20);
+    gameState = new GameState(this);
+
+    gameState.init();
   }
 
   @Override
   public void keyPressed() {
 
+  }
+
+  @Override
+  public void mouseClicked() {
+    //ellipse(mouseX, mouseY, 20, 20);
+    if(inGame) {
+      Position position = new Position((int) (mouseX / 32), (int) (mouseY / 32));
+
+      gameState.clicked(position);
+    }
   }
 
   /**
@@ -52,7 +70,7 @@ public class Window extends PApplet {
    */
   public void draw() {
     if(inGame){
-      map.draw();
+      gameState.draw();
     } else {
       //menu.draw();
     }
