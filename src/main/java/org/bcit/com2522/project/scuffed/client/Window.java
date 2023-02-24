@@ -37,7 +37,7 @@ public class Window extends PApplet {
   }
 
   public void init() {
-    map = new Map(this);
+    map = new Map(this, 20, 20);
   }
 
   @Override
