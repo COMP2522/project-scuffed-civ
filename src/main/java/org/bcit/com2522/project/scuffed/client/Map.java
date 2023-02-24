@@ -23,9 +23,18 @@ public class Map {
 
     public Map (Window scene, int width, int height) {
         grass = loadImage(scene, "sprites/Menu/tile_grass.png");
-//        rocks = loadImage("\\sprites\\tile_grass.png");
-//        sand = loadImage("\\sprites\\tile_grass.png");
-//        water = loadImage("\\sprites\\tile_grass.png");
+        rocks = loadImage(scene, "sprites/Menu/tile_rocks.png");
+        sand = loadImage(scene, "sprites/Menu/tile_sand.png");
+        water = loadImage(scene, "sprites/Menu/tile_water.png");
+
+        tiles = new Tile[width][height];
+
+
+        for(int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                tiles[i][j] = new Tile(new Position(i,j));
+            }
+        }
 
         this.scene = scene;
 
@@ -33,8 +42,21 @@ public class Map {
     }
 
     public void draw() {
-        this.scene.fill(color.getRed());
-        this.scene.circle(50, 50, 50);
-        this.scene.image(grass, 500,500);
+        //this.scene.fill(color.getRed());
+        //this.scene.circle(50, 50, 50);
+        //this.scene.image(grass, 500,500);
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                if(element.getType() == 0)
+                    this.scene.image(grass, element.getPosition().getX()*32,element.getPosition().getY()*32);
+                else if(element.getType() == 1)
+                    this.scene.image(rocks, element.getPosition().getX()*32,element.getPosition().getY()*32);
+                else if(element.getType() == 2)
+                    this.scene.image(sand, element.getPosition().getX()*32,element.getPosition().getY()*32);
+                else if(element.getType() == 3)
+                    this.scene.image(water, element.getPosition().getX()*32,element.getPosition().getY()*32);
+
+            }
+        }
     }
 }
