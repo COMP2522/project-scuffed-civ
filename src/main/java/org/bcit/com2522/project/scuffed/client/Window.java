@@ -3,14 +3,13 @@ package org.bcit.com2522.project.scuffed.client;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.KeyEvent;
-import sun.awt.windows.WPathGraphics;
 
 import java.awt.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
 /**
-
+ *
  * @author bean
  *
  */
@@ -18,7 +17,7 @@ public class Window extends PApplet {
 
   Map map;
 
-  boolean inGame;
+  boolean inGame = true;
 
   Socket socket;
 
@@ -38,7 +37,7 @@ public class Window extends PApplet {
   }
 
   public void init() {
-
+    map = new Map(this, 20, 20);
   }
 
   @Override
