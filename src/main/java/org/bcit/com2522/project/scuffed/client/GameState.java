@@ -1,28 +1,32 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import processing.core.PVector;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import static processing.core.PConstants.*;
 
 public class GameState { //everything manager this is the player manager
     Map map;
     Player currentTurn;
-    ArrayList<Player> players;
+    ArrayList<Player> players;// could be a circular linked list instead might make logic easier
 
     Entity[][] entities;
     Entity selected;
 
     Window scene;
 
-    public GameState(Window scene) {
+    public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
         players = new ArrayList<Player>();
         this.scene = scene;
 
-        entities = new Entity[20][20];
+        entities = new Entity[mapwidth][mapheight];
+        map = new Map(scene, mapwidth, mapheight);
 
     }
 
     public void init() {
-        map = new Map(scene, 20, 20);
 
         //this is just for now more logic will have to go into making players later
         players.add(new Player(scene));
@@ -30,7 +34,11 @@ public class GameState { //everything manager this is the player manager
         currentTurn = players.get(0);
     }
 
-    public void clicked(Position position) {
+    public void clicked(PVector mousePos) {
+        Position position = new Position((int) (mousePos.x / 32), (int) (mousePos.y / 32));
+
+        //if (the mouse is over the map)
+
         if(entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
             //players.get(currentTurn.getPlayerNum()).addEntity(position);
             entities[position.getX()][position.getY()] = new Entity(scene, position, currentTurn);
@@ -48,6 +56,33 @@ public class GameState { //everything manager this is the player manager
         }
         else {
             System.out.println("else");
+        }
+
+        //else (the mouse is over a different button)
+
+
+    }
+
+    public void keyPressed(char key) {
+        if(key == 'w') {
+            map.moveUp();
+        }
+        else if(key == 'a') {
+            map.moveLeft();
+        }
+        else if(key == 's') {
+            map.moveDown();
+        }
+        else if(key == 'd') {
+            map.moveRight();
+        }
+        if (key == CODED) {
+            if (scene.keyCode == UP) {
+                map.zoom(2f);
+                System.out.println("up pressed");
+            } else if (scene.keyCode == DOWN) {
+                map.zoom(0.5f);
+            }
         }
 
     }

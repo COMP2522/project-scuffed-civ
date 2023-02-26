@@ -19,6 +19,8 @@ public class Map { //this is a tile manager
     Tile[][] tiles;
     Window scene;
 
+    int scale;
+
     Player player;
 
     private Color color;
@@ -38,14 +40,56 @@ public class Map { //this is a tile manager
             }
         }
 
+        scale = 1;
+
         this.scene = scene;
 
         this.color = (Color.red);
     }
 
-    public Entity contains(Position position) {
-        return tiles[position.getX()][position.getY()].getEntity();
+    public void moveUp() {
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                element.setPosition(new Position(element.getPosition().getX(), element.getPosition().getY() + (1 * scale)));
+            }
+        }
     }
+    public void moveDown() {
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                element.setPosition(new Position(element.getPosition().getX(), element.getPosition().getY() - (1 * scale)));
+            }
+        }
+    }
+    public void moveLeft() {
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                element.setPosition(new Position(element.getPosition().getX() + (1 * scale), element.getPosition().getY()));
+            }
+        }
+    }
+    public void moveRight() {
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                element.setPosition(new Position(element.getPosition().getX() - (1 * scale), element.getPosition().getY()));
+            }
+        }
+    }
+
+    public void zoom(float amount) {
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                grass.resize((int) (grass.pixelWidth * amount), 0);
+                rocks.resize((int) (grass.pixelWidth * amount), 0);
+                sand.resize((int) (grass.pixelWidth * amount), 0);
+                water.resize((int) (grass.pixelWidth * amount), 0);
+
+                scale += amount;
+            }
+        }
+    }
+
+
 
     public void draw() {
         //this.scene.fill(color.getRed());
