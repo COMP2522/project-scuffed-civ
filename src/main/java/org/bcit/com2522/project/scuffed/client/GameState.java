@@ -17,12 +17,16 @@ public class GameState { //everything manager this is the player manager
 
     Window scene;
 
+    int scale;
+
     public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
         players = new ArrayList<Player>();
         this.scene = scene;
 
         entities = new Entity[mapwidth][mapheight];
         map = new Map(scene, mapwidth, mapheight);
+
+        scale = 1;
 
     }
 
@@ -59,32 +63,53 @@ public class GameState { //everything manager this is the player manager
         }
 
         //else (the mouse is over a different button)
-
-
     }
 
     public void keyPressed(char key) {
         if(key == 'w') {
-            map.moveUp();
+            move(0, 1);
         }
         else if(key == 'a') {
-            map.moveLeft();
+            move(1, 0);
         }
         else if(key == 's') {
-            map.moveDown();
+            move(0, -1);
         }
         else if(key == 'd') {
-            map.moveRight();
+            move(-1, 0);
         }
         if (key == CODED) {
             if (scene.keyCode == UP) {
-                map.zoom(2f);
-                System.out.println("up pressed");
+                zoom(2);
             } else if (scene.keyCode == DOWN) {
-                map.zoom(0.5f);
+                zoom(0.5f);
             }
         }
+    }
 
+    //amount is the
+    public void zoom(float amount) {
+        if (map.getZoomamount() <= 32 && amount < 1) {
+
+        } else {
+            map.setZoomamount((int) (map.getZoomamount() * amount));
+            //scale /= amount;
+        }
+    }
+
+    public void move(int x, int y) {
+        //int scale = 1;
+
+        map.move(x, y, scale);
+
+        for (Entity[] row: entities) {
+            for (Entity element: row) {
+                if(element != null) {
+                    element.moveTo(new Position(element.getPosition().getX() + (x * scale),
+                            element.getPosition().getY() + (y * scale)));
+                }
+            }
+        }
     }
 
     public static void nextTurn(){
