@@ -26,7 +26,7 @@ public class Entity {
     }
 
     public void draw(){
-        this.scene.image(texture, this.getPosition().getX()*32,this.getPosition().getY()*32);
+        this.scene.image(texture, this.getPosition().getX()*32,this.getPosition().getY()*32); //this is the source of the entity not scaling with zoom
     }
 
     public void moveTo(Position position) {
