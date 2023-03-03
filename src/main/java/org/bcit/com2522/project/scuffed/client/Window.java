@@ -1,6 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 import java.net.Socket;
 
@@ -40,27 +41,31 @@ public class Window extends PApplet {
 
   public void init() {
     //map = new Map(this, 20, 20);
-    gameState = new GameState(this);
+    menu = new Menu(this);
+  }
+
+  public void initGame(int numplayers, int mapwidth, int mapheight) {
+    gameState = new GameState(this, numplayers, mapwidth, mapheight);
 
     gameState.init();
 
-    menu = new Menu(this);
   }
 
   @Override
   public void keyPressed() {
-
+    if(inGame) {
+      gameState.keyPressed(key);
+    }
   }
 
   @Override
   public void mouseClicked() {
-    //ellipse(mouseX, mouseY, 20, 20);
     if(inGame) {
-      Position position = new Position((int) (mouseX / 32), (int) (mouseY / 32));
+      PVector mousePos = new PVector(mouseX, mouseY);
 
-      gameState.clicked(position);
+      gameState.clicked(mousePos);
     } else {
-      menu.clicked();
+      inGame = menu.clicked(mouseX, mouseY);
     }
   }
 
@@ -70,6 +75,7 @@ public class Window extends PApplet {
    * in order of function calls.
    */
   public void draw() {
+    background(222);
     if(inGame){
       gameState.draw();
     } else {

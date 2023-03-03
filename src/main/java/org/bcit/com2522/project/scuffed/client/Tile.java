@@ -14,20 +14,15 @@ public class Tile {
         this.position = position;
     }
 
-    public Entity getEntity() {
-        //return entity;
-        return null;
-    }
-
-    public void draw(){
-
-    }
-
     public Position getPosition() {
         return position;
     }
 
     public int getType() {
         return type;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

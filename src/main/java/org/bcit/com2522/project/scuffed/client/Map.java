@@ -21,6 +21,8 @@ public class Map { //this is a tile manager
 
     Player player;
 
+    int zoomamount;
+
     private Color color;
 
     public Map (Window scene, int width, int height) {
@@ -30,6 +32,8 @@ public class Map { //this is a tile manager
         water = loadImage(scene, "sprites/Menu/tile_water.png");
 
         tiles = new Tile[width][height];
+
+        zoomamount = 32;
 
 
         for(int i = 0; i < width; i++) {
@@ -43,9 +47,39 @@ public class Map { //this is a tile manager
         this.color = (Color.red);
     }
 
-    public Entity contains(Position position) {
-        return tiles[position.getX()][position.getY()].getEntity();
+    public void move(int x, int y, int scale) {
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                element.setPosition(new Position(element.getPosition().getX() + (x * scale),
+                        element.getPosition().getY() + (y * scale)));
+            }
+        }
     }
+
+    public void zoom(float amount) {
+
+    }
+
+    public void setZoomamount(int zoomamount) {
+        this.zoomamount = zoomamount;
+
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                grass.resize(zoomamount, 0);
+                rocks.resize(zoomamount, 0);
+                sand.resize(zoomamount, 0);
+                water.resize(zoomamount, 0);
+
+                //scale += amount;
+            }
+        }
+    }
+
+    public int getZoomamount() {
+        return zoomamount;
+    }
+
+
 
     public void draw() {
         //this.scene.fill(color.getRed());
@@ -54,13 +88,13 @@ public class Map { //this is a tile manager
         for (Tile[] row: tiles) {
             for (Tile element: row) {
                 if(element.getType() == 0)
-                    this.scene.image(grass, element.getPosition().getX()*32,element.getPosition().getY()*32);
+                    this.scene.image(grass, element.getPosition().getX()*zoomamount,element.getPosition().getY()*zoomamount);
                 else if(element.getType() == 1)
-                    this.scene.image(rocks, element.getPosition().getX()*32,element.getPosition().getY()*32);
+                    this.scene.image(rocks, element.getPosition().getX()*zoomamount,element.getPosition().getY()*zoomamount);
                 else if(element.getType() == 2)
-                    this.scene.image(sand, element.getPosition().getX()*32,element.getPosition().getY()*32);
+                    this.scene.image(sand, element.getPosition().getX()*zoomamount,element.getPosition().getY()*zoomamount);
                 else if(element.getType() == 3)
-                    this.scene.image(water, element.getPosition().getX()*32,element.getPosition().getY()*32);
+                    this.scene.image(water, element.getPosition().getX()*zoomamount,element.getPosition().getY()*zoomamount);
 
             }
         }

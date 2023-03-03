@@ -40,11 +40,13 @@ public class Player { //should have a player manager (later)
   }
 
   public void draw() {
-//    if(entities != null) {
-//      for (Entity entity : entities) {
-//        entity.draw();
-//      }
-//    }
+    scene.fill(000);
+    scene.text("Player " + (playerNum + 1), 700, 150); //print current player
+
+    scene.fill(200);
+    scene.rect(700, 550, 400, 200);
+    scene.fill(000);
+    scene.text("end turn", 725, 675); //print end turn box
   }
 
   public boolean hasLost(){
