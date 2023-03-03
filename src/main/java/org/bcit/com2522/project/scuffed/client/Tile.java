@@ -2,7 +2,6 @@ package org.bcit.com2522.project.scuffed.client;
 
 public class Tile {
     private Position position;
-    private Entity entity;
 
     private int type;
     //0: grass
@@ -12,8 +11,12 @@ public class Tile {
 
     public Tile(Position position) {
         type = (int) (Math.random() * 4); // 1-4
-        this.entity = null;
         this.position = position;
+    }
+
+    public Entity getEntity() {
+        //return entity;
+        return null;
     }
 
     public void draw(){
