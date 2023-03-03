@@ -15,8 +15,9 @@ public class Player { //should have a player manager (later)
   Map map;
 
 
-  public Player (Window scene) {
+  public Player (Window scene, int playerNum) {
     this.scene = scene;
+    this.playerNum = playerNum;
     //this.playerNum = playerNum;
     //entities = new ArrayList<Entity>();
   }
