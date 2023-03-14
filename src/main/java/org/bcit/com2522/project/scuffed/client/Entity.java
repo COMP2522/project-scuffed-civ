@@ -5,7 +5,7 @@ import processing.core.PImage;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Entity {
-    private Position position;
+    Position position;
 
     Player owner;
 
@@ -27,10 +27,6 @@ public class Entity {
 
     public void draw(){
         this.scene.image(texture, this.getPosition().getX()*32,this.getPosition().getY()*32); //this is the source of the entity not scaling with zoom
-    }
-
-    public void moveTo(Position position) {
-        this.position = position;
     }
 
     public Position getPosition() {
