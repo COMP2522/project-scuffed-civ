@@ -2,35 +2,39 @@ package org.bcit.com2522.project.scuffed.client;
 
 import processing.core.PApplet;
 
-/**
- * Creates Clickable object with callback.
- * @author Emma MB
- * @version 1.1
- */
 public class Clickable {
   private PApplet p;
   private float x, y, w, h;
   private boolean clicked;
-  private Runnable callback;
+  private boolean hovering;
+  private Runnable onClick;
+  private Runnable onHover;
 
-  public Clickable(PApplet p, float x, float y, float w, float h, Runnable callback) {
+  public Clickable(PApplet p, float x, float y, float w, float h, Runnable onClick) {
     this.p = p;
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
-    this.callback = callback;
+    this.onClick = onClick;
+    this.onHover = null;
   }
 
-  public void display() {
-    p.fill(255);
-    p.rect(x, y, w, h);
+  public Clickable(PApplet p, float x, float y, float w, float h, Runnable onClick, Runnable onHover) {
+    this.p = p;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.onClick = onClick;
+    this.onHover = onHover;
   }
+
 
   public void checkClicked() {
     if (p.mousePressed && p.mouseButton == PApplet.LEFT && p.mouseX >= x && p.mouseX <= x + w && p.mouseY >= y && p.mouseY <= y + h) {
       clicked = true;
-      callback.run();
+      onClick.run();
     } else {
       clicked = false;
     }
@@ -38,6 +42,19 @@ public class Clickable {
 
   public boolean isClicked() {
     return clicked;
+  }
+
+  public void checkHover() {
+    if (p.mouseX >= x && p.mouseX <= x + w && p.mouseY >= y && p.mouseY <= y + h) {
+      if (!hovering) {
+        hovering = true;
+        if (onHover != null) {
+          onHover.run();
+        }
+      }
+    } else {
+      hovering = false;
+    }
   }
 
   public void moveBounds(float x, float y, float w, float h) {
@@ -49,6 +66,7 @@ public class Clickable {
 
   public void delete() {
     p = null;
-    callback = null;
+    onClick = null;
+    onHover = null;
   }
 }
