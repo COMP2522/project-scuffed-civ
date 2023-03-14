@@ -29,8 +29,8 @@ public class Menu {
     }
 
     public boolean clicked(float xpos, float ypos) {
-        int mapwidth = 25;
-        int mapheight = 20;
+        int mapwidth = 16;
+        int mapheight = 16;
 
         //this should probably be a box that you can enter a number instead of buttons
         if(ypos >= 200 && ypos <= 300) {

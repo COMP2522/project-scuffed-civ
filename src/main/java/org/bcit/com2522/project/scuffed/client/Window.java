@@ -46,9 +46,6 @@ public class Window extends PApplet {
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
     gameState = new GameState(this, numplayers, mapwidth, mapheight);
-
-    gameState.init();
-
   }
 
   @Override
