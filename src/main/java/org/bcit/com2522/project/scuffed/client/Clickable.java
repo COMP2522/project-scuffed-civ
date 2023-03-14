@@ -1,43 +1,72 @@
 package org.bcit.com2522.project.scuffed.client;
 
-/**
- * A class that represents a clickable object.
- * @author Emma MB
- * @version 1.0
- */
+import processing.core.PApplet;
+
 public class Clickable {
+  private PApplet p;
+  private float x, y, w, h;
+  private boolean clicked;
+  private boolean hovering;
+  private Runnable onClick;
+  private Runnable onHover;
+
+  public Clickable(PApplet p, float x, float y, float w, float h, Runnable onClick) {
+    this.p = p;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.onClick = onClick;
+    this.onHover = null;
+  }
+
+  public Clickable(PApplet p, float x, float y, float w, float h, Runnable onClick, Runnable onHover) {
+    this.p = p;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.onClick = onClick;
+    this.onHover = onHover;
+  }
 
 
-    private int boundsFromX;
-    private int boundsFromY;
-    private int boundsToX;
-    private int boundsToY;
-
-  /**
-   * Constructs a clickable object.
-   * @param boundsFromX the x coordinate of the top left corner of the clickable object
-   * @param boundsFromY the y coordinate of the top left corner of the clickable object
-   * @param boundsToX the x coordinate of the bottom right corner of the clickable object
-   * @param boundsToY the y coordinate of the bottom right corner of the clickable object
-   */
-    public Clickable(int boundsFromX, int boundsFromY, int boundsToX, int boundsToY) {
-        this.boundsFromX = boundsFromX;
-        this.boundsFromY = boundsFromY;
-        this.boundsToX = boundsToX;
-        this.boundsToY = boundsToY;
+  public void checkClicked() {
+    if (p.mousePressed && p.mouseButton == PApplet.LEFT && p.mouseX >= x && p.mouseX <= x + w && p.mouseY >= y && p.mouseY <= y + h) {
+      clicked = true;
+      onClick.run();
+    } else {
+      clicked = false;
     }
+  }
 
-    /**
-     * Checks if the given coordinates are within the bounds of the clickable object.
-     * @param x the x coordinate to check
-     * @param y the y coordinate to check
-     * @return true if the coordinates are within the bounds of the clickable object, false otherwise
-     */
-    public boolean isWithinBounds(int x, int y) {
-      return x >= boundsFromX && x <= boundsToX && y >= boundsFromY && y <= boundsToY;
+  public boolean isClicked() {
+    return clicked;
+  }
+
+  public void checkHover() {
+    if (p.mouseX >= x && p.mouseX <= x + w && p.mouseY >= y && p.mouseY <= y + h) {
+      if (!hovering) {
+        hovering = true;
+        if (onHover != null) {
+          onHover.run();
+        }
+      }
+    } else {
+      hovering = false;
     }
+  }
 
-    
+  public void moveBounds(float x, float y, float w, float h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
 
-
+  public void delete() {
+    p = null;
+    onClick = null;
+    onHover = null;
+  }
 }
