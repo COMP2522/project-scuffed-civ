@@ -1,43 +1,54 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import processing.core.PApplet;
+
 /**
- * A class that represents a clickable object.
+ * Creates Clickable object with callback.
  * @author Emma MB
- * @version 1.0
+ * @version 1.1
  */
 public class Clickable {
+  private PApplet p;
+  private float x, y, w, h;
+  private boolean clicked;
+  private Runnable callback;
 
+  public Clickable(PApplet p, float x, float y, float w, float h, Runnable callback) {
+    this.p = p;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.callback = callback;
+  }
 
-    private int boundsFromX;
-    private int boundsFromY;
-    private int boundsToX;
-    private int boundsToY;
+  public void display() {
+    p.fill(255);
+    p.rect(x, y, w, h);
+  }
 
-  /**
-   * Constructs a clickable object.
-   * @param boundsFromX the x coordinate of the top left corner of the clickable object
-   * @param boundsFromY the y coordinate of the top left corner of the clickable object
-   * @param boundsToX the x coordinate of the bottom right corner of the clickable object
-   * @param boundsToY the y coordinate of the bottom right corner of the clickable object
-   */
-    public Clickable(int boundsFromX, int boundsFromY, int boundsToX, int boundsToY) {
-        this.boundsFromX = boundsFromX;
-        this.boundsFromY = boundsFromY;
-        this.boundsToX = boundsToX;
-        this.boundsToY = boundsToY;
+  public void checkClicked() {
+    if (p.mousePressed && p.mouseButton == PApplet.LEFT && p.mouseX >= x && p.mouseX <= x + w && p.mouseY >= y && p.mouseY <= y + h) {
+      clicked = true;
+      callback.run();
+    } else {
+      clicked = false;
     }
+  }
 
-    /**
-     * Checks if the given coordinates are within the bounds of the clickable object.
-     * @param x the x coordinate to check
-     * @param y the y coordinate to check
-     * @return true if the coordinates are within the bounds of the clickable object, false otherwise
-     */
-    public boolean isWithinBounds(int x, int y) {
-      return x >= boundsFromX && x <= boundsToX && y >= boundsFromY && y <= boundsToY;
-    }
+  public boolean isClicked() {
+    return clicked;
+  }
 
-    
+  public void moveBounds(float x, float y, float w, float h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
 
-
+  public void delete() {
+    p = null;
+    callback = null;
+  }
 }
