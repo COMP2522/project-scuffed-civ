@@ -24,6 +24,9 @@ public class Window extends PApplet {
 
   GameState gameState;
 
+  Boolean debugMode = false;
+  static DebugMenu debugMenu;
+
   /**
    * Called once at the beginning of the program.
    */
@@ -56,6 +59,9 @@ public class Window extends PApplet {
     if(inGame) {
       gameState.keyPressed(key);
     }
+    if (keyCode == 114) {
+      debugMode = !debugMode;
+    }
   }
 
   @Override
@@ -81,7 +87,14 @@ public class Window extends PApplet {
     } else {
       menu.draw();
     }
+    // Debug Info - Can be added to
+    if(debugMode) {
+      debugMenu.draw();
+
+    }
   }
+
+
 
 
   /**
@@ -92,6 +105,7 @@ public class Window extends PApplet {
   public static void main(String[] passedArgs) {
     String[] appletArgs = new String[]{"eatBubbles"};
     Window eatBubbles = new Window();
+    debugMenu = new DebugMenu(eatBubbles);
     PApplet.runSketch(appletArgs, eatBubbles);
   }
 }
