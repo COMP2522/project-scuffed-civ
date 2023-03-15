@@ -4,7 +4,7 @@ import processing.core.PImage;
 
 import static processing.awt.ShimAWT.loadImage;
 
-public class Entity {
+public class Entity { //things that can be placed
     Position position;
 
     Player owner;
@@ -20,7 +20,7 @@ public class Entity {
     public Entity(Window scene, Position position, Player player) {
         this.position = position;
         this.scene = scene;
-        texture = loadImage(scene, "sprites/mario.png");
+        //texture = loadImage(scene, "sprites/mario.png");
 
         this.owner = player;
     }

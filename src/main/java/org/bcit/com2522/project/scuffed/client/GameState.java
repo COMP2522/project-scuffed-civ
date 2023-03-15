@@ -86,9 +86,10 @@ public class GameState { //everything manager this is the player manager
             System.out.println("selected");
         } else if (entities[position.getX()][position.getY()] == null && selected != null && selected instanceof Unit) { //move selected entity
             Unit unit = (Unit) selected;
-            entities[selected.getPosition().getX()][selected.getPosition().getY()] = null;
-            unit.moveTo(position);
-            entities[position.getX()][position.getY()] = selected;
+            if(unit.moveTo(position)) {
+                entities[selected.getPosition().getX()][selected.getPosition().getY()] = null;
+                entities[position.getX()][position.getY()] = selected;
+            }
             System.out.println("trying to move");
             selected = null;
         } else if (selected != null && entities[position.getX()][position.getY()] != null
@@ -166,6 +167,16 @@ public class GameState { //everything manager this is the player manager
     }
 
     public void nextTurn(){
+        //set remaining move to max
+        for (Entity[] row: entities) {
+            for (Entity element: row) {
+                if(element instanceof Unit) {
+                    ((Unit) element).resetMove();
+                }
+            }
+        }
+
+        //set currentPlayer to next player
         if (players.indexOf(currentPlayer) < players.size() - 1) {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
             System.out.println("next turn");
