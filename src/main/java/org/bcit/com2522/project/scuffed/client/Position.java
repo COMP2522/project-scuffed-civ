@@ -11,6 +11,12 @@ public class Position {
         this.y = y;
     }
 
+    public static Position fromJSONObject(JSONObject positionObject) {
+        int x = ((Number) positionObject.get("x")).intValue();
+        int y = ((Number) positionObject.get("y")).intValue();
+        return new Position(x, y);
+    }
+
     public int getX() {
         return x;
     }
