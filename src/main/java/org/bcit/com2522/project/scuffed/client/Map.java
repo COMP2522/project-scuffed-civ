@@ -1,5 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -98,5 +100,17 @@ public class Map { //this is a tile manager
 
             }
         }
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject map = new JSONObject();
+        JSONArray tilesArray = new JSONArray();
+        for (Tile[] row: tiles) {
+            for (Tile element: row) {
+                tilesArray.add(element.toJSONObject());
+            }
+        }
+        map.put("tiles", tilesArray);
+        return map;
     }
 }

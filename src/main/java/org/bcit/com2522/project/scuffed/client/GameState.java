@@ -1,9 +1,13 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import processing.core.PVector;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static processing.core.PConstants.*;
 
@@ -21,6 +25,7 @@ public class GameState { //everything manager this is the player manager
     int scale;
 
     public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
+        this.gameId = new Random().nextInt(10000); //make a random gameId
         players = new ArrayList<Player>();
         this.scene = scene;
 
@@ -46,6 +51,7 @@ public class GameState { //everything manager this is the player manager
         Position position = new Position((int) (mousePos.x / 32), (int) (mousePos.y / 32));
 
         if (mousePos.x >= 700 && mousePos.y >= 500) { //position of nextTurn button
+            save();
             nextTurn();
         }
 
@@ -149,11 +155,40 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    public static void save(){
+    /**
+     * Saves the current gamestate to a json file in the "saves" folder
+     * currently called at end of player turn
+     */
+    public void save(){
         JSONObject gamestate = new JSONObject();
+        gamestate.put("gameId", this.gameId);
+        gamestate.put("map", map.toJSONObject());
+        gamestate.put("currentPlayer", currentPlayer.toJSONObject());
+        JSONArray playerArray = new JSONArray();
+        for (Player player: players) {
+            playerArray.add(player.toJSONObject());
+        }
+        gamestate.put("players", playerArray);
+
+        JSONArray entityArray = new JSONArray();
+        for (Entity[] row: entities) {
+            for (Entity entity: row) {
+                if(entity != null) {
+                    entityArray.add(entity.toJSONObject());
+                }
+            }
+        }
+        gamestate.put("entities", entityArray);
+
+        try(FileWriter saveFile = new FileWriter("saves/game" + gameId + ".json")) {
+            saveFile.write(gamestate.toJSONString());
+            saveFile.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void load(){
+    public void load(){
 
     }
 

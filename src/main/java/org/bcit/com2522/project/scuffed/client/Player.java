@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONObject;
 import processing.core.PVector;
 
 import java.awt.*;
@@ -8,10 +9,8 @@ import java.util.ArrayList;
 public class Player { //should have a player manager (later)
   //private ArrayList<Entity> entities;
   private int resources;
-
   private int playerNum;
   Window scene;
-
   Map map;
 
 
@@ -53,5 +52,12 @@ public class Player { //should have a player manager (later)
   public boolean hasLost(){
     //return entities.size() == 0;
     return false;
+  }
+
+  public JSONObject toJSONObject() {
+    JSONObject player = new JSONObject();
+    player.put("playerNum", playerNum);
+    player.put("resources", resources);
+    return player;
   }
 }

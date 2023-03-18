@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONObject;
 import processing.core.PImage;
 
 import static processing.awt.ShimAWT.loadImage;
@@ -39,5 +40,15 @@ public class Entity {
 
     public Player getOwner () {
         return owner;
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        obj.put("position", position.toJSONObject());
+        obj.put("owner", owner.toJSONObject());
+        obj.put("health", health);
+        obj.put("currentHealth", currentHealth);
+        obj.put("resourceCost", resourceCost);
+        return obj;
     }
 }

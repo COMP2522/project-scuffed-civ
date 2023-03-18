@@ -1,5 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONObject;
+
 public class Tile {
     private Position position;
 
@@ -24,5 +26,12 @@ public class Tile {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        obj.put("position", position.toJSONObject());
+        obj.put("type", type);
+        return obj;
     }
 }

@@ -1,5 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONObject;
+
 public class Position {
     private int x;
     private int y;
@@ -24,4 +26,10 @@ public class Position {
         this.y = y;
     }
 
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        obj.put("x", x);
+        obj.put("y", y);
+        return obj;
+    }
 }
