@@ -1,72 +1,43 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import processing.core.PApplet;
-
 public class Clickable {
-  private PApplet p;
-  private float x, y, w, h;
-  private boolean clicked;
-  private boolean hovering;
-  private Runnable onClick;
-  private Runnable onHover;
+  int x1, y1, x2, y2;
+  Runnable callback;
 
-  public Clickable(PApplet p, float x, float y, float w, float h, Runnable onClick) {
-    this.p = p;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.onClick = onClick;
-    this.onHover = null;
-  }
-
-  public Clickable(PApplet p, float x, float y, float w, float h, Runnable onClick, Runnable onHover) {
-    this.p = p;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.onClick = onClick;
-    this.onHover = onHover;
+  public Clickable(int x1, int y1, int x2, int y2, Runnable callback, Runnable callbackOnHover) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.callback = callback;
   }
 
 
-  public void checkClicked() {
-    if (p.mousePressed && p.mouseButton == PApplet.LEFT && p.mouseX >= x && p.mouseX <= x + w && p.mouseY >= y && p.mouseY <= y + h) {
-      clicked = true;
-      onClick.run();
-    } else {
-      clicked = false;
-    }
+  public boolean isHovered(int x, int y) {
+    return x >= x1 && x <= x2 && y >= y1 && y <= y2;
   }
 
-  public boolean isClicked() {
-    return clicked;
+  public void click() {
+    callback.run();
   }
 
-  public void checkHover() {
-    if (p.mouseX >= x && p.mouseX <= x + w && p.mouseY >= y && p.mouseY <= y + h) {
-      if (!hovering) {
-        hovering = true;
-        if (onHover != null) {
-          onHover.run();
-        }
-      }
-    } else {
-      hovering = false;
-    }
+  public void hover() {
+    callback.run();
   }
 
-  public void moveBounds(float x, float y, float w, float h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+
+  public void changeBounds(int x1, int y1, int x2, int y2) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
   }
 
-  public void delete() {
-    p = null;
-    onClick = null;
-    onHover = null;
+  public void changeCallback(Runnable callback) {
+    this.callback = callback;
   }
+
+
+
+
 }

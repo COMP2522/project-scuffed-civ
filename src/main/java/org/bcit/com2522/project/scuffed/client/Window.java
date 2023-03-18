@@ -26,6 +26,7 @@ public class Window extends PApplet {
 
   Boolean debugMode = false;
   static DebugMenu debugMenu;
+  ClickableManager clickableManager;
 
   /**
    * Called once at the beginning of the program.
@@ -45,6 +46,7 @@ public class Window extends PApplet {
   public void init() {
     //map = new Map(this, 20, 20);
     menu = new Menu(this);
+    ClickableManager clickableManager = new ClickableManager(this);
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
@@ -94,6 +96,17 @@ public class Window extends PApplet {
     }
   }
 
+  public ClickableManager getClickableManager() {
+    return clickableManager;
+  }
+
+  public void addClickable(Clickable clickable) {
+    clickableManager.add(clickable);
+  }
+
+  public void removeClickable(Clickable clickable) {
+    clickableManager.remove(clickable);
+  }
 
 
 
