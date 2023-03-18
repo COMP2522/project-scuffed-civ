@@ -8,14 +8,7 @@ public class Menu {
         this.scene = scene;
     }
     public void draw() {
-        scene.textSize(100);
-        scene.fill(200);
-        scene.square(100, 200, 100);
-        scene.square(300, 200, 100);
-        scene.square(500, 200, 100);
-        scene.square(100, 400, 100);
-        scene.square(300, 400, 100);
-        scene.square(500, 400, 100);
+        scene.textSize(32);
 
         scene.fill(000);
         scene.text("how many players?", 100, 150);
