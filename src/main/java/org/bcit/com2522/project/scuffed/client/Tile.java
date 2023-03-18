@@ -1,5 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONObject;
+
 public class Tile {
     private Position position;
 
@@ -14,6 +16,19 @@ public class Tile {
         this.position = position;
     }
 
+    /**
+     * Constructor for loading a map from a file. //TODO: maybe add an "occupied" boolean to this class
+     *
+     * @param position
+     * @param type
+     */
+    public Tile(Position position, int type) {
+        this.position = position;
+        this.type = type;
+    }
+
+
+
     public Position getPosition() {
         return position;
     }
@@ -24,5 +39,16 @@ public class Tile {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject obj = new JSONObject();
+        obj.put("position", position.toJSONObject());
+        obj.put("type", type);
+        return obj;
+    }
+    public static Tile fromJSONObject(JSONObject tiles) {
+        Tile tile = new Tile(Position.fromJSONObject((JSONObject) tiles.get("position")), (int)(long) tiles.get("type"));
+        return tile;
     }
 }
