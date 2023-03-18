@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.json.simple.JSONObject;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import static processing.core.PConstants.*;
 
 public class GameState { //everything manager this is the player manager
+    int gameId;
     Map map;
     Player currentPlayer;
     ArrayList<Player> players;// could be a circular linked list instead might make logic easier
@@ -36,7 +38,6 @@ public class GameState { //everything manager this is the player manager
     public void init() {
 
         //this is just for now more logic will have to go into making players later
-
 
         currentPlayer = players.get(0);
     }
@@ -149,6 +150,12 @@ public class GameState { //everything manager this is the player manager
     }
 
     public static void save(){
+        JSONObject gamestate = new JSONObject();
+    }
+
+    public static void load(){
 
     }
+
+
 }

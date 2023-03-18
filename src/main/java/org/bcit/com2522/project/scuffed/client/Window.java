@@ -3,6 +3,8 @@ package org.bcit.com2522.project.scuffed.client;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -18,14 +20,20 @@ public class Window extends PApplet {
 
   Menu menu;
 
-  Socket socket;
-
   //ArrayList<Player> players = new ArrayList<Player>();
 
   GameState gameState;
 
   Boolean debugMode = false;
   static DebugMenu debugMenu;
+
+  /**server variables**/
+  private Socket socket;
+  private int clientID;
+  private String hostIP;
+  private int port;
+  private ObjectInputStream ois;
+  private ObjectOutputStream oos;
 
   /**
    * Called once at the beginning of the program.
@@ -49,9 +57,12 @@ public class Window extends PApplet {
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
     gameState = new GameState(this, numplayers, mapwidth, mapheight);
-
     gameState.init();
+  }
 
+  public void initGameServer(int numplayers, int mapwidth, int mapheight) {
+    gameState = new GameState(this, numplayers, mapwidth, mapheight);
+    gameState.init();
   }
 
   @Override
