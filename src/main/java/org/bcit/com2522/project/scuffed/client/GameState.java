@@ -80,13 +80,13 @@ public class GameState { //everything manager this is the player manager
         Position position = new Position((int) (mousePos.x / 32), (int) (mousePos.y / 32));
 
         if (mousePos.x >= 700 && mousePos.y >= 500) { //position of nextTurn button
-//            save();
-//
-//            try {
-//                GameState.load(scene, gameId);
-//            } catch (FileNotFoundException e) {
-//                throw new RuntimeException(e);
-//            }
+            save();
+
+            try {
+                GameState.load(scene, gameId);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             nextTurn();
         }
 
@@ -229,7 +229,6 @@ public class GameState { //everything manager this is the player manager
             playerArray.add(player.toJSONObject());
         }
         gamestate.put("players", playerArray);
-
         JSONArray entityArray = new JSONArray();
         for (Entity[] row: entities) {
             JSONArray rowArray = new JSONArray();
@@ -241,7 +240,6 @@ public class GameState { //everything manager this is the player manager
             entityArray.add(rowArray);
         }
         gamestate.put("entities", entityArray);
-
         try(FileWriter saveFile = new FileWriter("saves/save" + gameId + ".json")) {
             saveFile.write(gamestate.toJSONString());
             saveFile.flush();
@@ -269,15 +267,21 @@ public class GameState { //everything manager this is the player manager
             loadedGameState.players = (ArrayList<Player>) playersArray
                     .stream()
                     .map(playerObject ->
-                            Player.fromJSONObject((JSONObject)playerObject, window, loadedGameState.map)) //TODO: Maybe remove reference to map or scene from player?
+                            Player.fromJSONObject((JSONObject)playerObject, window)) //TODO: Maybe remove reference to map or scene from player?
                     .collect(Collectors.toList());
             JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
             loadedGameState.entities = (Entity[][]) entitiesArray
                     .stream()
-                    .map(row -> ((JSONArray) row)
-                            .stream()
-                            .map((entity) -> Entity.fromJSONObject((JSONObject) entity, window))
-                            .toArray(Entity[]::new)) //the ::new calls the constructor for a new entity array, kinda neat
+                    .map(row -> {
+                        if (((JSONArray)row).isEmpty()) {
+                            return new Entity[((JSONArray)row).size()]; // Return an empty array with the same size as the row
+                        } else {
+                            return ((JSONArray) row)
+                                    .stream()
+                                    .map((entity) -> Entity.fromJSONObject((JSONObject) entity, window))
+                                    .toArray(Entity[]::new);
+                        }
+                    })
                     .toArray(Entity[][]::new);
         } catch (IOException  | ParseException e) {
             e.printStackTrace();
