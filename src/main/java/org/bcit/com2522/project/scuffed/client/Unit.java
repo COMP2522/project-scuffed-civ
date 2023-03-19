@@ -1,35 +1,41 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
+import static processing.awt.ShimAWT.loadImage;
 
-public class Unit extends Entity{
-    int speed;
-    int damage;
+
+public class Unit extends Entity { //things that can move
+    int maxMove;
+    int remainMove;
 
     public Unit(Window scene, Position position, Player player) {
         super(scene, position, player);
         entityType = "unit";
-        speed = 3;
-        damage = 1;
+        maxMove = 6;
+        remainMove = maxMove;
     }
 
     public Unit(Window scene){
         super(scene);
         entityType = "unit";
-        speed = 3;
-        damage = 1;
+        maxMove = 6;
+        remainMove = maxMove;
     }
 
-
-    public void move(){
-
-    }
-    public void attack(){
-
+    public void resetMove() {
+        remainMove = maxMove;
     }
 
-    public void build(){
-
+    public Boolean moveTo(Position position) {
+        //if the position is in range
+        if(Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY()) <= remainMove) {
+            remainMove -= Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY());
+            this.position = position;
+            return true;
+        } else {
+            System.out.println("that position is out of range");
+            return false;
+        }
     }
 
     public JSONObject toJSONObject() {
@@ -47,8 +53,8 @@ public class Unit extends Entity{
         unit.health = (Integer) unitObject.get("health");
         unit.currentHealth = (Integer) unitObject.get("currentHealth");
         unit.resourceCost = (Integer) unitObject.get("resourceCost");
-        unit.speed = (Integer) unitObject.get("speed");
-        unit.damage = (Integer) unitObject.get("damage");
+//        unit.speed = (Integer) unitObject.get("speed");
+//        unit.damage = (Integer) unitObject.get("damage");
         return unit;
     }
 
