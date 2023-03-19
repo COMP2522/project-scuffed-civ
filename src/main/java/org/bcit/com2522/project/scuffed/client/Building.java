@@ -25,8 +25,12 @@ public class Building extends Entity{
 
     public JSONObject toJSONObject() {
         JSONObject buildingObject = new JSONObject();
-        buildingObject.put("x", this.getPosition().getX());
-        buildingObject.put("y", this.getPosition().getY());
+        buildingObject.put("entityType", entityType);
+        buildingObject.put("position", position.toJSONObject());
+        buildingObject.put("owner", owner.toJSONObject());
+        buildingObject.put("health", health);
+        buildingObject.put("currentHealth", currentHealth);
+        buildingObject.put("resourceCost", resourceCost);
         return buildingObject;
     }
 

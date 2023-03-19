@@ -4,9 +4,10 @@ import org.json.simple.JSONObject;
 import static processing.awt.ShimAWT.loadImage;
 
 
-public class Unit extends Entity { //things that can move
+public class Unit extends Entity { //things that can move TODO: maybe make this abstract
     int maxMove;
     int remainMove;
+    String unitType; //worker, soldier
 
     public Unit(Window scene, Position position, Player player) {
         super(scene, position, player);
@@ -39,23 +40,30 @@ public class Unit extends Entity { //things that can move
     }
 
     public JSONObject toJSONObject() {
-        JSONObject unitObject = new JSONObject();
-        unitObject.put("x", this.getPosition().getX());
-        unitObject.put("y", this.getPosition().getY());
-        return unitObject;
+        switch(unitType) {
+            case "soldier":
+                Soldier soldier = (Soldier) this;
+                return soldier.toJSONObject();
+            case "worker":
+                Worker worker = (Worker) this;
+                return worker.toJSONObject();
+            default:
+                return null;
+        }
     }
 
     public static Unit fromJSONObject(JSONObject unitObject, Window scene) {
-        Unit unit = new Unit(scene);
-        unit.scene = scene;
-        unit.setPosition(Position.fromJSONObject((JSONObject) unitObject.get("position")));
-        unit.owner = Player.fromJSONObject((JSONObject) unitObject.get("owner"));
-        unit.health = (Integer) unitObject.get("health");
-        unit.currentHealth = (Integer) unitObject.get("currentHealth");
-        unit.resourceCost = (Integer) unitObject.get("resourceCost");
-//        unit.speed = (Integer) unitObject.get("speed");
-//        unit.damage = (Integer) unitObject.get("damage");
-        return unit;
+        if(unitObject == null) {
+            return null;
+        }
+        switch((String) unitObject.get("unitType")) {
+            case "soldier":
+                return Soldier.fromJSONObject(unitObject, scene);
+            case "worker":
+                return Worker.fromJSONObject(unitObject, scene);
+            default:
+                return null;
+        }
     }
 
 

@@ -17,8 +17,6 @@ public class Player { //should have a player manager (later)
   public Player (Window scene, int playerNum) {
     this.scene = scene;
     this.playerNum = playerNum;
-    //this.playerNum = playerNum;
-    //entities = new ArrayList<Entity>();
   }
 
   /**
@@ -30,6 +28,20 @@ public class Player { //should have a player manager (later)
   public static Player fromJSONObject(JSONObject playerObject) {
     Player player = new Player(null, (int) (long) playerObject.get("playerNum"));
     player.resources = (int)(long) playerObject.get("resources");
+    return player;
+  }
+
+  /**
+   * Creates a player from a JSONObject and scene
+   *
+   * @param playerObject
+   * @param scene
+   * @return
+   */
+  public static Player fromJSONObject(JSONObject playerObject, Window scene) {
+    Player player = new Player(scene, (int)(long) playerObject.get("playerNum"));
+    player.resources = (int)(long) playerObject.get("resources");
+    player.scene = scene;
     return player;
   }
 
