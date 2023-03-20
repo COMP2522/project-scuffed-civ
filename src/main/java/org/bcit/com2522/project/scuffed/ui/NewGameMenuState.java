@@ -114,7 +114,6 @@ public class NewGameMenuState extends MenuState {
         int numPlayers = numPlayersInput.getValue();
         if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
             scene.initGame(numPlayers, mapWidth, mapHeight);
-            menu.setState(new HUDState(scene, menu));
             scene.inGame = true;
             showError = false;
         } else {
