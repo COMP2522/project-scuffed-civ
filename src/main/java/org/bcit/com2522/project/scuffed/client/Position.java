@@ -11,6 +11,10 @@ public class Position {
         this.y = y;
     }
 
+    public boolean equals(Position other) {
+        return x == other.x && y == other.y;
+    }
+
     public static Position fromJSONObject(JSONObject positionObject) {
         int x = ((Number) positionObject.get("x")).intValue();
         int y = ((Number) positionObject.get("y")).intValue();

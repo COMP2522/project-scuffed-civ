@@ -13,6 +13,10 @@ public class Map { //this is a tile manager
     PImage rocks;
     PImage sand;
     PImage water;
+
+    int width;
+
+    int height;
     Tile[][] tiles;
     Window scene;
     Player player;
@@ -28,6 +32,7 @@ public class Map { //this is a tile manager
         sand = loadImage(scene, "sprites/Menu/tile_sand.png");
         water = loadImage(scene, "sprites/Menu/tile_water.png");
         this.scene = scene;
+        this.color = (Color.red);
     }
 
     public Map (Window scene, int width, int height) {
@@ -35,7 +40,8 @@ public class Map { //this is a tile manager
         rocks = loadImage(scene, "sprites/Menu/tile_rocks.png");
         sand = loadImage(scene, "sprites/Menu/tile_sand.png");
         water = loadImage(scene, "sprites/Menu/tile_water.png");
-
+        this.width = width;
+        this.height = height;
         tiles = new Tile[width][height];
 
         for(int i = 0; i < width; i++) {
@@ -106,6 +112,8 @@ public class Map { //this is a tile manager
             tilesArray.add(rowArray);
         }
         map.put("tiles", tilesArray);
+        map.put("width", width);
+        map.put("height", height);
         return map;
     }
 
@@ -118,7 +126,9 @@ public class Map { //this is a tile manager
      */
     public static Map fromJSONObject(JSONObject mapObject, Window scene) {
         Map map = new Map(scene);
-        map.tiles = new Tile[((JSONArray) mapObject.get("tiles")).size()][((JSONArray) ((JSONArray) mapObject.get("tiles")).get(0)).size()];
+        map.width = ((Long) mapObject.get("width")).intValue();
+        map.height = ((Long) mapObject.get("height")).intValue();
+        map.tiles = new Tile[map.width][map.height];
         for (int i = 0; i < map.tiles.length; i++) {
             for (int j = 0; j < map.tiles[i].length; j++) {
                 map.tiles[i][j] = Tile.fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));

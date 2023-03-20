@@ -131,6 +131,7 @@ public class Window extends PApplet {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    inGame = true;
   }
 
   /**

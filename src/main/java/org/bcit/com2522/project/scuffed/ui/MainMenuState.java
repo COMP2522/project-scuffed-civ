@@ -43,9 +43,14 @@ public class MainMenuState extends MenuState {
 
     public void onLoadGameClicked() {
         // Change the menu state to the Load Game state
-        if(new File("saves/save.json").exists()){
-            scene.loadGame();
-            scene.inGame = true;
+        if (new File("saves/save.json").exists()) {
+            menu.setState(new LoadingMenuState(scene, menu));
+
+            // Run the loading process in a separate thread
+            new Thread(() -> {
+                scene.loadGame();
+            }).start();
+
         } else {
             errorMessage.draw();
         }
