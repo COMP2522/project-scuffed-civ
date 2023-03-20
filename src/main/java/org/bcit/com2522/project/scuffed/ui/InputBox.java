@@ -35,13 +35,19 @@ public class InputBox {
     }
 
     public void draw() {
+
         scene.pushStyle();
         scene.stroke(0);
-        scene.noFill();
+        if(selected) {
+            scene.fill(220);
+        } else {
+            scene.fill(255);
+        }
         scene.rect(x, y, width, height);
-        scene.fill(0);
         scene.textSize(16);
+        scene.fill(0);
         scene.text(text, x + 10, y + height - 10);
+
         scene.popStyle();
     }
 

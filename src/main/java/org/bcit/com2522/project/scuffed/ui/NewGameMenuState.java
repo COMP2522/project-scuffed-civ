@@ -27,7 +27,7 @@ public class NewGameMenuState extends MenuState {
     }
     @Override
     public void setup() {
-        // TODO: Add input boxes for the size of the width and height of the map and the number of players
+        // TODO: fix input boxes, maybe add an indicator for when the input is selected
         mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100, "16");
         mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100, "16");
         numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10, "2");

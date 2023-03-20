@@ -22,4 +22,14 @@ public class OnlineMenuState extends MenuState {
         // Change the menu state to the New Game state
         menu.setState(new MainMenuState(scene, menu));
     }
+
+    public void onHostClicked() {
+        // Change the menu state to the New Game state
+        menu.setState(new HostGameMenuState(scene, menu));
+    }
+
+    public void onJoinClicked() {
+        // Change the menu state to the New Game state
+        menu.setState(new JoinGameMenuState(scene, menu));
+    }
 }
