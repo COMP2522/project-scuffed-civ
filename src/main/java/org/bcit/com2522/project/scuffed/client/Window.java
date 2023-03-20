@@ -1,8 +1,11 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.ui.Menu;
+import org.bcit.com2522.project.scuffed.ui.NewGameMenuState;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -16,11 +19,9 @@ public class Window extends PApplet {
 
   //Map map;
 
-  boolean inGame = false;
+  public boolean inGame = false;
 
   Menu menu;
-
-  //ArrayList<Player> players = new ArrayList<Player>();
 
   GameState gameState;
 
@@ -53,8 +54,9 @@ public class Window extends PApplet {
 
   public void init() {
     //map = new Map(this, 20, 20);
+    clickableManager = new ClickableManager(this);
+    surface.setTitle("Scuffed - Main Menu");
     menu = new Menu(this);
-    ClickableManager clickableManager = new ClickableManager(this);
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
@@ -75,16 +77,21 @@ public class Window extends PApplet {
     if (keyCode == 114) {
       debugMode = !debugMode;
     }
+    if(menu.currentState instanceof NewGameMenuState){
+        NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
+        newGameMenuState.keyPressed(key);
+    }
   }
 
   @Override
   public void mouseClicked() {
     if(inGame) {
       PVector mousePos = new PVector(mouseX, mouseY);
-
       gameState.clicked(mousePos);
+      surface.setTitle("Scuffed Civ");
     } else {
-      inGame = menu.clicked(mouseX, mouseY);
+      menu.clicked(mouseX, mouseY);
+      surface.setTitle("Scuffed - " + menu.currentState.getClass().getSimpleName());
     }
   }
 
@@ -103,7 +110,6 @@ public class Window extends PApplet {
     // Debug Info - Can be added to
     if(debugMode) {
       debugMenu.draw();
-
     }
   }
 
@@ -119,7 +125,13 @@ public class Window extends PApplet {
     clickableManager.remove(clickable);
   }
 
-
+  public void loadGame() {
+    try {
+      this.gameState = GameState.load(this);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
   /**
    * Main function.
@@ -132,4 +144,6 @@ public class Window extends PApplet {
     debugMenu = new DebugMenu(eatBubbles);
     PApplet.runSketch(appletArgs, eatBubbles);
   }
+
+
 }

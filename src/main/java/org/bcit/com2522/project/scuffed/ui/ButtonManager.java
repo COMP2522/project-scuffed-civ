@@ -1,10 +1,13 @@
-package org.bcit.com2522.project.scuffed.client;
+package org.bcit.com2522.project.scuffed.ui;
+
+import org.bcit.com2522.project.scuffed.client.Window;
 
 import java.util.ArrayList;
 
 public class ButtonManager {
   ArrayList<Button> buttons = new ArrayList<Button>();
   Window scene;
+
   public ButtonManager(Window scene) {
     this.scene = scene;
   }

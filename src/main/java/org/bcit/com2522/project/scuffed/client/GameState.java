@@ -81,12 +81,6 @@ public class GameState { //everything manager this is the player manager
 
         if (mousePos.x >= 700 && mousePos.y >= 500) { //position of nextTurn button
             save();
-
-            try {
-                GameState.load(scene, gameId);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
             nextTurn();
         }
 
@@ -240,7 +234,7 @@ public class GameState { //everything manager this is the player manager
             entityArray.add(rowArray);
         }
         gamestate.put("entities", entityArray);
-        try(FileWriter saveFile = new FileWriter("saves/save" + gameId + ".json")) {
+        try(FileWriter saveFile = new FileWriter("saves/save.json")) {
             saveFile.write(gamestate.toJSONString());
             saveFile.flush();
         } catch (IOException e) {
@@ -254,7 +248,7 @@ public class GameState { //everything manager this is the player manager
      * @return loadedGameState as a GameState object
      * @throws FileNotFoundException
      */
-    public static void load(Window window, int gameId) throws FileNotFoundException {
+    public static GameState load(Window window, int gameId) throws FileNotFoundException {
         GameState loadedGameState = new GameState();
         JSONParser parser = new JSONParser();
         try(FileReader saveReader = new FileReader("saves/save" + gameId + ".json")){
@@ -262,7 +256,7 @@ public class GameState { //everything manager this is the player manager
             loadedGameState.scene = window;
             loadedGameState.gameId = ((Number)gameStateJSON.get("gameId")).intValue() + 1;
             loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"), window);
-            loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"));
+            loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"), window);
             JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
             loadedGameState.players = (ArrayList<Player>) playersArray
                     .stream()
@@ -287,7 +281,43 @@ public class GameState { //everything manager this is the player manager
             e.printStackTrace();
         }
 
-        loadedGameState.save();
+        return loadedGameState;
+    }
+
+    public static GameState load(Window window) throws FileNotFoundException {
+        GameState loadedGameState = new GameState();
+        JSONParser parser = new JSONParser();
+        try(FileReader saveReader = new FileReader("saves/save.json")){
+            JSONObject gameStateJSON = (JSONObject)parser.parse(saveReader);
+            loadedGameState.scene = window;
+            loadedGameState.gameId = ((Number)gameStateJSON.get("gameId")).intValue();
+            loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"), window);
+            loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"), window);
+            JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
+            loadedGameState.players = (ArrayList<Player>) playersArray
+                    .stream()
+                    .map(playerObject ->
+                            Player.fromJSONObject((JSONObject)playerObject, window)) //TODO: Maybe remove reference to map or scene from player?
+                    .collect(Collectors.toList());
+            JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
+            loadedGameState.entities = (Entity[][]) entitiesArray
+                    .stream()
+                    .map(row -> {
+                        if (((JSONArray)row).isEmpty()) {
+                            return new Entity[((JSONArray)row).size()]; // Return an empty array with the same size as the row
+                        } else {
+                            return ((JSONArray) row)
+                                    .stream()
+                                    .map((entity) -> Entity.fromJSONObject((JSONObject) entity, window))
+                                    .toArray(Entity[]::new);
+                        }
+                    })
+                    .toArray(Entity[][]::new);
+        } catch (IOException  | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return loadedGameState;
     }
 
 }

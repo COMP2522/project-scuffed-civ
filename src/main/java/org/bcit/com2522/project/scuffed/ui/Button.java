@@ -1,12 +1,14 @@
-package org.bcit.com2522.project.scuffed.client;
+package org.bcit.com2522.project.scuffed.ui;
 
+import org.bcit.com2522.project.scuffed.client.Clickable;
+import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
+import static processing.awt.ShimAWT.loadImage;
 
 public class Button {
   int x1, y1, x2, y2;
   Runnable callback;
   Clickable clickable;
-
   String text;
   PImage background;
   PImage hoverBackground;
@@ -42,6 +44,11 @@ public class Button {
     }
 
   }
+
+  public void click() {
+    clickable.click();
+  }
+
 
   public void changeBounds(int x1, int y1, int x2, int y2) {
     this.x1 = x1;
