@@ -1,11 +1,12 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.ui.HUD;
+import org.bcit.com2522.project.scuffed.ui.HostGameMenuState;
 import org.bcit.com2522.project.scuffed.ui.Menu;
 import org.bcit.com2522.project.scuffed.ui.NewGameMenuState;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -23,6 +24,8 @@ public class Window extends PApplet {
 
   Menu menu;
 
+  HUD hud;
+
   GameState gameState;
 
   Boolean debugMode = false;
@@ -31,7 +34,7 @@ public class Window extends PApplet {
 
   /**server variables**/
   private Socket socket;
-  private int clientID;
+  private int clientId;
   private String hostIP;
   private int port;
   private ObjectInputStream ois;
@@ -56,6 +59,7 @@ public class Window extends PApplet {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
     surface.setTitle("Scuffed - Main Menu");
+    clientId = new java.util.Random().nextInt(100000);
     menu = new Menu(this);
   }
 
@@ -64,7 +68,8 @@ public class Window extends PApplet {
     gameState.init();
   }
 
-  public void initGameServer(int numplayers, int mapwidth, int mapheight) {
+  //TODO: implement actual server
+  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
     gameState = new GameState(this, numplayers, mapwidth, mapheight);
     gameState.init();
   }
@@ -80,6 +85,10 @@ public class Window extends PApplet {
     if(menu.currentState instanceof NewGameMenuState){
         NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
         newGameMenuState.keyPressed(key);
+    }
+    if(menu.currentState instanceof HostGameMenuState){
+        HostGameMenuState hostGameMenuState = (HostGameMenuState) menu.currentState;
+        hostGameMenuState.keyPressed(key);
     }
   }
 
@@ -141,6 +150,18 @@ public class Window extends PApplet {
     inGame = true;
   }
 
+  public void saveGame() {
+    try {
+      gameState.save();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void endTurn() {
+    gameState.nextTurn();
+  }
+
   /**
    * Main function.
    *
@@ -152,6 +173,7 @@ public class Window extends PApplet {
     debugMenu = new DebugMenu(eatBubbles);
     PApplet.runSketch(appletArgs, eatBubbles);
   }
+
 
 
 }

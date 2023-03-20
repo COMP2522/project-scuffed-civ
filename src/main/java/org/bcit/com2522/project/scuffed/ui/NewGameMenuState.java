@@ -2,9 +2,6 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
-import processing.core.PImage;
-
-import static processing.awt.ShimAWT.loadImage;
 
 public class NewGameMenuState extends MenuState {
     private InputBox mapWidthInput;
@@ -27,7 +24,6 @@ public class NewGameMenuState extends MenuState {
     }
     @Override
     public void setup() {
-        // TODO: fix input boxes, maybe add an indicator for when the input is selected
         mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100, "16");
         mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100, "16");
         numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10, "2");
@@ -118,6 +114,7 @@ public class NewGameMenuState extends MenuState {
         int numPlayers = numPlayersInput.getValue();
         if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
             scene.initGame(numPlayers, mapWidth, mapHeight);
+            menu.setState(new HUDState(scene, menu));
             scene.inGame = true;
             showError = false;
         } else {

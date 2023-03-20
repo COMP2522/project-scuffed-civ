@@ -21,7 +21,6 @@ public class GameState { //everything manager this is the player manager
     Entity[][] entities;
     Entity selected;
     Window scene;
-
     int zoomAmount;
 
     public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
@@ -151,7 +150,7 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    //amount is the
+
     public void zoom(float amount) {
         //TODO entities do not zoom properly,
         //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
@@ -227,41 +226,6 @@ public class GameState { //everything manager this is the player manager
 
 
 
-//    public static GameState load(Window window, int gameId) throws FileNotFoundException {
-//        GameState loadedGameState = new GameState();
-//        JSONParser parser = new JSONParser();
-//        try(FileReader saveReader = new FileReader("saves/save" + gameId + ".json")){
-//            JSONObject gameStateJSON = (JSONObject)parser.parse(saveReader);
-//            loadedGameState.scene = window;
-//            loadedGameState.gameId = ((Number)gameStateJSON.get("gameId")).intValue() + 1;
-//            loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"), window);
-//            loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"), window);
-//            JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-//            loadedGameState.players = (ArrayList<Player>) playersArray
-//                    .stream()
-//                    .map(playerObject ->
-//                            Player.fromJSONObject((JSONObject)playerObject, window)) //TODO: Maybe remove reference to map or scene from player?
-//                    .collect(Collectors.toList());
-//            JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
-//            loadedGameState.entities = (Entity[][]) entitiesArray
-//                    .stream()
-//                    .map(row -> {
-//                        if (((JSONArray)row).isEmpty()) {
-//                            return new Entity[((JSONArray)row).size()]; // Return an empty array with the same size as the row
-//                        } else {
-//                            return ((JSONArray) row)
-//                                    .stream()
-//                                    .map((entity) -> Entity.fromJSONObject((JSONObject) entity, window))
-//                                    .toArray(Entity[]::new);
-//                        }
-//                    })
-//                    .toArray(Entity[][]::new);
-//        } catch (IOException  | ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return loadedGameState;
-//    }
     /**
      * Saves the current gamestate to a json file in the "saves" folder
      * currently called at end of player turn
