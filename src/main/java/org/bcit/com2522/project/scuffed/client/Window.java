@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.ui.Menu;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -19,8 +20,6 @@ public class Window extends PApplet {
   boolean inGame = false;
 
   Menu menu;
-
-  //ArrayList<Player> players = new ArrayList<Player>();
 
   GameState gameState;
 
@@ -53,8 +52,8 @@ public class Window extends PApplet {
 
   public void init() {
     //map = new Map(this, 20, 20);
+    clickableManager = new ClickableManager(this);
     menu = new Menu(this);
-    ClickableManager clickableManager = new ClickableManager(this);
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
@@ -81,7 +80,6 @@ public class Window extends PApplet {
   public void mouseClicked() {
     if(inGame) {
       PVector mousePos = new PVector(mouseX, mouseY);
-
       gameState.clicked(mousePos);
     } else {
       inGame = menu.clicked(mouseX, mouseY);
@@ -103,7 +101,6 @@ public class Window extends PApplet {
     // Debug Info - Can be added to
     if(debugMode) {
       debugMenu.draw();
-
     }
   }
 
@@ -131,5 +128,8 @@ public class Window extends PApplet {
     Window eatBubbles = new Window();
     debugMenu = new DebugMenu(eatBubbles);
     PApplet.runSketch(appletArgs, eatBubbles);
+  }
+
+  public void loadGame() {
   }
 }
