@@ -35,15 +35,11 @@ public class NewGameMenuState extends MenuState {
         mapWidthLabel = new Label(50, 95, "Map Width:", 14, scene);
         mapHeightLabel = new Label(50, 145, "Map Height:", 14, scene);
         numPlayersLabel = new Label(50, 195, "Number of Players:", 14, scene);
-
-        // Add an error message label
         errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14, scene);
 
-        // TODO: fix start game button
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
         Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
 
-        // Add the buttons to the button manager
         buttonManager.add(backButton);
         buttonManager.add(startButton);
     }

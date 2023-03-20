@@ -55,6 +55,7 @@ public class Window extends PApplet {
   public void init() {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
+    surface.setTitle("Scuffed - Main Menu");
     menu = new Menu(this);
   }
 
@@ -87,8 +88,10 @@ public class Window extends PApplet {
     if(inGame) {
       PVector mousePos = new PVector(mouseX, mouseY);
       gameState.clicked(mousePos);
+      surface.setTitle("Scuffed Civ");
     } else {
       menu.clicked(mouseX, mouseY);
+      surface.setTitle("Scuffed - " + menu.currentState.getClass().getSimpleName());
     }
   }
 

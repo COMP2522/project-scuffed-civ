@@ -13,7 +13,6 @@ public class HostGameMenuState extends MenuState {
     @Override
     public void setup() {
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-
         // Add the buttons to the button manager
         buttonManager.add(backButton);
     }
