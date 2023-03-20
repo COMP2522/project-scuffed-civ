@@ -2,9 +2,6 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
-import processing.core.PImage;
-
-import static processing.awt.ShimAWT.loadImage;
 
 public class HostGameMenuState extends MenuState {
     private InputBox mapWidthInput;
@@ -118,10 +115,10 @@ public class HostGameMenuState extends MenuState {
     // ...
 
     public void onStartServerClicked() {
-        int port = portInput.getValue();
-        int mapWidth = mapWidthInput.getValue();
-        int mapHeight = mapHeightInput.getValue();
-        int numPlayers = numPlayersInput.getValue();
+        int port = portInput.getIntValue();
+        int mapWidth = mapWidthInput.getIntValue();
+        int mapHeight = mapHeightInput.getIntValue();
+        int numPlayers = numPlayersInput.getIntValue();
         if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
             scene.initGameServer(numPlayers, mapWidth, mapHeight, port);
             scene.inGame = true;

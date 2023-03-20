@@ -1,9 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.bcit.com2522.project.scuffed.ui.HUD;
-import org.bcit.com2522.project.scuffed.ui.HostGameMenuState;
-import org.bcit.com2522.project.scuffed.ui.Menu;
-import org.bcit.com2522.project.scuffed.ui.NewGameMenuState;
+import org.bcit.com2522.project.scuffed.server.GameServer;
+import org.bcit.com2522.project.scuffed.ui.*;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -40,6 +38,8 @@ public class Window extends PApplet {
   private ObjectInputStream ois;
   private ObjectOutputStream oos;
 
+  public GameServer gameServer;
+
   /**
    * Called once at the beginning of the program.
    */
@@ -70,7 +70,13 @@ public class Window extends PApplet {
 
   //TODO: implement actual server
   public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
+    this.port = port;
+    this.hostIP = "localhost";
+    gameServer = new GameServer();
     gameState = new GameState(this, numplayers, mapwidth, mapheight);
+    gameServer.start(gameState, port);
+
+
     gameState.init();
   }
 
@@ -89,6 +95,10 @@ public class Window extends PApplet {
     if(menu.currentState instanceof HostGameMenuState){
         HostGameMenuState hostGameMenuState = (HostGameMenuState) menu.currentState;
         hostGameMenuState.keyPressed(key);
+    }
+    if(menu.currentState instanceof JoinGameMenuState){
+        JoinGameMenuState joinGameMenuState = (JoinGameMenuState) menu.currentState;
+        joinGameMenuState.keyPressed(key);
     }
   }
 
@@ -156,6 +166,10 @@ public class Window extends PApplet {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public void joinGame(String hostIP, int port) {
+    System.out.println("Joining game at " + hostIP + ":" + port);
   }
 
   public void endTurn() {

@@ -22,6 +22,7 @@ public class GameServer {
     private ServerSocket serverSocket;
     private GameState gameState;
     private int port;
+    String hostIP = "localhost"; //TODO: change to actual IP when server is started
 
     /**
      * The list of clients connected to the server.

@@ -150,7 +150,6 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-
     public void zoom(float amount) {
         //TODO entities do not zoom properly,
         //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
@@ -288,6 +287,5 @@ public class GameState { //everything manager this is the player manager
 
         return loadedGameState;
     }
-
 
 }
