@@ -12,10 +12,10 @@ public class HostGameMenuState extends MenuState {
     }
     @Override
     public void setup() {
-        // Create and add the buttons for the main menu
-        PImage background = loadImage(scene, "background.png");
-        PImage button = loadImage(scene, "button_blank.png");
-        PImage buttonPressed = loadImage(scene, "button_blank_pressed.png");
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
+
+        // Add the buttons to the button manager
+        buttonManager.add(backButton);
     }
 
     public void onBackClicked() {
