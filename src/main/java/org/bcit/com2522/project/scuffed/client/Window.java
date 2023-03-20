@@ -125,6 +125,13 @@ public class Window extends PApplet {
     clickableManager.remove(clickable);
   }
 
+  public Player getCurrentPlayer() {
+    if(gameState == null){
+      return null;
+    }
+    return gameState.currentPlayer;
+  }
+
   public void loadGame() {
     try {
       this.gameState = GameState.load(this);

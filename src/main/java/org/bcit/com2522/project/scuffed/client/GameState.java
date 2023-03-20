@@ -85,31 +85,45 @@ public class GameState { //everything manager this is the player manager
             save();
             nextTurn();
         }
-
         //TODO everything below this should be mathed out and shortened
-        else if(entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
+        else if (entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
             //players.get(currentTurn.getPlayerNum()).addEntity(position);
             //entities[position.getX()][position.getY()] = new Entity(scene, position, currentPlayer);
             System.out.println("You can't make entities like that!");
         } else if (entities[position.getX()][position.getY()] != null &&
-                entities[position.getX()][position.getY()].getOwner() == currentPlayer) { //select existing entity
+                entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //select existing entity
             //.getOwner().equals(currentTurn)
             selected = entities[position.getX()][position.getY()];
+
+            // Debugging printlns
+            System.out.println("Selected entity class: " + selected.getClass().getName());
+            System.out.println("Selected entity owner: " + selected.getOwner());
+            System.out.println("Selected entity position: " + selected.getPosition());
+
             System.out.println("selected");
         } else if (entities[position.getX()][position.getY()] == null && selected != null && selected instanceof Unit) { //move selected entity
             Unit unit = (Unit) selected;
-            if(unit.moveTo(position)) {
+            if (unit.moveTo(position)) {
                 entities[selected.getPosition().getX()][selected.getPosition().getY()] = null;
                 entities[position.getX()][position.getY()] = selected;
             }
             System.out.println("trying to move");
             selected = null;
         } else if (selected != null && entities[position.getX()][position.getY()] != null
-                && entities[position.getX()][position.getY()].getOwner() != currentPlayer) { //attack enemy entity
+                && entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //attack enemy entity
 
-        }
-        else {
+        } else {
             System.out.println("you can't select that token");
+
+            // Debugging printlns
+            if (entities[position.getX()][position.getY()] != null) {
+                Entity clickedEntity = entities[position.getX()][position.getY()];
+                System.out.println("Clicked entity class: " + clickedEntity.getClass().getName());
+                System.out.println("Clicked entity owner: " + clickedEntity.getOwner());
+                System.out.println("Clicked entity position: " + clickedEntity.getPosition());
+            } else {
+                System.out.println("Clicked on an empty tile");
+            }
         }
 
         //else (the mouse is over a different button)

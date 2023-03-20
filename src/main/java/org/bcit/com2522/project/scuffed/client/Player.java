@@ -89,4 +89,12 @@ public class Player { //should have a player manager (later)
     player.put("resources", resources);
     return player;
   }
+
+  @Override
+  public String toString() {
+    return "Player{" +
+            "resources=" + resources +
+            ", playerNum=" + playerNum +
+            '}';
+  }
 }
