@@ -37,7 +37,7 @@ public class Building extends Entity{
     public static Building fromJSONObject(JSONObject buildingObject, Window scene) {
         Building building = new Building(scene);
         building.setPosition(Position.fromJSONObject((JSONObject) buildingObject.get("position")));
-        building.owner = Player.fromJSONObject((JSONObject) buildingObject.get("owner"));
+        building.owner = Player.fromJSONObject((JSONObject) buildingObject.get("owner"), scene);
         building.health = (Integer) buildingObject.get("health");
         building.currentHealth = (Integer) buildingObject.get("currentHealth");
         building.resourceCost = (Integer) buildingObject.get("resourceCost");

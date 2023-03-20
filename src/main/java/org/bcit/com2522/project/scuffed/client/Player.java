@@ -19,17 +19,6 @@ public class Player { //should have a player manager (later)
     this.playerNum = playerNum;
   }
 
-  /**
-   * Creates a player from a JSONObject w/o setting the map or scene
-   *
-   * @param playerObject
-   * @return
-   */
-  public static Player fromJSONObject(JSONObject playerObject) {
-    Player player = new Player(null, (int) (long) playerObject.get("playerNum"));
-    player.resources = (int)(long) playerObject.get("resources");
-    return player;
-  }
 
   /**
    * Creates a player from a JSONObject and scene

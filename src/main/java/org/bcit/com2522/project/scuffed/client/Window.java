@@ -5,6 +5,7 @@ import org.bcit.com2522.project.scuffed.ui.NewGameMenuState;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -121,7 +122,13 @@ public class Window extends PApplet {
     clickableManager.remove(clickable);
   }
 
-
+  public void loadGame() {
+    try {
+      this.gameState = GameState.load(this);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
   /**
    * Main function.
@@ -135,6 +142,5 @@ public class Window extends PApplet {
     PApplet.runSketch(appletArgs, eatBubbles);
   }
 
-  public void loadGame() {
-  }
+
 }
