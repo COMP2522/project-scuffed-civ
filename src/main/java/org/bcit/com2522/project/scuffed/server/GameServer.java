@@ -7,6 +7,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Coordinates the game state between multiple clients using the ClientHandler inner class to designate a new
@@ -20,6 +23,11 @@ public class GameServer {
     private GameState gameState;
     private int port;
 
+    /**
+     * The list of clients connected to the server.
+     */
+    private final List<ClientHandler> clients = Collections.synchronizedList(new LinkedList<>());
+
     public void start(GameState gameState, int port) {
         try {
             serverSocket = new ServerSocket(port);
@@ -30,38 +38,30 @@ public class GameServer {
 
         while(true){
             try {
-                new ClientHandler(serverSocket.accept()).start();
+                ClientHandler client = new ClientHandler(serverSocket.accept());
+                clients.add(client);
+                client.start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void start(int port) {
-        try {
-            serverSocket = new ServerSocket(port);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        this.gameState = gameState;
-
-        while(true){
-            try {
-                new ClientHandler(serverSocket.accept()).start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    /**
+     * Sends the updated game state to all clients except the current player.
+     *
+     * @param updatedGameState the updated game state
+     * @param currentPlayer the current player's client handler
+     */
+    public void broadcastGameState(GameState updatedGameState, ClientHandler currentPlayer) {
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                if (client != currentPlayer) {
+                    client.sendGameState(updatedGameState);
+                }
             }
         }
     }
-
-    public void loadGame(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    public void saveGame(GameState gameState) {
-        this.gameState = gameState;
-    }
-
 
     /**
      * Handles each new connection made to the GameServer.
@@ -74,7 +74,7 @@ public class GameServer {
         private final ObjectOutputStream oos;
         private final ObjectInputStream ois;
 
-        public ClientHandler(Socket socket){
+        public ClientHandler(Socket socket) {
             this.clientSocket = socket;
             try {
                 oos = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -86,38 +86,42 @@ public class GameServer {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        /**
+         * Reads the client's game state and updates the server's game state. Then broadcasts the updated
+         * game state to all clients.
+         */
+        public void run() {
             try {
-                GameState clientGameState = (GameState) ois.readObject();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                ois.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                oos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                while (true) {
+                    GameState clientGameState = (GameState) ois.readObject();
+                    // Update the server's game state
+                    gameState = clientGameState;
+                    // Broadcast the updated game state to all clients
+                    broadcastGameState(gameState, this);
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    ois.close();
+                    oos.close();
+                    clientSocket.close();
+                    clients.remove(this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
-        public void run(){
-            GameState received;
-            GameState returned;
-            while(clientSocket.isConnected()){
-
+        public void sendGameState(GameState gameState) {
+            try {
+                oos.writeObject(gameState);
+                oos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
-
 }
-

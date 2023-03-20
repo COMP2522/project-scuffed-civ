@@ -42,4 +42,12 @@ public class Position {
         obj.put("y", y);
         return obj;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

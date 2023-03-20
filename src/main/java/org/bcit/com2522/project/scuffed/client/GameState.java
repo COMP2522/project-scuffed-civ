@@ -21,7 +21,6 @@ public class GameState { //everything manager this is the player manager
     Entity[][] entities;
     Entity selected;
     Window scene;
-
     int zoomAmount;
 
     public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
@@ -85,31 +84,45 @@ public class GameState { //everything manager this is the player manager
             save();
             nextTurn();
         }
-
         //TODO everything below this should be mathed out and shortened
-        else if(entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
+        else if (entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
             //players.get(currentTurn.getPlayerNum()).addEntity(position);
             //entities[position.getX()][position.getY()] = new Entity(scene, position, currentPlayer);
             System.out.println("You can't make entities like that!");
         } else if (entities[position.getX()][position.getY()] != null &&
-                entities[position.getX()][position.getY()].getOwner() == currentPlayer) { //select existing entity
+                entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //select existing entity
             //.getOwner().equals(currentTurn)
             selected = entities[position.getX()][position.getY()];
+
+            // Debugging printlns
+            System.out.println("Selected entity class: " + selected.getClass().getName());
+            System.out.println("Selected entity owner: " + selected.getOwner());
+            System.out.println("Selected entity position: " + selected.getPosition());
+
             System.out.println("selected");
         } else if (entities[position.getX()][position.getY()] == null && selected != null && selected instanceof Unit) { //move selected entity
             Unit unit = (Unit) selected;
-            if(unit.moveTo(position)) {
+            if (unit.moveTo(position)) {
                 entities[selected.getPosition().getX()][selected.getPosition().getY()] = null;
                 entities[position.getX()][position.getY()] = selected;
             }
             System.out.println("trying to move");
             selected = null;
         } else if (selected != null && entities[position.getX()][position.getY()] != null
-                && entities[position.getX()][position.getY()].getOwner() != currentPlayer) { //attack enemy entity
+                && entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //attack enemy entity
 
-        }
-        else {
+        } else {
             System.out.println("you can't select that token");
+
+            // Debugging printlns
+            if (entities[position.getX()][position.getY()] != null) {
+                Entity clickedEntity = entities[position.getX()][position.getY()];
+                System.out.println("Clicked entity class: " + clickedEntity.getClass().getName());
+                System.out.println("Clicked entity owner: " + clickedEntity.getOwner());
+                System.out.println("Clicked entity position: " + clickedEntity.getPosition());
+            } else {
+                System.out.println("Clicked on an empty tile");
+            }
         }
 
         //else (the mouse is over a different button)
@@ -137,7 +150,7 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    //amount is the
+
     public void zoom(float amount) {
         //TODO entities do not zoom properly,
         //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
@@ -213,41 +226,6 @@ public class GameState { //everything manager this is the player manager
 
 
 
-//    public static GameState load(Window window, int gameId) throws FileNotFoundException {
-//        GameState loadedGameState = new GameState();
-//        JSONParser parser = new JSONParser();
-//        try(FileReader saveReader = new FileReader("saves/save" + gameId + ".json")){
-//            JSONObject gameStateJSON = (JSONObject)parser.parse(saveReader);
-//            loadedGameState.scene = window;
-//            loadedGameState.gameId = ((Number)gameStateJSON.get("gameId")).intValue() + 1;
-//            loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"), window);
-//            loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"), window);
-//            JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-//            loadedGameState.players = (ArrayList<Player>) playersArray
-//                    .stream()
-//                    .map(playerObject ->
-//                            Player.fromJSONObject((JSONObject)playerObject, window)) //TODO: Maybe remove reference to map or scene from player?
-//                    .collect(Collectors.toList());
-//            JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
-//            loadedGameState.entities = (Entity[][]) entitiesArray
-//                    .stream()
-//                    .map(row -> {
-//                        if (((JSONArray)row).isEmpty()) {
-//                            return new Entity[((JSONArray)row).size()]; // Return an empty array with the same size as the row
-//                        } else {
-//                            return ((JSONArray) row)
-//                                    .stream()
-//                                    .map((entity) -> Entity.fromJSONObject((JSONObject) entity, window))
-//                                    .toArray(Entity[]::new);
-//                        }
-//                    })
-//                    .toArray(Entity[][]::new);
-//        } catch (IOException  | ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return loadedGameState;
-//    }
     /**
      * Saves the current gamestate to a json file in the "saves" folder
      * currently called at end of player turn
