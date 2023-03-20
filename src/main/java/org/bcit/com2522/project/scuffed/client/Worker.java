@@ -2,9 +2,11 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
+
 import static processing.awt.ShimAWT.loadImage;
 
-public class Worker extends Unit{
+public class Worker extends Unit implements Serializable {
     public Worker(Window scene, Position position, Player player) {
         super(scene, position, player);
         unitType = "worker";

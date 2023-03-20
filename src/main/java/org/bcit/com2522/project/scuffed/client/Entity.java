@@ -3,9 +3,11 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 import processing.core.PImage;
 
+import java.io.Serializable;
+
 import static processing.awt.ShimAWT.loadImage;
 
-public class Entity { //TODO: make this class abstract
+public class Entity implements Serializable { //TODO: make this class abstract
 
     Position position;
 
@@ -15,9 +17,9 @@ public class Entity { //TODO: make this class abstract
 
     int ownerNum;
 
-    Window scene;
+    transient Window scene;
 
-    PImage texture;
+    transient PImage texture;
 
     int health;
     int currentHealth;

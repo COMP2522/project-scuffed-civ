@@ -84,8 +84,6 @@ public class JoinGameMenuState extends MenuState {
         }
     }
 
-
-
     public void onBackClicked() {
         // Change the menu state to the New Game state
         menu.setState(new OnlineMenuState(scene, menu));

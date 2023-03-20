@@ -5,20 +5,21 @@ import org.json.simple.JSONObject;
 import processing.core.PImage;
 
 import java.awt.*;
+import java.io.Serializable;
 
 import static processing.awt.ShimAWT.loadImage;
 
-public class Map { //this is a tile manager
-    PImage grass;
-    PImage rocks;
-    PImage sand;
-    PImage water;
+public class Map implements Serializable { //this is a tile manager
+    transient PImage grass;
+    transient PImage rocks;
+    transient PImage sand;
+    transient PImage water;
 
     int width;
 
     int height;
     Tile[][] tiles;
-    Window scene;
+    transient Window scene;
     Player player;
 
     private Color color;
@@ -126,6 +127,26 @@ public class Map { //this is a tile manager
      */
     public static Map fromJSONObject(JSONObject mapObject, Window scene) {
         Map map = new Map(scene);
+        map.width = ((Long) mapObject.get("width")).intValue();
+        map.height = ((Long) mapObject.get("height")).intValue();
+        map.tiles = new Tile[map.width][map.height];
+        for (int i = 0; i < map.tiles.length; i++) {
+            for (int j = 0; j < map.tiles[i].length; j++) {
+                map.tiles[i][j] = Tile.fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));
+            }
+        }
+        return map;
+    }
+
+    /**
+     * Creates a map from a JSONObject.
+     *
+     * @param mapObject JSONObject map
+     * @param scene Window scene
+     * @return Map map
+     */
+    public static Map fromJSONObject(JSONObject mapObject) {
+        Map map = new Map(null);
         map.width = ((Long) mapObject.get("width")).intValue();
         map.height = ((Long) mapObject.get("height")).intValue();
         map.tiles = new Tile[map.width][map.height];

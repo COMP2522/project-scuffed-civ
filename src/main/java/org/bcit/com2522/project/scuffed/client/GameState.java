@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 
 import static processing.core.PConstants.*;
 
-public class GameState { //everything manager this is the player manager
+public class GameState implements Serializable { //everything manager this is the player manager
     int gameId;
     Map map;
     Player currentPlayer;
     ArrayList<Player> players;// could be a circular linked list instead might make logic easier
     Entity[][] entities;
-    Entity selected;
-    Window scene;
+    transient Entity selected;
+    transient Window scene;
     int zoomAmount;
 
     public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
@@ -33,7 +33,7 @@ public class GameState { //everything manager this is the player manager
 
         //scale = 1;
 
-        for(int i = 0; i < numplayers; i++) {
+        for (int i = 0; i < numplayers; i++) {
             players.add(new Player(scene, i));
         }
 
@@ -42,31 +42,33 @@ public class GameState { //everything manager this is the player manager
         init(); //inits players and starting entities on map
     }
 
-    public GameState(){
+    public GameState() {
         zoomAmount = 32;
-    };
+    }
+
+    ;
 
     public void init() {
         //this is just for now more logic will have to go into making players later
         currentPlayer = players.get(0);
 
         //puts entities into each corner
-        if(players.size() > 0) {
+        if (players.size() > 0) {
             entities[0][0] = new Worker(scene, new Position(0, 0), players.get(0));
         }
-        if(players.size() > 1) {
+        if (players.size() > 1) {
             entities[entities.length - 1][entities[0].length - 1] = new Worker(scene, new Position(entities.length - 1, entities[0].length - 1), players.get(1));
         }
-        if(players.size() > 2) {
+        if (players.size() > 2) {
             entities[entities.length - 1][0] = new Worker(scene, new Position(entities.length - 1, 0), players.get(2));
         }
-        if(players.size() > 3) {
+        if (players.size() > 3) {
             entities[0][entities[0].length - 1] = new Worker(scene, new Position(0, entities[0].length - 1), players.get(3));
         }
-        if(players.size() > 4) {
+        if (players.size() > 4) {
             entities[(entities.length - 1) / 2][0] = new Worker(scene, new Position((entities.length - 1) / 2, 0), players.get(4));
         }
-        if(players.size() > 5) {
+        if (players.size() > 5) {
             entities[(entities.length - 1) / 2][entities[0].length - 1] = new Worker(scene, new Position((entities.length - 1) / 2, entities[0].length - 1), players.get(5));
         }
 //        if(players.size() > 6) {
@@ -81,7 +83,7 @@ public class GameState { //everything manager this is the player manager
         Position position = new Position((int) (mousePos.x / 32), (int) (mousePos.y / 32));
 
         if (mousePos.x >= 700 && mousePos.y >= 500) { //position of nextTurn button
-            save();
+            scene.saveGame();
             nextTurn();
         }
         //TODO everything below this should be mathed out and shortened
@@ -129,16 +131,13 @@ public class GameState { //everything manager this is the player manager
     }
 
     public void keyPressed(char key) {
-        if(key == 'w') {
+        if (key == 'w') {
             shift(0, 1);
-        }
-        else if(key == 'a') {
+        } else if (key == 'a') {
             shift(1, 0);
-        }
-        else if(key == 's') {
+        } else if (key == 's') {
             shift(0, -1);
-        }
-        else if(key == 'd') {
+        } else if (key == 'd') {
             shift(-1, 0);
         }
         if (key == CODED) {
@@ -157,14 +156,14 @@ public class GameState { //everything manager this is the player manager
 
         if (!(zoomAmount <= 32 && amount < 1)) {
             //zoom for map
-            zoomAmount = (int)(zoomAmount * amount);
+            zoomAmount = (int) (zoomAmount * amount);
             map.resize(zoomAmount);
 
 
             //zoom for entities
-            for (Entity[] row: entities) {
-                for (Entity element: row) {
-                    if(element != null) {
+            for (Entity[] row : entities) {
+                for (Entity element : row) {
+                    if (element != null) {
                         element.resize(zoomAmount);
                     }
 
@@ -180,9 +179,9 @@ public class GameState { //everything manager this is the player manager
 
         map.shift(x, y);
 
-        for (Entity[] row: entities) {
-            for (Entity element: row) {
-                if(element != null) {
+        for (Entity[] row : entities) {
+            for (Entity element : row) {
+                if (element != null) {
                     element.shift(new Position(element.getPosition().getX() + (x),
                             element.getPosition().getY() + (y)));
                 }
@@ -190,11 +189,11 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    public void nextTurn(){
+    public void nextTurn() {
         //set remaining move to max
-        for (Entity[] row: entities) {
-            for (Entity element: row) {
-                if(element instanceof Unit) {
+        for (Entity[] row : entities) {
+            for (Entity element : row) {
+                if (element instanceof Unit) {
                     ((Unit) element).resetMove();
                 }
             }
@@ -211,39 +210,36 @@ public class GameState { //everything manager this is the player manager
 
     public void draw() {
         map.draw(zoomAmount); //drawing the map doesn't need to be color shifted
-
-        for (Entity[] row: entities) {
-            for (Entity entity: row) {
-                if(entity != null) {
+        for (Entity[] row : entities) {
+            for (Entity entity : row) {
+                if (entity != null) {
                     entity.draw(zoomAmount, players.indexOf(entity.getOwner())); //should be color shifted based on player number
                 }
             }
         }
-
         currentPlayer.draw(); //this is drawing the hud.
     }
-
 
 
     /**
      * Saves the current gamestate to a json file in the "saves" folder
      * currently called at end of player turn
      */
-    public void save(){
+    public JSONObject toJSONObject() {
         JSONObject gamestate = new JSONObject();
         gamestate.put("gameId", this.gameId);
         gamestate.put("map", map.toJSONObject());
         gamestate.put("currentPlayer", currentPlayer.toJSONObject());
         JSONArray playerArray = new JSONArray();
-        for (Player player: players) {
+        for (Player player : players) {
             playerArray.add(player.toJSONObject());
         }
         gamestate.put("players", playerArray);
         JSONArray entityArray = new JSONArray();
-        for (Entity[] row: entities) {
+        for (Entity[] row : entities) {
             JSONArray rowArray = new JSONArray();
-            for (Entity entity: row) {
-                if(entity != null) {
+            for (Entity entity : row) {
+                if (entity != null) {
                     rowArray.add(entity.toJSONObject());
                 } else {
                     rowArray.add(null);
@@ -252,25 +248,43 @@ public class GameState { //everything manager this is the player manager
             entityArray.add(rowArray);
         }
         gamestate.put("entities", entityArray);
-        try(FileWriter saveFile = new FileWriter("saves/save.json")) {
-            saveFile.write(gamestate.toJSONString());
-            saveFile.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        return gamestate;
+    }
+
+    /**
+     * Loads a gamestate from a json object. Window is set to null for each entity.
+     */
+    public static GameState fromJSONObject(JSONObject gameStateJSON, Window window) {
+        GameState loadedGameState = new GameState();
+        loadedGameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
+        loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
+        loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"), window);
+        JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
+        loadedGameState.players = (ArrayList<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject, window))
+                .collect(Collectors.toList());
+        JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
+        Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];
+        for (int i = 0; i < entitiesArray.size(); i++) {
+            JSONArray row = (JSONArray) entitiesArray.get(i);
+            for (int j = 0; j < row.size(); j++) {
+                entities[i][j] = Entity.fromJSONObject((JSONObject) row.get(j), window);
+            }
         }
+        loadedGameState.entities = entities;
+        return loadedGameState;
     }
 
     public static GameState load(Window window) throws FileNotFoundException {
         GameState loadedGameState = new GameState();
         JSONParser parser = new JSONParser();
-        try(FileReader saveReader = new FileReader("saves/save.json")){
-            JSONObject gameStateJSON = (JSONObject)parser.parse(saveReader);
+        try (FileReader saveReader = new FileReader("saves/save.json")) {
+            JSONObject gameStateJSON = (JSONObject) parser.parse(saveReader);
             loadedGameState.scene = window;
-            loadedGameState.gameId = ((Number)gameStateJSON.get("gameId")).intValue();
+            loadedGameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
             loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"), window);
             loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"), window);
             JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-            loadedGameState.players = (ArrayList<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject)playerObject, window))
+            loadedGameState.players = (ArrayList<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject, window))
                     .collect(Collectors.toList());
             JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
             Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];
@@ -281,11 +295,9 @@ public class GameState { //everything manager this is the player manager
                 }
             }
             loadedGameState.entities = entities;
-        } catch (IOException  | ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
         return loadedGameState;
     }
-
 }

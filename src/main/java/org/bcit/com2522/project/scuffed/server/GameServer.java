@@ -22,7 +22,7 @@ public class GameServer {
     private ServerSocket serverSocket;
     private GameState gameState;
     private int port;
-    String hostIP = "localhost"; //TODO: change to actual IP when server is started
+    String hostIP;
 
     /**
      * The list of clients connected to the server.
@@ -32,14 +32,19 @@ public class GameServer {
     public void start(GameState gameState, int port) {
         try {
             serverSocket = new ServerSocket(port);
+            this.port = port;
+            this.hostIP = serverSocket.getInetAddress().getHostAddress();
+            System.out.println("Server started on " + hostIP + ":" + port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         this.gameState = gameState;
 
         while(true){
+            System.out.println("Waiting for client connections on port " + port + "...");
             try {
                 ClientHandler client = new ClientHandler(serverSocket.accept());
+                System.out.println("Client connected from " + client.clientSocket.getInetAddress().getHostAddress());
                 clients.add(client);
                 client.start();
             } catch (IOException e) {
@@ -94,26 +99,28 @@ public class GameServer {
          * game state to all clients.
          */
         public void run() {
-            try {
-                while (true) {
-                    GameState clientGameState = (GameState) ois.readObject();
-                    // Update the server's game state
-                    gameState = clientGameState;
-                    // Broadcast the updated game state to all clients
-                    broadcastGameState(gameState, this);
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    ois.close();
-                    oos.close();
-                    clientSocket.close();
-                    clients.remove(this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            String clientIP = clientSocket.getInetAddress().getHostAddress();
+            System.out.println("Client connected: " + clientIP);
+//            try {
+//                while (true) {
+//                    GameState clientGameState = (GameState) ois.readObject();
+//                    // Update the server's game state
+//                    gameState = clientGameState;
+//                    // Broadcast the updated game state to all clients
+//                    broadcastGameState(gameState, this);
+//                }
+//            } catch (IOException | ClassNotFoundException e) {
+//                e.printStackTrace();
+//            } finally {
+//                try {
+//                    ois.close();
+//                    oos.close();
+//                    clientSocket.close();
+//                    clients.remove(this);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
 
         public void sendGameState(GameState gameState) {

@@ -2,7 +2,9 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-public class Tile {
+import java.io.Serializable;
+
+public class Tile implements Serializable {
     private Position position;
 
     private int type;

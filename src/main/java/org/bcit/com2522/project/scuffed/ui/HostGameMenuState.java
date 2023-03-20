@@ -113,7 +113,6 @@ public class HostGameMenuState extends MenuState {
     }
 
     // ...
-
     public void onStartServerClicked() {
         int port = portInput.getIntValue();
         int mapWidth = mapWidthInput.getIntValue();
@@ -127,7 +126,6 @@ public class HostGameMenuState extends MenuState {
             showError = true;
         }
     }
-
 
     @Override
     public void onBackClicked() {

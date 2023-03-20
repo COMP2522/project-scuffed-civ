@@ -2,7 +2,9 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
     private int x;
     private int y;
 

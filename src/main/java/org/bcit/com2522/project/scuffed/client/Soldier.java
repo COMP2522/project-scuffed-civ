@@ -2,9 +2,11 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
+
 import static processing.awt.ShimAWT.loadImage;
 
-public class Soldier extends Unit{
+public class Soldier extends Unit implements Serializable {
     int speed;
     int damage;
 

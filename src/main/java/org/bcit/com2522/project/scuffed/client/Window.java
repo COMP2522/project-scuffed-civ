@@ -2,11 +2,11 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.bcit.com2522.project.scuffed.ui.*;
+import org.json.simple.JSONObject;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -65,18 +65,6 @@ public class Window extends PApplet {
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
     gameState = new GameState(this, numplayers, mapwidth, mapheight);
-    gameState.init();
-  }
-
-  //TODO: implement actual server
-  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
-    this.port = port;
-    this.hostIP = "localhost";
-    gameServer = new GameServer();
-    gameState = new GameState(this, numplayers, mapwidth, mapheight);
-    gameServer.start(gameState, port);
-
-
     gameState.init();
   }
 
@@ -152,6 +140,7 @@ public class Window extends PApplet {
   }
 
   public void loadGame() {
+    System.out.println("Loading game");
     try {
       this.gameState = GameState.load(this);
     } catch (Exception e) {
@@ -161,15 +150,41 @@ public class Window extends PApplet {
   }
 
   public void saveGame() {
-    try {
-      gameState.save();
-    } catch (Exception e) {
+    System.out.println("Saving game");
+    JSONObject gameStateJSON = gameState.toJSONObject();
+    try (FileWriter saveFile = new FileWriter("saves/save.json")) {
+      saveFile.write(gameStateJSON.toJSONString());
+      saveFile.flush();
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+  //TODO: implement actual server
+  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
+    this.port = port;
+    this.hostIP = "localhost";
+    gameServer = new GameServer();
+    gameState = new GameState(this, numplayers, mapwidth, mapheight);
+    gameServer.start(gameState, port);
+
+  }
+
   public void joinGame(String hostIP, int port) {
     System.out.println("Joining game at " + hostIP + ":" + port);
+    this.hostIP = hostIP;
+    this.port = port;
+    try {
+      socket = new Socket(hostIP, port);
+      oos = new ObjectOutputStream(socket.getOutputStream());
+      ois = new ObjectInputStream(socket.getInputStream());
+//      oos.writeObject(clientId);
+//      oos.flush();
+      gameState = GameState.fromJSONObject((JSONObject) ois.readObject(), this);
+      inGame = true;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void endTurn() {
