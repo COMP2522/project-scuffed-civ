@@ -22,6 +22,18 @@ public class InputBox {
         this.maxValue = maxValue;
     }
 
+    public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue, String defaultText) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.text = defaultText;
+        this.scene = scene;
+        this.selected = false;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
     public void draw() {
         scene.pushStyle();
         scene.stroke(0);
@@ -54,6 +66,9 @@ public class InputBox {
     }
 
     public int getValue() {
+        if(text.equals("")) {
+            return 0;
+        }
         int value = Integer.parseInt(text);
         return PApplet.constrain(value, minValue, maxValue);
     }

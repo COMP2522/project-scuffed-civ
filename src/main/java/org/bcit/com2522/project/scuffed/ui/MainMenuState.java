@@ -19,7 +19,7 @@ public class MainMenuState extends MenuState {
         // Create buttons
         Button newGameButton = new Button(50, 100, 250, 150, () -> onNewGameClicked() , "New Game", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
         Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), "Load Game", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online Multiplayer", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
+        Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
         Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "Exit", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
 
         // Add buttons to ButtonManager

@@ -11,6 +11,16 @@ public class NewGameMenuState extends MenuState {
     private InputBox mapHeightInput;
     private InputBox numPlayersInput;
 
+    private Label mapWidthLabel;
+
+    private Label mapHeightLabel;
+
+    private Label numPlayersLabel;
+
+    private Label errorMessageLabel;
+
+    private boolean showError = false;
+
     public NewGameMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
@@ -18,13 +28,20 @@ public class NewGameMenuState extends MenuState {
     @Override
     public void setup() {
         // TODO: Add input boxes for the size of the width and height of the map and the number of players
-        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100);
-        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100);
-        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10);
+        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100, "16");
+        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100, "16");
+        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10, "2");
 
-        // TODO: Add buttons for starting the game and going back to the main menu
+        mapWidthLabel = new Label(50, 95, "Map Width:", 14, scene);
+        mapHeightLabel = new Label(50, 145, "Map Height:", 14, scene);
+        numPlayersLabel = new Label(50, 195, "Number of Players:", 14, scene);
+
+        // Add an error message label
+        errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14, scene);
+
+        // TODO: fix start game button
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button startButton = new Button(100, 600, 350, 666, () -> onStartClicked(), "start", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
+        Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
 
         // Add the buttons to the button manager
         buttonManager.add(backButton);
@@ -42,6 +59,13 @@ public class NewGameMenuState extends MenuState {
         mapWidthInput.draw();
         mapHeightInput.draw();
         numPlayersInput.draw();
+        mapWidthLabel.draw();
+        mapHeightLabel.draw();
+        numPlayersLabel.draw();
+
+        if(showError) {
+            errorMessageLabel.draw();
+        }
     }
 
     @Override
@@ -69,6 +93,7 @@ public class NewGameMenuState extends MenuState {
         return false;
     }
 
+
     public void keyPressed(char key) {
         if (key == PApplet.BACKSPACE) {
             if (mapWidthInput.isSelected()) {
@@ -95,8 +120,13 @@ public class NewGameMenuState extends MenuState {
         int mapWidth = mapWidthInput.getValue();
         int mapHeight = mapHeightInput.getValue();
         int numPlayers = numPlayersInput.getValue();
-        scene.initGame(numPlayers, mapWidth, mapHeight);
-        scene.inGame = true;
+        if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
+            scene.initGame(numPlayers, mapWidth, mapHeight);
+            scene.inGame = true;
+            showError = false;
+        } else {
+            showError = true;
+        }
     }
 
 
