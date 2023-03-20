@@ -1,6 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import org.bcit.com2522.project.scuffed.ui.Menu;
+import org.bcit.com2522.project.scuffed.ui.NewGameMenuState;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -17,7 +18,7 @@ public class Window extends PApplet {
 
   //Map map;
 
-  boolean inGame = false;
+  public boolean inGame = false;
 
   Menu menu;
 
@@ -74,6 +75,10 @@ public class Window extends PApplet {
     if (keyCode == 114) {
       debugMode = !debugMode;
     }
+    if(menu.currentState instanceof NewGameMenuState){
+        NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
+        newGameMenuState.keyPressed(key);
+    }
   }
 
   @Override
@@ -82,7 +87,7 @@ public class Window extends PApplet {
       PVector mousePos = new PVector(mouseX, mouseY);
       gameState.clicked(mousePos);
     } else {
-      inGame = menu.clicked(mouseX, mouseY);
+      menu.clicked(mouseX, mouseY);
     }
   }
 

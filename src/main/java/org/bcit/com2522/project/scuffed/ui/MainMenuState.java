@@ -21,7 +21,6 @@ public class MainMenuState extends MenuState {
         Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), "Load Game", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
         Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online Multiplayer", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
         Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "Exit", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        //Button settingsButton = new Button(50, 400, 250, 450, , "Settings", buttonBackground, buttonHoverBackground, buttonClickBackground, scene);
 
         // Add buttons to ButtonManager
         buttonManager.add(newGameButton);
@@ -53,10 +52,6 @@ public class MainMenuState extends MenuState {
 //        // Change the menu state to the Settings state
 //        menu.setState(new SettingsMenuState(scene, menu));
 //    }
-
-
-
-
 
     public void onBackClicked() {
         // exit the game

@@ -63,7 +63,7 @@ import processing.core.PImage;
 
  public class Menu {
      private MenuState previousState;
-    private MenuState currentState;
+    public MenuState currentState;
     Window scene;
 
      public static PImage buttonBackground;
