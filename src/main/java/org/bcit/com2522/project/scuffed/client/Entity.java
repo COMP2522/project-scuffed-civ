@@ -3,11 +3,9 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 import processing.core.PImage;
 
-import java.io.Serializable;
-
 import static processing.awt.ShimAWT.loadImage;
 
-public class Entity implements Serializable { //TODO: make this class abstract
+public class Entity { //TODO: make this class abstract
 
     int maxAction;
     int remainAction;
@@ -19,9 +17,9 @@ public class Entity implements Serializable { //TODO: make this class abstract
 
     int ownerNum;
 
-    transient Window scene;
+    Window scene;
 
-    transient PImage texture;
+    PImage texture;
 
     int maxHealth;
     int currentHealth;
@@ -69,7 +67,6 @@ public class Entity implements Serializable { //TODO: make this class abstract
             scene.tint(255, 192, 203);
             this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
         }
-
         scene.noTint();
     }
 

@@ -286,15 +286,15 @@ public class GameState { //everything manager this is the player manager
      * currently called at end of player turn
      */
     public JSONObject toJSONObject() {
-        JSONObject gamestate = new JSONObject();
-        gamestate.put("gameId", this.gameId);
-        gamestate.put("map", map.toJSONObject());
-        gamestate.put("currentPlayer", currentPlayer.toJSONObject());
+        JSONObject gameState = new JSONObject();
+        gameState.put("gameId", this.gameId);
+        gameState.put("map", map.toJSONObject());
+        gameState.put("currentPlayer", currentPlayer.toJSONObject());
         JSONArray playerArray = new JSONArray();
         for (Player player : players) {
             playerArray.add(player.toJSONObject());
         }
-        gamestate.put("players", playerArray);
+        gameState.put("players", playerArray);
         JSONArray entityArray = new JSONArray();
         for (Entity[] row : entities) {
             JSONArray rowArray = new JSONArray();
@@ -307,8 +307,8 @@ public class GameState { //everything manager this is the player manager
             }
             entityArray.add(rowArray);
         }
-        gamestate.put("entities", entityArray);
-        return gamestate;
+        gameState.put("entities", entityArray);
+        return gameState;
     }
 
     /**

@@ -142,10 +142,11 @@ public class Window extends PApplet {
     System.out.println("Loading game");
     try {
       this.gameState = GameState.load(this);
+      inGame = true;
     } catch (Exception e) {
       e.printStackTrace();
     }
-    inGame = true;
+
   }
 
   public void saveGame() {
