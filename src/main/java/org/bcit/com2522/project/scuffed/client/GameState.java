@@ -13,11 +13,15 @@ import java.util.stream.Collectors;
 
 import static processing.core.PConstants.*;
 
+import org.bcit.com2522.project.scuffed.ai.AI;
+
 public class GameState { //everything manager this is the player manager
     int gameId;
     Map map;
     public Player currentPlayer;
     ArrayList<Player> players;// could be a circular linked list instead might make logic easier
+    //ArrayList<AI> ais;
+    AI ai;
     Entity[][] entities;
     Entity selected;
     Window scene;
@@ -75,6 +79,8 @@ public class GameState { //everything manager this is the player manager
 //        if(players.size() > 7) {
 //            entities[0][0] = new Worker(scene, new Position(0, 0), currentPlayer);
 //        }
+
+        ai = new AI();
     }
 
     public void clicked(PVector mousePos) {
@@ -266,6 +272,10 @@ public class GameState { //everything manager this is the player manager
             System.out.println("next turn");
         } else {
             currentPlayer = players.get(0);
+        }
+
+        if (players.indexOf(currentPlayer) == 2) {
+            ai.start(this);
         }
 
         if (!currentPlayer.getHasLost()) {
