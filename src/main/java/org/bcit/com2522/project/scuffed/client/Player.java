@@ -1,47 +1,34 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
-import processing.core.PVector;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Player { //gamestate is the player manager
-  //private ArrayList<Entity> entities;
   private int resources;
   private int playerNum;
-
   boolean hasLost;
-  Window scene;
-  Map map;
+  private Color color;
 
-
-  public Player (Window scene, int playerNum) {
-    this.scene = scene;
+  public Player (int playerNum) {
     this.playerNum = playerNum;
     hasLost = false;
   }
 
-
   /**
-   * Creates a player from a JSONObject and scene
+   * Creates a player from a JSONObject
    *
-   * @param playerObject
-   * @param scene
-   * @return
+   * @param JSONObject playerObject
+   * @return Player object from the JSON
    */
-  public static Player fromJSONObject(JSONObject playerObject, Window scene) {
-    Player player = new Player(scene, (int)(long) playerObject.get("playerNum"));
+  public static Player fromJSONObject(JSONObject playerObject) {
+    Player player = new Player((int)(long) playerObject.get("playerNum"));
     player.resources = (int)(long) playerObject.get("resources");
-    player.scene = scene;
     return player;
   }
 
-
-
   public void addEntity(Position position) {
     //entities.add(new Entity(scene, position, this));
-
   }
 
   @Override
@@ -57,10 +44,9 @@ public class Player { //gamestate is the player manager
     return playerNum;
   }
 
-  public void draw() {
+  public void draw(Window scene) {
     scene.fill(000);
     scene.text("Player " + (playerNum + 1), 700, 150); //print current player
-
     scene.fill(200);
     scene.rect(700, 550, 400, 200);
     scene.fill(000);
@@ -93,5 +79,16 @@ public class Player { //gamestate is the player manager
 
   public boolean getHasLost() {
     return hasLost;
+  }
+  public Color getColor() {
+    return color;
+  }
+
+  public void setColor(Color color) {
+    this.color = color;
+  }
+
+  public int getID() {
+    return playerNum; //TODO: change to unique int or string that represents the player
   }
 }

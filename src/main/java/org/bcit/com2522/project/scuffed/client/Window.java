@@ -137,7 +137,7 @@ public class Window extends PApplet {
   public void draw() {
     background(222);
     if(inGame){
-      gameState.draw();
+      gameState.draw(this);
     } else {
       menu.draw();
     }
@@ -169,7 +169,7 @@ public class Window extends PApplet {
   public void loadGame() {
     System.out.println("Loading game");
     try {
-      this.gameState = GameState.load(this);
+      this.gameState = GameState.load();
       inGame = true;
     } catch (Exception e) {
       e.printStackTrace();

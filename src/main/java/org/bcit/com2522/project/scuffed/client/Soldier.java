@@ -8,13 +8,12 @@ import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Soldier extends Unit{
-    int speed;
     int damage;
 
     int range;
 
-    public Soldier(Window scene, Position position, Player player) {
-        super(scene, position, player);
+    public Soldier(Position position, Player player) {
+        super(position, player);
         unitType = "soldier";
         texture = PImages.get("soldier");
         damage = 50;
@@ -43,11 +42,11 @@ public class Soldier extends Unit{
         return soldierObject;
     }
 
-    public static Soldier fromJSONObject(JSONObject soldierObject, Window scene) {
+    public static Soldier fromJSONObject(JSONObject soldierObject) {
         if(soldierObject == null) {
             return null;
         }
-        Soldier soldier = new Soldier(scene, Position.fromJSONObject((JSONObject) soldierObject.get("position")), Player.fromJSONObject((JSONObject) soldierObject.get("owner"), scene));
+        Soldier soldier = new Soldier(Position.fromJSONObject((JSONObject) soldierObject.get("position")), Player.fromJSONObject((JSONObject) soldierObject.get("owner")));
         soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
         return soldier;
     }

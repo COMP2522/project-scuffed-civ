@@ -8,16 +8,12 @@ import static processing.awt.ShimAWT.loadImage;
 
 public class Building extends Entity{
 
-
-    public Building(Window scene, Position position, Player player) {
-        super(scene, position, player);
+    public Building(Position position, Player player) {
+        super(position, player);
         texture = PImages.get("building");
         entityType = "building";
     }
 
-    public void build(){
-
-    }
 
     public JSONObject toJSONObject() {
         JSONObject buildingObject = new JSONObject();
@@ -30,11 +26,11 @@ public class Building extends Entity{
         return buildingObject;
     }
 
-    public static Building fromJSONObject(JSONObject buildingObject, Window scene) {
+    public static Building fromJSONObject(JSONObject buildingObject) {
         if(buildingObject == null) {
             return null;
         }
-        Building building = new Building(scene, Position.fromJSONObject((JSONObject) buildingObject.get("position")), Player.fromJSONObject((JSONObject) buildingObject.get("owner"), scene));
+        Building building = new Building(Position.fromJSONObject((JSONObject) buildingObject.get("position")), Player.fromJSONObject((JSONObject) buildingObject.get("owner")));
         building.maxHealth = (int)(long) buildingObject.get("health");
         building.currentHealth = (int)(long) buildingObject.get("currentHealth");
         building.resourceCost = (int)(long) buildingObject.get("resourceCost");

@@ -7,18 +7,15 @@ import java.io.Serializable;
 import static processing.awt.ShimAWT.loadImage;
 
 
-public class Unit extends Entity { //things that can move TODO: maybe make this abstract
+public abstract class Unit extends Entity { //things that can move TODO: maybe make this abstract
     int maxMove;
     int remainMove;
-    String unitType; //worker, soldier
 
-    public Unit(Window scene, Position position, Player player) {
-        super(scene, position, player);
-        entityType = "unit";
+    public Unit(Position position, Player player) {
+        super(position, player);
         maxMove = 6;
         remainMove = maxMove;
     }
-
 
     public void resetMove() {
         remainMove = maxMove;
@@ -36,32 +33,30 @@ public class Unit extends Entity { //things that can move TODO: maybe make this 
         }
     }
 
-    public JSONObject toJSONObject() {
-        switch(unitType) {
-            case "soldier":
-                Soldier soldier = (Soldier) this;
-                return soldier.toJSONObject();
-            case "worker":
-                Worker worker = (Worker) this;
-                return worker.toJSONObject();
-            default:
-                return null;
-        }
-    }
+//    public JSONObject toJSONObject() {
+//        switch(unitType) {
+//            case "soldier":
+//                Soldier soldier = (Soldier) this;
+//                return soldier.toJSONObject();
+//            case "worker":
+//                Worker worker = (Worker) this;
+//                return worker.toJSONObject();
+//            default:
+//                return null;
+//        }
+//    }
 
-    public static Unit fromJSONObject(JSONObject unitObject, Window scene) {
-        if(unitObject == null) {
-            return null;
-        }
-        switch((String) unitObject.get("unitType")) {
-            case "soldier":
-                return Soldier.fromJSONObject(unitObject, scene);
-            case "worker":
-                return Worker.fromJSONObject(unitObject, scene);
-            default:
-                return null;
-        }
-    }
-
-
+//    public static Unit fromJSONObject(JSONObject unitObject, Window scene) {
+//        if(unitObject == null) {
+//            return null;
+//        }
+//        switch((String) unitObject.get("entityType")) {
+//            case "soldier":
+//                return Soldier.fromJSONObject(unitObject, scene);
+//            case "worker":
+//                return Worker.fromJSONObject(unitObject, scene);
+//            default:
+//                return null;
+//        }
+//    }
 }
