@@ -28,6 +28,13 @@ public abstract class MenuState {
         return false;
     }
 
-    public abstract void setup(); // setup the buttons for the menu state
+    /**
+     * SetUp the buttons and inputs for the menu state
+     */
+    public abstract void setup();
+
+    /**
+     * Called when the back/exit button is clicked
+     */
     public abstract void onBackClicked(); // go back to the previous menu state
 }

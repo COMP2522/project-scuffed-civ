@@ -67,7 +67,6 @@ public class Entity { //TODO: make this class abstract
             scene.tint(255, 192, 203);
             this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
         }
-
         scene.noTint();
     }
 

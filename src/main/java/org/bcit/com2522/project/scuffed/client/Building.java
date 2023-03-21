@@ -35,12 +35,13 @@ public class Building extends Entity{
     }
 
     public static Building fromJSONObject(JSONObject buildingObject, Window scene) {
-        Building building = new Building(scene);
-        building.setPosition(Position.fromJSONObject((JSONObject) buildingObject.get("position")));
-        building.owner = Player.fromJSONObject((JSONObject) buildingObject.get("owner"), scene);
-        building.maxHealth = (Integer) buildingObject.get("health");
-        building.currentHealth = (Integer) buildingObject.get("currentHealth");
-        building.resourceCost = (Integer) buildingObject.get("resourceCost");
+        if(buildingObject == null) {
+            return null;
+        }
+        Building building = new Building(scene, Position.fromJSONObject((JSONObject) buildingObject.get("position")), Player.fromJSONObject((JSONObject) buildingObject.get("owner"), scene));
+        building.maxHealth = (int)(long) buildingObject.get("health");
+        building.currentHealth = (int)(long) buildingObject.get("currentHealth");
+        building.resourceCost = (int)(long) buildingObject.get("resourceCost");
         return building;
     }
 }

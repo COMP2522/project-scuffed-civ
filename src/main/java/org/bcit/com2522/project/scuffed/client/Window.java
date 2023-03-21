@@ -1,14 +1,12 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.bcit.com2522.project.scuffed.ui.HUD;
-import org.bcit.com2522.project.scuffed.ui.HostGameMenuState;
-import org.bcit.com2522.project.scuffed.ui.Menu;
-import org.bcit.com2522.project.scuffed.ui.NewGameMenuState;
+import org.bcit.com2522.project.scuffed.server.GameServer;
+import org.bcit.com2522.project.scuffed.ui.*;
+import org.json.simple.JSONObject;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -39,6 +37,7 @@ public class Window extends PApplet {
   private int port;
   private ObjectInputStream ois;
   private ObjectOutputStream oos;
+  public GameServer gameServer;
 
   /**
    * Called once at the beginning of the program.
@@ -68,12 +67,6 @@ public class Window extends PApplet {
     gameState.init();
   }
 
-  //TODO: implement actual server
-  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
-    gameState = new GameState(this, numplayers, mapwidth, mapheight);
-    gameState.init();
-  }
-
   @Override
   public void keyPressed() {
     if(inGame) {
@@ -89,6 +82,10 @@ public class Window extends PApplet {
     if(menu.currentState instanceof HostGameMenuState){
         HostGameMenuState hostGameMenuState = (HostGameMenuState) menu.currentState;
         hostGameMenuState.keyPressed(key);
+    }
+    if(menu.currentState instanceof JoinGameMenuState){
+        JoinGameMenuState joinGameMenuState = (JoinGameMenuState) menu.currentState;
+        joinGameMenuState.keyPressed(key);
     }
   }
 
@@ -142,18 +139,70 @@ public class Window extends PApplet {
   }
 
   public void loadGame() {
+    System.out.println("Loading game");
     try {
       this.gameState = GameState.load(this);
+      inGame = true;
     } catch (Exception e) {
       e.printStackTrace();
     }
-    inGame = true;
+
   }
 
   public void saveGame() {
+    System.out.println("Saving game");
+    JSONObject gameStateJSON = gameState.toJSONObject();
+    try (FileWriter saveFile = new FileWriter("saves/save.json")) {
+      saveFile.write(gameStateJSON.toJSONString());
+      saveFile.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  //TODO: implement actual server
+  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
+    this.port = port;
+    this.hostIP = "localhost";
+    gameServer = new GameServer();
+    gameState = new GameState(this, numplayers, mapwidth, mapheight);
+    gameServer.start(gameState, port);
+    gameState.init();
+  }
+
+  public void joinGame(String hostIP, int port) {
+    System.out.println("Joining game at " + hostIP + ":" + port);
+    this.hostIP = hostIP;
+    this.port = port;
     try {
-      gameState.save();
+      socket = new Socket(hostIP, port);
+      oos = new ObjectOutputStream(socket.getOutputStream());
+      ois = new ObjectInputStream(socket.getInputStream());
+      gameState = GameState.fromJSONObject((JSONObject) ois.readObject(), this);
     } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+//    Thread t = new Thread(() -> {
+//      while (true) {
+//        receiveGameState();
+//      }
+//    });
+  }
+
+  public void sendGameState(GameState gameState) {
+    try {
+      oos.writeObject(gameState.toJSONObject());
+      oos.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void receiveGameState() {
+    try {
+      gameState = GameState.fromJSONObject((JSONObject) ois.readObject(), this);
+    } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
   }

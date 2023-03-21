@@ -109,9 +109,9 @@ public class NewGameMenuState extends MenuState {
     // ...
 
     public void onStartClicked() {
-        int mapWidth = mapWidthInput.getValue();
-        int mapHeight = mapHeightInput.getValue();
-        int numPlayers = numPlayersInput.getValue();
+        int mapWidth = mapWidthInput.getIntValue();
+        int mapHeight = mapHeightInput.getIntValue();
+        int numPlayers = numPlayersInput.getIntValue();
         if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
             scene.initGame(numPlayers, mapWidth, mapHeight);
             scene.inGame = true;

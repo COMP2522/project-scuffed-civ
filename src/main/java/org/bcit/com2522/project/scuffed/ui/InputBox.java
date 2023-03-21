@@ -6,6 +6,7 @@ import processing.core.PApplet;
 public class InputBox {
     private int x, y, width, height;
     private String text;
+    private String type;
     private Window scene;
     private boolean selected;
     private int minValue, maxValue;
@@ -20,6 +21,7 @@ public class InputBox {
         this.selected = false;
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.type = "int";
     }
 
     public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue, String defaultText) {
@@ -32,6 +34,31 @@ public class InputBox {
         this.selected = false;
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.type = "int";
+    }
+
+    public InputBox(int x, int y, int width, int height, Window scene, String defaultText) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.text = defaultText;
+        this.scene = scene;
+        this.selected = false;
+        this.minValue = Integer.MIN_VALUE;
+        this.maxValue = Integer.MAX_VALUE;
+    }
+    public InputBox(int x, int y, int width, int height, Window scene, String defaultText, String type) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.text = defaultText;
+        this.scene = scene;
+        this.selected = false;
+        this.minValue = Integer.MIN_VALUE;
+        this.maxValue = Integer.MAX_VALUE;
+        this.type = type;
     }
 
     public void draw() {
@@ -60,6 +87,10 @@ public class InputBox {
     }
 
     public void addCharacter(char c) {
+        if(type.equalsIgnoreCase("string")) {
+            text += c;
+            return;
+        }
         if (Character.isDigit(c)) {
             text += c;
         }
@@ -71,7 +102,7 @@ public class InputBox {
         }
     }
 
-    public int getValue() {
+    public int getIntValue() {
         if(text.equals("")) {
             return 0;
         }
@@ -79,6 +110,9 @@ public class InputBox {
         return PApplet.constrain(value, minValue, maxValue);
     }
 
+    public String getStringValue() {
+        return text;
+    }
     public boolean isClicked(int mouseX, int mouseY) {
         return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
     }

@@ -1,6 +1,9 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
+
+import java.io.Serializable;
+
 import static processing.awt.ShimAWT.loadImage;
 
 
