@@ -81,8 +81,10 @@ public class GameState { //everything manager this is the player manager
         Position position = new Position((int) (mousePos.x / 32), (int) (mousePos.y / 32));
 
         if (mousePos.x >= 700 && mousePos.y >= 500) { //position of nextTurn button
+            //printEntities();
             scene.saveGame();
             nextTurn();
+
         }
         //TODO everything below this should be mathed out and shortened
         else if (entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
@@ -112,8 +114,9 @@ public class GameState { //everything manager this is the player manager
         }
         else if (entities[position.getX()][position.getY()] == null && selected != null && selected instanceof Unit) { //move selected entity
             Unit unit = (Unit) selected;
+            Position oldposition = selected.getPosition();
             if (unit.moveTo(position)) {
-                entities[selected.getPosition().getX()][selected.getPosition().getY()] = null;
+                entities[oldposition.getX()][oldposition.getY()] = null;
                 entities[position.getX()][position.getY()] = selected;
             }
             System.out.println("trying to move");
@@ -279,7 +282,15 @@ public class GameState { //everything manager this is the player manager
         currentPlayer.draw(); //this is drawing the hud.
     }
 
-
+    public void printEntities() {
+        for (Entity[] row: entities) {
+            for (Entity element: row) {
+                if(element != null) {
+                    System.out.println(element);
+                }
+            }
+        }
+    }
 
     /**
      * Saves the current gamestate to a json file in the "saves" folder
