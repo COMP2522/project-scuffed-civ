@@ -140,6 +140,32 @@ public class GameState { //everything manager this is the player manager
         }
         else if(key == 'd') {
             shift(-1, 0);
+        } else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building TODO: fix below this to be less shit
+            Position free = getFreePosition(selected);
+            if (free != null && selected.getActionsRemain() > 0) {
+                entities[free.getX()][free.getY()] = new Building(scene, free, currentPlayer);
+                selected.act();
+            } else
+                System.out.println("there are no available spaces to place a builder or this entity is out of actions");
+        } else if(key == 'm' && selected instanceof Building) {
+            Position free = getFreePosition(selected);
+            if (free != null && selected.getActionsRemain() > 0) {
+                entities[free.getX()][free.getY()] = new Worker(scene, free, currentPlayer);
+                selected.act();
+            } else
+                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+        } else if(key == 'f' && selected instanceof Building) {
+            Position free = getFreePosition(selected);
+            if (free != null && selected.getActionsRemain() > 0) {
+                entities[free.getX()][free.getY()] = new Soldier(scene, free, currentPlayer);
+                selected.act();
+            } else
+                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+        } else if(key == 'c' && selected instanceof Worker) {
+
+        } else if (key == '\n' || key == '\r') {
+            System.out.println("enter pressed");
+            nextTurn();
         }
         if (key == CODED) {
             if (scene.keyCode == UP) {
@@ -148,6 +174,22 @@ public class GameState { //everything manager this is the player manager
                 zoom(0.5f);
             }
         }
+    }
+
+    private Position getFreePosition(Entity selected) {
+        if (selected.getPosition().getY() == 0 || entities[selected.getPosition().getX()][selected.getPosition().getY() - 1] != null) {
+            if (selected.getPosition().getX() == entities.length - 1 || entities[selected.getPosition().getX() + 1][selected.getPosition().getY()] != null) {
+                if (selected.getPosition().getY() == entities[0].length - 1 || entities[selected.getPosition().getX()][selected.getPosition().getY() + 1] != null) {
+                    if (selected.getPosition().getX() == 0 || entities[selected.getPosition().getX() - 1][selected.getPosition().getY()] != null) {
+                        return null;
+                    }
+                    return new Position (selected.getPosition().getX() - 1, selected.getPosition().getY());
+                }
+                return new Position(selected.getPosition().getX(), selected.getPosition().getY() + 1);
+            }
+            return new Position(selected.getPosition().getX() + 1, selected.getPosition().getY());
+        }
+        return new Position(selected.getPosition().getX(), selected.getPosition().getY() - 1);
     }
 
 
@@ -195,8 +237,11 @@ public class GameState { //everything manager this is the player manager
         //set remaining move to max
         for (Entity[] row: entities) {
             for (Entity element: row) {
-                if(element instanceof Unit) {
-                    ((Unit) element).resetMove();
+                if (element != null) {
+                    element.resetAction();
+                    if (element instanceof Unit) {
+                        ((Unit) element).resetMove();
+                    }
                 }
             }
         }

@@ -6,7 +6,7 @@ import processing.core.PVector;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Player { //should have a player manager (later)
+public class Player { //gamestate is the player manager
   //private ArrayList<Entity> entities;
   private int resources;
   private int playerNum;
