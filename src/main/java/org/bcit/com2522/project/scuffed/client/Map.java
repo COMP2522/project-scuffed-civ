@@ -9,17 +9,17 @@ import java.io.Serializable;
 
 import static processing.awt.ShimAWT.loadImage;
 
-public class Map implements Serializable { //this is a tile manager
-    transient PImage grass;
-    transient PImage rocks;
-    transient PImage sand;
-    transient PImage water;
+public class Map { //this is a tile manager
+    PImage grass;
+    PImage rocks;
+    PImage sand;
+    PImage water;
 
     int width;
 
     int height;
     Tile[][] tiles;
-    transient Window scene;
+    Window scene;
     Player player;
 
     private Color color;

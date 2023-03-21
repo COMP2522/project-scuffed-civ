@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import com.jogamp.common.util.locks.SingletonInstance;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,7 +17,7 @@ import static processing.core.PConstants.*;
 public class GameState implements Serializable { //everything manager this is the player manager
     int gameId;
     Map map;
-    Player currentPlayer;
+    public Player currentPlayer;
     ArrayList<Player> players;// could be a circular linked list instead might make logic easier
     Entity[][] entities;
     transient Entity selected;

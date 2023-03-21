@@ -37,7 +37,6 @@ public class Window extends PApplet {
   private int port;
   private ObjectInputStream ois;
   private ObjectOutputStream oos;
-
   public GameServer gameServer;
 
   /**
@@ -167,7 +166,7 @@ public class Window extends PApplet {
     gameServer = new GameServer();
     gameState = new GameState(this, numplayers, mapwidth, mapheight);
     gameServer.start(gameState, port);
-
+    gameState.init();
   }
 
   public void joinGame(String hostIP, int port) {
@@ -178,11 +177,31 @@ public class Window extends PApplet {
       socket = new Socket(hostIP, port);
       oos = new ObjectOutputStream(socket.getOutputStream());
       ois = new ObjectInputStream(socket.getInputStream());
-//      oos.writeObject(clientId);
-//      oos.flush();
       gameState = GameState.fromJSONObject((JSONObject) ois.readObject(), this);
-      inGame = true;
     } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+//    Thread t = new Thread(() -> {
+//      while (true) {
+//        receiveGameState();
+//      }
+//    });
+  }
+
+  public void sendGameState(GameState gameState) {
+    try {
+      oos.writeObject(gameState.toJSONObject());
+      oos.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void receiveGameState() {
+    try {
+      gameState = GameState.fromJSONObject((JSONObject) ois.readObject(), this);
+    } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
   }
