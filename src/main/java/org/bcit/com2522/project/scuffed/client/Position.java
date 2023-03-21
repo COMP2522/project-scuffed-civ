@@ -4,6 +4,9 @@ import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
+/**
+ * Represents the position on the map
+ */
 public class Position{
     private int x;
     private int y;

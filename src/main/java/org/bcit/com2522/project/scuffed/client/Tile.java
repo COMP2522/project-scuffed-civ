@@ -4,14 +4,11 @@ import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
+import static processing.awt.ShimAWT.loadImage;
+
 public class Tile{
     private Position position;
-
     private int type;
-    //0: grass
-    //1: rocks
-    //2: sand
-    //3: water
 
     public Tile(Position position) {
         type = (int) (Math.random() * 4); // 1-4
@@ -28,7 +25,6 @@ public class Tile{
         this.position = position;
         this.type = type;
     }
-
 
 
     public Position getPosition() {
@@ -53,4 +49,5 @@ public class Tile{
         Tile tile = new Tile(Position.fromJSONObject((JSONObject) tiles.get("position")), (int)(long) tiles.get("type"));
         return tile;
     }
+
 }

@@ -4,10 +4,12 @@ import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.bcit.com2522.project.scuffed.ui.*;
 import org.json.simple.JSONObject;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
 
 /**
  *
@@ -18,6 +20,7 @@ public class Window extends PApplet {
 
   //Map map;
 
+  public static HashMap<String, PImage> PImages;
   public boolean inGame = false;
 
   Menu menu;
@@ -51,6 +54,7 @@ public class Window extends PApplet {
    * Initializes all objects.
    */
   public void setup() {
+    initPImages();
     this.init();
   }
 
@@ -60,6 +64,17 @@ public class Window extends PApplet {
     surface.setTitle("Scuffed - Main Menu");
     clientId = new java.util.Random().nextInt(100000);
     menu = new Menu(this);
+  }
+
+  /**
+   * This initializes one HashMap to hold the PImages for all classes
+   */
+  public void initPImages(){
+    PImages = new HashMap<String, PImage>();
+    PImages.put("grassTile", loadImage("sprites/Menu/tile_grass.png"));
+    PImages.put("rockTile", loadImage("sprites/Menu/tile_rocks.png"));
+    PImages.put("waterTile", loadImage("sprites/Menu/tile_water.png"));
+    PImages.put("sandTile", loadImage("sprites/Menu/tile_sand.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {

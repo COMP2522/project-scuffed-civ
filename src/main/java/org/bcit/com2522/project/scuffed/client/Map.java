@@ -7,13 +7,10 @@ import processing.core.PImage;
 import java.awt.*;
 import java.io.Serializable;
 
+import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Map { //this is a tile manager
-    PImage grass;
-    PImage rocks;
-    PImage sand;
-    PImage water;
 
     int width;
 
@@ -28,19 +25,11 @@ public class Map { //this is a tile manager
      * Constructor used in loading a map from JSON.
      */
     public Map(Window scene){
-        grass = loadImage(scene, "sprites/Menu/tile_grass.png");
-        rocks = loadImage(scene, "sprites/Menu/tile_rocks.png");
-        sand = loadImage(scene, "sprites/Menu/tile_sand.png");
-        water = loadImage(scene, "sprites/Menu/tile_water.png");
         this.scene = scene;
         this.color = (Color.red);
     }
 
     public Map (Window scene, int width, int height) {
-        grass = loadImage(scene, "sprites/Menu/tile_grass.png");
-        rocks = loadImage(scene, "sprites/Menu/tile_rocks.png");
-        sand = loadImage(scene, "sprites/Menu/tile_sand.png");
-        water = loadImage(scene, "sprites/Menu/tile_water.png");
         this.width = width;
         this.height = height;
         tiles = new Tile[width][height];
@@ -67,10 +56,10 @@ public class Map { //this is a tile manager
     public void resize(int zoomAmount) {
         for (Tile[] row: tiles) {
             for (Tile element: row) {
-                grass.resize(zoomAmount, 0);
-                rocks.resize(zoomAmount, 0);
-                sand.resize(zoomAmount, 0);
-                water.resize(zoomAmount, 0);
+//                grass.resize(zoomAmount, 0);
+//                rocks.resize(zoomAmount, 0);
+//                sand.resize(zoomAmount, 0);
+//                water.resize(zoomAmount, 0);
 
                 //scale += amount;
             }
@@ -85,14 +74,13 @@ public class Map { //this is a tile manager
         for (Tile[] row: tiles) {
             for (Tile element: row) {
                 if(element.getType() == 0)
-                    this.scene.image(grass, element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+                    this.scene.image(PImages.get("grassTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
                 else if(element.getType() == 1)
-                    this.scene.image(rocks, element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+                    this.scene.image(PImages.get("rockTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
                 else if(element.getType() == 2)
-                    this.scene.image(sand, element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+                    this.scene.image(PImages.get("waterTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
                 else if(element.getType() == 3)
-                    this.scene.image(water, element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
-
+                    this.scene.image(PImages.get("sandTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
             }
         }
     }

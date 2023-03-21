@@ -106,7 +106,6 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity owner: " + selected.getOwner());
             System.out.println("Selected entity position: " + selected.getPosition());
-
             System.out.println("selected");
         } else if (entities[position.getX()][position.getY()] != null && selected != null && selected instanceof Soldier &&
                 !entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //select enemy entity with soldier (attack)
