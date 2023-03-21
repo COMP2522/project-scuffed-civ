@@ -175,7 +175,7 @@ public class GameState { //everything manager this is the player manager
             } else
                 System.out.println("there are no available spaces to place a worker or this entity is out of actions");
         } else if(key == 'c' && selected instanceof Worker) {
-
+            ((Worker) selected).collect();
         } else if (key == '\n' || key == '\r') {
             System.out.println("enter pressed");
             nextTurn();
@@ -248,6 +248,7 @@ public class GameState { //everything manager this is the player manager
 
     public void nextTurn(){
         //set remaining move to max
+
         for (Entity[] row: entities) {
             for (Entity element: row) {
                 if (element != null) {
@@ -266,15 +267,43 @@ public class GameState { //everything manager this is the player manager
         } else {
             currentPlayer = players.get(0);
         }
+
+        if (!currentPlayer.getHasLost()) {
+            boolean hasLost = true;
+            for (Entity[] row : entities) {
+                for (Entity element : row) {
+                    if (element != null && element.getOwner() == currentPlayer) {
+                        hasLost = false;
+                        break;
+                    }
+                }
+            }
+            if (hasLost) {
+                currentPlayer.lose();
+                nextTurn();
+            }
+        }
+
+        int alivePlayers = 0;
+        for (Player player : players) {
+            if (!player.getHasLost()) {
+                alivePlayers++;
+            }
+        }
+        if (alivePlayers <= 1) {
+            System.out.println("someone won");
+            int seven = 5/0;
+        }
+
     }
 
     public void draw() {
-        map.draw(zoomAmount); //drawing the map doesn't need to be color shifted
+        map.draw(zoomAmount);
 
         for (Entity[] row: entities) {
             for (Entity entity: row) {
                 if(entity != null) {
-                    entity.draw(zoomAmount, players.indexOf(entity.getOwner())); //should be color shifted based on player number
+                    entity.draw(zoomAmount, players.indexOf(entity.getOwner()));
                 }
             }
         }
