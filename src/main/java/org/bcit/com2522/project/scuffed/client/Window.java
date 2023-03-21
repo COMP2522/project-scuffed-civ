@@ -51,8 +51,6 @@ public class Window extends PApplet {
    * Initializes all objects.
    */
   public void setup() {
-    noSmooth();
-    noStroke();
     this.init();
   }
 
