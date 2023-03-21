@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
-public class Tile implements Serializable {
+public class Tile{
     private Position position;
 
     private int type;

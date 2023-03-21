@@ -7,7 +7,7 @@ import java.io.Serializable;
 import static processing.awt.ShimAWT.loadImage;
 
 
-public class Unit extends Entity implements Serializable { //things that can move TODO: maybe make this abstract
+public class Unit extends Entity { //things that can move TODO: maybe make this abstract
     int maxMove;
     int remainMove;
     String unitType; //worker, soldier

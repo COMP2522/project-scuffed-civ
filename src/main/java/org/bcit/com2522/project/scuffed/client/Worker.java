@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import static processing.awt.ShimAWT.loadImage;
 
-public class Worker extends Unit implements Serializable {
+public class Worker extends Unit{
     public Worker(Window scene, Position position, Player player) {
         super(scene, position, player);
         unitType = "worker";

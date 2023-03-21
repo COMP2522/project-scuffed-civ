@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 import static processing.awt.ShimAWT.loadImage;
 
-public class Soldier extends Unit implements Serializable {
+public class Soldier extends Unit{
     int speed;
     int damage;
 
