@@ -23,7 +23,7 @@ public class Entity implements Serializable { //TODO: make this class abstract
 
     transient PImage texture;
 
-    int health;
+    int maxHealth;
     int currentHealth;
     int resourceCost;
 
@@ -36,6 +36,8 @@ public class Entity implements Serializable { //TODO: make this class abstract
         this.entityType = "entity"; //TODO: remove this once entity is abstracted as every entityType should be building or unit
         maxAction = 1;
         remainAction = 1;
+        maxHealth = 100;
+        currentHealth = maxHealth;
     }
 
     public Entity(Window scene) {
@@ -120,11 +122,20 @@ public class Entity implements Serializable { //TODO: make this class abstract
         }
     }
 
-    public int getActionsRemain() {
-        return remainAction;
+    public boolean canAct() {
+        return remainAction >= 1;
     }
 
     public void act() {
         remainAction--;
+    }
+
+    public boolean dealDamage(int damageDealt) { //returns true if dead
+        currentHealth -= damageDealt;
+
+        if (currentHealth <= 0) {
+            return true;
+        }
+        return false;
     }
 }
