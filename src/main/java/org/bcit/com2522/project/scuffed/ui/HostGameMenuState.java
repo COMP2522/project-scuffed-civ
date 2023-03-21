@@ -31,8 +31,8 @@ public class HostGameMenuState extends MenuState {
         numPlayersLabel = new Label(50, 195, "Number of Players:", 14, scene);
         errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14, scene);
 
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button startButton = new Button(50, 600, 250, 650, () -> onStartServerClicked(), "Start Server", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
+        Button startButton = new Button(50, 600, 250, 650, () -> onStartServerClicked(), "Start Server", scene);
 
         buttonManager.add(backButton);
         buttonManager.add(startButton);

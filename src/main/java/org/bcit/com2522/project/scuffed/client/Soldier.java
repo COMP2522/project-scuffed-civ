@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
+import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Soldier extends Unit{
@@ -15,7 +16,7 @@ public class Soldier extends Unit{
     public Soldier(Window scene, Position position, Player player) {
         super(scene, position, player);
         unitType = "soldier";
-        texture = loadImage(scene, "sprites/mrClean.png");
+        texture = PImages.get("soldier");
         damage = 50;
         range = 500;
     }

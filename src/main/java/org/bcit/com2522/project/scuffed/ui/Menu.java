@@ -11,20 +11,9 @@ import processing.core.PImage;
      public MenuState currentState;
      Window scene;
 
-     public static PImage buttonBackground;
-     public static PImage buttonHoverBackground;
-     public static PImage buttonClickBackground;
-
     public Menu(Window scene) {
         this.scene = scene;
-        loadPImages();
         this.currentState = new MainMenuState(scene, this);
-    }
-
-    public void loadPImages() {
-        buttonBackground = loadImage(scene, "sprites/Menu/background.png");
-        buttonHoverBackground = loadImage(scene, "sprites/Menu/button_blank.png");
-        buttonClickBackground = loadImage(scene, "sprites/Menu/button_blank_pressed.png");
     }
 
     public void setState(MenuState newState) {

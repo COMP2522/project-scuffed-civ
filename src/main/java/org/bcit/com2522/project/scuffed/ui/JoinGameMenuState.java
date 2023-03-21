@@ -20,8 +20,8 @@ public class JoinGameMenuState extends MenuState {
     @Override
     public void setup() {
         // Create buttons
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
+        Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join", scene);
         // Create input box for host IP and port
         portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, "8080");
         hostIPInput = new InputBox(50, 100, 250, 30, scene, "", "string");

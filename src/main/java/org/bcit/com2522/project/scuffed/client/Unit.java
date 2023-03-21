@@ -19,12 +19,6 @@ public class Unit extends Entity { //things that can move TODO: maybe make this 
         remainMove = maxMove;
     }
 
-    public Unit(Window scene){
-        super(scene);
-        entityType = "unit";
-        maxMove = 6;
-        remainMove = maxMove;
-    }
 
     public void resetMove() {
         remainMove = maxMove;

@@ -5,15 +5,13 @@ import processing.core.PImage;
 
 import static processing.awt.ShimAWT.loadImage;
 
-public class Entity { //TODO: make this class abstract
-
+public abstract class Entity { //TODO: make this class abstract
     int maxAction;
     int remainAction;
     Position position;
-
     String entityType; //building or unit or entity(for now)
 
-    Player owner;
+    Player owner; //TODO: remove this reference and make entity only have ownerID
 
     int ownerNum;
 
@@ -28,7 +26,6 @@ public class Entity { //TODO: make this class abstract
     public Entity(Window scene, Position position, Player player) {
         this.position = position;
         this.scene = scene;
-        //texture = loadImage(scene, "sprites/mario.png");
         this.owner = player;
         this.ownerNum = player.getPlayerNum();
         this.entityType = "entity"; //TODO: remove this once entity is abstracted as every entityType should be building or unit
@@ -38,10 +35,6 @@ public class Entity { //TODO: make this class abstract
         currentHealth = maxHealth;
     }
 
-    public Entity(Window scene) {
-        texture = loadImage(scene, "sprites/mario.png");
-        this.entityType = "entity"; //TODO: remove this once entity is abstracted as every entityType should be building or unit
-    }
 
     public void resize(int zoomAmount) {
         texture.resize(zoomAmount, 0);

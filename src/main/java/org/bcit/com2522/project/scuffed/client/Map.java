@@ -60,8 +60,8 @@ public class Map { //this is a tile manager
 //                rocks.resize(zoomAmount, 0);
 //                sand.resize(zoomAmount, 0);
 //                water.resize(zoomAmount, 0);
-
-                //scale += amount;
+//
+//                scale += amount;
             }
         }
     }

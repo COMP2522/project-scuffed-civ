@@ -17,10 +17,10 @@ public class MainMenuState extends MenuState {
     @Override
     public void setup() {
         // Create buttons
-        Button newGameButton = new Button(50, 100, 250, 150, () -> onNewGameClicked() , "New Game", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), "Load Game", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "Exit", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
+        Button newGameButton = new Button(50, 100, 250, 150, () -> onNewGameClicked() , "New Game", scene);
+        Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), "Load Game", scene);
+        Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online", scene);
+        Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "Exit", scene);
 
         //Create error message label
         errorMessage = new Label(50, 400, "No save file found", 14, scene);

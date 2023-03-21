@@ -13,9 +13,9 @@ public class OnlineMenuState extends MenuState {
     }
     @Override
     public void setup() {
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button hostButton = new Button(50, 200, 250, 250, () -> onHostClicked(), "Host Game", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
-        Button joinButton = new Button(50, 300, 250, 350, () -> onJoinClicked(), "Join Game", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
+        Button hostButton = new Button(50, 200, 250, 250, () -> onHostClicked(), "Host Game", scene);
+        Button joinButton = new Button(50, 300, 250, 350, () -> onJoinClicked(), "Join Game", scene);
 
         buttonManager.add(backButton);
         buttonManager.add(hostButton);

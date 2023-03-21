@@ -11,6 +11,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
+import static processing.awt.ShimAWT.loadImage;
+
 /**
  *
  * @author bean
@@ -75,6 +77,12 @@ public class Window extends PApplet {
     PImages.put("rockTile", loadImage("sprites/Menu/tile_rocks.png"));
     PImages.put("waterTile", loadImage("sprites/Menu/tile_water.png"));
     PImages.put("sandTile", loadImage("sprites/Menu/tile_sand.png"));
+    PImages.put("buttonBackground", loadImage("sprites/Menu/background.png"));
+    PImages.put("buttonHoverBackground", loadImage("sprites/Menu/button_blank.png"));
+    PImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
+    PImages.put("soldier", loadImage( "sprites/soldier.png"));
+    PImages.put("worker", loadImage("sprites/worker.png"));
+    PImages.put("building", loadImage("sprites/building.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {

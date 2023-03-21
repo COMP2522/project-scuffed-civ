@@ -4,13 +4,14 @@ import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
+import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Worker extends Unit{
     public Worker(Window scene, Position position, Player player) {
         super(scene, position, player);
         unitType = "worker";
-        texture = loadImage(scene, "sprites/hammerDude.png");
+        texture = PImages.get("worker");
     }
 
     @Override

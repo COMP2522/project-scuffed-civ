@@ -160,6 +160,7 @@ public class GameState { //everything manager this is the player manager
             shift(-1, 0);
         } else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building TODO: fix below this to be less shit
             Position free = getFreePosition(selected);
+            System.out.println("b");
             if (free != null && selected.canAct()) {
                 entities[free.getX()][free.getY()] = new Building(scene, free, currentPlayer);
                 selected.act();
