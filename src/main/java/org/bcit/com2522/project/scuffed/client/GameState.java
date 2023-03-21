@@ -1,6 +1,5 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import com.jogamp.common.util.locks.SingletonInstance;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,14 +13,14 @@ import java.util.stream.Collectors;
 
 import static processing.core.PConstants.*;
 
-public class GameState implements Serializable { //everything manager this is the player manager
+public class GameState { //everything manager this is the player manager
     int gameId;
     Map map;
     public Player currentPlayer;
     ArrayList<Player> players;// could be a circular linked list instead might make logic easier
     Entity[][] entities;
-    transient Entity selected;
-    transient Window scene;
+    Entity selected;
+    Window scene;
     int zoomAmount;
 
     public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
@@ -34,7 +33,7 @@ public class GameState implements Serializable { //everything manager this is th
 
         //scale = 1;
 
-        for (int i = 0; i < numplayers; i++) {
+        for(int i = 0; i < numplayers; i++) {
             players.add(new Player(scene, i));
         }
 
@@ -43,11 +42,9 @@ public class GameState implements Serializable { //everything manager this is th
         init(); //inits players and starting entities on map
     }
 
-    public GameState() {
+    public GameState(){
         zoomAmount = 32;
-    }
-
-    ;
+    };
 
     public void init() {
         //this is just for now more logic will have to go into making players later
@@ -132,14 +129,43 @@ public class GameState implements Serializable { //everything manager this is th
     }
 
     public void keyPressed(char key) {
-        if (key == 'w') {
+        if(key == 'w') {
             shift(0, 1);
-        } else if (key == 'a') {
+        }
+        else if(key == 'a') {
             shift(1, 0);
-        } else if (key == 's') {
+        }
+        else if(key == 's') {
             shift(0, -1);
-        } else if (key == 'd') {
+        }
+        else if(key == 'd') {
             shift(-1, 0);
+        } else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building TODO: fix below this to be less shit
+            Position free = getFreePosition(selected);
+            if (free != null && selected.getActionsRemain() > 0) {
+                entities[free.getX()][free.getY()] = new Building(scene, free, currentPlayer);
+                selected.act();
+            } else
+                System.out.println("there are no available spaces to place a builder or this entity is out of actions");
+        } else if(key == 'm' && selected instanceof Building) {
+            Position free = getFreePosition(selected);
+            if (free != null && selected.getActionsRemain() > 0) {
+                entities[free.getX()][free.getY()] = new Worker(scene, free, currentPlayer);
+                selected.act();
+            } else
+                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+        } else if(key == 'f' && selected instanceof Building) {
+            Position free = getFreePosition(selected);
+            if (free != null && selected.getActionsRemain() > 0) {
+                entities[free.getX()][free.getY()] = new Soldier(scene, free, currentPlayer);
+                selected.act();
+            } else
+                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+        } else if(key == 'c' && selected instanceof Worker) {
+
+        } else if (key == '\n' || key == '\r') {
+            System.out.println("enter pressed");
+            nextTurn();
         }
         if (key == CODED) {
             if (scene.keyCode == UP) {
@@ -150,6 +176,23 @@ public class GameState implements Serializable { //everything manager this is th
         }
     }
 
+    private Position getFreePosition(Entity selected) {
+        if (selected.getPosition().getY() == 0 || entities[selected.getPosition().getX()][selected.getPosition().getY() - 1] != null) {
+            if (selected.getPosition().getX() == entities.length - 1 || entities[selected.getPosition().getX() + 1][selected.getPosition().getY()] != null) {
+                if (selected.getPosition().getY() == entities[0].length - 1 || entities[selected.getPosition().getX()][selected.getPosition().getY() + 1] != null) {
+                    if (selected.getPosition().getX() == 0 || entities[selected.getPosition().getX() - 1][selected.getPosition().getY()] != null) {
+                        return null;
+                    }
+                    return new Position (selected.getPosition().getX() - 1, selected.getPosition().getY());
+                }
+                return new Position(selected.getPosition().getX(), selected.getPosition().getY() + 1);
+            }
+            return new Position(selected.getPosition().getX() + 1, selected.getPosition().getY());
+        }
+        return new Position(selected.getPosition().getX(), selected.getPosition().getY() - 1);
+    }
+
+
     public void zoom(float amount) {
         //TODO entities do not zoom properly,
         //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
@@ -157,14 +200,14 @@ public class GameState implements Serializable { //everything manager this is th
 
         if (!(zoomAmount <= 32 && amount < 1)) {
             //zoom for map
-            zoomAmount = (int) (zoomAmount * amount);
+            zoomAmount = (int)(zoomAmount * amount);
             map.resize(zoomAmount);
 
 
             //zoom for entities
-            for (Entity[] row : entities) {
-                for (Entity element : row) {
-                    if (element != null) {
+            for (Entity[] row: entities) {
+                for (Entity element: row) {
+                    if(element != null) {
                         element.resize(zoomAmount);
                     }
 
@@ -180,9 +223,9 @@ public class GameState implements Serializable { //everything manager this is th
 
         map.shift(x, y);
 
-        for (Entity[] row : entities) {
-            for (Entity element : row) {
-                if (element != null) {
+        for (Entity[] row: entities) {
+            for (Entity element: row) {
+                if(element != null) {
                     element.shift(new Position(element.getPosition().getX() + (x),
                             element.getPosition().getY() + (y)));
                 }
@@ -190,12 +233,15 @@ public class GameState implements Serializable { //everything manager this is th
         }
     }
 
-    public void nextTurn() {
+    public void nextTurn(){
         //set remaining move to max
-        for (Entity[] row : entities) {
-            for (Entity element : row) {
-                if (element instanceof Unit) {
-                    ((Unit) element).resetMove();
+        for (Entity[] row: entities) {
+            for (Entity element: row) {
+                if (element != null) {
+                    element.resetAction();
+                    if (element instanceof Unit) {
+                        ((Unit) element).resetMove();
+                    }
                 }
             }
         }
@@ -211,15 +257,18 @@ public class GameState implements Serializable { //everything manager this is th
 
     public void draw() {
         map.draw(zoomAmount); //drawing the map doesn't need to be color shifted
-        for (Entity[] row : entities) {
-            for (Entity entity : row) {
-                if (entity != null) {
+
+        for (Entity[] row: entities) {
+            for (Entity entity: row) {
+                if(entity != null) {
                     entity.draw(zoomAmount, players.indexOf(entity.getOwner())); //should be color shifted based on player number
                 }
             }
         }
+
         currentPlayer.draw(); //this is drawing the hud.
     }
+
 
 
     /**

@@ -9,6 +9,8 @@ import static processing.awt.ShimAWT.loadImage;
 
 public class Entity implements Serializable { //TODO: make this class abstract
 
+    int maxAction;
+    int remainAction;
     Position position;
 
     String entityType; //building or unit or entity(for now)
@@ -32,6 +34,8 @@ public class Entity implements Serializable { //TODO: make this class abstract
         this.owner = player;
         this.ownerNum = player.getPlayerNum();
         this.entityType = "entity"; //TODO: remove this once entity is abstracted as every entityType should be building or unit
+        maxAction = 1;
+        remainAction = 1;
     }
 
     public Entity(Window scene) {
@@ -65,6 +69,10 @@ public class Entity implements Serializable { //TODO: make this class abstract
         }
 
         scene.noTint();
+    }
+
+    public void resetAction() {
+        remainAction = maxAction;
     }
 
     //shifts the map entirely
@@ -110,5 +118,13 @@ public class Entity implements Serializable { //TODO: make this class abstract
             default:
                 throw new IllegalArgumentException("Invalid entity type must be unit or building");
         }
+    }
+
+    public int getActionsRemain() {
+        return remainAction;
+    }
+
+    public void act() {
+        remainAction--;
     }
 }

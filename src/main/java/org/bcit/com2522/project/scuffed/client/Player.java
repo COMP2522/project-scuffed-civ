@@ -4,14 +4,14 @@ import org.json.simple.JSONObject;
 import processing.core.PVector;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player implements Serializable { //should have a player manager (later)
+public class Player { //gamestate is the player manager
   //private ArrayList<Entity> entities;
   private int resources;
   private int playerNum;
-  transient Window scene;
+  Window scene;
+  Map map;
 
 
   public Player (Window scene, int playerNum) {

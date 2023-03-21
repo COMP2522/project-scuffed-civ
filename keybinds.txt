@@ -1,0 +1,11 @@
+w - move camera up
+a
+s
+d
+b - create building (requires building or worker to be selected)
+w - create worker (requires building to be selected)
+s - create soldier (requires building to be selected)
+c - collect (requires worker to be selected)
+up arrow
+down arrow
+f3 - debug menu
