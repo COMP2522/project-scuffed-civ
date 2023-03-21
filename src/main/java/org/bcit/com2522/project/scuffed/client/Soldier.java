@@ -8,17 +8,22 @@ public class Soldier extends Unit{
     int speed;
     int damage;
 
+    int range;
+
     public Soldier(Window scene, Position position, Player player) {
         super(scene, position, player);
         unitType = "soldier";
         texture = loadImage(scene, "sprites/mrClean.png");
+        damage = 50;
+        range = 500;
     }
 
     public void move(){
 
     }
-    public void attack(){
-
+    public int attack(){
+        remainAction--;
+        return damage;
     }
 
     public void build(){
@@ -42,5 +47,14 @@ public class Soldier extends Unit{
         Soldier soldier = new Soldier(scene, Position.fromJSONObject((JSONObject) soldierObject.get("position")), Player.fromJSONObject((JSONObject) soldierObject.get("owner"), scene));
         soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
         return soldier;
+    }
+
+    public boolean withinRange(Position position) {
+        if(Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY()) <= range) {
+            return true;
+        } else {
+            System.out.println("that position is out of range");
+            return false;
+        }
     }
 }

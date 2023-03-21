@@ -100,7 +100,17 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity position: " + selected.getPosition());
 
             System.out.println("selected");
-        } else if (entities[position.getX()][position.getY()] == null && selected != null && selected instanceof Unit) { //move selected entity
+        } else if (entities[position.getX()][position.getY()] != null && selected != null && selected instanceof Soldier &&
+                !entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //select enemy entity with soldier (attack)
+            Soldier soldier = (Soldier) selected;
+            if (soldier.withinRange(position) && soldier.canAct()) {
+                if (entities[position.getX()][position.getY()].dealDamage(((Soldier) selected).attack())) {
+                    entities[position.getX()][position.getY()] = null;
+                }
+            }
+
+        }
+        else if (entities[position.getX()][position.getY()] == null && selected != null && selected instanceof Unit) { //move selected entity
             Unit unit = (Unit) selected;
             if (unit.moveTo(position)) {
                 entities[selected.getPosition().getX()][selected.getPosition().getY()] = null;
@@ -142,21 +152,21 @@ public class GameState { //everything manager this is the player manager
             shift(-1, 0);
         } else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building TODO: fix below this to be less shit
             Position free = getFreePosition(selected);
-            if (free != null && selected.getActionsRemain() > 0) {
+            if (free != null && selected.canAct()) {
                 entities[free.getX()][free.getY()] = new Building(scene, free, currentPlayer);
                 selected.act();
             } else
                 System.out.println("there are no available spaces to place a builder or this entity is out of actions");
         } else if(key == 'm' && selected instanceof Building) {
             Position free = getFreePosition(selected);
-            if (free != null && selected.getActionsRemain() > 0) {
+            if (free != null && selected.canAct()) {
                 entities[free.getX()][free.getY()] = new Worker(scene, free, currentPlayer);
                 selected.act();
             } else
                 System.out.println("there are no available spaces to place a worker or this entity is out of actions");
         } else if(key == 'f' && selected instanceof Building) {
             Position free = getFreePosition(selected);
-            if (free != null && selected.getActionsRemain() > 0) {
+            if (free != null && selected.canAct()) {
                 entities[free.getX()][free.getY()] = new Soldier(scene, free, currentPlayer);
                 selected.act();
             } else

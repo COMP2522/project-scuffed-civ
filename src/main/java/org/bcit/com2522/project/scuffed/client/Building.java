@@ -28,7 +28,7 @@ public class Building extends Entity{
         buildingObject.put("entityType", entityType);
         buildingObject.put("position", position.toJSONObject());
         buildingObject.put("owner", owner.toJSONObject());
-        buildingObject.put("health", health);
+        buildingObject.put("health", maxHealth);
         buildingObject.put("currentHealth", currentHealth);
         buildingObject.put("resourceCost", resourceCost);
         return buildingObject;
@@ -38,7 +38,7 @@ public class Building extends Entity{
         Building building = new Building(scene);
         building.setPosition(Position.fromJSONObject((JSONObject) buildingObject.get("position")));
         building.owner = Player.fromJSONObject((JSONObject) buildingObject.get("owner"), scene);
-        building.health = (Integer) buildingObject.get("health");
+        building.maxHealth = (Integer) buildingObject.get("health");
         building.currentHealth = (Integer) buildingObject.get("currentHealth");
         building.resourceCost = (Integer) buildingObject.get("resourceCost");
         return building;
