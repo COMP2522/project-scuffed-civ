@@ -32,4 +32,8 @@ public class Worker extends Unit{
         worker.currentHealth = (int) (long) workerObject.get("currentHealth");
         return worker;
     }
+
+    public void collect() {
+
+    }
 }

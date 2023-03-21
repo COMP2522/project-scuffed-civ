@@ -10,6 +10,8 @@ public class Player { //gamestate is the player manager
   //private ArrayList<Entity> entities;
   private int resources;
   private int playerNum;
+
+  boolean hasLost;
   Window scene;
   Map map;
 
@@ -17,6 +19,7 @@ public class Player { //gamestate is the player manager
   public Player (Window scene, int playerNum) {
     this.scene = scene;
     this.playerNum = playerNum;
+    hasLost = false;
   }
 
 
@@ -82,5 +85,13 @@ public class Player { //gamestate is the player manager
             "resources=" + resources +
             ", playerNum=" + playerNum +
             '}';
+  }
+
+  public void lose() {
+    hasLost = true;
+  }
+
+  public boolean getHasLost() {
+    return hasLost;
   }
 }
