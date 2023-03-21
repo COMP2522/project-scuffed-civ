@@ -185,6 +185,10 @@ public class GameState { //everything manager this is the player manager
         } else if (key == '\n' || key == '\r') {
             System.out.println("enter pressed");
             nextTurn();
+        } else if (key == ESC) {
+            key = 0;
+            scene.saveGame();
+            scene.inGame = false;
         }
         if (key == CODED) {
             if (scene.keyCode == UP) {

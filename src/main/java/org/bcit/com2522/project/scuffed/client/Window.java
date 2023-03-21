@@ -75,6 +75,11 @@ public class Window extends PApplet {
     if (keyCode == 114) {
       debugMode = !debugMode;
     }
+
+    if (keyCode == ESC) {
+      key = 0;
+    }
+
     if(menu.currentState instanceof NewGameMenuState){
         NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
         newGameMenuState.keyPressed(key);
