@@ -25,6 +25,7 @@ public class Window extends PApplet {
   public Boolean debugMode = false;
   static DebugMenu debugMenu;
   public ClickableManager clickableManager;
+  public GraphicManager graphicManager;
 
 
   /**
@@ -65,6 +66,7 @@ public class Window extends PApplet {
     PImages.put("soldier", loadImage( "sprites/soldier.png"));
     PImages.put("worker", loadImage("sprites/worker.png"));
     PImages.put("building", loadImage("sprites/building.png"));
+    PImages.put("logo", loadImage("sprites/logo.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
@@ -125,6 +127,7 @@ public class Window extends PApplet {
     if(debugMode) {
       debugMenu.draw();
     }
+    graphicManager.drawGraphics();
   }
 
   public ClickableManager getClickableManager() {
@@ -138,6 +141,12 @@ public class Window extends PApplet {
   public void removeClickable(Clickable clickable) {
     clickableManager.remove(clickable);
   }
+
+  public GraphicManager getGraphicManager() {
+    return graphicManager;
+  }
+
+
 
   public Player getCurrentPlayer() {
     if(gameInstance == null){

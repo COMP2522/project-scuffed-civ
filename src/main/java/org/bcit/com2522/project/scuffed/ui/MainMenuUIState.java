@@ -6,9 +6,13 @@ import java.io.File;
 
 public class MainMenuUIState extends UIState {
 
+    GraphicManager graphicManager;
+
     private Label errorMessage;
     public MainMenuUIState(Window scene, Menu menu) {
+
         super(scene, menu, new ButtonManager(scene));
+        graphicManager = scene.getGraphicManager();
         setup();
     }
     @Override
@@ -18,6 +22,9 @@ public class MainMenuUIState extends UIState {
         Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), "Load Game", scene);
         Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online", scene);
         Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "Exit", scene);
+        
+
+
 
         //Create error message label
         errorMessage = new Label(50, 400, "No save file found", 14, scene);
