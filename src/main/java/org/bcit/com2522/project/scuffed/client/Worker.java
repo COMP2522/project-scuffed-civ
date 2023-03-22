@@ -4,32 +4,32 @@ import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
+import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Worker extends Unit{
-    public Worker(Window scene, Position position, Player player) {
-        super(scene, position, player);
-        unitType = "worker";
-        texture = loadImage(scene, "sprites/hammerDude.png");
+    public Worker(Position position, Player owner) {
+        super(position, owner);
+        entityType = "worker";
+        texture = PImages.get(entityType);
+    }
+    public Worker(Position position, int ownerID) {
+        super(position, ownerID);
+        entityType = "worker";
+        texture = PImages.get(entityType);
     }
 
-    @Override
     public JSONObject toJSONObject() {
-        JSONObject workerObject = new JSONObject();
-        workerObject.put("entityType", entityType);
-        workerObject.put("unitType", unitType);
-        workerObject.put("position", position.toJSONObject());
-        workerObject.put("owner", owner.toJSONObject());
-        workerObject.put("currentHealth", currentHealth);
+        JSONObject workerObject = super.toJSONObject();
         return workerObject;
     }
 
-    public static Worker fromJSONObject(JSONObject workerObject, Window scene) {
+    public static Worker fromJSONObject(JSONObject workerObject) {
         if(workerObject == null) {
             return null;
         }
-        Worker worker = new Worker(scene, Position.fromJSONObject((JSONObject) workerObject.get("position")), Player.fromJSONObject((JSONObject) workerObject.get("owner"), scene));
-        worker.currentHealth = (int) (long) workerObject.get("currentHealth");
+        Worker worker = new Worker(Position.fromJSONObject((JSONObject) workerObject.get("position")), (int)(long)workerObject.get("ownerId"));
+        worker.currentHealth = (int)(long) workerObject.get("currentHealth");
         return worker;
     }
 

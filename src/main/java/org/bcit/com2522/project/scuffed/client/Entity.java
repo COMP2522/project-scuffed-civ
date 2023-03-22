@@ -3,70 +3,47 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 import processing.core.PImage;
 
-import static processing.awt.ShimAWT.loadImage;
+import java.awt.*;
 
-public class Entity { //TODO: make this class abstract
+public abstract class Entity { //TODO: make this class abstract
+    protected int maxAction;
+    protected int remainAction;
+    protected int ownerID;
 
-    int maxAction;
-    int remainAction;
-    Position position;
+    protected Color color;
+    protected int maxHealth;
+    protected int currentHealth;
+    protected int resourceCost;
 
-    String entityType; //building or unit or entity(for now)
+    protected Position position;
+    protected PImage texture;
+    protected String entityType; //building, soldier, worker
 
-    Player owner;
-
-    int ownerNum;
-
-    Window scene;
-
-    PImage texture;
-
-    int maxHealth;
-    int currentHealth;
-    int resourceCost;
-
-    public Entity(Window scene, Position position, Player player) {
+    public Entity(Position position, Player owner) {
         this.position = position;
-        this.scene = scene;
-        //texture = loadImage(scene, "sprites/mario.png");
-        this.owner = player;
-        this.ownerNum = player.getPlayerNum();
-        this.entityType = "entity"; //TODO: remove this once entity is abstracted as every entityType should be building or unit
+        this.ownerID = owner.getID();
+        this.color = owner.getColor();
+        maxAction = 1;
+        remainAction = 1;
+        maxHealth = 100;
+        currentHealth = maxHealth;
+    }
+    public Entity(Position position, int ownerID) {
+        this.position = position;
+        this.ownerID = ownerID;
         maxAction = 1;
         remainAction = 1;
         maxHealth = 100;
         currentHealth = maxHealth;
     }
 
-    public Entity(Window scene) {
-        texture = loadImage(scene, "sprites/mario.png");
-        this.entityType = "entity"; //TODO: remove this once entity is abstracted as every entityType should be building or unit
-    }
-
     public void resize(int zoomAmount) {
         texture.resize(zoomAmount, 0);
     }
 
-    public void draw(int zoomAmount, int playerNum) {
-        if(playerNum == 0) {
-            scene.tint(255, 0, 0);
-            this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 1) {
-            scene.tint(0, 0, 255);
-            this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 2) {
-            scene.tint(0, 255, 0);
-            this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 3) {
-            scene.tint(255, 255, 0);
-            this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 4) {
-            scene.tint(191, 64, 191);
-            this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 5) {
-            scene.tint(255, 192, 203);
-            this.scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        }
+    public void draw(int zoomAmount, Color color, Window scene) {
+        scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        scene.image(texture, this.position.getX() * zoomAmount, this.position.getY() * zoomAmount);
         scene.noTint();
     }
 
@@ -87,36 +64,46 @@ public class Entity { //TODO: make this class abstract
         this.position = position;
     }
 
-    public Player getOwner () {
-        return owner;
+    public int getOwnerID () {
+        return ownerID;
     }
+
 
     public JSONObject toJSONObject() {
-        switch(entityType) {
-            case "unit":
-                Unit unit = (Unit) this;
-                return unit.toJSONObject();
-            case "building":
-                Building building = (Building) this;
-                return building.toJSONObject();
-            default:
-                throw new IllegalArgumentException("Invalid entity type must be unit or building");
-        }
-
+        JSONObject entityObject = new JSONObject();
+        entityObject.put("position", position.toJSONObject());
+        entityObject.put("ownerId", ownerID);
+        entityObject.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
+        entityObject.put("currentHealth", currentHealth);
+        entityObject.put("remainAction", remainAction);
+        entityObject.put("entityType", entityType);
+        return entityObject;
     }
-    public static Entity fromJSONObject(JSONObject entityObject, Window scene) { //TODO: add reference to window/scene
+
+
+    public static Entity fromJSONObject(JSONObject entityObject) {
         if(entityObject == null || entityObject.isEmpty()) {
             return null;
         }
         String entityType = (String) entityObject.get("entityType");
+        System.out.println(entityType);
         switch(entityType) {
-            case "unit":
-                return Unit.fromJSONObject(entityObject, scene);
             case "building":
-                return Building.fromJSONObject(entityObject, scene);
+                Building building = Building.fromJSONObject(entityObject);
+                building.color = Color.decode((String) entityObject.get("color"));
+                return building;
+            case "soldier":
+                Soldier soldier = Soldier.fromJSONObject(entityObject);
+                soldier.color = Color.decode((String) entityObject.get("color"));
+                return soldier;
+            case "worker":
+                Worker worker = Worker.fromJSONObject(entityObject);
+                worker.color = Color.decode((String) entityObject.get("color"));
+                return worker;
             default:
-                throw new IllegalArgumentException("Invalid entity type must be unit or building");
+                throw new IllegalArgumentException("this is not a valid entityType: " + entityType);
         }
+
     }
 
     public boolean canAct() {
@@ -135,4 +122,6 @@ public class Entity { //TODO: make this class abstract
         }
         return false;
     }
+
+
 }

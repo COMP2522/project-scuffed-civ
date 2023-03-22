@@ -4,18 +4,26 @@ import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 
+import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Soldier extends Unit{
-    int speed;
     int damage;
 
     int range;
 
-    public Soldier(Window scene, Position position, Player player) {
-        super(scene, position, player);
-        unitType = "soldier";
-        texture = loadImage(scene, "sprites/mrClean.png");
+    public Soldier(Position position, Player owner) {
+        super(position, owner);
+        entityType = "soldier";
+        texture = PImages.get("soldier");
+        damage = 50;
+        range = 500;
+    }
+
+    public Soldier(Position position, int ownerId) {
+        super(position, ownerId);
+        entityType = "soldier";
+        texture = PImages.get("soldier");
         damage = 50;
         range = 500;
     }
@@ -33,20 +41,17 @@ public class Soldier extends Unit{
     }
 
     public JSONObject toJSONObject() {
-        JSONObject soldierObject = new JSONObject();
-        soldierObject.put("entityType", entityType);
-        soldierObject.put("unitType", unitType);
-        soldierObject.put("position", position.toJSONObject());
-        soldierObject.put("owner", owner.toJSONObject());
-        soldierObject.put("currentHealth", currentHealth);
+        JSONObject soldierObject = super.toJSONObject();
+        soldierObject.put("damage", damage);
+        soldierObject.put("range", range);
         return soldierObject;
     }
 
-    public static Soldier fromJSONObject(JSONObject soldierObject, Window scene) {
+    public static Soldier fromJSONObject(JSONObject soldierObject) {
         if(soldierObject == null) {
             return null;
         }
-        Soldier soldier = new Soldier(scene, Position.fromJSONObject((JSONObject) soldierObject.get("position")), Player.fromJSONObject((JSONObject) soldierObject.get("owner"), scene));
+        Soldier soldier = new Soldier(Position.fromJSONObject((JSONObject) soldierObject.get("position")), (int)(long) soldierObject.get("ownerId"));
         soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
         return soldier;
     }
