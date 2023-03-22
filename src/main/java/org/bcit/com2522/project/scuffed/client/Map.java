@@ -48,12 +48,7 @@ public class Map { //this is a tile manager
     public void resize(int zoomAmount) {
         for (Tile[] row: tiles) {
             for (Tile element: row) {
-//                grass.resize(zoomAmount, 0);
-//                rocks.resize(zoomAmount, 0);
-//                sand.resize(zoomAmount, 0);
-//                water.resize(zoomAmount, 0);
-//
-//                scale += amount;
+                //texture.resize(zoomAmount, 0);
             }
         }
     }
