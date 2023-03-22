@@ -45,15 +45,6 @@ public class Map { //this is a tile manager
         }
     }
 
-    public void resize(int zoomAmount) {
-        for (Tile[] row: tiles) {
-            for (Tile element: row) {
-                //texture.resize(zoomAmount, 0);
-            }
-        }
-    }
-
-
     public void draw(int zoomAmount, Window scene) {
         //this.scene.fill(color.getRed());
         //this.scene.circle(50, 50, 50);

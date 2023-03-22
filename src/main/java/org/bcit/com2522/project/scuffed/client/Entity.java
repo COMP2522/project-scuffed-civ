@@ -37,10 +37,6 @@ public abstract class Entity { //TODO: make this class abstract
         currentHealth = maxHealth;
     }
 
-    public void resize(int zoomAmount) {
-        texture.resize(zoomAmount, 0);
-    }
-
     public void draw(int zoomAmount, Color color, Window scene) {
         scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         scene.image(texture, this.position.getX() * zoomAmount, this.position.getY() * zoomAmount);
