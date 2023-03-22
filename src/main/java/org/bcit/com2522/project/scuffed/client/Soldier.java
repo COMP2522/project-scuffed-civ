@@ -20,6 +20,14 @@ public class Soldier extends Unit{
         range = 500;
     }
 
+    public Soldier(Position position, int ownerId) {
+        super(position, ownerId);
+        entityType = "soldier";
+        texture = PImages.get("soldier");
+        damage = 50;
+        range = 500;
+    }
+
     public void move(){
 
     }
@@ -43,7 +51,7 @@ public class Soldier extends Unit{
         if(soldierObject == null) {
             return null;
         }
-        Soldier soldier = new Soldier(Position.fromJSONObject((JSONObject) soldierObject.get("position")), Player.fromJSONObject((JSONObject) soldierObject.get("owner")));
+        Soldier soldier = new Soldier(Position.fromJSONObject((JSONObject) soldierObject.get("position")), (int)(long) soldierObject.get("ownerId"));
         soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
         return soldier;
     }

@@ -3,10 +3,14 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 import processing.core.PImage;
 
+import java.awt.*;
+
 public abstract class Entity { //TODO: make this class abstract
     protected int maxAction;
     protected int remainAction;
     protected int ownerID;
+
+    protected Color color;
     protected int maxHealth;
     protected int currentHealth;
     protected int resourceCost;
@@ -18,6 +22,15 @@ public abstract class Entity { //TODO: make this class abstract
     public Entity(Position position, Player owner) {
         this.position = position;
         this.ownerID = owner.getID();
+        this.color = owner.getColor();
+        maxAction = 1;
+        remainAction = 1;
+        maxHealth = 100;
+        currentHealth = maxHealth;
+    }
+    public Entity(Position position, int ownerID) {
+        this.position = position;
+        this.ownerID = ownerID;
         maxAction = 1;
         remainAction = 1;
         maxHealth = 100;
@@ -28,26 +41,9 @@ public abstract class Entity { //TODO: make this class abstract
         texture.resize(zoomAmount, 0);
     }
 
-    public void draw(int zoomAmount, int playerNum, Window scene) {
-        if(playerNum == 0) {
-            scene.tint(255, 0, 0);
-            scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 1) {
-            scene.tint(0, 0, 255);
-            scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 2) {
-            scene.tint(0, 255, 0);
-            scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 3) {
-            scene.tint(255, 255, 0);
-            scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 4) {
-            scene.tint(191, 64, 191);
-            scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        } else if(playerNum == 5) {
-            scene.tint(255, 192, 203);
-            scene.image(texture, this.getPosition().getX() * zoomAmount, this.getPosition().getY() * zoomAmount);
-        }
+    public void draw(int zoomAmount, Color color, Window scene) {
+        scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        scene.image(texture, this.position.getX() * zoomAmount, this.position.getY() * zoomAmount);
         scene.noTint();
     }
 
@@ -77,6 +73,7 @@ public abstract class Entity { //TODO: make this class abstract
         JSONObject entityObject = new JSONObject();
         entityObject.put("position", position.toJSONObject());
         entityObject.put("ownerId", ownerID);
+        entityObject.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
         entityObject.put("currentHealth", currentHealth);
         entityObject.put("remainAction", remainAction);
         entityObject.put("entityType", entityType);
@@ -92,11 +89,17 @@ public abstract class Entity { //TODO: make this class abstract
         System.out.println(entityType);
         switch(entityType) {
             case "building":
-                return Building.fromJSONObject(entityObject);
+                Building building = Building.fromJSONObject(entityObject);
+                building.color = Color.decode((String) entityObject.get("color"));
+                return building;
             case "soldier":
-                return Soldier.fromJSONObject(entityObject);
+                Soldier soldier = Soldier.fromJSONObject(entityObject);
+                soldier.color = Color.decode((String) entityObject.get("color"));
+                return soldier;
             case "worker":
-                return Worker.fromJSONObject(entityObject);
+                Worker worker = Worker.fromJSONObject(entityObject);
+                worker.color = Color.decode((String) entityObject.get("color"));
+                return worker;
             default:
                 throw new IllegalArgumentException("this is not a valid entityType: " + entityType);
         }

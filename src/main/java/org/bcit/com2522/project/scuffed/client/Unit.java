@@ -13,6 +13,12 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
         remainMove = maxMove;
     }
 
+    public Unit(Position position, int ownerID) {
+        super(position, ownerID);
+        maxMove = 6;
+        remainMove = maxMove;
+    }
+
     public void resetMove() {
         remainMove = maxMove;
     }

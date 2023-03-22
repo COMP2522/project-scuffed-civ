@@ -48,7 +48,7 @@ public class MainMenuState extends MenuState {
 
             // Run the loading process in a separate thread
             scene.loadGame();
-
+            menu.setState(new MainMenuState(scene, menu));
 
         } else {
             errorMessage.draw();

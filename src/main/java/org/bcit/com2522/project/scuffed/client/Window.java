@@ -17,21 +17,14 @@ import java.util.HashMap;
  *
  */
 public class Window extends PApplet {
-
-  //Map map;
-
   public static HashMap<String, PImage> PImages;
   public boolean inGame = false;
 
-  Menu menu;
-
-  HUD hud;
-
-  GameState gameState;
-
-  Boolean debugMode = false;
+  public Menu menu;
+  public GameInstance gameInstance;
+  public Boolean debugMode = false;
   static DebugMenu debugMenu;
-  ClickableManager clickableManager;
+  public ClickableManager clickableManager;
 
   /**server variables**/
   private Socket socket;
@@ -41,6 +34,7 @@ public class Window extends PApplet {
   private ObjectInputStream ois;
   private ObjectOutputStream oos;
   public GameServer gameServer;
+
 
   /**
    * Called once at the beginning of the program.
@@ -84,23 +78,21 @@ public class Window extends PApplet {
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
-    gameState = new GameState(numplayers, mapwidth, mapheight);
-    gameState.init();
+    gameInstance = new GameInstance(new HUD(), new GameState(numplayers, mapwidth, mapheight));
+    gameInstance.newGame();
   }
 
   @Override
   public void keyPressed() {
     if(inGame) {
-      gameState.keyPressed(key, this);
+      gameInstance.keyPressed(key, this);
     }
     if (keyCode == 114) {
       debugMode = !debugMode;
     }
-
     if (keyCode == ESC) {
       key = 0;
     }
-
     if(menu.currentState instanceof NewGameMenuState){
         NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
         newGameMenuState.keyPressed(key);
@@ -117,9 +109,9 @@ public class Window extends PApplet {
 
   @Override
   public void mouseClicked() {
+    PVector mousePos = new PVector(mouseX, mouseY);
     if(inGame) {
-      PVector mousePos = new PVector(mouseX, mouseY);
-      gameState.clicked(mousePos, this);
+      gameInstance.clicked(mousePos, this);
       surface.setTitle("Scuffed Civ");
     } else {
       menu.clicked(mouseX, mouseY);
@@ -135,7 +127,7 @@ public class Window extends PApplet {
   public void draw() {
     background(222);
     if(inGame){
-      gameState.draw(this);
+      gameInstance.draw(this);
     } else {
       menu.draw();
     }
@@ -158,41 +150,36 @@ public class Window extends PApplet {
   }
 
   public Player getCurrentPlayer() {
-    if(gameState == null){
+    if(gameInstance == null){
       return null;
     }
-    return gameState.currentPlayer;
+    return gameInstance.getCurrentPlayer();
+  }
+
+  public void nextTurn() {
+    gameInstance.nextTurn();
   }
 
   public void loadGame() {
+    gameInstance = new GameInstance();
     System.out.println("Loading game");
-    try {
-      this.gameState = GameState.load();
-      inGame = true;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    gameInstance.loadGame();
+    inGame = true;
+  }
 
-  }
   public void saveGame() {
-    System.out.println("Saving game");
-    JSONObject gameStateJSON = gameState.toJSONObject();
-    try (FileWriter saveFile = new FileWriter("saves/save.json")) {
-      saveFile.write(gameStateJSON.toJSONString());
-      saveFile.flush();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    gameInstance.saveGame();
   }
+
 
   //TODO: implement actual server
   public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
-    this.port = port;
-    this.hostIP = "localhost";
-    gameServer = new GameServer();
-    gameState = new GameState(numplayers, mapwidth, mapheight);
-    gameServer.start(gameState, port);
-    gameState.init();
+//    this.port = port;
+//    this.hostIP = "localhost";
+//    gameServer = new GameServer();
+//    gameState = new GameState(numplayers, mapwidth, mapheight);
+//    gameServer.start(gameState, port);
+//    gameState.init();
   }
 
   public void joinGame(String hostIP, int port) {
@@ -227,15 +214,11 @@ public class Window extends PApplet {
   }
 
   public void receiveGameState() {
-    try {
-      gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
-    } catch (IOException | ClassNotFoundException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void endTurn() {
-    gameState.nextTurn();
+//    try {
+//      gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
+//    } catch (IOException | ClassNotFoundException e) {
+//      e.printStackTrace();
+//    }
   }
 
   /**

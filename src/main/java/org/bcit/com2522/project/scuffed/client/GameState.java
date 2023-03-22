@@ -38,7 +38,7 @@ public class GameState { //everything manager this is the player manager
         }
 
         zoomAmount = 32;
-        init(); //inits players and starting entities on map
+
     }
 
     public GameState(){
@@ -53,41 +53,61 @@ public class GameState { //everything manager this is the player manager
         int cols = entities[0].length;
 
         // Calculate the number of grid sections along the x and y axes
-        int xSections = (int) Math.ceil(Math.sqrt(players.size()));
-        int ySections = (int) Math.ceil((double) players.size() / xSections);
-
-        // Calculate the width and height of each grid section
-        int sectionWidth = rows / xSections;
-        int sectionHeight = cols / ySections;
-
-        // Create a copy of the playersQueue to iterate over without affecting the original queue
+        System.out.println(players.size());
         ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);
+        if (players.size() == 2) {
+            Player player1 = playersQueueCopy.poll();
+            Player player2 = playersQueueCopy.poll();
 
-        for (int y = 0; y < ySections; y++) {
-            for (int x = 0; x < xSections; x++) {
-                if (!playersQueueCopy.isEmpty()) {
-                    Player player = playersQueueCopy.poll();
+            entities[0][0] = new Worker(new Position(0, 0), player1);
+            entities[rows - 1][cols - 1] = new Worker(new Position(rows - 1, cols - 1), player2);
+        } else {
+            int xSections = (int) Math.ceil(Math.sqrt(players.size()));
+            int ySections = (int) Math.ceil((double) players.size() / xSections);
 
-                    // Calculate the position of the worker for the current player
-                    int xPos = x * sectionWidth + sectionWidth / 2;
-                    int yPos = y * sectionHeight + sectionHeight / 2;
+            // Calculate the width and height of each grid section
+            int sectionWidth = rows / xSections;
+            int sectionHeight = cols / ySections;
 
-                    entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player);
+            // Create a copy of the playersQueue to iterate over without affecting the original queue
+
+            for (int y = 0; y < ySections; y++) {
+                for (int x = 0; x < xSections; x++) {
+                    if (!playersQueueCopy.isEmpty()) {
+                        Player player = playersQueueCopy.poll();
+
+                        // Calculate the position of the worker for the current player
+                        int xPos;
+                        int yPos;
+
+                        if (x % 2 == 0) {
+                            xPos = x * sectionWidth;
+                        } else {
+                            xPos = x * sectionWidth + sectionWidth - 1;
+                        }
+
+                        if (y % 2 == 0) {
+                            yPos = y * sectionHeight;
+                        } else {
+                            yPos = y * sectionHeight + sectionHeight - 1;
+                        }
+
+                        entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player);
+                    }
                 }
             }
         }
     }
 
-    public void clicked(PVector mousePos, Window scene) {
+    public boolean clickedMap(PVector mousePos) {
         int x = (int) (mousePos.x / 32);
         int y = (int) (mousePos.y / 32);
-        if(!(x >= 0 && x < entities.length && y >= 0 && y < entities[0].length)){
-            if (mousePos.x >= 700 && mousePos.y >= 500) {
-                scene.saveGame();
-                nextTurn();
-            }
-            return;
-        }
+        return x >= 0 && x < entities.length && y >= 0 && y < entities[0].length;
+    }
+
+    public void clicked(PVector mousePos) {
+        int x = (int) (mousePos.x / 32);
+        int y = (int) (mousePos.y / 32);
         Entity entity = entities[x][y];
         if (entity == null && selected == null) {
             System.out.println("You can't make entities like that!");
@@ -115,6 +135,7 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Invalid selection");
         }
     }
+
 
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
@@ -190,13 +211,10 @@ public class GameState { //everything manager this is the player manager
         //TODO entities do not zoom properly,
         //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
         //from a different manager class for entities
-
         if (!(zoomAmount <= 32 && amount < 1)) {
             //zoom for map
             zoomAmount = (int)(zoomAmount * amount);
             map.resize(zoomAmount);
-
-
             //zoom for entities
             for (Entity[] row: entities) {
                 for (Entity element: row) {
@@ -214,7 +232,6 @@ public class GameState { //everything manager this is the player manager
     public void shift(int x, int y) {
         //int scale = 1;
         map.shift(x, y);
-
         for (Entity[] row: entities) {
             for (Entity element: row) {
                 if(element != null) {
@@ -277,20 +294,21 @@ public class GameState { //everything manager this is the player manager
 //        }
     }
 
+
     public void draw(Window scene) {
         map.draw(zoomAmount, scene);
-
         for (Entity[] row: entities) {
             for (Entity entity: row) {
                 if(entity != null) {
-                    entity.draw(zoomAmount, entity.ownerID, scene);
+                    entity.draw(zoomAmount, entity.color, scene);
                 }
             }
         }
-
-        currentPlayer.draw(scene); //this is drawing the hud.
     }
 
+    /**
+     * Prints all entities in the gamestate to the console for debugging purposes
+     */
     public void printEntities() {
         for (Entity[] row: entities) {
             for (Entity element: row) {
@@ -332,48 +350,41 @@ public class GameState { //everything manager this is the player manager
     }
 
     /**
-     * Loads a gamestate from a json object.
+     * Reads JSON and creates a gamestate from it
+     * @param gameStateJSON the json to read
      */
     public static GameState fromJSONObject(JSONObject gameStateJSON) {
-        GameState loadedGameState = new GameState();
-        loadedGameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
-        loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
-        loadedGameState.currentPlayer = (Player)gameStateJSON.get("currentPlayer");
+        GameState gameState = new GameState();
+        gameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
+        gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
+        gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer")) ;
         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-        loadedGameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
+        gameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
                 .collect(Collectors.toCollection(ArrayDeque::new));
         JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
-        Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];
+        Entity[][] entities = new Entity[gameState.map.width][gameState.map.width];
         for (int i = 0; i < entitiesArray.size(); i++) {
             JSONArray row = (JSONArray) entitiesArray.get(i);
             for (int j = 0; j < row.size(); j++) {
                 entities[i][j] = Entity.fromJSONObject((JSONObject) row.get(j));
             }
         }
-        loadedGameState.entities = entities;
-        return loadedGameState;
+        gameState.entities = entities;
+        return gameState;
     }
 
+    /**
+     * Loads a gamestate from a json file in the "saves" folder
+     * if there's an error, try adding a saves folder to the root directory
+     *
+     * @return the loaded gamestate
+     * @throws FileNotFoundException
+     */
     public static GameState load() throws FileNotFoundException {
         GameState loadedGameState = new GameState();
         JSONParser parser = new JSONParser();
         try (FileReader saveReader = new FileReader("saves/save.json")) {
-            JSONObject gameStateJSON = (JSONObject) parser.parse(saveReader);
-            loadedGameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
-            loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
-            loadedGameState.currentPlayer = (Player) gameStateJSON.get("currentPlayerID");
-            JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-            loadedGameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
-                    .collect(Collectors.toCollection(ArrayDeque::new));
-            JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
-            Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];
-            for (int i = 0; i < entitiesArray.size(); i++) {
-                JSONArray row = (JSONArray) entitiesArray.get(i);
-                for (int j = 0; j < row.size(); j++) {
-                    entities[i][j] = Entity.fromJSONObject((JSONObject) row.get(j));
-                }
-            }
-            loadedGameState.entities = entities;
+            loadedGameState = fromJSONObject((JSONObject) parser.parse(saveReader));
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,6 @@ public class Map { //this is a tile manager
     int width;
     int height;
     Tile[][] tiles;
-    Player player;
     private Color color;
 
     /**

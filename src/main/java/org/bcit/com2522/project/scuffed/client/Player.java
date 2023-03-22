@@ -3,6 +3,7 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Player { //gamestate is the player manager
   private int resources;
@@ -12,20 +13,18 @@ public class Player { //gamestate is the player manager
 
   public Player (int playerNum) {
     this.playerNum = playerNum;
+    Random random = new Random();
+    color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255) );
     hasLost = false;
   }
 
-  /**
-   * Creates a player from a JSONObject
-   *
-   * @param JSONObject playerObject
-   * @return Player object from the JSON
-   */
-  public static Player fromJSONObject(JSONObject playerObject) {
-    Player player = new Player((int)(long) playerObject.get("playerNum"));
-    player.resources = (int)(long) playerObject.get("resources");
-    return player;
+  public Player (int playerNum, Color color) {
+    this.playerNum = playerNum;
+    this.color = color;
+    hasLost = false;
   }
+
+
 
   public void addEntity(Position position) {
     //entities.add(new Entity(scene, position, this));
@@ -58,10 +57,24 @@ public class Player { //gamestate is the player manager
     return false;
   }
 
+  /**
+   * Creates a player from a JSONObject
+   *
+   * @param JSONObject playerObject
+   * @return Player object from the JSON
+   */
+  public static Player fromJSONObject(JSONObject playerObject) {
+    Player player = new Player((int)(long) playerObject.get("playerNum"));
+    player.resources = (int)(long) playerObject.get("resources");
+    player.color = Color.decode((String) playerObject.get("color"));
+    return player;
+  }
+
   public JSONObject toJSONObject() {
     JSONObject player = new JSONObject();
     player.put("playerNum", playerNum);
     player.put("resources", resources);
+    player.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
     return player;
   }
 

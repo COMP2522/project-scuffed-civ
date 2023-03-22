@@ -14,6 +14,12 @@ public class Building extends Entity{
         entityType = "building";
     }
 
+    public Building(Position position, int ownerID) {
+        super(position, ownerID);
+        texture = PImages.get("building");
+        entityType = "building";
+    }
+
 
     /**
      * Converts the Building object to a JSONObject
@@ -28,10 +34,8 @@ public class Building extends Entity{
         if(buildingObject == null) {
             return null;
         }
-        Building building = new Building(Position.fromJSONObject((JSONObject) buildingObject.get("position")), Player.fromJSONObject((JSONObject) buildingObject.get("owner")));
-        building.maxHealth = (int)(long) buildingObject.get("health");
+        Building building = new Building(Position.fromJSONObject((JSONObject) buildingObject.get("position")), (int)(long) buildingObject.get("ownerId"));
         building.currentHealth = (int)(long) buildingObject.get("currentHealth");
-        building.resourceCost = (int)(long) buildingObject.get("resourceCost");
         return building;
     }
 }

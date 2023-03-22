@@ -13,6 +13,11 @@ public class Worker extends Unit{
         entityType = "worker";
         texture = PImages.get(entityType);
     }
+    public Worker(Position position, int ownerID) {
+        super(position, ownerID);
+        entityType = "worker";
+        texture = PImages.get(entityType);
+    }
 
     public JSONObject toJSONObject() {
         JSONObject workerObject = super.toJSONObject();
@@ -23,7 +28,7 @@ public class Worker extends Unit{
         if(workerObject == null) {
             return null;
         }
-        Worker worker = new Worker(Position.fromJSONObject((JSONObject) workerObject.get("position")), Player.fromJSONObject((JSONObject) workerObject.get("owner")));
+        Worker worker = new Worker(Position.fromJSONObject((JSONObject) workerObject.get("position")), (int)(long)workerObject.get("ownerId"));
         worker.currentHealth = (int)(long) workerObject.get("currentHealth");
         return worker;
     }
