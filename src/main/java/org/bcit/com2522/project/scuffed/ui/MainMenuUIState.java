@@ -1,16 +1,13 @@
 package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import processing.core.PImage;
 
 import java.io.File;
 
-import static processing.awt.ShimAWT.loadImage;
-
-public class MainMenuState extends MenuState {
+public class MainMenuUIState extends UIState {
 
     private Label errorMessage;
-    public MainMenuState(Window scene, Menu menu) {
+    public MainMenuUIState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -38,17 +35,17 @@ public class MainMenuState extends MenuState {
 
     public void onNewGameClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new NewGameMenuState(scene, menu));
+        menu.setState(new NewGameUIState(scene, menu));
     }
 
     public void onLoadGameClicked() {
         // Change the menu state to the Load Game state
         if (new File("saves/save.json").exists()) {
-            menu.setState(new LoadingMenuState(scene, menu));
+            menu.setState(new LoadingUIState(scene, menu));
 
             // Run the loading process in a separate thread
             scene.loadGame();
-            menu.setState(new MainMenuState(scene, menu));
+            menu.setState(new MainMenuUIState(scene, menu));
 
         } else {
             errorMessage.draw();
@@ -57,7 +54,7 @@ public class MainMenuState extends MenuState {
 
     public void onOnlineClicked() {
         // Change the menu state to the Online Multiplayer state
-        menu.setState(new OnlineMenuState(scene, menu));
+        menu.setState(new OnlineUIState(scene, menu));
     }
 
 //    public void onSettingsClicked() {

@@ -2,7 +2,7 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
-public class Label {
+public class Label implements UIElement{
     private int x, y;
     private String text;
     private Window scene;

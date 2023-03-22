@@ -1,14 +1,12 @@
 package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import processing.core.PImage;
 
-import java.io.File;
-public class LoadingMenuState extends MenuState {
+public class LoadingUIState extends UIState {
 
     private String loadingText;
 
-    public LoadingMenuState(Window scene, Menu menu) {
+    public LoadingUIState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         loadingText = "Loading...";
     }

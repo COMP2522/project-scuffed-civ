@@ -20,31 +20,38 @@ public class GameState { //everything manager this is the player manager
     Map map;
     public Player currentPlayer;
     ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
-    AI ai;
     Entity[][] entities;
     Entity selected;
-    Window scene;
-    int zoomAmount;
+    int zoomAmount = 32;
 
+    /**
+     * Constructor used for creating a new game.
+     *
+     * @param numplayers number of players in the game
+     * @param mapwidth width of the map
+     * @param mapheight height of the map
+     */
     public GameState(int numplayers, int mapwidth, int mapheight) {
         this.gameId = new Random().nextInt(10000); //make a random gameId
         players = new ArrayDeque<>(numplayers);
-
         entities = new Entity[mapwidth][mapheight];
         map = new Map(mapwidth, mapheight);
-
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
-
         zoomAmount = 32;
-
     }
 
+    /**
+     * Constructor used primarily when loading a game state from a JSON file.
+     */
     public GameState(){
         zoomAmount = 32;
     };
 
+    /**
+     * Method called to initialize the game state that sets up a new worker entity for each player.
+     */
     public void init() {
         // Initialize the currentPlayer as the first player in the queue
         currentPlayer = players.peek();
@@ -99,12 +106,23 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
+    /**
+     * Checks whether a click was on the map.
+     *
+     * @param mousePos the position of the mouse
+     * @return true if the click was on the map, false otherwise
+     */
     public boolean clickedMap(PVector mousePos) {
         int x = (int) (mousePos.x / 32);
         int y = (int) (mousePos.y / 32);
         return x >= 0 && x < entities.length && y >= 0 && y < entities[0].length;
     }
 
+    /**
+     * Method called when the map is clicked.
+     *
+     * @param mousePos the position of the mouse
+     */
     public void clicked(PVector mousePos) {
         int x = (int) (mousePos.x / 32);
         int y = (int) (mousePos.y / 32);
@@ -135,7 +153,6 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Invalid selection");
         }
     }
-
 
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
@@ -206,7 +223,6 @@ public class GameState { //everything manager this is the player manager
         return new Position(selected.getPosition().getX(), selected.getPosition().getY() - 1);
     }
 
-
     public void zoom(float amount) {
         //TODO entities do not zoom properly,
         //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
@@ -242,8 +258,25 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
+    /**
+     * Sets the current player to the next in the queue and checks win conditions
+     */
     public void nextTurn() {
-        // Reset actions and moves for all entities
+        resetEntityActions();
+        moveToNextPlayer();
+        checkPlayerLoss();
+        checkVictoryCondition();
+
+        // If the current player is AI, call ai.start(this)
+        // if (currentPlayer.isAI()) {
+        //     ai.start(this);
+        // }
+    }
+
+    /**
+     * Checks if the game has been won
+     */
+    private void resetEntityActions() {
         for (Entity[] row : entities) {
             for (Entity element : row) {
                 if (element != null) {
@@ -254,12 +287,20 @@ public class GameState { //everything manager this is the player manager
                 }
             }
         }
+    }
 
-        // Move to the next player and update currentPlayer
+    /**
+     * Moves to the next player
+     */
+    private void moveToNextPlayer() {
         players.offer(players.poll());
         currentPlayer = players.peek();
+    }
 
-        // Check if the next player has lost
+    /**
+     * Checks if the current player has lost, and if so, moves to the next player
+     */
+    private void checkPlayerLoss() {
         if (!currentPlayer.getHasLost()) {
             boolean hasLost = true;
             for (Entity[] row : entities) {
@@ -275,8 +316,12 @@ public class GameState { //everything manager this is the player manager
                 nextTurn();
             }
         }
+    }
 
-        // Check if there's only one player left
+    /**
+     * Checks if the game is over, and if so, prints a message and exits the program
+     */
+    private void checkVictoryCondition() {
         int alivePlayers = 0;
         for (Player player : players) {
             if (!player.getHasLost()) {
@@ -287,14 +332,13 @@ public class GameState { //everything manager this is the player manager
             System.out.println("someone won");
             int seven = 5 / 0;
         }
-
-        // If the current player is AI, call ai.start(this)
-//        if (currentPlayer.isAI()) {
-//            ai.start(this);
-//        }
     }
 
 
+    /**
+     * Draws the map and all entities in the gamestate
+     * @param scene the window to draw to
+     */
     public void draw(Window scene) {
         map.draw(zoomAmount, scene);
         for (Entity[] row: entities) {

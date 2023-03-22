@@ -1,13 +1,10 @@
 package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import processing.core.PImage;
 
-import static processing.awt.ShimAWT.loadImage;
+public class OnlineUIState extends UIState {
 
-public class OnlineMenuState extends MenuState {
-
-    public OnlineMenuState(Window scene, Menu menu) {
+    public OnlineUIState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -24,16 +21,16 @@ public class OnlineMenuState extends MenuState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new MainMenuState(scene, menu));
+        menu.setState(new MainMenuUIState(scene, menu));
     }
 
     public void onHostClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new HostGameMenuState(scene, menu));
+        menu.setState(new HostGameUIState(scene, menu));
     }
 
     public void onJoinClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new JoinGameMenuState(scene, menu));
+        menu.setState(new JoinGameUIState(scene, menu));
     }
 }

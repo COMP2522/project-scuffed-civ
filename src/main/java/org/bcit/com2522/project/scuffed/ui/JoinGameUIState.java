@@ -3,7 +3,7 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
 
-public class JoinGameMenuState extends MenuState {
+public class JoinGameUIState extends UIState {
 
     private InputBox portInput;
     private InputBox hostIPInput;
@@ -12,7 +12,7 @@ public class JoinGameMenuState extends MenuState {
     private Label errorMessageLabel;
     private boolean showError = false;
 
-    public JoinGameMenuState(Window scene, Menu menu) {
+    public JoinGameUIState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -86,7 +86,7 @@ public class JoinGameMenuState extends MenuState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new OnlineMenuState(scene, menu));
+        menu.setState(new OnlineUIState(scene, menu));
     }
 
     public void onJoinClicked() {

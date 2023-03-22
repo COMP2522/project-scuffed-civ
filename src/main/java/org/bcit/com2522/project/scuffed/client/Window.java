@@ -26,15 +26,6 @@ public class Window extends PApplet {
   static DebugMenu debugMenu;
   public ClickableManager clickableManager;
 
-  /**server variables**/
-  private Socket socket;
-  private int clientId;
-  private String hostIP;
-  private int port;
-  private ObjectInputStream ois;
-  private ObjectOutputStream oos;
-  public GameServer gameServer;
-
 
   /**
    * Called once at the beginning of the program.
@@ -56,7 +47,6 @@ public class Window extends PApplet {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
     surface.setTitle("Scuffed - Main Menu");
-    clientId = new java.util.Random().nextInt(100000);
     menu = new Menu(this);
   }
 
@@ -93,16 +83,16 @@ public class Window extends PApplet {
     if (keyCode == ESC) {
       key = 0;
     }
-    if(menu.currentState instanceof NewGameMenuState){
-        NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
+    if(menu.currentState instanceof NewGameUIState){
+        NewGameUIState newGameMenuState = (NewGameUIState) menu.currentState;
         newGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof HostGameMenuState){
-        HostGameMenuState hostGameMenuState = (HostGameMenuState) menu.currentState;
+    if(menu.currentState instanceof HostGameUIState){
+        HostGameUIState hostGameMenuState = (HostGameUIState) menu.currentState;
         hostGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof JoinGameMenuState){
-        JoinGameMenuState joinGameMenuState = (JoinGameMenuState) menu.currentState;
+    if(menu.currentState instanceof JoinGameUIState){
+        JoinGameUIState joinGameMenuState = (JoinGameUIState) menu.currentState;
         joinGameMenuState.keyPressed(key);
     }
   }
@@ -167,6 +157,11 @@ public class Window extends PApplet {
     inGame = true;
   }
 
+  public void joinGame(String hostIP, int port) {
+    gameInstance = new GameInstance();
+    gameInstance.joinGame(hostIP, port);
+  }
+
   public void saveGame() {
     gameInstance.saveGame();
   }
@@ -182,44 +177,6 @@ public class Window extends PApplet {
 //    gameState.init();
   }
 
-  public void joinGame(String hostIP, int port) {
-    System.out.println("Joining game at " + hostIP + ":" + port);
-    this.hostIP = hostIP;
-    this.port = port;
-//    try {
-//      socket = new Socket(hostIP, port);
-//      oos = new ObjectOutputStream(socket.getOutputStream());
-//      ois = new ObjectInputStream(socket.getInputStream());
-//      GameState serverGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
-//      serverGameState.map.loadImages(this);
-//      gameState = serverGameState;
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-
-//    Thread t = new Thread(() -> {
-//      while (true) {
-//        receiveGameState();
-//      }
-//    });
-  }
-
-  public void sendGameState(GameState gameState) {
-    try {
-      oos.writeObject(gameState.toJSONObject());
-      oos.flush();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void receiveGameState() {
-//    try {
-//      gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
-//    } catch (IOException | ClassNotFoundException e) {
-//      e.printStackTrace();
-//    }
-  }
 
   /**
    * Main function.

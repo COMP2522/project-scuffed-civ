@@ -1,15 +1,28 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.json.simple.JSONObject;
 import processing.core.PVector;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public class GameInstance {
     public HUD hud;
     public GameState gameState;
     boolean vsAI = false;
+    /**server variables**/
+    private Socket socket;
+    private int clientId;
+    private String hostIP;
+    private int port;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
+    public GameServer gameServer;
+
 
     public GameInstance() {
         hud = new HUD();
@@ -70,5 +83,38 @@ public class GameInstance {
     public void newGame() {
         gameState.init();
         hud.currentPlayer = gameState.currentPlayer;
+    }
+
+    public void sendGameState(GameState gameState) {
+        try {
+            oos.writeObject(gameState.toJSONObject());
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+        public void receiveGameState() {
+        try {
+            gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    public void joinGame(String hostIP, int port) {
+        System.out.println("Joining game at " + hostIP + ":" + port);
+        this.hostIP = hostIP;
+        this.port = port;
+        try {
+            socket = new Socket(hostIP, port);
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            GameState serverGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
+            GameInstance gameInstance = new GameInstance(new HUD(), serverGameState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
