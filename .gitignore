@@ -14,7 +14,7 @@
 saves/*.json
 
 # Package Files #
-*.jar
+
 *.war
 *.nar
 *.ear
