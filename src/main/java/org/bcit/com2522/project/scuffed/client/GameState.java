@@ -4,13 +4,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.io.*;
 import java.util.ArrayDeque;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.core.PConstants.*;
 
 import org.bcit.com2522.project.scuffed.ai.AI;
@@ -62,6 +65,7 @@ public class GameState { //everything manager this is the player manager
         // Calculate the number of grid sections along the x and y axes
         System.out.println(players.size());
         ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);
+        //TODO same logic should be used for all numbers of players
         if (players.size() == 2) {
             Player player1 = playersQueueCopy.poll();
             Player player2 = playersQueueCopy.poll();
@@ -87,17 +91,17 @@ public class GameState { //everything manager this is the player manager
                         int xPos;
                         int yPos;
 
-                        if (x % 2 == 0) {
+//                        if (x % 2 == 0) {
                             xPos = x * sectionWidth;
-                        } else {
-                            xPos = x * sectionWidth + sectionWidth - 1;
-                        }
+//                        } else {
+//                            xPos = x * sectionWidth + sectionWidth - 1;
+//                        }
 
-                        if (y % 2 == 0) {
+//                        if (y % 2 == 0) {
                             yPos = y * sectionHeight;
-                        } else {
-                            yPos = y * sectionHeight + sectionHeight - 1;
-                        }
+//                        } else {
+//                            yPos = y * sectionHeight + sectionHeight - 1;
+//                        }
 
                         entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player);
                     }
@@ -113,8 +117,8 @@ public class GameState { //everything manager this is the player manager
      * @return true if the click was on the map, false otherwise
      */
     public boolean clickedMap(PVector mousePos) {
-        int x = (int) (mousePos.x / 32);
-        int y = (int) (mousePos.y / 32);
+        int x = (int) (mousePos.x / zoomAmount);
+        int y = (int) (mousePos.y / zoomAmount);
         return x >= 0 && x < entities.length && y >= 0 && y < entities[0].length;
     }
 
@@ -124,8 +128,8 @@ public class GameState { //everything manager this is the player manager
      * @param mousePos the position of the mouse
      */
     public void clicked(PVector mousePos) {
-        int x = (int) (mousePos.x / 32);
-        int y = (int) (mousePos.y / 32);
+        int x = (int) (mousePos.x / zoomAmount);
+        int y = (int) (mousePos.y / zoomAmount);
         Entity entity = entities[x][y];
         if (entity == null && selected == null) {
             System.out.println("You can't make entities like that!");
@@ -228,18 +232,9 @@ public class GameState { //everything manager this is the player manager
         //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
         //from a different manager class for entities
         if (!(zoomAmount <= 32 && amount < 1)) {
-            //zoom for map
             zoomAmount = (int)(zoomAmount * amount);
-            map.resize(zoomAmount);
-            //zoom for entities
-            for (Entity[] row: entities) {
-                for (Entity element: row) {
-                    if(element != null) {
-                        element.resize(zoomAmount);
-                    }
-
-                    //scale += amount;
-                }
+            for (java.util.Map.Entry<String, PImage> mapElement : PImages.entrySet()) {
+                mapElement.getValue().resize(zoomAmount, 0);
             }
         }
     }
