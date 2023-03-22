@@ -26,13 +26,12 @@ public class GameState { //everything manager this is the player manager
     Window scene;
     int zoomAmount;
 
-    public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
+    public GameState(int numplayers, int mapwidth, int mapheight) {
         this.gameId = new Random().nextInt(10000); //make a random gameId
         players = new ArrayDeque<>(numplayers);
-        this.scene = scene;
 
         entities = new Entity[mapwidth][mapheight];
-        map = new Map(scene, mapwidth, mapheight);
+        map = new Map(mapwidth, mapheight);
 
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
@@ -79,9 +78,7 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-
-
-    public void clicked(PVector mousePos) {
+    public void clicked(PVector mousePos, Window scene) {
         int x = (int) (mousePos.x / 32);
         int y = (int) (mousePos.y / 32);
         if(!(x >= 0 && x < entities.length && y >= 0 && y < entities[0].length)){
@@ -119,7 +116,7 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    public void keyPressed(char key) {
+    public void keyPressed(char key, Window scene) {
         if(key == 'w') {
             shift(0, 1);
         }
@@ -216,7 +213,6 @@ public class GameState { //everything manager this is the player manager
     //moving around the map, does not take unit movement into account.
     public void shift(int x, int y) {
         //int scale = 1;
-
         map.shift(x, y);
 
         for (Entity[] row: entities) {
@@ -282,7 +278,7 @@ public class GameState { //everything manager this is the player manager
     }
 
     public void draw(Window scene) {
-        map.draw(zoomAmount);
+        map.draw(zoomAmount, scene);
 
         for (Entity[] row: entities) {
             for (Entity entity: row) {

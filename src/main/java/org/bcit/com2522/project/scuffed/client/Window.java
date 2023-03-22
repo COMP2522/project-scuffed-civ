@@ -11,8 +11,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 
-import static processing.awt.ShimAWT.loadImage;
-
 /**
  *
  * @author bean
@@ -86,14 +84,14 @@ public class Window extends PApplet {
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
-    gameState = new GameState(this, numplayers, mapwidth, mapheight);
+    gameState = new GameState(numplayers, mapwidth, mapheight);
     gameState.init();
   }
 
   @Override
   public void keyPressed() {
     if(inGame) {
-      gameState.keyPressed(key);
+      gameState.keyPressed(key, this);
     }
     if (keyCode == 114) {
       debugMode = !debugMode;
@@ -121,7 +119,7 @@ public class Window extends PApplet {
   public void mouseClicked() {
     if(inGame) {
       PVector mousePos = new PVector(mouseX, mouseY);
-      gameState.clicked(mousePos);
+      gameState.clicked(mousePos, this);
       surface.setTitle("Scuffed Civ");
     } else {
       menu.clicked(mouseX, mouseY);
@@ -192,7 +190,7 @@ public class Window extends PApplet {
     this.port = port;
     this.hostIP = "localhost";
     gameServer = new GameServer();
-    gameState = new GameState(this, numplayers, mapwidth, mapheight);
+    gameState = new GameState(numplayers, mapwidth, mapheight);
     gameServer.start(gameState, port);
     gameState.init();
   }
