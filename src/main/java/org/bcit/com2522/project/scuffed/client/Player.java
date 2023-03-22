@@ -10,12 +10,21 @@ public class Player { //gamestate is the player manager
   private int playerNum;
   boolean hasLost;
   private Color color;
+  private boolean isAi;
 
   public Player (int playerNum) {
     this.playerNum = playerNum;
     Random random = new Random();
     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255) );
     hasLost = false;
+
+
+    if (playerNum == 1) {
+      isAi = true;
+    }
+    else {
+      isAi = false;
+    }
   }
 
   public Player (int playerNum, Color color) {
@@ -104,4 +113,8 @@ public class Player { //gamestate is the player manager
   public int getID() {
     return playerNum; //TODO: change to unique int or string that represents the player
   }
+
+    public boolean isAI() {
+      return isAi;
+    }
 }

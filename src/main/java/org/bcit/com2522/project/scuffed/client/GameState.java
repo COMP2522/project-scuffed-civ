@@ -9,7 +9,6 @@ import processing.core.PVector;
 
 import java.io.*;
 import java.util.ArrayDeque;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,8 @@ public class GameState { //everything manager this is the player manager
     int xShift;
     int yShift;
 
+    AI ai;
+
     /**
      * Constructor used for creating a new game.
      *
@@ -47,6 +48,8 @@ public class GameState { //everything manager this is the player manager
         zoomAmount = 32;
         xShift = 0;
         yShift = 0;
+
+        ai = new AI();
     }
 
     /**
@@ -145,9 +148,12 @@ public class GameState { //everything manager this is the player manager
         } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
             Soldier soldier = (Soldier) selected;
             if (soldier.withinRange(new Position(x, y)) && soldier.canAct()) {
-                if (entity.dealDamage(soldier.attack())) {
+                if (entity.takeDamage(soldier.attack())) {
                     entities[x][y] = null;
                 }
+                System.out.println("you did some damage");
+            } else {
+                System.out.println("enemy is either out of range or you are out of actions");
             }
         } else if (entity == null && selected instanceof Unit) { //move
             Unit unit = (Unit) selected;
@@ -155,7 +161,7 @@ public class GameState { //everything manager this is the player manager
             if (unit.moveTo(new Position(x - xShift, y - yShift))) {
                 entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
                 entities[x][y] = selected;
-                selected = null;
+                //selected = null;
             }
         } else {
             System.out.println("Invalid selection");
@@ -266,9 +272,9 @@ public class GameState { //everything manager this is the player manager
         checkVictoryCondition();
 
         // If the current player is AI, call ai.start(this)
-        // if (currentPlayer.isAI()) {
-        //     ai.start(this);
-        // }
+         if (currentPlayer.isAI()) {
+             ai.start(this);
+         }
     }
 
     /**
@@ -431,5 +437,13 @@ public class GameState { //everything manager this is the player manager
             e.printStackTrace();
         }
         return loadedGameState;
+    }
+
+    public Entity[][] getEntities() {
+        return entities;
+    }
+
+    public int getCurrentPlayerID() {
+        return currentPlayer.getID();
     }
 }

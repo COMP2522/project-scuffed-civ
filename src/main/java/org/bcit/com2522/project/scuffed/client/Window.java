@@ -31,7 +31,6 @@ public class Window extends PApplet {
    * Called once at the beginning of the program.
    */
   public void settings() {
-    noSmooth();
     size(1080, 720);
   }
 

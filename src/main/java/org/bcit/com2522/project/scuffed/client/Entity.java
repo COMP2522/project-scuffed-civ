@@ -110,7 +110,7 @@ public abstract class Entity { //TODO: make this class abstract
         remainAction--;
     }
 
-    public boolean dealDamage(int damageDealt) { //returns true if dead
+    public boolean takeDamage(int damageDealt) { //returns true if dead
         currentHealth -= damageDealt;
 
         if (currentHealth <= 0) {
