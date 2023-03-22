@@ -8,7 +8,6 @@ import processing.core.PVector;
 
 import java.io.*;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,6 @@ public class GameState { //everything manager this is the player manager
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
-
 
         zoomAmount = 32;
         init(); //inits players and starting entities on map
@@ -86,12 +84,15 @@ public class GameState { //everything manager this is the player manager
     public void clicked(PVector mousePos) {
         int x = (int) (mousePos.x / 32);
         int y = (int) (mousePos.y / 32);
+        if(!(x >= 0 && x < entities.length && y >= 0 && y < entities[0].length)){
+            if (mousePos.x >= 700 && mousePos.y >= 500) {
+                scene.saveGame();
+                nextTurn();
+            }
+            return;
+        }
         Entity entity = entities[x][y];
-
-        if (x >= 700 && y >= 500) {
-            scene.saveGame();
-            nextTurn();
-        } else if (entity == null && selected == null) {
+        if (entity == null && selected == null) {
             System.out.println("You can't make entities like that!");
         } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) {
             selected = entity;
