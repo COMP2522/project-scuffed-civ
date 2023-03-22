@@ -26,6 +26,8 @@ public class GameState { //everything manager this is the player manager
     Entity[][] entities;
     Entity selected;
     int zoomAmount = 32;
+    int xShift;
+    int yShift;
 
     /**
      * Constructor used for creating a new game.
@@ -43,6 +45,8 @@ public class GameState { //everything manager this is the player manager
             players.add(new Player(i));
         }
         zoomAmount = 32;
+        xShift = 0;
+        yShift = 0;
     }
 
     /**
@@ -117,42 +121,42 @@ public class GameState { //everything manager this is the player manager
      * @return true if the click was on the map, false otherwise
      */
     public boolean clickedMap(PVector mousePos) {
-        int x = (int) (mousePos.x / zoomAmount);
-        int y = (int) (mousePos.y / zoomAmount);
+        int x = (int) (mousePos.x / zoomAmount) + xShift;
+        int y = (int) (mousePos.y / zoomAmount) + yShift;
         return x >= 0 && x < entities.length && y >= 0 && y < entities[0].length;
     }
 
     /**
      * Method called when the map is clicked.
      *
-     * @param mousePos the position of the mouse
+     * @param mousePos the position of the mouse in pixels
      */
     public void clicked(PVector mousePos) {
-        int x = (int) (mousePos.x / zoomAmount);
-        int y = (int) (mousePos.y / zoomAmount);
+        int x = (int) (mousePos.x / zoomAmount) + xShift;
+        int y = (int) (mousePos.y / zoomAmount) + yShift;
         Entity entity = entities[x][y];
-        if (entity == null && selected == null) {
-            System.out.println("You can't make entities like that!");
-        } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) {
+        if (entity == null && selected == null) { //select empty tile
+            System.out.println("Nothing Selected");
+        } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) { //select own entity
             selected = entity;
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
-        } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) {
+        } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
             Soldier soldier = (Soldier) selected;
             if (soldier.withinRange(new Position(x, y)) && soldier.canAct()) {
                 if (entity.dealDamage(soldier.attack())) {
                     entities[x][y] = null;
                 }
             }
-        } else if (entity == null && selected instanceof Unit) {
+        } else if (entity == null && selected instanceof Unit) { //move
             Unit unit = (Unit) selected;
             Position oldPos = selected.getPosition();
-            if (unit.moveTo(new Position(x, y))) {
-                entities[oldPos.getX()][oldPos.getY()] = null;
+            if (unit.moveTo(new Position(x - xShift, y - yShift))) {
+                entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
                 entities[x][y] = selected;
+                selected = null;
             }
-            selected = null;
         } else {
             System.out.println("Invalid selection");
         }
@@ -228,10 +232,8 @@ public class GameState { //everything manager this is the player manager
     }
 
     public void zoom(float amount) {
-        //TODO entities do not zoom properly,
-        //this requires all entity textures to be accessed somewhere, potentially from GameState potentially
-        //from a different manager class for entities
-        if (!(zoomAmount <= 32 && amount < 1)) {
+        //TODO change to nearest neighbor resizing if possible
+        if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
             zoomAmount = (int)(zoomAmount * amount);
             for (java.util.Map.Entry<String, PImage> mapElement : PImages.entrySet()) {
                 mapElement.getValue().resize(zoomAmount, 0);
@@ -241,7 +243,8 @@ public class GameState { //everything manager this is the player manager
 
     //moving around the map, does not take unit movement into account.
     public void shift(int x, int y) {
-        //int scale = 1;
+        xShift -= x;
+        yShift -= y;
         map.shift(x, y);
         for (Entity[] row: entities) {
             for (Entity element: row) {
