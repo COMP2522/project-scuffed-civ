@@ -28,34 +28,12 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
             return false;
         }
     }
-
     @Override
     public JSONObject toJSONObject() {
-        JSONObject unitObject;
-        if(this instanceof Worker) {
-            unitObject = ((Worker)this).toJSONObject();
-        } else if(this instanceof Soldier) {
-            unitObject = ((Soldier)this).toJSONObject();
-        } else {
-           throw new IllegalArgumentException("this is not a valid unit");
-        }
-        unitObject.put("entityType", "unit");
+        JSONObject unitObject = super.toJSONObject();
         unitObject.put("maxMove", maxMove);
         unitObject.put("remainMove", remainMove);
         return unitObject;
     }
 
-    public static Unit fromJSONObject(JSONObject unitObject, Window scene) {
-        if(unitObject == null) {
-            return null;
-        }
-        switch((String) unitObject.get("entityType")) {
-            case "soldier":
-                return Soldier.fromJSONObject(unitObject, scene);
-            case "worker":
-                return Worker.fromJSONObject(unitObject, scene);
-            default:
-                return null;
-        }
-    }
 }

@@ -72,29 +72,14 @@ public abstract class Entity { //TODO: make this class abstract
         return ownerID;
     }
 
-    /**
-     * C
-     * @return
-     */
-    public JSONObject toJSONObject() {
-        JSONObject entityObject;
-        if(this instanceof Unit) {
-            entityObject = ((Unit)this).toJSONObject();
-        } else if(this instanceof Building) {
-            entityObject = ((Building)this).toJSONObject();
-        } else {
-            throw new IllegalArgumentException("this is not a valid entity");
-        }
 
+    public JSONObject toJSONObject() {
+        JSONObject entityObject = new JSONObject();
         entityObject.put("position", position.toJSONObject());
         entityObject.put("ownerId", ownerID);
         entityObject.put("currentHealth", currentHealth);
-        entityObject.put("maxHealth", maxHealth);
-        entityObject.put("maxAction", maxAction);
         entityObject.put("remainAction", remainAction);
         entityObject.put("entityType", entityType);
-        entityObject.put("resourceCost", resourceCost);
-        entityObject.put("texture", texture.toString());
         return entityObject;
     }
 
@@ -104,6 +89,7 @@ public abstract class Entity { //TODO: make this class abstract
             return null;
         }
         String entityType = (String) entityObject.get("entityType");
+        System.out.println(entityType);
         switch(entityType) {
             case "building":
                 return Building.fromJSONObject(entityObject);
@@ -112,8 +98,9 @@ public abstract class Entity { //TODO: make this class abstract
             case "worker":
                 return Worker.fromJSONObject(entityObject);
             default:
-                throw new IllegalArgumentException("Invalid entity type must be unit or building");
+                throw new IllegalArgumentException("this is not a valid entityType: " + entityType);
         }
+
     }
 
     public boolean canAct() {

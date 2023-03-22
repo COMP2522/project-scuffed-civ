@@ -33,8 +33,7 @@ public class Soldier extends Unit{
     }
 
     public JSONObject toJSONObject() {
-        JSONObject soldierObject = new JSONObject();
-        soldierObject.put("entityType", "soldier");
+        JSONObject soldierObject = super.toJSONObject();
         soldierObject.put("damage", damage);
         soldierObject.put("range", range);
         return soldierObject;

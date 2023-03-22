@@ -341,7 +341,7 @@ public class GameState { //everything manager this is the player manager
         loadedGameState.currentPlayer = (Player)gameStateJSON.get("currentPlayer");
         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
         loadedGameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayDeque::new));
         JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
         Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];
         for (int i = 0; i < entitiesArray.size(); i++) {
@@ -364,7 +364,7 @@ public class GameState { //everything manager this is the player manager
             loadedGameState.currentPlayer = (Player) gameStateJSON.get("currentPlayerID");
             JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
             loadedGameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toCollection(ArrayDeque::new));
             JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
             Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];
             for (int i = 0; i < entitiesArray.size(); i++) {

@@ -176,13 +176,13 @@ public class Window extends PApplet {
   }
   public void saveGame() {
     System.out.println("Saving game");
-//    JSONObject gameStateJSON = gameState.toJSONObject();
-//    try (FileWriter saveFile = new FileWriter("saves/save.json")) {
-//      saveFile.write(gameStateJSON.toJSONString());
-//      saveFile.flush();
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
+    JSONObject gameStateJSON = gameState.toJSONObject();
+    try (FileWriter saveFile = new FileWriter("saves/save.json")) {
+      saveFile.write(gameStateJSON.toJSONString());
+      saveFile.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   //TODO: implement actual server

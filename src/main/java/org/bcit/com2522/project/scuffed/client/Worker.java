@@ -15,16 +15,16 @@ public class Worker extends Unit{
     }
 
     public JSONObject toJSONObject() {
-        JSONObject workerObject = new JSONObject();
+        JSONObject workerObject = super.toJSONObject();
         return workerObject;
     }
 
-    public static Worker fromJSONObject(JSONObject workerObject, Window scene) {
+    public static Worker fromJSONObject(JSONObject workerObject) {
         if(workerObject == null) {
             return null;
         }
         Worker worker = new Worker(Position.fromJSONObject((JSONObject) workerObject.get("position")), Player.fromJSONObject((JSONObject) workerObject.get("owner")));
-        worker.currentHealth = (int) (long) workerObject.get("currentHealth");
+        worker.currentHealth = (int)(long) workerObject.get("currentHealth");
         return worker;
     }
 

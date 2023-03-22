@@ -15,9 +15,12 @@ public class Building extends Entity{
     }
 
 
+    /**
+     * Converts the Building object to a JSONObject
+     * @return buildingObject - the JSONObject representation of the Building object
+     */
     public JSONObject toJSONObject() {
-        JSONObject buildingObject = new JSONObject();
-        buildingObject.put("entityType", "building");
+        JSONObject buildingObject = super.toJSONObject();
         return buildingObject;
     }
 
