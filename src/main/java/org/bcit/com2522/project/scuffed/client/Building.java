@@ -8,8 +8,8 @@ import static processing.awt.ShimAWT.loadImage;
 
 public class Building extends Entity{
 
-    public Building(Position position, Player player) {
-        super(position, player);
+    public Building(Position position, Player owner) {
+        super(position, owner);
         texture = PImages.get("building");
         entityType = "building";
     }
@@ -17,12 +17,7 @@ public class Building extends Entity{
 
     public JSONObject toJSONObject() {
         JSONObject buildingObject = new JSONObject();
-        buildingObject.put("entityType", entityType);
-        buildingObject.put("position", position.toJSONObject());
-        buildingObject.put("owner", owner.toJSONObject());
-        buildingObject.put("health", maxHealth);
-        buildingObject.put("currentHealth", currentHealth);
-        buildingObject.put("resourceCost", resourceCost);
+        buildingObject.put("entityType", "building");
         return buildingObject;
     }
 

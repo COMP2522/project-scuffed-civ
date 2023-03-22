@@ -1,18 +1,14 @@
 package org.bcit.com2522.project.scuffed.client;
 
+
 import org.json.simple.JSONObject;
-
-import java.io.Serializable;
-
-import static processing.awt.ShimAWT.loadImage;
-
 
 public abstract class Unit extends Entity { //things that can move TODO: maybe make this abstract
     int maxMove;
     int remainMove;
 
-    public Unit(Position position, Player player) {
-        super(position, player);
+    public Unit(Position position, Player owner) {
+        super(position, owner);
         maxMove = 6;
         remainMove = maxMove;
     }
@@ -33,30 +29,33 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
         }
     }
 
-//    public JSONObject toJSONObject() {
-//        switch(unitType) {
-//            case "soldier":
-//                Soldier soldier = (Soldier) this;
-//                return soldier.toJSONObject();
-//            case "worker":
-//                Worker worker = (Worker) this;
-//                return worker.toJSONObject();
-//            default:
-//                return null;
-//        }
-//    }
+    @Override
+    public JSONObject toJSONObject() {
+        JSONObject unitObject;
+        if(this instanceof Worker) {
+            unitObject = ((Worker)this).toJSONObject();
+        } else if(this instanceof Soldier) {
+            unitObject = ((Soldier)this).toJSONObject();
+        } else {
+           throw new IllegalArgumentException("this is not a valid unit");
+        }
+        unitObject.put("entityType", "unit");
+        unitObject.put("maxMove", maxMove);
+        unitObject.put("remainMove", remainMove);
+        return unitObject;
+    }
 
-//    public static Unit fromJSONObject(JSONObject unitObject, Window scene) {
-//        if(unitObject == null) {
-//            return null;
-//        }
-//        switch((String) unitObject.get("entityType")) {
-//            case "soldier":
-//                return Soldier.fromJSONObject(unitObject, scene);
-//            case "worker":
-//                return Worker.fromJSONObject(unitObject, scene);
-//            default:
-//                return null;
-//        }
-//    }
+    public static Unit fromJSONObject(JSONObject unitObject, Window scene) {
+        if(unitObject == null) {
+            return null;
+        }
+        switch((String) unitObject.get("entityType")) {
+            case "soldier":
+                return Soldier.fromJSONObject(unitObject, scene);
+            case "worker":
+                return Worker.fromJSONObject(unitObject, scene);
+            default:
+                return null;
+        }
+    }
 }

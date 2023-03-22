@@ -135,8 +135,8 @@ public class Map { //this is a tile manager
      */
     public static Map fromJSONObject(JSONObject mapObject) {
         Map map = new Map(null);
-        map.width = ((Long) mapObject.get("width")).intValue();
-        map.height = ((Long) mapObject.get("height")).intValue();
+        map.width = (int)(long) mapObject.get("width");
+        map.height = (int)(long) mapObject.get("height");
         map.tiles = new Tile[map.width][map.height];
         for (int i = 0; i < map.tiles.length; i++) {
             for (int j = 0; j < map.tiles[i].length; j++) {

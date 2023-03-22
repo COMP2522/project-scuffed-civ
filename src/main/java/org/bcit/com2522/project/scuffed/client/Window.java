@@ -176,7 +176,6 @@ public class Window extends PApplet {
     }
 
   }
-
   public void saveGame() {
     System.out.println("Saving game");
     JSONObject gameStateJSON = gameState.toJSONObject();
@@ -202,14 +201,16 @@ public class Window extends PApplet {
     System.out.println("Joining game at " + hostIP + ":" + port);
     this.hostIP = hostIP;
     this.port = port;
-    try {
-      socket = new Socket(hostIP, port);
-      oos = new ObjectOutputStream(socket.getOutputStream());
-      ois = new ObjectInputStream(socket.getInputStream());
-      gameState = GameState.fromJSONObject((JSONObject) ois.readObject(), this);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+//    try {
+//      socket = new Socket(hostIP, port);
+//      oos = new ObjectOutputStream(socket.getOutputStream());
+//      ois = new ObjectInputStream(socket.getInputStream());
+//      GameState serverGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
+//      serverGameState.map.loadImages(this);
+//      gameState = serverGameState;
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
 
 //    Thread t = new Thread(() -> {
 //      while (true) {
@@ -229,7 +230,7 @@ public class Window extends PApplet {
 
   public void receiveGameState() {
     try {
-      gameState = GameState.fromJSONObject((JSONObject) ois.readObject(), this);
+      gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
     } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }

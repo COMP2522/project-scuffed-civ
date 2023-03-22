@@ -8,19 +8,14 @@ import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Worker extends Unit{
-    public Worker(Position position, Player player) {
-        super(position, player);
+    public Worker(Position position, Player owner) {
+        super(position, owner);
         entityType = "worker";
         texture = PImages.get(entityType);
     }
 
-    @Override
     public JSONObject toJSONObject() {
         JSONObject workerObject = new JSONObject();
-        workerObject.put("entityType", entityType);
-        workerObject.put("position", position.toJSONObject());
-        workerObject.put("ownerId", ownerID);
-        workerObject.put("currentHealth", currentHealth);
         return workerObject;
     }
 

@@ -3,22 +3,21 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 import processing.core.PImage;
 
-import static processing.awt.ShimAWT.loadImage;
-
 public abstract class Entity { //TODO: make this class abstract
-    int maxAction;
-    int remainAction;
-    int ownerID;
-    int maxHealth;
-    int currentHealth;
-    int resourceCost;
-    Position position;
-    PImage texture;
-    String entityType; //building, soldier, worker
+    protected int maxAction;
+    protected int remainAction;
+    protected int ownerID;
+    protected int maxHealth;
+    protected int currentHealth;
+    protected int resourceCost;
 
-    public Entity(Position position, Player player) {
+    protected Position position;
+    protected PImage texture;
+    protected String entityType; //building, soldier, worker
+
+    public Entity(Position position, Player owner) {
         this.position = position;
-        this.ownerID = player.getID();
+        this.ownerID = owner.getID();
         maxAction = 1;
         remainAction = 1;
         maxHealth = 100;
@@ -79,25 +78,14 @@ public abstract class Entity { //TODO: make this class abstract
      */
     public JSONObject toJSONObject() {
         JSONObject entityObject;
-        switch(entityType) {
-            case "worker":
-                Worker worker = (Worker)this;
-                entityObject = worker.toJSONObject();
-                break;
-            case "soldier":
-                Soldier soldier = (Soldier)this;
-                entityObject = soldier.toJSONObject();
-                break;
-            case "unit":
-                Unit unit = (Unit) this;
-                entityObject = unit.toJSONObject();
-                break;
-            case "building":
-                Building building = (Building) this;
-                entityObject = building.toJSONObject();
-            default:
-                throw new IllegalArgumentException("Invalid entity type: " + entityType);
+        if(this instanceof Unit) {
+            entityObject = ((Unit)this).toJSONObject();
+        } else if(this instanceof Building) {
+            entityObject = ((Building)this).toJSONObject();
+        } else {
+            throw new IllegalArgumentException("this is not a valid entity");
         }
+
         entityObject.put("position", position.toJSONObject());
         entityObject.put("ownerId", ownerID);
         entityObject.put("currentHealth", currentHealth);
@@ -107,11 +95,10 @@ public abstract class Entity { //TODO: make this class abstract
         entityObject.put("entityType", entityType);
         entityObject.put("resourceCost", resourceCost);
         entityObject.put("texture", texture.toString());
-
-//
         return entityObject;
-
     }
+
+
     public static Entity fromJSONObject(JSONObject entityObject) {
         if(entityObject == null || entityObject.isEmpty()) {
             return null;
@@ -145,4 +132,6 @@ public abstract class Entity { //TODO: make this class abstract
         }
         return false;
     }
+
+
 }

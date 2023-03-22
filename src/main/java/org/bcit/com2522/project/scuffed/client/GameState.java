@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 import processing.core.PVector;
 
 import java.io.*;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -19,8 +20,7 @@ public class GameState { //everything manager this is the player manager
     int gameId;
     Map map;
     public Player currentPlayer;
-    ArrayList<Player> players;// could be a circular linked list instead might make logic easier
-    //ArrayList<AI> ais;
+    ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     AI ai;
     Entity[][] entities;
     Entity selected;
@@ -29,20 +29,18 @@ public class GameState { //everything manager this is the player manager
 
     public GameState(Window scene, int numplayers, int mapwidth, int mapheight) {
         this.gameId = new Random().nextInt(10000); //make a random gameId
-        players = new ArrayList<Player>();
+        players = new ArrayDeque<>(numplayers);
         this.scene = scene;
 
         entities = new Entity[mapwidth][mapheight];
         map = new Map(scene, mapwidth, mapheight);
 
-        //scale = 1;
-
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
 
-        zoomAmount = 32;
 
+        zoomAmount = 32;
         init(); //inits players and starting entities on map
     }
 
@@ -51,99 +49,73 @@ public class GameState { //everything manager this is the player manager
     };
 
     public void init() {
-        //this is just for now more logic will have to go into making players later
-        currentPlayer = players.get(0);
+        // Initialize the currentPlayer as the first player in the queue
+        currentPlayer = players.peek();
 
-        //puts entities into each corner
-        if (players.size() > 0) {
-            entities[0][0] = new Worker(new Position(0, 0), players.get(0));
-        }
-        if (players.size() > 1) {
-            entities[entities.length - 1][entities[0].length - 1] = new Worker(new Position(entities.length - 1, entities[0].length - 1), players.get(1));
-        }
-        if (players.size() > 2) {
-            entities[entities.length - 1][0] = new Worker(new Position(entities.length - 1, 0), players.get(2));
-        }
-        if (players.size() > 3) {
-            entities[0][entities[0].length - 1] = new Worker(new Position(0, entities[0].length - 1), players.get(3));
-        }
-        if (players.size() > 4) {
-            entities[(entities.length - 1) / 2][0] = new Worker(new Position((entities.length - 1) / 2, 0), players.get(4));
-        }
-        if (players.size() > 5) {
-            entities[(entities.length - 1) / 2][entities[0].length - 1] = new Worker(new Position((entities.length - 1) / 2, entities[0].length - 1), players.get(5));
-        }
-//        if(players.size() > 6) {
-//            entities[0][0] = new Worker(scene, new Position(0, 0), currentPlayer);
-//        }
-//        if(players.size() > 7) {
-//            entities[0][0] = new Worker(scene, new Position(0, 0), currentPlayer);
-//        }
+        int rows = entities.length;
+        int cols = entities[0].length;
 
-        ai = new AI();
-    }
+        // Calculate the number of grid sections along the x and y axes
+        int xSections = (int) Math.ceil(Math.sqrt(players.size()));
+        int ySections = (int) Math.ceil((double) players.size() / xSections);
 
-    public void clicked(PVector mousePos) {
-        Position position = new Position((int) (mousePos.x / 32), (int) (mousePos.y / 32));
+        // Calculate the width and height of each grid section
+        int sectionWidth = rows / xSections;
+        int sectionHeight = cols / ySections;
 
-        if (mousePos.x >= 700 && mousePos.y >= 500) { //position of nextTurn button
-            //printEntities();
-            scene.saveGame();
-            nextTurn();
+        // Create a copy of the playersQueue to iterate over without affecting the original queue
+        ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);
 
-        }
-        //TODO everything below this should be mathed out and shortened
-        else if (entities[position.getX()][position.getY()] == null && selected == null) { //make new entity
-            //players.get(currentTurn.getPlayerNum()).addEntity(position);
-            //entities[position.getX()][position.getY()] = new Entity(scene, position, currentPlayer);
-            System.out.println("You can't make entities like that!");
-        } else if (entities[position.getX()][position.getY()] != null &&
-                entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //select existing entity
-            //.getOwner().equals(currentTurn)
-            selected = entities[position.getX()][position.getY()];
+        for (int y = 0; y < ySections; y++) {
+            for (int x = 0; x < xSections; x++) {
+                if (!playersQueueCopy.isEmpty()) {
+                    Player player = playersQueueCopy.poll();
 
-            // Debugging printlns
-            System.out.println("Selected entity class: " + selected.getClass().getName());
-            System.out.println("Selected entity owner: " + selected.getOwner());
-            System.out.println("Selected entity position: " + selected.getPosition());
-            System.out.println("selected");
-        } else if (entities[position.getX()][position.getY()] != null && selected != null && selected instanceof Soldier &&
-                !entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //select enemy entity with soldier (attack)
-            Soldier soldier = (Soldier) selected;
-            if (soldier.withinRange(position) && soldier.canAct()) {
-                if (entities[position.getX()][position.getY()].dealDamage(((Soldier) selected).attack())) {
-                    entities[position.getX()][position.getY()] = null;
+                    // Calculate the position of the worker for the current player
+                    int xPos = x * sectionWidth + sectionWidth / 2;
+                    int yPos = y * sectionHeight + sectionHeight / 2;
+
+                    entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player);
                 }
             }
-
         }
-        else if (entities[position.getX()][position.getY()] == null && selected != null && selected instanceof Unit) { //move selected entity
+    }
+
+
+
+    public void clicked(PVector mousePos) {
+        int x = (int) (mousePos.x / 32);
+        int y = (int) (mousePos.y / 32);
+        Entity entity = entities[x][y];
+
+        if (x >= 700 && y >= 500) {
+            scene.saveGame();
+            nextTurn();
+        } else if (entity == null && selected == null) {
+            System.out.println("You can't make entities like that!");
+        } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) {
+            selected = entity;
+            System.out.println("Selected entity class: " + selected.getClass().getName());
+            System.out.println("Selected entity ownerID: " + selected.getOwnerID());
+            System.out.println("Selected entity position: " + selected.getPosition());
+        } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) {
+            Soldier soldier = (Soldier) selected;
+            if (soldier.withinRange(new Position(x, y)) && soldier.canAct()) {
+                if (entity.dealDamage(soldier.attack())) {
+                    entities[x][y] = null;
+                }
+            }
+        } else if (entity == null && selected instanceof Unit) {
             Unit unit = (Unit) selected;
-            Position oldposition = selected.getPosition();
-            if (unit.moveTo(position)) {
-                entities[oldposition.getX()][oldposition.getY()] = null;
-                entities[position.getX()][position.getY()] = selected;
+            Position oldPos = selected.getPosition();
+            if (unit.moveTo(new Position(x, y))) {
+                entities[oldPos.getX()][oldPos.getY()] = null;
+                entities[x][y] = selected;
             }
-            System.out.println("trying to move");
             selected = null;
-        } else if (selected != null && entities[position.getX()][position.getY()] != null
-                && entities[position.getX()][position.getY()].getOwner().equals(currentPlayer)) { //attack enemy entity
-
         } else {
-            System.out.println("you can't select that token");
-
-            // Debugging printlns
-            if (entities[position.getX()][position.getY()] != null) {
-                Entity clickedEntity = entities[position.getX()][position.getY()];
-                System.out.println("Clicked entity class: " + clickedEntity.getClass().getName());
-                System.out.println("Clicked entity owner: " + clickedEntity.getOwner());
-                System.out.println("Clicked entity position: " + clickedEntity.getPosition());
-            } else {
-                System.out.println("Clicked on an empty tile");
-            }
+            System.out.println("Invalid selection");
         }
-
-        //else (the mouse is over a different button)
     }
 
     public void keyPressed(char key) {
@@ -256,11 +228,10 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    public void nextTurn(){
-        //set remaining move to max
-
-        for (Entity[] row: entities) {
-            for (Entity element: row) {
+    public void nextTurn() {
+        // Reset actions and moves for all entities
+        for (Entity[] row : entities) {
+            for (Entity element : row) {
                 if (element != null) {
                     element.resetAction();
                     if (element instanceof Unit) {
@@ -270,23 +241,16 @@ public class GameState { //everything manager this is the player manager
             }
         }
 
-        //set currentPlayer to next player
-        if (players.indexOf(currentPlayer) < players.size() - 1) {
-            currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
-            System.out.println("next turn");
-        } else {
-            currentPlayer = players.get(0);
-        }
+        // Move to the next player and update currentPlayer
+        players.offer(players.poll());
+        currentPlayer = players.peek();
 
-        if (players.indexOf(currentPlayer) == 2) {
-            ai.start(this);
-        }
-
+        // Check if the next player has lost
         if (!currentPlayer.getHasLost()) {
             boolean hasLost = true;
             for (Entity[] row : entities) {
                 for (Entity element : row) {
-                    if (element != null && element.getOwner() == currentPlayer) {
+                    if (element != null && element.getOwnerID() == currentPlayer.getID()) {
                         hasLost = false;
                         break;
                     }
@@ -298,6 +262,7 @@ public class GameState { //everything manager this is the player manager
             }
         }
 
+        // Check if there's only one player left
         int alivePlayers = 0;
         for (Player player : players) {
             if (!player.getHasLost()) {
@@ -306,9 +271,13 @@ public class GameState { //everything manager this is the player manager
         }
         if (alivePlayers <= 1) {
             System.out.println("someone won");
-            int seven = 5/0;
+            int seven = 5 / 0;
         }
 
+        // If the current player is AI, call ai.start(this)
+//        if (currentPlayer.isAI()) {
+//            ai.start(this);
+//        }
     }
 
     public void draw(Window scene) {
@@ -317,7 +286,7 @@ public class GameState { //everything manager this is the player manager
         for (Entity[] row: entities) {
             for (Entity entity: row) {
                 if(entity != null) {
-                    entity.draw(zoomAmount, players.indexOf(entity.getOwner()), scene);
+                    entity.draw(zoomAmount, entity.ownerID, scene);
                 }
             }
         }
@@ -366,15 +335,15 @@ public class GameState { //everything manager this is the player manager
     }
 
     /**
-     * Loads a gamestate from a json object. Window is set to null for each entity.
+     * Loads a gamestate from a json object.
      */
-    public static GameState fromJSONObject(JSONObject gameStateJSON, Window window) {
+    public static GameState fromJSONObject(JSONObject gameStateJSON) {
         GameState loadedGameState = new GameState();
         loadedGameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
         loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
-        loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"));
+        loadedGameState.currentPlayer = (Player)gameStateJSON.get("currentPlayer");
         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-        loadedGameState.players = (ArrayList<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
+        loadedGameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
                 .collect(Collectors.toList());
         JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
         Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];
@@ -395,9 +364,9 @@ public class GameState { //everything manager this is the player manager
             JSONObject gameStateJSON = (JSONObject) parser.parse(saveReader);
             loadedGameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
             loadedGameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
-            loadedGameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"));
+            loadedGameState.currentPlayer = (Player) gameStateJSON.get("currentPlayerID");
             JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-            loadedGameState.players = (ArrayList<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
+            loadedGameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
                     .collect(Collectors.toList());
             JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
             Entity[][] entities = new Entity[loadedGameState.map.width][loadedGameState.map.width];

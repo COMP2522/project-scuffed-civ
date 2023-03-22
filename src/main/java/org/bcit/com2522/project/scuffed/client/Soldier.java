@@ -12,9 +12,9 @@ public class Soldier extends Unit{
 
     int range;
 
-    public Soldier(Position position, Player player) {
-        super(position, player);
-        unitType = "soldier";
+    public Soldier(Position position, Player owner) {
+        super(position, owner);
+        entityType = "soldier";
         texture = PImages.get("soldier");
         damage = 50;
         range = 500;
@@ -34,11 +34,9 @@ public class Soldier extends Unit{
 
     public JSONObject toJSONObject() {
         JSONObject soldierObject = new JSONObject();
-        soldierObject.put("entityType", entityType);
-        soldierObject.put("unitType", unitType);
-        soldierObject.put("position", position.toJSONObject());
-        soldierObject.put("owner", owner.toJSONObject());
-        soldierObject.put("currentHealth", currentHealth);
+        soldierObject.put("entityType", "soldier");
+        soldierObject.put("damage", damage);
+        soldierObject.put("range", range);
         return soldierObject;
     }
 

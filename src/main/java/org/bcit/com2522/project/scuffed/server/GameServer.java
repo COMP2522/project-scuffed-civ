@@ -117,7 +117,7 @@ public class GameServer {
 
             try {
                 while (true) {
-                    GameState updatedGameState = GameState.fromJSONObject((JSONObject) ois.readObject(), null);
+                    GameState updatedGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
                     gameState = updatedGameState;
                     broadcastGameState(gameState, this);
                 }
