@@ -155,8 +155,8 @@ public class GameState { //everything manager this is the player manager
             if (unit.moveTo(new Position(x - xShift, y - yShift))) {
                 entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
                 entities[x][y] = selected;
+                selected = null;
             }
-            selected = null;
         } else {
             System.out.println("Invalid selection");
         }
