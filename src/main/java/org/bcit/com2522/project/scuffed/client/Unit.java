@@ -43,11 +43,11 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
     }
 
     //TODO: combine this and moveTo
-    public void move(Entity[][] entities, Position position, int x, int y, int xShift, int yShift) {
+    public void move(Entity[][] entities, Position position, int xShift, int yShift) {
         Position oldPos = getPosition();
-        if (moveTo(new Position(x - xShift, y - yShift))) {
+        if (moveTo(new Position(position.getX() - xShift, position.getY() - yShift))) {
             entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
-            entities[x][y] = this;
+            entities[position.getX()][position.getY()] = this;
             //selected = null;
         }
     }

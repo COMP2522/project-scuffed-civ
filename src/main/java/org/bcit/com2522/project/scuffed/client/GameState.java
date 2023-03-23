@@ -150,13 +150,9 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
         } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
-            ((Soldier) selected).attack(entity);
-
-            if (entity.getHealth() <= 0) {
-                entities[x][y] = null;
-            }
+            ((Soldier) selected).attack(entities, entity);
         } else if (entity == null && selected instanceof Unit) { //move
-            ((Unit) selected).move(entities, new Position(x, y), x, y, xShift, yShift);
+            ((Unit) selected).move(entities, new Position(x, y), xShift, yShift);
         } else {
             System.out.println("Invalid selection");
         }
@@ -429,5 +425,9 @@ public class GameState { //everything manager this is the player manager
 
     public int getCurrentPlayerID() {
         return currentPlayer.getID();
+    }
+
+    public Map getMap() {
+        return map;
     }
 }

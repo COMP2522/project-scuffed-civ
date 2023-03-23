@@ -25,19 +25,23 @@ public class Soldier extends Unit{
         range = 500;
     }
 
-    public void attack(Entity entity){
+    public void attack(Entity[][] entities, Entity entity){
+        if (!withinRange(entity.getPosition())) {
+            System.out.println("enemy is out of range");
+            return;
+        }
+        if (!canAct()) {
+            System.out.println("you are out of actions");
+            return;
+        }
+        entity.takeDamage(damage);
+        System.out.println("you did some damage");
         remainAction--;
 
-        if (withinRange(entity.getPosition()) && canAct()) {
-            entity.takeDamage(damage);
-            System.out.println("you did some damage");
-        } else {
-            System.out.println("enemy is either out of range or you are out of actions");
+
+        if (entity.getHealth() <= 0) {
+            entities[entity.getPosition().getX()][entity.getPosition().getY()] = null;
         }
-    }
-
-    public void build(){
-
     }
 
     public JSONObject toJSONObject() {
