@@ -13,7 +13,7 @@ public class AI {
     public void start (GameState gameState) {
 
         System.out.println("ai is in control");
-        gameState.shift(1,1);
+        //gameState.shift(1,1);
 
         for (Entity[] row : gameState.getEntities()) {
             for (Entity entity : row) {
