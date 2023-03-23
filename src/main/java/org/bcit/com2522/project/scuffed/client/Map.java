@@ -123,4 +123,8 @@ public class Map { //this is a tile manager
         }
         return map;
     }
+
+    public Tile get(int x, int y) {
+        return tiles[x][y];
+    }
 }

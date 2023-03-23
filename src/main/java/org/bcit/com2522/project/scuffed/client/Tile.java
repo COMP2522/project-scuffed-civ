@@ -50,4 +50,11 @@ public class Tile{
         return tile;
     }
 
+    public int takeResources() {
+        if (type >= 1) {
+            type -= 1;
+            return 1;
+        }
+        return 0;
+    }
 }

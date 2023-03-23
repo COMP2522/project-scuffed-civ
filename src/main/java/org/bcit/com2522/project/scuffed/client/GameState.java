@@ -174,40 +174,25 @@ public class GameState { //everything manager this is the player manager
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
             shift(0, 1);
-        }
-        else if(key == 'a') {
+        } else if(key == 'a') {
             shift(1, 0);
-        }
-        else if(key == 's') {
+        } else if(key == 's') {
             shift(0, -1);
-        }
-        else if(key == 'd') {
+        } else if(key == 'd') {
             shift(-1, 0);
-        } else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building TODO: fix below this to be less shit
-            Position free = getFreePosition(selected);
-            System.out.println("b");
-            if (free != null && selected.canAct()) {
-                entities[free.getX()][free.getY()] = new Building(free, currentPlayer);
-                selected.act();
-            } else
-                System.out.println("there are no available spaces to place a builder or this entity is out of actions");
+        }
+
+        else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building
+            selected.buildBuilding(entities);
         } else if(key == 'm' && selected instanceof Building) {
-            Position free = getFreePosition(selected);
-            if (free != null && selected.canAct()) {
-                entities[free.getX()][free.getY()] = new Worker(free, currentPlayer);
-                selected.act();
-            } else
-                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+            ((Building) selected).buildWorker(entities);
         } else if(key == 'f' && selected instanceof Building) {
-            Position free = getFreePosition(selected);
-            if (free != null && selected.canAct()) {
-                entities[free.getX()][free.getY()] = new Soldier(free, currentPlayer);
-                selected.act();
-            } else
-                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+            ((Building) selected).buildSoldier(entities);
         } else if(key == 'c' && selected instanceof Worker) {
-            ((Worker) selected).collect();
-        } else if (key == '\n' || key == '\r') {
+            ((Worker) selected).collect(map.get(selected.getPosition().getX() + xShift, selected.getPosition().getY() + yShift));
+        }
+
+        else if (key == '\n' || key == '\r') {
             System.out.println("enter pressed");
             nextTurn();
         } else if (key == ESC) {
@@ -222,22 +207,6 @@ public class GameState { //everything manager this is the player manager
                 zoom(0.5f);
             }
         }
-    }
-
-    private Position getFreePosition(Entity selected) {
-        if (selected.getPosition().getY() == 0 || entities[selected.getPosition().getX()][selected.getPosition().getY() - 1] != null) {
-            if (selected.getPosition().getX() == entities.length - 1 || entities[selected.getPosition().getX() + 1][selected.getPosition().getY()] != null) {
-                if (selected.getPosition().getY() == entities[0].length - 1 || entities[selected.getPosition().getX()][selected.getPosition().getY() + 1] != null) {
-                    if (selected.getPosition().getX() == 0 || entities[selected.getPosition().getX() - 1][selected.getPosition().getY()] != null) {
-                        return null;
-                    }
-                    return new Position (selected.getPosition().getX() - 1, selected.getPosition().getY());
-                }
-                return new Position(selected.getPosition().getX(), selected.getPosition().getY() + 1);
-            }
-            return new Position(selected.getPosition().getX() + 1, selected.getPosition().getY());
-        }
-        return new Position(selected.getPosition().getX(), selected.getPosition().getY() - 1);
     }
 
     public void zoom(float amount) {
@@ -276,7 +245,6 @@ public class GameState { //everything manager this is the player manager
 
         selected = null;
 
-        // If the current player is AI, call ai.start(this)
          if (currentPlayer.isAI()) {
              ai.start(this);
          }

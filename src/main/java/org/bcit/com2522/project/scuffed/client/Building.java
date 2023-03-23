@@ -38,4 +38,22 @@ public class Building extends Entity{
         building.currentHealth = (int)(long) buildingObject.get("currentHealth");
         return building;
     }
+
+    public void buildWorker(Entity[][] entities) {
+        Position free = getFreePosition(entities);
+        if (canBuild(free, 1)) {
+            entities[free.getX()][free.getY()] = new Worker(free, owner);
+            remainAction--;
+            owner.spendResources(1);
+        }
+    }
+
+    public void buildSoldier(Entity[][] entities) {
+        Position free = getFreePosition(entities);
+        if (canBuild(free, 1)) {
+            entities[free.getX()][free.getY()] = new Soldier(free, owner);
+            remainAction--;
+            owner.spendResources(1);
+        }
+    }
 }

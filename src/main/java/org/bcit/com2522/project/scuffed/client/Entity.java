@@ -10,6 +10,7 @@ public abstract class Entity { //TODO: make this class abstract
     protected int remainAction;
     protected int ownerID;
 
+    protected Player owner;
     protected Color color;
     protected int maxHealth;
     protected int currentHealth;
@@ -22,6 +23,7 @@ public abstract class Entity { //TODO: make this class abstract
     public Entity(Position position, Player owner) {
         this.position = position;
         this.ownerID = owner.getID();
+        this.owner = owner;
         this.color = owner.getColor();
         maxAction = 1;
         remainAction = 1;
@@ -41,6 +43,23 @@ public abstract class Entity { //TODO: make this class abstract
         scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         scene.image(texture, this.position.getX() * zoomAmount, this.position.getY() * zoomAmount);
         scene.noTint();
+    }
+
+    //finds the nearest non-filled position
+    Position getFreePosition(Entity[][] entities) { //TODO: fix this mess
+        if (getPosition().getY() == 0 || entities[getPosition().getX()][getPosition().getY() - 1] != null) {
+            if (getPosition().getX() == entities.length - 1 || entities[getPosition().getX() + 1][getPosition().getY()] != null) {
+                if (getPosition().getY() == entities[0].length - 1 || entities[getPosition().getX()][getPosition().getY() + 1] != null) {
+                    if (getPosition().getX() == 0 || entities[getPosition().getX() - 1][getPosition().getY()] != null) {
+                        return null;
+                    }
+                    return new Position (getPosition().getX() - 1, getPosition().getY());
+                }
+                return new Position(getPosition().getX(), getPosition().getY() + 1);
+            }
+            return new Position(getPosition().getX() + 1, getPosition().getY());
+        }
+        return new Position(getPosition().getX(), getPosition().getY() - 1);
     }
 
     public void resetAction() {
@@ -106,9 +125,7 @@ public abstract class Entity { //TODO: make this class abstract
         return remainAction >= 1;
     }
 
-    public void act() {
-        remainAction--;
-    }
+    //public void act() {remainAction--;}
 
     public boolean takeDamage(int damageDealt) { //returns true if dead
         currentHealth -= damageDealt;
@@ -117,6 +134,33 @@ public abstract class Entity { //TODO: make this class abstract
             return true;
         }
         return false;
+    }
+
+    public boolean canBuild(Position free, int resources) {
+        if (free == null) {
+            System.out.println("there are no available spaces to place a entity");
+            return false;
+        }
+        if (!canAct()) {
+            System.out.println("this entity is out of actions");
+            return false;
+        }
+        if (owner.getResources() < resources) {
+            System.out.println("you don't have enough resources");
+            return false;
+        }
+        return true;
+    }
+
+    public void buildBuilding(Entity[][] entities) {
+        if (this instanceof Worker || this instanceof Building) {
+            Position free = getFreePosition(entities);
+            if (canBuild(free, 2)) {
+                entities[free.getX()][free.getY()] = new Building(free, owner);
+                remainAction--;
+                owner.spendResources(2);
+            }
+        }
     }
 
 

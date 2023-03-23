@@ -17,6 +17,7 @@ public class Player { //gamestate is the player manager
     Random random = new Random();
     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255) );
     hasLost = false;
+    resources = 2;
 
 
     if (playerNum == 1) {
@@ -30,6 +31,7 @@ public class Player { //gamestate is the player manager
   public Player (int playerNum, Color color) {
     this.playerNum = playerNum;
     this.color = color;
+    resources = 1;
     hasLost = false;
   }
 
@@ -55,6 +57,7 @@ public class Player { //gamestate is the player manager
   public void draw(Window scene) {
     scene.fill(color.getRGB());
     scene.text("Player " + (playerNum + 1), 700, 150); //print current player
+    scene.text("Resources " + (resources), 700, 300); //print player resources
     scene.fill(200);
     scene.rect(700, 550, 400, 200);
     scene.fill(000);
@@ -117,4 +120,16 @@ public class Player { //gamestate is the player manager
     public boolean isAI() {
       return isAi;
     }
+
+  public void increaseResources(int gained) {
+    resources += gained;
+  }
+
+  public void spendResources(int lost) {
+    resources -= lost;
+  }
+
+  public int getResources() {
+    return resources;
+  }
 }
