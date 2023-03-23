@@ -2,10 +2,7 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-import java.io.Serializable;
-
 import static org.bcit.com2522.project.scuffed.client.Window.PImages;
-import static processing.awt.ShimAWT.loadImage;
 
 public class Soldier extends Unit{
     int damage;
@@ -28,12 +25,15 @@ public class Soldier extends Unit{
         range = 500;
     }
 
-    public void move(){
-
-    }
-    public int attack(){
+    public void attack(Entity entity){
         remainAction--;
-        return damage;
+
+        if (withinRange(entity.getPosition()) && canAct()) {
+            entity.takeDamage(damage);
+            System.out.println("you did some damage");
+        } else {
+            System.out.println("enemy is either out of range or you are out of actions");
+        }
     }
 
     public void build(){

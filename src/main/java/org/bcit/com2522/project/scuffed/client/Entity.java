@@ -164,4 +164,7 @@ public abstract class Entity { //TODO: make this class abstract
     }
 
 
+    public int getHealth() {
+        return currentHealth;
+    }
 }
