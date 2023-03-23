@@ -53,7 +53,7 @@ public class Player { //gamestate is the player manager
   }
 
   public void draw(Window scene) {
-    scene.fill(000);
+    scene.fill(color.getRGB());
     scene.text("Player " + (playerNum + 1), 700, 150); //print current player
     scene.fill(200);
     scene.rect(700, 550, 400, 200);

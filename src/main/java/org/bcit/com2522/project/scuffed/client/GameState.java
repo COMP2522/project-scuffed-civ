@@ -28,6 +28,8 @@ public class GameState { //everything manager this is the player manager
     int xShift;
     int yShift;
 
+    PImage select;
+    Position selectPosition;
     AI ai;
 
     /**
@@ -45,6 +47,7 @@ public class GameState { //everything manager this is the player manager
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
+        select = PImages.get("select");
         zoomAmount = 32;
         xShift = 0;
         yShift = 0;
@@ -271,6 +274,8 @@ public class GameState { //everything manager this is the player manager
         checkPlayerLoss();
         checkVictoryCondition();
 
+        selected = null;
+
         // If the current player is AI, call ai.start(this)
          if (currentPlayer.isAI()) {
              ai.start(this);
@@ -351,6 +356,10 @@ public class GameState { //everything manager this is the player manager
                     entity.draw(zoomAmount, entity.color, scene);
                 }
             }
+        }
+        if (selected != null) {
+            selectPosition = selected.getPosition();
+            scene.image(select, selectPosition.getX() * zoomAmount, selectPosition.getY() * zoomAmount);
         }
     }
 

@@ -67,6 +67,7 @@ public class Window extends PApplet {
     PImages.put("worker", loadImage("sprites/worker.png"));
     PImages.put("building", loadImage("sprites/building.png"));
     PImages.put("logo", loadImage("sprites/logo.png"));
+    PImages.put("select", loadImage("sprites/select.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
@@ -127,7 +128,7 @@ public class Window extends PApplet {
     if(debugMode) {
       debugMenu.draw();
     }
-    graphicManager.drawGraphics();
+    //graphicManager.drawGraphics();
   }
 
   public ClickableManager getClickableManager() {
