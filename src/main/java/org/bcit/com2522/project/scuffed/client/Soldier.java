@@ -2,10 +2,7 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-import java.io.Serializable;
-
 import static org.bcit.com2522.project.scuffed.client.Window.PImages;
-import static processing.awt.ShimAWT.loadImage;
 
 public class Soldier extends Unit{
     int damage;
@@ -28,16 +25,23 @@ public class Soldier extends Unit{
         range = 500;
     }
 
-    public void move(){
-
-    }
-    public int attack(){
+    public void attack(Entity[][] entities, Entity entity){
+        if (!withinRange(entity.getPosition())) {
+            System.out.println("enemy is out of range");
+            return;
+        }
+        if (!canAct()) {
+            System.out.println("you are out of actions");
+            return;
+        }
+        entity.takeDamage(damage);
+        System.out.println("you did some damage");
         remainAction--;
-        return damage;
-    }
 
-    public void build(){
 
+        if (entity.getHealth() <= 0) {
+            entities[entity.getPosition().getX()][entity.getPosition().getY()] = null;
+        }
     }
 
     public JSONObject toJSONObject() {

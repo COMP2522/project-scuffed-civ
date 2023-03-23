@@ -150,23 +150,9 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
         } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
-            Soldier soldier = (Soldier) selected;
-            if (soldier.withinRange(new Position(x, y)) && soldier.canAct()) {
-                if (entity.takeDamage(soldier.attack())) {
-                    entities[x][y] = null;
-                }
-                System.out.println("you did some damage");
-            } else {
-                System.out.println("enemy is either out of range or you are out of actions");
-            }
+            ((Soldier) selected).attack(entities, entity);
         } else if (entity == null && selected instanceof Unit) { //move
-            Unit unit = (Unit) selected;
-            Position oldPos = selected.getPosition();
-            if (unit.moveTo(new Position(x - xShift, y - yShift))) {
-                entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
-                entities[x][y] = selected;
-                //selected = null;
-            }
+            ((Unit) selected).move(entities, new Position(x, y), xShift, yShift);
         } else {
             System.out.println("Invalid selection");
         }
@@ -200,6 +186,8 @@ public class GameState { //everything manager this is the player manager
             key = 0;
             scene.saveGame();
             scene.inGame = false;
+        } else if (key == ' ') {
+            resetShift();
         }
         if (key == CODED) {
             if (scene.keyCode == UP) {
@@ -224,12 +212,23 @@ public class GameState { //everything manager this is the player manager
     public void shift(int x, int y) {
         xShift -= x;
         yShift -= y;
-        map.shift(x, y);
+        shift2(x, y);
+    }
+
+    public void resetShift() {
+        shift2(xShift, yShift);
+
+        xShift = 0;
+        yShift = 0;
+    }
+
+    private void shift2(int xShift, int yShift) {
+        map.shift(xShift, yShift);
         for (Entity[] row: entities) {
             for (Entity element: row) {
                 if(element != null) {
-                    element.shift(new Position(element.getPosition().getX() + (x),
-                            element.getPosition().getY() + (y)));
+                    element.shift(new Position(element.getPosition().getX() + (xShift),
+                            element.getPosition().getY() + (yShift)));
                 }
             }
         }
@@ -426,5 +425,9 @@ public class GameState { //everything manager this is the player manager
 
     public int getCurrentPlayerID() {
         return currentPlayer.getID();
+    }
+
+    public Map getMap() {
+        return map;
     }
 }
