@@ -46,7 +46,7 @@ public abstract class Entity { //TODO: make this class abstract
     }
 
     //finds the nearest non-filled position
-    Position getFreePosition(Entity[][] entities) { //TODO: fix this mess
+    public Position getFreePosition(Entity[][] entities) { //TODO: fix this mess
         if (getPosition().getY() == 0 || entities[getPosition().getX()][getPosition().getY() - 1] != null) {
             if (getPosition().getX() == entities.length - 1 || entities[getPosition().getX() + 1][getPosition().getY()] != null) {
                 if (getPosition().getY() == entities[0].length - 1 || entities[getPosition().getX()][getPosition().getY() + 1] != null) {
@@ -152,15 +152,18 @@ public abstract class Entity { //TODO: make this class abstract
         return true;
     }
 
-    public void buildBuilding(Entity[][] entities) {
+    public Entity buildBuilding(Entity[][] entities) {
+        Building building = null;
         if (this instanceof Worker || this instanceof Building) {
             Position free = getFreePosition(entities);
             if (canBuild(free, 2)) {
-                entities[free.getX()][free.getY()] = new Building(free, owner);
+                building = new Building(free, owner);
+                entities[free.getX()][free.getY()] = building;
                 remainAction--;
                 owner.spendResources(2);
             }
         }
+        return building;
     }
 
 

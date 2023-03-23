@@ -14,7 +14,7 @@ public class Soldier extends Unit{
         entityType = "soldier";
         texture = PImages.get("soldier");
         damage = 50;
-        range = 500;
+        range = 5;
     }
 
     public Soldier(Position position, int ownerId) {
@@ -22,25 +22,25 @@ public class Soldier extends Unit{
         entityType = "soldier";
         texture = PImages.get("soldier");
         damage = 50;
-        range = 500;
+        range = 5;
     }
 
-    public void attack(Entity[][] entities, Entity entity){
-        if (!withinRange(entity.getPosition())) {
+    public void attack(Entity[][] entities, Entity target){
+        if (!withinRange(target.getPosition())) {
             System.out.println("enemy is out of range");
             return;
-        }
-        if (!canAct()) {
+        } else if (!canAct()) {
             System.out.println("you are out of actions");
             return;
+        } else {
+            target.takeDamage(damage);
+            System.out.println("you did some damage");
+            remainAction--;
         }
-        entity.takeDamage(damage);
-        System.out.println("you did some damage");
-        remainAction--;
 
 
-        if (entity.getHealth() <= 0) {
-            entities[entity.getPosition().getX()][entity.getPosition().getY()] = null;
+        if (target.getHealth() <= 0) {
+            entities[target.getPosition().getX()][target.getPosition().getY()] = null;
         }
     }
 

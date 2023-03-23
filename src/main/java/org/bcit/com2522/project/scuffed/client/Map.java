@@ -131,8 +131,8 @@ public class Map { //this is a tile manager
     public void regenResources() {
         for (Tile[] row: tiles) {
             for (Tile tile: row) {
-                int regen = (int) (Math.random() * 10); // 0-9
-                if (regen == 9 && tile.getType() < 3) {
+                int regen = (int) (Math.random() * 100); // 0-9
+                if (regen == 99 && tile.getType() < 3) {
                     tile.increaseType();
                 }
             }

@@ -45,10 +45,38 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
     //TODO: combine this and moveTo
     public void move(Entity[][] entities, Position position, int xShift, int yShift) {
         Position oldPos = getPosition();
-        if (moveTo(new Position(position.getX() - xShift, position.getY() - yShift))) {
+        if (entities[position.getX() - xShift][position.getY() - yShift] != null) {
+            System.out.println("cannot move there");
+            return;
+        } else if (moveTo(new Position(position.getX() - xShift, position.getY() - yShift))) {
             entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
             entities[position.getX()][position.getY()] = this;
             //selected = null;
         }
+    }
+
+    public void moveTowards(Entity[][] entities, Position position, int xShift, int yShift) {
+        Position tempPos = getPosition();
+        while (remainMove > 0 && !tempPos.equals(position)) {
+            if (Math.abs(position.getX() - getPosition().getX()) >= Math.abs(position.getY() - getPosition().getY())) {
+                if (position.getX() > tempPos.getX())
+                    tempPos.setX(tempPos.getX() + 1);
+                else if (position.getX() < tempPos.getX())
+                    tempPos.setX(tempPos.getX() - 1);
+            } else {
+                if (position.getY() > tempPos.getY())
+                    tempPos.setY(tempPos.getY() + 1);
+                else if (position.getY() < tempPos.getY())
+                    tempPos.setY(tempPos.getY() - 1);
+            }
+
+            move(entities, tempPos, xShift, yShift);
+            if (remainMove < 1)
+                break;
+        }
+    }
+
+    public int getRemainMove() {
+        return remainMove;
     }
 }
