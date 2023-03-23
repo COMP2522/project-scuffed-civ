@@ -34,11 +34,16 @@ public class Worker extends Unit{
     }
 
     public void collect(Tile tile) {
-        if (canAct()) {
-            owner.increaseResources(tile.takeResources());
-            remainAction--;
-            remainMove = 0;
-        } else
+        if (!canAct()) {
             System.out.println("you do not have enough actions left");
+            return;
+        }
+        if (tile.getType() <= 0) {
+            System.out.println("there is nothing to collect here");
+            return;
+        }
+        owner.increaseResources(tile.takeResources());
+        remainAction--;
+        remainMove = 0;
     }
 }

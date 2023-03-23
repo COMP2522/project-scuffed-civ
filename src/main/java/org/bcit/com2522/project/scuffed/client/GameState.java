@@ -9,6 +9,7 @@ import processing.core.PVector;
 
 import java.io.*;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -302,15 +303,15 @@ public class GameState { //everything manager this is the player manager
      * Checks if the game is over, and if so, prints a message and exits the program
      */
     private void checkVictoryCondition() {
-        int alivePlayers = 0;
+        ArrayList<Player> alivePlayers = new ArrayList<Player>();
         for (Player player : players) {
             if (!player.getHasLost()) {
-                alivePlayers++;
+                alivePlayers.add(player);
             }
         }
-        if (alivePlayers <= 1) {
-            System.out.println("someone won");
-            int seven = 5 / 0;
+        if (alivePlayers.size() == 1) {
+            System.out.println("Player " + alivePlayers.get(0).getID()+1 + " won");
+            System.out.println("hit escape to return to the main menu!");
         }
     }
 
