@@ -11,7 +11,7 @@ public class Tile{
     private int type;
 
     public Tile(Position position) {
-        type = (int) (Math.random() * 4); // 1-4
+        type = (int) (Math.random() * 4); // 0-3
         this.position = position;
     }
 
@@ -50,4 +50,15 @@ public class Tile{
         return tile;
     }
 
+    public int takeResources() {
+        if (type >= 1) {
+            type -= 1;
+            return 1;
+        }
+        return 0;
+    }
+
+    public void increaseType() {
+        type++;
+    }
 }

@@ -9,6 +9,7 @@ import processing.core.PVector;
 
 import java.io.*;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,8 @@ public class GameState { //everything manager this is the player manager
     int xShift;
     int yShift;
 
+    PImage select;
+    Position selectPosition;
     AI ai;
 
     /**
@@ -45,6 +48,7 @@ public class GameState { //everything manager this is the player manager
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
+        select = PImages.get("select");
         zoomAmount = 32;
         xShift = 0;
         yShift = 0;
@@ -146,23 +150,9 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
         } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
-            Soldier soldier = (Soldier) selected;
-            if (soldier.withinRange(new Position(x, y)) && soldier.canAct()) {
-                if (entity.takeDamage(soldier.attack())) {
-                    entities[x][y] = null;
-                }
-                System.out.println("you did some damage");
-            } else {
-                System.out.println("enemy is either out of range or you are out of actions");
-            }
+            ((Soldier) selected).attack(entities, entity);
         } else if (entity == null && selected instanceof Unit) { //move
-            Unit unit = (Unit) selected;
-            Position oldPos = selected.getPosition();
-            if (unit.moveTo(new Position(x - xShift, y - yShift))) {
-                entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
-                entities[x][y] = selected;
-                //selected = null;
-            }
+            ((Unit) selected).move(entities, new Position(x, y), xShift, yShift);
         } else {
             System.out.println("Invalid selection");
         }
@@ -171,46 +161,33 @@ public class GameState { //everything manager this is the player manager
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
             shift(0, 1);
-        }
-        else if(key == 'a') {
+        } else if(key == 'a') {
             shift(1, 0);
-        }
-        else if(key == 's') {
+        } else if(key == 's') {
             shift(0, -1);
-        }
-        else if(key == 'd') {
+        } else if(key == 'd') {
             shift(-1, 0);
-        } else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building TODO: fix below this to be less shit
-            Position free = getFreePosition(selected);
-            System.out.println("b");
-            if (free != null && selected.canAct()) {
-                entities[free.getX()][free.getY()] = new Building(free, currentPlayer);
-                selected.act();
-            } else
-                System.out.println("there are no available spaces to place a builder or this entity is out of actions");
+        }
+
+        else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building
+            selected.buildBuilding(entities);
         } else if(key == 'm' && selected instanceof Building) {
-            Position free = getFreePosition(selected);
-            if (free != null && selected.canAct()) {
-                entities[free.getX()][free.getY()] = new Worker(free, currentPlayer);
-                selected.act();
-            } else
-                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+            ((Building) selected).buildWorker(entities);
         } else if(key == 'f' && selected instanceof Building) {
-            Position free = getFreePosition(selected);
-            if (free != null && selected.canAct()) {
-                entities[free.getX()][free.getY()] = new Soldier(free, currentPlayer);
-                selected.act();
-            } else
-                System.out.println("there are no available spaces to place a worker or this entity is out of actions");
+            ((Building) selected).buildSoldier(entities);
         } else if(key == 'c' && selected instanceof Worker) {
-            ((Worker) selected).collect();
-        } else if (key == '\n' || key == '\r') {
+            ((Worker) selected).collect(map.get(selected.getPosition().getX() + xShift, selected.getPosition().getY() + yShift));
+        }
+
+        else if (key == '\n' || key == '\r') {
             System.out.println("enter pressed");
             nextTurn();
         } else if (key == ESC) {
             key = 0;
             scene.saveGame();
             scene.inGame = false;
+        } else if (key == ' ') {
+            resetShift();
         }
         if (key == CODED) {
             if (scene.keyCode == UP) {
@@ -219,22 +196,6 @@ public class GameState { //everything manager this is the player manager
                 zoom(0.5f);
             }
         }
-    }
-
-    private Position getFreePosition(Entity selected) {
-        if (selected.getPosition().getY() == 0 || entities[selected.getPosition().getX()][selected.getPosition().getY() - 1] != null) {
-            if (selected.getPosition().getX() == entities.length - 1 || entities[selected.getPosition().getX() + 1][selected.getPosition().getY()] != null) {
-                if (selected.getPosition().getY() == entities[0].length - 1 || entities[selected.getPosition().getX()][selected.getPosition().getY() + 1] != null) {
-                    if (selected.getPosition().getX() == 0 || entities[selected.getPosition().getX() - 1][selected.getPosition().getY()] != null) {
-                        return null;
-                    }
-                    return new Position (selected.getPosition().getX() - 1, selected.getPosition().getY());
-                }
-                return new Position(selected.getPosition().getX(), selected.getPosition().getY() + 1);
-            }
-            return new Position(selected.getPosition().getX() + 1, selected.getPosition().getY());
-        }
-        return new Position(selected.getPosition().getX(), selected.getPosition().getY() - 1);
     }
 
     public void zoom(float amount) {
@@ -251,12 +212,23 @@ public class GameState { //everything manager this is the player manager
     public void shift(int x, int y) {
         xShift -= x;
         yShift -= y;
-        map.shift(x, y);
+        shift2(x, y);
+    }
+
+    public void resetShift() {
+        shift2(xShift, yShift);
+
+        xShift = 0;
+        yShift = 0;
+    }
+
+    private void shift2(int xShift, int yShift) {
+        map.shift(xShift, yShift);
         for (Entity[] row: entities) {
             for (Entity element: row) {
                 if(element != null) {
-                    element.shift(new Position(element.getPosition().getX() + (x),
-                            element.getPosition().getY() + (y)));
+                    element.shift(new Position(element.getPosition().getX() + (xShift),
+                            element.getPosition().getY() + (yShift)));
                 }
             }
         }
@@ -271,7 +243,11 @@ public class GameState { //everything manager this is the player manager
         checkPlayerLoss();
         checkVictoryCondition();
 
-        // If the current player is AI, call ai.start(this)
+        //randomly regenerates more resources for certain squares
+        map.regenResources();
+
+        selected = null;
+
          if (currentPlayer.isAI()) {
              ai.start(this);
          }
@@ -326,15 +302,18 @@ public class GameState { //everything manager this is the player manager
      * Checks if the game is over, and if so, prints a message and exits the program
      */
     private void checkVictoryCondition() {
-        int alivePlayers = 0;
+        ArrayList<Player> alivePlayers = new ArrayList<Player>();
         for (Player player : players) {
             if (!player.getHasLost()) {
-                alivePlayers++;
+                alivePlayers.add(player);
             }
         }
-        if (alivePlayers <= 1) {
-            System.out.println("someone won");
-            int seven = 5 / 0;
+        if (alivePlayers.size() == 1) {
+            System.out.print("Player " + (alivePlayers.get(0).getID()+1));
+            if (alivePlayers.get(0).isAI())
+                System.out.print(" (AI)");
+            System.out.println(" won");
+            System.out.println("hit escape to return to the main menu!");
         }
     }
 
@@ -351,6 +330,10 @@ public class GameState { //everything manager this is the player manager
                     entity.draw(zoomAmount, entity.color, scene);
                 }
             }
+        }
+        if (selected != null) {
+            selectPosition = selected.getPosition();
+            scene.image(select, selectPosition.getX() * zoomAmount, selectPosition.getY() * zoomAmount);
         }
     }
 
@@ -445,5 +428,9 @@ public class GameState { //everything manager this is the player manager
 
     public int getCurrentPlayerID() {
         return currentPlayer.getID();
+    }
+
+    public Map getMap() {
+        return map;
     }
 }
