@@ -47,6 +47,7 @@ public class Window extends PApplet {
   public void init() {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
+    graphicManager = new GraphicManager(this);
     surface.setTitle("Scuffed - Main Menu");
     menu = new Menu(this);
   }
@@ -68,6 +69,7 @@ public class Window extends PApplet {
     PImages.put("building", loadImage("sprites/building.png"));
     PImages.put("logo", loadImage("sprites/logo.png"));
     PImages.put("select", loadImage("sprites/select.png"));
+
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
@@ -128,7 +130,7 @@ public class Window extends PApplet {
     if(debugMode) {
       debugMenu.draw();
     }
-    //graphicManager.drawGraphics();
+    graphicManager.drawGraphics();
   }
 
   public ClickableManager getClickableManager() {
@@ -147,7 +149,13 @@ public class Window extends PApplet {
     return graphicManager;
   }
 
+  public void wipeGraphics() {
+    graphicManager.wipeGraphics();
+  }
 
+  public PImage getLoadedPImage(String name) {
+    return PImages.get(name);
+  }
 
   public Player getCurrentPlayer() {
     if(gameInstance == null){

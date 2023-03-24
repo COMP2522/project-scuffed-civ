@@ -13,6 +13,7 @@ public class Menu {
     }
 
     public void setState(UIState newState) {
+        scene.wipeGraphics();
         this.previousState = this.currentState;
         this.currentState = newState;
     }

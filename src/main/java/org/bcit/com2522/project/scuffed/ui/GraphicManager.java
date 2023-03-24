@@ -9,7 +9,7 @@ import java.util.ArrayList;
  *
  */
 public class GraphicManager {
-  ArrayList<Graphic> graphicArrayList;
+  ArrayList<Graphic> graphicArrayList = new ArrayList<Graphic>();
 
   Window scene;
 
@@ -23,6 +23,7 @@ public class GraphicManager {
 
   public void addGraphic(float x, float y, PImage texture) {
     Graphic graphic = new Graphic(x, y, texture, scene);
+    graphicArrayList.add(graphic);
   }
 
   public void removeGraphic(Graphic graphic) {

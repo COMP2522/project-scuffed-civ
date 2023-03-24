@@ -1,8 +1,13 @@
 package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import processing.core.PImage;
 
 import java.io.File;
+import processing.core.PImage;
+
+import static processing.awt.ShimAWT.loadImage;
+import processing.core.PApplet;
 
 public class MainMenuUIState extends UIState {
 
@@ -13,6 +18,7 @@ public class MainMenuUIState extends UIState {
 
         super(scene, menu, new ButtonManager(scene));
         graphicManager = scene.getGraphicManager();
+
         setup();
     }
     @Override
@@ -22,6 +28,10 @@ public class MainMenuUIState extends UIState {
         Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), "Load Game", scene);
         Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online", scene);
         Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "Exit", scene);
+
+
+
+        graphicManager.addGraphic(500, 100, scene.getLoadedPImage("logo"));
         
 
 
