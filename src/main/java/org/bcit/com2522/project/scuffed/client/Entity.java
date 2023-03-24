@@ -147,19 +147,6 @@ public abstract class Entity { //TODO: make this class abstract
         return true;
     }
 
-    public Entity buildBuilding(Entity[][] entities) {
-        Building building = null;
-        if (this instanceof Worker || this instanceof Building) {
-            Position free = getFreePosition(entities);
-            if (canBuild(free, 2)) {
-                building = new Building(free, owner);
-                entities[free.getX()][free.getY()] = building;
-                remainAction--;
-                owner.spendResources(2);
-            }
-        }
-        return building;
-    }
 
 
     public int getHealth() {

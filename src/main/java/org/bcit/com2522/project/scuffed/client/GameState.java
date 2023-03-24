@@ -178,7 +178,7 @@ public class GameState { //everything manager this is the player manager
         }
 
         else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building
-            selected.buildBuilding(entities);
+            ((Worker) selected).buildBuilding(entities);
         } else if(key == 'm' && selected instanceof Building) {
             ((Building) selected).buildWorker(entities);
         } else if(key == 'f' && selected instanceof Building) {
