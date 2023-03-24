@@ -1,14 +1,10 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.bcit.com2522.project.scuffed.ui.*;
-import org.json.simple.JSONObject;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
-import java.io.*;
-import java.net.Socket;
 import java.util.HashMap;
 
 /**
@@ -20,7 +16,7 @@ public class Window extends PApplet {
   public static HashMap<String, PImage> PImages;
   public boolean inGame = false;
 
-  public Menu menu;
+  public UI UI;
   public GameInstance gameInstance;
   public Boolean debugMode = false;
   static DebugMenu debugMenu;
@@ -46,10 +42,10 @@ public class Window extends PApplet {
 
   public void init() {
     //map = new Map(this, 20, 20);
-    clickableManager = new ClickableManager(this);
-    graphicManager = new GraphicManager(this);
+    clickableManager = new ClickableManager();
+    graphicManager = new GraphicManager();
     surface.setTitle("Scuffed - Main Menu");
-    menu = new Menu(this);
+    UI = new UI(this);
   }
 
   /**
@@ -88,16 +84,16 @@ public class Window extends PApplet {
     if (keyCode == ESC) {
       key = 0;
     }
-    if(menu.currentState instanceof NewGameUIState){
-        NewGameUIState newGameMenuState = (NewGameUIState) menu.currentState;
+    if(UI.currentState instanceof NewGameUIState){
+        NewGameUIState newGameMenuState = (NewGameUIState) UI.currentState;
         newGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof HostGameUIState){
-        HostGameUIState hostGameMenuState = (HostGameUIState) menu.currentState;
+    if(UI.currentState instanceof HostGameUIState){
+        HostGameUIState hostGameMenuState = (HostGameUIState) UI.currentState;
         hostGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof JoinGameUIState){
-        JoinGameUIState joinGameMenuState = (JoinGameUIState) menu.currentState;
+    if(UI.currentState instanceof JoinGameUIState){
+        JoinGameUIState joinGameMenuState = (JoinGameUIState) UI.currentState;
         joinGameMenuState.keyPressed(key);
     }
   }
@@ -109,8 +105,8 @@ public class Window extends PApplet {
       gameInstance.clicked(mousePos, this);
       surface.setTitle("Scuffed Civ");
     } else {
-      menu.clicked(mouseX, mouseY);
-      surface.setTitle("Scuffed - " + menu.currentState.getClass().getSimpleName());
+      UI.clicked(mouseX, mouseY);
+      surface.setTitle("Scuffed - " + UI.currentState.getClass().getSimpleName());
     }
   }
 
@@ -124,13 +120,13 @@ public class Window extends PApplet {
     if(inGame){
       gameInstance.draw(this);
     } else {
-      menu.draw();
+      UI.draw();
     }
     // Debug Info - Can be added to
     if(debugMode) {
       debugMenu.draw();
     }
-    graphicManager.drawGraphics();
+    //graphicManager.drawGraphics();
   }
 
   public ClickableManager getClickableManager() {

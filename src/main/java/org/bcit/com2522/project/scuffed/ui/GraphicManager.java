@@ -8,13 +8,11 @@ import java.util.ArrayList;
 /** Manages Graphic Class
  *
  */
-public class GraphicManager {
+public class GraphicManager implements Drawable{
   ArrayList<Graphic> graphicArrayList = new ArrayList<Graphic>();
 
-  Window scene;
+  public GraphicManager() {
 
-  public GraphicManager(Window scene) {
-    this.scene = scene;
   }
 
   public void addGraphic(Graphic graphic) {
@@ -22,7 +20,7 @@ public class GraphicManager {
   }
 
   public void addGraphic(float x, float y, PImage texture) {
-    Graphic graphic = new Graphic(x, y, texture, scene);
+    Graphic graphic = new Graphic(x, y, texture);
     graphicArrayList.add(graphic);
   }
 
@@ -30,9 +28,9 @@ public class GraphicManager {
     graphicArrayList.remove(graphic);
   }
 
-  public void drawGraphics() {
+  public void draw(Window scene) {
     for (Graphic graphic : graphicArrayList) {
-      graphic.draw();
+      graphic.draw(scene);
     }
   }
 

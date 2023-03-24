@@ -12,24 +12,24 @@ public class JoinGameUIState extends UIState {
     private Label errorMessageLabel;
     private boolean showError = false;
 
-    public JoinGameUIState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+    public JoinGameUIState(UI UI) {
+        super(UI);
         setup();
     }
 
     @Override
     public void setup() {
         // Create buttons
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
-        Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join", scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back");
+        Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join");
         // Create input box for host IP and port
-        portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, "8080");
-        hostIPInput = new InputBox(50, 100, 250, 30, scene, "", "string");
+        portInput = new InputBox(50, 50, 200, 30, 1, 60000, "8080");
+        hostIPInput = new InputBox(50, 100, 250, 30, "", "string");
 
         // Add labels for the input boxes
-        portInputLabel = new Label(50, 45, "Port:", 14, scene);
-        hostIPInputLabel = new Label(50, 95, "Host IP:", 14, scene);
-        errorMessageLabel = new Label(50, 250, "Invalid input!", 14, scene);
+        portInputLabel = new Label(50, 45, "Port:", 14);
+        hostIPInputLabel = new Label(50, 95, "Host IP:", 14);
+        errorMessageLabel = new Label(50, 250, "Invalid input!", 14);
 
         // Add the buttons to the button manager
         buttonManager.add(backButton);
@@ -38,15 +38,15 @@ public class JoinGameUIState extends UIState {
 
 
     @Override
-    public void draw() {
-        super.draw();
-        portInput.draw();
-        portInputLabel.draw();
-        hostIPInput.draw();
-        hostIPInputLabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        portInput.draw(scene);
+        portInputLabel.draw(scene);
+        hostIPInput.draw(scene);
+        hostIPInputLabel.draw(scene);
 
         if (showError) {
-            errorMessageLabel.draw();
+            errorMessageLabel.draw(scene);
         }
     }
 
@@ -86,7 +86,7 @@ public class JoinGameUIState extends UIState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new OnlineUIState(scene, menu));
+        UI.setState(new OnlineUIState(UI));
     }
 
     public void onJoinClicked() {
@@ -96,7 +96,7 @@ public class JoinGameUIState extends UIState {
         // Check if the port and host IP are valid
         if (port >= 1 && port <= 60000 && hostIP != null) {
             // Join the game
-            scene.joinGame(hostIP, port);
+            UI.scene.joinGame(hostIP, port);
             showError = false;
         } else {
             showError = true;

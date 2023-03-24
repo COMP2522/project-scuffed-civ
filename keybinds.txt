@@ -9,4 +9,4 @@ c - collect (requires worker to be selected)
 enter - next turn
 up arrow - zoom in
 down arrow - zoom out
-f3 - debug menu
+f3 - debug UI

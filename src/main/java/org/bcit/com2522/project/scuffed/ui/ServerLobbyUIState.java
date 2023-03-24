@@ -4,8 +4,8 @@ import org.bcit.com2522.project.scuffed.client.Window;
 
 public class ServerLobbyUIState extends UIState {
 
-    public ServerLobbyUIState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+    public ServerLobbyUIState(UI UI) {
+        super(UI);
     }
 
     @Override

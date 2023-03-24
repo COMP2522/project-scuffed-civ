@@ -4,12 +4,11 @@ import org.bcit.com2522.project.scuffed.client.Window;
 
 import java.util.ArrayList;
 
-public class ButtonManager{
+public class ButtonManager implements Drawable{
   ArrayList<Button> buttons = new ArrayList<Button>();
-  Window scene;
 
-  public ButtonManager(Window scene) {
-    this.scene = scene;
+  public ButtonManager() {
+
   }
   public void add(Button button) {
     buttons.add(button);
@@ -17,7 +16,7 @@ public class ButtonManager{
   public void remove(Button button) {
     buttons.remove(button);
   }
-  public void draw() {
+  public void draw(Window scene) {
     for (Button button : buttons) {
       button.draw(scene);
     }

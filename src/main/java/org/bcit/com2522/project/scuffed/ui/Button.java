@@ -5,7 +5,6 @@ import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
 
 import static org.bcit.com2522.project.scuffed.client.Window.PImages;
-import static processing.awt.ShimAWT.loadImage;
 
 public class Button {
   int x1, y1, x2, y2;
@@ -15,10 +14,9 @@ public class Button {
   PImage background;
   PImage hoverBackground;
   PImage clickBackground;
-  Window scene;
 
 
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -29,10 +27,10 @@ public class Button {
     this.hoverBackground = hoverBackground;
     this.clickBackground = clickBackground;
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
-    scene.addClickable(this.clickable);
+    //scene.addClickable(this.clickable);
   }
 
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, Window scene) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -43,7 +41,7 @@ public class Button {
     this.hoverBackground = PImages.get("buttonHoverBackground");
     this.clickBackground = PImages.get("buttonClickBackground");
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
-    scene.addClickable(this.clickable);
+    //scene.addClickable(this.clickable);
   }
 
   public void draw(Window scene) {
@@ -58,7 +56,6 @@ public class Button {
       scene.textSize(32);
       scene.text(text, x1 + 10, y1 + 32);
     }
-
   }
 
   public void click() {
@@ -99,7 +96,7 @@ public class Button {
     return clickable.isHovered(x, y);
   }
 
-  public void delete() {
+  public void delete(Window scene) {
     this.callback = null;
     this.text = null;
     this.background = null;

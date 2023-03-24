@@ -61,6 +61,7 @@ public class GameState { //everything manager this is the player manager
      */
     public GameState(){
         zoomAmount = 32;
+        select = PImages.get("select");
     };
 
     /**

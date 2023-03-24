@@ -7,61 +7,56 @@ public class InputBox {
     private int x, y, width, height;
     private String text;
     private String type;
-    private Window scene;
     private boolean selected;
     private int minValue, maxValue;
 
-    public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue) {
+    public InputBox(int x, int y, int width, int height, int minValue, int maxValue) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = "";
-        this.scene = scene;
         this.selected = false;
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.type = "int";
     }
 
-    public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue, String defaultText) {
+    public InputBox(int x, int y, int width, int height, int minValue, int maxValue, String defaultText) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.type = "int";
     }
 
-    public InputBox(int x, int y, int width, int height, Window scene, String defaultText) {
+    public InputBox(int x, int y, int width, int height, String defaultText) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = Integer.MIN_VALUE;
         this.maxValue = Integer.MAX_VALUE;
     }
-    public InputBox(int x, int y, int width, int height, Window scene, String defaultText, String type) {
+    public InputBox(int x, int y, int width, int height, String defaultText, String type) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = Integer.MIN_VALUE;
         this.maxValue = Integer.MAX_VALUE;
         this.type = type;
     }
 
-    public void draw() {
+    public void draw(Window scene) {
 
         scene.pushStyle();
         scene.stroke(0);

@@ -1,21 +1,23 @@
 package org.bcit.com2522.project.scuffed.ui;
 
+import org.bcit.com2522.project.scuffed.client.ClickableManager;
 import org.bcit.com2522.project.scuffed.client.Window;
 
 public abstract class UIState {
-    ButtonManager buttonManager;
-    protected Window scene;
-    protected Menu menu;
+    protected ButtonManager buttonManager;
+    protected GraphicManager graphicManager;
+    protected ClickableManager clickableManager;
 
-    public UIState(Window scene, Menu menu, ButtonManager buttonManager) {
-        this.scene = scene;
-        this.buttonManager = buttonManager;
-        this.menu = menu;
+    protected UI UI;
+
+    public UIState(UI UI) {
+        this.UI = UI;
     }
 
-    public void draw() {
-        buttonManager.draw();
+    public void draw(Window scene) {
+        buttonManager.draw(scene);
     }
+
 
     public boolean clicked(int xpos, int ypos) {
         // Check if any buttons were clicked and perform actions

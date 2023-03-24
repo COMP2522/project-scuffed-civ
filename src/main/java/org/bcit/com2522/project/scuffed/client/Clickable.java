@@ -12,7 +12,6 @@ public class Clickable {
     this.callback = callback;
   }
 
-
   public boolean isHovered(int x, int y) {
     return x >= x1 && x <= x2 && y >= y1 && y <= y2;
   }
@@ -24,7 +23,6 @@ public class Clickable {
   public void hover() {
     callback.run();
   }
-
 
   public void changeBounds(int x1, int y1, int x2, int y2) {
     this.x1 = x1;

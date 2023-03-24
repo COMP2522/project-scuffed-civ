@@ -2,14 +2,14 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
-public class Menu {
+public class UI {
      private UIState previousState;
      public UIState currentState;
      Window scene;
 
-    public Menu(Window scene) {
+    public UI(Window scene) {
         this.scene = scene;
-        this.currentState = new MainMenuUIState(scene, this);
+        this.currentState = new MainMenuUIState(this);
     }
 
     public void setState(UIState newState) {
@@ -19,7 +19,7 @@ public class Menu {
     }
 
     public void draw() {
-        currentState.draw();
+        currentState.draw(scene);
     }
 
     public boolean clicked(int xpos, int ypos) {

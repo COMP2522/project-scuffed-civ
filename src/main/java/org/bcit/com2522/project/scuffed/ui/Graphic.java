@@ -1,5 +1,4 @@
 package org.bcit.com2522.project.scuffed.ui;
-
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
 
@@ -11,16 +10,14 @@ public class Graphic {
   float x;
   float y;
   protected PImage texture;
-  Window scene;
 
-  public Graphic(float x, float y, PImage texture, Window scene) {
+  public Graphic(float x, float y, PImage texture) {
     this.x = x;
     this.y = y;
     this.texture = texture;
-    this.scene = scene;
   }
 
-  public void draw() {
+  public void draw(Window scene) {
     scene.image(texture, x, y);
   }
 

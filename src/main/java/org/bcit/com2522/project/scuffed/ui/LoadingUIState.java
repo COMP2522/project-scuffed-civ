@@ -6,8 +6,8 @@ public class LoadingUIState extends UIState {
 
     private String loadingText;
 
-    public LoadingUIState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+    public LoadingUIState(UI UI) {
+        super(UI);
         loadingText = "Loading...";
     }
 
@@ -17,7 +17,7 @@ public class LoadingUIState extends UIState {
 
 
     @Override
-    public void draw() {
+    public void draw(Window scene) {
         scene.background(200);
         scene.fill(0);
         scene.textSize(24);
