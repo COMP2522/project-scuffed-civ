@@ -127,13 +127,8 @@ public abstract class Entity { //TODO: make this class abstract
 
     //public void act() {remainAction--;}
 
-    public boolean takeDamage(int damageDealt) { //returns true if dead
+    public void takeDamage(int damageDealt) { //returns true if dead
         currentHealth -= damageDealt;
-
-        if (currentHealth <= 0) {
-            return true;
-        }
-        return false;
     }
 
     public boolean canBuild(Position free, int resources) {

@@ -149,6 +149,14 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
+            System.out.println("Selected entity health: " + selected.getHealth());
+        } else if(entity != null && selected == null) {
+            selected = entity;
+            System.out.println("Selected entity class: " + selected.getClass().getName());
+            System.out.println("Selected entity ownerID: " + selected.getOwnerID());
+            System.out.println("Selected entity position: " + selected.getPosition());
+            System.out.println("Selected entity health: " + selected.getHealth());
+            selected = null;
         } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
             ((Soldier) selected).attack(entities, entity);
         } else if (entity == null && selected instanceof Unit) { //move
@@ -177,6 +185,8 @@ public class GameState { //everything manager this is the player manager
             ((Building) selected).buildSoldier(entities);
         } else if(key == 'c' && selected instanceof Worker) {
             ((Worker) selected).collect(map.get(selected.getPosition().getX() + xShift, selected.getPosition().getY() + yShift));
+        } else if (key == 'x') {
+            selected = null;
         }
 
         else if (key == '\n' || key == '\r') {
@@ -189,6 +199,7 @@ public class GameState { //everything manager this is the player manager
         } else if (key == ' ') {
             resetShift();
         }
+
         if (key == CODED) {
             if (scene.keyCode == UP) {
                 zoom(2);
