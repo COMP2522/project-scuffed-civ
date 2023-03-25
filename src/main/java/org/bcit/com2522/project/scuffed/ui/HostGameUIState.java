@@ -59,29 +59,24 @@ public class HostGameUIState extends UIState {
     @Override
     public boolean clicked(int xpos, int ypos) {
         // Check if any buttons or inputs were clicked and perform actions
+        mapHeightInput.deselect();
+        mapWidthInput.deselect();
+        numPlayersInput.deselect();
+        portInput.deselect();
         if(super.clicked(xpos, ypos)) {
             return true;
         }
         if(mapWidthInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected();
-            mapHeightInput.setSelected();
-            numPlayersInput.setSelected();
+            mapWidthInput.select();
             return true;
         }else if(mapHeightInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected();
-            mapHeightInput.setSelected();
-            numPlayersInput.setSelected();
+            mapHeightInput.select();
             return true;
         }else if(numPlayersInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected();
-            mapHeightInput.setSelected();
-            numPlayersInput.setSelected();
+            numPlayersInput.select();
             return true;
-        } else if( portInput.isClicked(xpos, ypos) ) {
-            portInput.setSelected();
-            mapWidthInput.setSelected();
-            mapHeightInput.setSelected();
-            numPlayersInput.setSelected();
+        } else if(portInput.isClicked(xpos, ypos) ) {
+            portInput.select();
             return true;
         }
         return false;

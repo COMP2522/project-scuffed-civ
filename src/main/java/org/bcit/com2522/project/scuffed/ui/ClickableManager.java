@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class ClickableManager {
     ArrayList<Clickable> clickables = new ArrayList<Clickable>();
-    int xOffset = 50;
-    int yOffset = 50;
+    int xOffset = 0;
+    int yOffset = 0;
 
     public ClickableManager(int xOffset, int yOffset) {
         this.xOffset = xOffset;
@@ -19,7 +19,13 @@ public class ClickableManager {
     }
 
     public void add(Clickable clickable) {
-        clickables.add(clickable);
+        if(clickables.size() >= 1){
+            clickable.offsetX(xOffset);
+            clickable.offsetY(yOffset);
+            clickables.add(clickable);
+        } else {
+            clickables.add(clickable);
+        }
     }
 
     public void remove(Clickable clickable) {
@@ -45,6 +51,8 @@ public class ClickableManager {
     }
 
     public void draw(Window scene) {
-
+        for (Clickable clickable : clickables){
+            clickable.draw(scene);
+        }
     }
 }
