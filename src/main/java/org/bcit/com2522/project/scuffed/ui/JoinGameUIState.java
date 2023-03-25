@@ -32,8 +32,8 @@ public class JoinGameUIState extends UIState {
         errorMessageLabel = new Label(50, 250, "Invalid input!", 14);
 
         // Add the buttons to the button manager
-        buttonManager.add(backButton);
-        buttonManager.add(joinButton);
+        clickableManager.add(backButton);
+        clickableManager.add(joinButton);
     }
 
 
@@ -57,12 +57,12 @@ public class JoinGameUIState extends UIState {
             return true;
         }
        if (hostIPInput.isClicked(xpos, ypos)) {
-            hostIPInput.setSelected(true);
-            portInput.setSelected(false);
+            hostIPInput.setSelected();
+            portInput.setSelected();
             return true;
         } else if (portInput.isClicked(xpos, ypos)) {
-            portInput.setSelected(true);
-            hostIPInput.setSelected(false);
+            portInput.setSelected();
+            hostIPInput.setSelected();
             return true;
         }
         return false;

@@ -12,9 +12,9 @@ public class OnlineUIState extends UIState {
         Button hostButton = new Button(50, 200, 250, 250, () -> onHostClicked(), "Host Game");
         Button joinButton = new Button(50, 300, 250, 350, () -> onJoinClicked(), "Join Game");
 
-        buttonManager.add(backButton);
-        buttonManager.add(hostButton);
-        buttonManager.add(joinButton);
+        clickableManager.add(backButton);
+        clickableManager.add(hostButton);
+        clickableManager.add(joinButton);
     }
 
     public void onBackClicked() {

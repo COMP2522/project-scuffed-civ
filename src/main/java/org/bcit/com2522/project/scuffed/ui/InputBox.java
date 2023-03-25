@@ -3,7 +3,7 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
 
-public class InputBox {
+public class InputBox extends Clickable {
     private int x, y, width, height;
     private String text;
     private String type;
@@ -11,8 +11,21 @@ public class InputBox {
     private int minValue, maxValue;
 
     public InputBox(int x, int y, int width, int height, int minValue, int maxValue) {
+        super
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
+        this.text = "";
+        this.selected = false;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        this.type = "int";
+    }
+
+    public InputBox(int x, int y, int width, int height, int minValue, int maxValue) {
+        this.x = 50;
+        this.y = 50;
         this.width = width;
         this.height = height;
         this.text = "";
@@ -35,6 +48,7 @@ public class InputBox {
     }
 
     public InputBox(int x, int y, int width, int height, String defaultText) {
+
         this.x = x;
         this.y = y;
         this.width = width;
@@ -44,6 +58,8 @@ public class InputBox {
         this.minValue = Integer.MIN_VALUE;
         this.maxValue = Integer.MAX_VALUE;
     }
+
+
     public InputBox(int x, int y, int width, int height, String defaultText, String type) {
         this.x = x;
         this.y = y;
@@ -57,7 +73,6 @@ public class InputBox {
     }
 
     public void draw(Window scene) {
-
         scene.pushStyle();
         scene.stroke(0);
         if(selected) {
@@ -77,8 +92,12 @@ public class InputBox {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void select() {
+        this.selected = true;
+    }
+
+    public void deselect() {
+        this.selected = false;
     }
 
     public void addCharacter(char c) {

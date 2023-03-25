@@ -12,27 +12,24 @@ public class MainMenuUIState extends UIState {
     }
     @Override
     public void setup() {
+        // Make button offset, input offset
         // Create buttons
-        Button newGameButton = new Button(50, 100, 250, 150, () -> onNewGameClicked() , "New Game");
+
+        Button newGameButton  = new Button(50, 100, 250, 150, () -> onNewGameClicked() , "New Game");
         Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), "Load Game");
-        Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), "Online");
-        Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "Exit");
-
-
+        Button onlineButton   = new Button(50, 300, 250, 350, () -> onOnlineClicked()  , "Online");
+        Button exitButton     = new Button(50, 500, 250, 550, () -> onBackClicked()    , "Exit");
 
         graphicManager.addGraphic(500, 100, UI.scene.getLoadedPImage("logo"));
-        
-
-
 
         //Create error message label
         errorMessage = new Label(50, 400, "No save file found", 14);
 
         // Add buttons to ButtonManager
-        buttonManager.add(newGameButton);
-        buttonManager.add(loadGameButton);
-        buttonManager.add(onlineButton);
-        buttonManager.add(exitButton);
+        clickableManager.add(newGameButton);
+        clickableManager.add(loadGameButton);
+        clickableManager.add(onlineButton);
+        clickableManager.add(exitButton);
 
         // TODO: Add settings button
 //        buttonManager.add(settingsButton);
@@ -52,7 +49,6 @@ public class MainMenuUIState extends UIState {
             // Run the loading process in a separate thread
             UI.scene.loadGame();
             UI.setState(new MainMenuUIState(UI));
-
         } else {
             errorMessage.draw(UI.scene);
         }

@@ -34,8 +34,8 @@ public class HostGameUIState extends UIState {
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back");
         Button startButton = new Button(50, 600, 250, 650, () -> onStartServerClicked(), "Start Server");
 
-        buttonManager.add(backButton);
-        buttonManager.add(startButton);
+        clickableManager.add(backButton);
+        clickableManager.add(startButton);
 
     }
 
@@ -63,25 +63,25 @@ public class HostGameUIState extends UIState {
             return true;
         }
         if(mapWidthInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(true);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(false);
+            mapWidthInput.setSelected();
+            mapHeightInput.setSelected();
+            numPlayersInput.setSelected();
             return true;
         }else if(mapHeightInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(true);
-            numPlayersInput.setSelected(false);
+            mapWidthInput.setSelected();
+            mapHeightInput.setSelected();
+            numPlayersInput.setSelected();
             return true;
         }else if(numPlayersInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(true);
+            mapWidthInput.setSelected();
+            mapHeightInput.setSelected();
+            numPlayersInput.setSelected();
             return true;
         } else if( portInput.isClicked(xpos, ypos) ) {
-            portInput.setSelected(true);
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(false);
+            portInput.setSelected();
+            mapWidthInput.setSelected();
+            mapHeightInput.setSelected();
+            numPlayersInput.setSelected();
             return true;
         }
         return false;
@@ -114,9 +114,9 @@ public class HostGameUIState extends UIState {
 
     // ...
     public void onStartServerClicked() {
-        int port = portInput.getIntValue();
-        int mapWidth = mapWidthInput.getIntValue();
-        int mapHeight = mapHeightInput.getIntValue();
+        int port       = portInput.getIntValue();
+        int mapWidth   = mapWidthInput.getIntValue();
+        int mapHeight  = mapHeightInput.getIntValue();
         int numPlayers = numPlayersInput.getIntValue();
         if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
             UI.scene.initGameServer(numPlayers, mapWidth, mapHeight, port);

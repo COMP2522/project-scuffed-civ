@@ -3,7 +3,7 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
 
-public class NewGameUIState extends UIState {
+public class NewGameUIState extends UIState implements Drawable {
     private InputBox mapWidthInput;
     private InputBox mapHeightInput;
     private InputBox numPlayersInput;
@@ -22,6 +22,7 @@ public class NewGameUIState extends UIState {
         super(UI);
         setup();
     }
+
     @Override
     public void setup() {
         mapWidthInput = new InputBox(50, 100, 200, 30, 10, 100, "16");
@@ -36,8 +37,8 @@ public class NewGameUIState extends UIState {
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back");
         Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start");
 
-        buttonManager.add(backButton);
-        buttonManager.add(startButton);
+        clickableManager.add(backButton);
+        clickableManager.add(startButton);
     }
 
     public void onBackClicked() {
@@ -67,19 +68,19 @@ public class NewGameUIState extends UIState {
             return true;
         }
         if(mapWidthInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(true);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(false);
+            mapWidthInput.setSelected();
+            mapHeightInput.setSelected();
+            numPlayersInput.setSelected();
             return true;
         }else if(mapHeightInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(true);
-            numPlayersInput.setSelected(false);
+            mapWidthInput.setSelected();
+            mapHeightInput.setSelected();
+            numPlayersInput.setSelected();
             return true;
         }else if(numPlayersInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(true);
+            mapWidthInput.setSelected();
+            mapHeightInput.setSelected();
+            numPlayersInput.setSelected();
             return true;
         }
         return false;

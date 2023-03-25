@@ -1,53 +1,39 @@
 package org.bcit.com2522.project.scuffed.ui;
 
-import org.bcit.com2522.project.scuffed.client.Clickable;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
 
 import static org.bcit.com2522.project.scuffed.client.Window.PImages;
 
-public class Button {
-  int x1, y1, x2, y2;
+public class Button extends Clickable {
+
   Runnable callback;
-  Clickable clickable;
   String text;
   PImage background;
   PImage hoverBackground;
   PImage clickBackground;
 
-
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.callback = callback;
+    super(x1, y1, x2, y2, callback);
     this.text = text;
     this.background = background;
     this.hoverBackground = hoverBackground;
     this.clickBackground = clickBackground;
-    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
-    //scene.addClickable(this.clickable);
   }
 
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.callback = callback;
+    super(x1, y1, x2, y2, callback);
     this.text = text;
     this.background = PImages.get("buttonBackground");
     this.hoverBackground = PImages.get("buttonHoverBackground");
     this.clickBackground = PImages.get("buttonClickBackground");
-    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
-    //scene.addClickable(this.clickable);
   }
 
+  @Override
   public void draw(Window scene) {
-    if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed) {
+    if (isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed) {
       scene.image(clickBackground, x1, y1, x2 - x1, y2 - y1);
-    } else if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
+    } else if (isHovered(scene.mouseX, scene.mouseY)) {
       scene.image(hoverBackground, x1, y1, x2 - x1, y2 - y1);
     } else {
       scene.image(background, x1, y1, x2 - x1, y2 - y1);
@@ -58,22 +44,8 @@ public class Button {
     }
   }
 
-  public void click() {
-    clickable.click();
-  }
-
-
-  public void changeBounds(int x1, int y1, int x2, int y2) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-    clickable.changeBounds(x1, y1, x2, y2);
-  }
-
   public void changeCallback(Runnable callback) {
     this.callback = callback;
-    clickable.changeCallback(callback);
   }
 
   public void changeText(String text) {
@@ -92,18 +64,11 @@ public class Button {
     this.clickBackground = clickBackground;
   }
 
-  public boolean isClicked(int x, int y) {
-    return clickable.isHovered(x, y);
-  }
-
   public void delete(Window scene) {
     this.callback = null;
     this.text = null;
     this.background = null;
     this.hoverBackground = null;
     this.clickBackground = null;
-    scene.removeClickable(clickable);
   }
-
-
 }

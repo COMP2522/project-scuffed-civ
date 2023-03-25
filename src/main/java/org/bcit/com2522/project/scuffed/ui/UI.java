@@ -3,7 +3,6 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 
 public class UI {
-     private UIState previousState;
      public UIState currentState;
      Window scene;
 
@@ -14,7 +13,6 @@ public class UI {
 
     public void setState(UIState newState) {
         scene.wipeGraphics();
-        this.previousState = this.currentState;
         this.currentState = newState;
     }
 
