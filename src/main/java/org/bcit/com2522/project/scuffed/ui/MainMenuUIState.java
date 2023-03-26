@@ -1,6 +1,7 @@
 package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import processing.core.PImage;
 import processing.core.PConstants;
 
 import java.io.File;
@@ -24,16 +25,12 @@ public class MainMenuUIState extends UIState implements PConstants {
 
         int height = scene.height;
         File saveFile = new File("saves/save.json");
+        Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
+                "", UIImages.get("menuLoad"), UIImages.get("menuLoadHov"), UIImages.get("menuLoadSel"), scene, UIImages.get("menuLoadGry"), false);
         if (saveFile.isFile()) {
-            // Load Continue button
-            Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
-                "", UIImages.get("menuLoad"), UIImages.get("menuLoadHov"), UIImages.get("menuLoadSel"), scene);
-            buttonManager.add(loadGameButton);
-        } else {
-            // Gray out Continue button
-            graphicManager.addGraphic(50, height - 450, UIImages.get("menuLoadGry"));
+            loadGameButton.setClickable(true);
         }
-
+        buttonManager.add(loadGameButton);
         // Create buttons
         Button newGameButton = new Button(50, height - 350, 250, height - 300, () -> onNewGameClicked(),
             "", UIImages.get("menuNew"), UIImages.get("menuNewHov"), UIImages.get("menuNewSel"), scene);
