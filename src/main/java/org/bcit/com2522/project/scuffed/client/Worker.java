@@ -2,21 +2,18 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-import java.io.Serializable;
-
-import static org.bcit.com2522.project.scuffed.client.Window.PImages;
-import static processing.awt.ShimAWT.loadImage;
+import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 public class Worker extends Unit{
     public Worker(Position position, Player owner) {
         super(position, owner);
         entityType = "worker";
-        texture = PImages.get(entityType);
+        texture = GameImages.get(entityType);
     }
     public Worker(Position position, int ownerID) {
         super(position, ownerID);
         entityType = "worker";
-        texture = PImages.get(entityType);
+        texture = GameImages.get(entityType);
     }
 
     public JSONObject toJSONObject() {

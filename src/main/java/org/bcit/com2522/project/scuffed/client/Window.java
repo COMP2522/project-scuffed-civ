@@ -13,7 +13,9 @@ import java.util.HashMap;
  *
  */
 public class Window extends PApplet {
-  public static HashMap<String, PImage> PImages;
+  public static HashMap<String, PImage> GameImages;
+  public static HashMap<String, PImage> UIImages;
+
   public boolean inGame = false;
 
   public Menu menu;
@@ -52,31 +54,35 @@ public class Window extends PApplet {
    * This initializes one HashMap to hold the PImages for all classes
    */
   public void initPImages(){
-    PImages = new HashMap<String, PImage>();
-    PImages.put("grassTile", loadImage("sprites/Menu/tile_grass.png"));
-    PImages.put("rockTile", loadImage("sprites/Menu/tile_rocks.png"));
-    PImages.put("waterTile", loadImage("sprites/Menu/tile_water.png"));
-    PImages.put("sandTile", loadImage("sprites/Menu/tile_sand.png"));
-    PImages.put("buttonBackground", loadImage("sprites/Menu/background.png"));
-    PImages.put("buttonHoverBackground", loadImage("sprites/Menu/button_blank.png"));
-    PImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
-    PImages.put("soldier", loadImage( "sprites/soldier.png"));
-    PImages.put("worker", loadImage("sprites/worker.png"));
-    PImages.put("building", loadImage("sprites/building.png"));
-    PImages.put("logo", loadImage("sprites/logo.png"));
-    PImages.put("select", loadImage("sprites/select.png"));
-    PImages.put("menuNew", loadImage("sprites/Menu/New.png"));
-    PImages.put("menuNewHov", loadImage("sprites/Menu/New_Hov.png"));
-    PImages.put("menuNewSel", loadImage("sprites/Menu/New_Sel.png"));
-    PImages.put("menuLoad", loadImage("sprites/Menu/Load.png"));
-    PImages.put("menuLoadHov", loadImage("sprites/Menu/Load_Hov.png"));
-    PImages.put("menuLoadSel", loadImage("sprites/Menu/Load_Sel.png"));
-    PImages.put("menuExit", loadImage("sprites/Menu/Exit.png"));
-    PImages.put("menuExitHov", loadImage("sprites/Menu/Exit_Hov.png"));
-    PImages.put("menuExitSel", loadImage("sprites/Menu/Exit_Sel.png"));
-    PImages.put("menOnline", loadImage("sprites/Menu/Online.png"));
-    PImages.put("menOnlineHov", loadImage("sprites/Menu/Online_Hov.png"));
-    PImages.put("menOnlineSel", loadImage("sprites/Menu/Online_Sel.png"));
+    //Images for the GameBoard. Tiles, Units, Buildings, etc.
+    GameImages = new HashMap<String, PImage>();
+    GameImages.put("grassTile", loadImage("sprites/Menu/tile_grass.png"));
+    GameImages.put("rockTile", loadImage("sprites/Menu/tile_rocks.png"));
+    GameImages.put("waterTile", loadImage("sprites/Menu/tile_water.png"));
+    GameImages.put("sandTile", loadImage("sprites/Menu/tile_sand.png"));
+    GameImages.put("soldier", loadImage( "sprites/soldier.png"));
+    GameImages.put("worker", loadImage("sprites/worker.png"));
+    GameImages.put("building", loadImage("sprites/building.png"));
+
+    //Images for the UI. Buttons, Menus, Backgrounds, etc.
+    UIImages = new HashMap<String, PImage>();
+    UIImages.put("logo", loadImage("sprites/logo.png"));
+    UIImages.put("select", loadImage("sprites/select.png"));
+    UIImages.put("menuNew", loadImage("sprites/Menu/New.png"));
+    UIImages.put("menuNewHov", loadImage("sprites/Menu/New_Hov.png"));
+    UIImages.put("menuNewSel", loadImage("sprites/Menu/New_Sel.png"));
+    UIImages.put("menuLoad", loadImage("sprites/Menu/Load.png"));
+    UIImages.put("menuLoadHov", loadImage("sprites/Menu/Load_Hov.png"));
+    UIImages.put("menuLoadSel", loadImage("sprites/Menu/Load_Sel.png"));
+    UIImages.put("menuExit", loadImage("sprites/Menu/Exit.png"));
+    UIImages.put("menuExitHov", loadImage("sprites/Menu/Exit_Hov.png"));
+    UIImages.put("menuExitSel", loadImage("sprites/Menu/Exit_Sel.png"));
+    UIImages.put("menuOnline", loadImage("sprites/Menu/Online.png"));
+    UIImages.put("menuOnlineHov", loadImage("sprites/Menu/Online_hov.png"));
+    UIImages.put("menuOnlineSel", loadImage("sprites/Menu/Online_sel.png"));
+    UIImages.put("buttonBackground", loadImage("sprites/Menu/background.png"));
+    UIImages.put("buttonHoverBackground", loadImage("sprites/Menu/button_blank.png"));
+    UIImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
@@ -85,7 +91,7 @@ public class Window extends PApplet {
   }
 
   public PImage getPImage(String name) {
-    return PImages.get(name);
+    return GameImages.get(name);
   }
 
   public PImage loadImage2(String path) {
@@ -169,7 +175,7 @@ public class Window extends PApplet {
   }
 
   public PImage getLoadedPImage(String name) {
-    return PImages.get(name);
+    return GameImages.get(name);
   }
 
   public Player getCurrentPlayer() {
