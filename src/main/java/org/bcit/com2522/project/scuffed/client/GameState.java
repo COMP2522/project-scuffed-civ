@@ -19,7 +19,7 @@ import static processing.core.PConstants.*;
 import org.bcit.com2522.project.scuffed.ai.AI;
 
 public class GameState { //everything manager this is the player manager
-    int gameId;
+    private String gameID;
     Map map;
     public Player currentPlayer;
     ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
@@ -41,7 +41,7 @@ public class GameState { //everything manager this is the player manager
      * @param mapheight height of the map
      */
     public GameState(int numplayers, int mapwidth, int mapheight) {
-        this.gameId = new Random().nextInt(10000); //make a random gameId
+        this.gameID = "Game" + new Random().nextInt(10000); //make a random gameId
         players = new ArrayDeque<>(numplayers);
         entities = new Entity[mapwidth][mapheight];
         map = new Map(mapwidth, mapheight);
@@ -367,7 +367,7 @@ public class GameState { //everything manager this is the player manager
      */
     public JSONObject toJSONObject() {
         JSONObject gameState = new JSONObject();
-        gameState.put("gameId", this.gameId);
+        gameState.put("gameID", this.gameID);
         gameState.put("map", map.toJSONObject());
         gameState.put("currentPlayer", currentPlayer.toJSONObject());
         JSONArray playerArray = new JSONArray();
@@ -397,7 +397,7 @@ public class GameState { //everything manager this is the player manager
      */
     public static GameState fromJSONObject(JSONObject gameStateJSON) {
         GameState gameState = new GameState();
-        gameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
+        gameState.gameID = (String)(gameStateJSON.get("gameID"));
         gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
         gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer")) ;
         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
@@ -443,5 +443,9 @@ public class GameState { //everything manager this is the player manager
 
     public Map getMap() {
         return map;
+    }
+
+    public String getGameID() {
+        return gameID;
     }
 }

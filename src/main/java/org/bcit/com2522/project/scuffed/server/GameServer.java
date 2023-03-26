@@ -13,8 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * [CURRENTLY NON-FUNCTIONAL]
+ *
  * Coordinates the game state between multiple clients using the ClientHandler inner class to designate a new
- * Thread for each new client. [in progress]
+ * Thread for each new client.
  *
  * @author Cameron Walford
  * @version 0.1

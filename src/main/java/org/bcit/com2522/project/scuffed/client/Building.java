@@ -55,4 +55,5 @@ public class Building extends Entity{
             owner.spendResources(1);
         }
     }
+
 }
