@@ -5,7 +5,6 @@ import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
 
 import static org.bcit.com2522.project.scuffed.client.Window.PImages;
-import static processing.awt.ShimAWT.loadImage;
 
 public class Button {
   int x1, y1, x2, y2;
@@ -16,6 +15,8 @@ public class Button {
   PImage hoverBackground;
   PImage clickBackground;
   Window scene;
+
+  boolean isClickable = true;
 
 
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
@@ -32,6 +33,21 @@ public class Button {
     scene.addClickable(this.clickable);
   }
 
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.callback = callback;
+    this.text = text;
+    this.background = background;
+    this.hoverBackground = hoverBackground;
+    this.clickBackground = clickBackground;
+    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
+    this.isClickable = isClickable;
+    scene.addClickable(this.clickable);
+  }
+
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, Window scene) {
     this.x1 = x1;
     this.y1 = y1;
@@ -44,6 +60,10 @@ public class Button {
     this.clickBackground = PImages.get("buttonClickBackground");
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
     scene.addClickable(this.clickable);
+  }
+
+  public void setClickable(boolean isClickable) {
+    this.isClickable = isClickable;
   }
 
   public void draw(Window scene) {
