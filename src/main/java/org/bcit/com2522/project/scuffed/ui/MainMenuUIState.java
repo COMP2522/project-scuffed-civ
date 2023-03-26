@@ -34,18 +34,15 @@ public class MainMenuUIState extends UIState implements PConstants {
         PImage menuOnline = scene.loadImage2("sprites/Menu/Online.png");
         PImage menuOnlineHov = scene.loadImage2("sprites/Menu/Online_Hov.png");
         PImage menuOnlineSel = scene.loadImage2("sprites/Menu/Online_Sel.png");
+
         int height = scene.height;
         File saveFile = new File("saves/save.json");
+        Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
+            "", menuLoad, menuLoadHov, menuLoadSel, scene, menuLoadGry, false);
         if (saveFile.isFile()) {
-            // Load Continue button
-            Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
-                "", menuLoad, menuLoadHov, menuLoadSel, scene);
-            buttonManager.add(loadGameButton);
-        } else {
-            // Gray out Continue button
-            graphicManager.addGraphic(50, height - 450, menuLoadGry);
+            loadGameButton.setClickable(true);
         }
-
+        buttonManager.add(loadGameButton);
         // Create buttons
         Button newGameButton = new Button(50, height - 350, 250, height - 300, () -> onNewGameClicked(),
             "", menuNew, menuNewHov, menuNewSel, scene);

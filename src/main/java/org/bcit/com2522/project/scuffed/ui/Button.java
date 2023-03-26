@@ -14,6 +14,8 @@ public class Button {
   PImage background;
   PImage hoverBackground;
   PImage clickBackground;
+
+  PImage disabledBackground;
   Window scene;
 
   boolean isClickable = true;
@@ -29,6 +31,7 @@ public class Button {
     this.background = background;
     this.hoverBackground = hoverBackground;
     this.clickBackground = clickBackground;
+
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
     scene.addClickable(this.clickable);
   }
@@ -44,6 +47,7 @@ public class Button {
     this.hoverBackground = hoverBackground;
     this.clickBackground = clickBackground;
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
+    this.disabledBackground = disabledBackground;
     this.isClickable = isClickable;
     scene.addClickable(this.clickable);
   }
@@ -67,7 +71,10 @@ public class Button {
   }
 
   public void draw(Window scene) {
-    if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed) {
+    if (!isClickable && disabledBackground != null) {
+      scene.image(disabledBackground, x1, y1, x2 - x1, y2 - y1);
+
+    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed) {
       scene.image(clickBackground, x1, y1, x2 - x1, y2 - y1);
     } else if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
       scene.image(hoverBackground, x1, y1, x2 - x1, y2 - y1);
@@ -82,6 +89,9 @@ public class Button {
   }
 
   public void click() {
+    if (!isClickable) {
+      return;
+    }
     clickable.click();
   }
 
