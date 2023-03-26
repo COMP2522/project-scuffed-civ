@@ -14,6 +14,7 @@ public class DebugMenu {
     scene.fill(0);
     scene.textSize(15);
     scene.text(("mX=" + scene.mouseX + " mY=" + scene.mouseY), 5, 15);
+    scene.text(("currentPlayer=" + scene.getCurrentPlayer()), 5, 30);
   }
 
 }

@@ -1,0 +1,14 @@
+w - move camera up
+a - move camera left
+s - move camera down
+d - move camera right
+b - create building (worker to be selected)
+m - create worker (maker) (requires building to be selected)
+f - create soldier (fighter) (requires building to be selected)
+c - collect (requires worker to be selected)
+enter - next turn
+space - reset camera
+x - deselect entity
+up arrow - zoom in
+down arrow - zoom out
+f3 - debug menu
