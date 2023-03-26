@@ -2,7 +2,7 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-import static org.bcit.com2522.project.scuffed.client.Window.PImages;
+import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 public class Soldier extends Unit{
     int damage;
@@ -12,7 +12,7 @@ public class Soldier extends Unit{
     public Soldier(Position position, Player owner) {
         super(position, owner);
         entityType = "soldier";
-        texture = PImages.get("soldier");
+        texture = GameImages.get("soldier");
         damage = 50;
         range = 5;
     }
@@ -20,7 +20,7 @@ public class Soldier extends Unit{
     public Soldier(Position position, int ownerId) {
         super(position, ownerId);
         entityType = "soldier";
-        texture = PImages.get("soldier");
+        texture = GameImages.get("soldier");
         damage = 50;
         range = 5;
     }

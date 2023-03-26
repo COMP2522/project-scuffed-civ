@@ -2,13 +2,10 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import processing.core.PImage;
 
 import java.awt.*;
-import java.io.Serializable;
 
-import static org.bcit.com2522.project.scuffed.client.Window.PImages;
-import static processing.awt.ShimAWT.loadImage;
+import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 public class Map { //this is a tile manager
     int width;
@@ -52,13 +49,13 @@ public class Map { //this is a tile manager
         for (Tile[] row: tiles) {
             for (Tile element: row) {
                 if(element.getType() == 0)
-                    scene.image(PImages.get("grassTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+                    scene.image(GameImages.get("grassTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
                 else if(element.getType() == 1)
-                    scene.image(PImages.get("rockTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+                    scene.image(GameImages.get("rockTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
                 else if(element.getType() == 2)
-                    scene.image(PImages.get("waterTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+                    scene.image(GameImages.get("waterTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
                 else if(element.getType() == 3)
-                    scene.image(PImages.get("sandTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+                    scene.image(GameImages.get("sandTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
             }
         }
     }

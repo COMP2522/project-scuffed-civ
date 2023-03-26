@@ -3,20 +3,19 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-import static org.bcit.com2522.project.scuffed.client.Window.PImages;
-import static processing.awt.ShimAWT.loadImage;
+import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 public class Building extends Entity{
 
     public Building(Position position, Player owner) {
         super(position, owner);
-        texture = PImages.get("building");
+        texture = GameImages.get("building");
         entityType = "building";
     }
 
     public Building(Position position, int ownerID) {
         super(position, ownerID);
-        texture = PImages.get("building");
+        texture = GameImages.get("building");
         entityType = "building";
     }
 

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static org.bcit.com2522.project.scuffed.client.Window.PImages;
+import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 import static processing.core.PConstants.*;
 
 import org.bcit.com2522.project.scuffed.ai.AI;
@@ -48,7 +48,7 @@ public class GameState { //everything manager this is the player manager
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
-        select = PImages.get("select");
+        select = GameImages.get("select");
         zoomAmount = 32;
         xShift = 0;
         yShift = 0;
@@ -213,7 +213,7 @@ public class GameState { //everything manager this is the player manager
         //TODO change to nearest neighbor resizing if possible
         if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
             zoomAmount = (int)(zoomAmount * amount);
-            for (java.util.Map.Entry<String, PImage> mapElement : PImages.entrySet()) {
+            for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
                 mapElement.getValue().resize(zoomAmount, 0);
             }
         }

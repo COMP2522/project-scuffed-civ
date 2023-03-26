@@ -4,7 +4,7 @@ import org.bcit.com2522.project.scuffed.client.Clickable;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
 
-import static org.bcit.com2522.project.scuffed.client.Window.PImages;
+import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 public class Button {
   int x1, y1, x2, y2;
@@ -94,9 +94,9 @@ public class Button {
     this.y2 = y2;
     this.callback = callback;
     this.text = text;
-    this.background = PImages.get("buttonBackground");
-    this.hoverBackground = PImages.get("buttonHoverBackground");
-    this.clickBackground = PImages.get("buttonClickBackground");
+    this.background = UIImages.get("buttonBackground");
+    this.hoverBackground = UIImages.get("buttonHoverBackground");
+    this.clickBackground = UIImages.get("buttonClickBackground");
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
     scene.addClickable(this.clickable);
   }
