@@ -1,14 +1,10 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.bcit.com2522.project.scuffed.ui.*;
-import org.json.simple.JSONObject;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
-import java.io.*;
-import java.net.Socket;
 import java.util.HashMap;
 
 /**
@@ -69,12 +65,31 @@ public class Window extends PApplet {
     PImages.put("building", loadImage("sprites/building.png"));
     PImages.put("logo", loadImage("sprites/logo.png"));
     PImages.put("select", loadImage("sprites/select.png"));
-
+    PImages.put("menuNew", loadImage("sprites/Menu/New.png"));
+    PImages.put("menuNewHov", loadImage("sprites/Menu/New_Hov.png"));
+    PImages.put("menuNewSel", loadImage("sprites/Menu/New_Sel.png"));
+    PImages.put("menuLoad", loadImage("sprites/Menu/Load.png"));
+    PImages.put("menuLoadHov", loadImage("sprites/Menu/Load_Hov.png"));
+    PImages.put("menuLoadSel", loadImage("sprites/Menu/Load_Sel.png"));
+    PImages.put("menuExit", loadImage("sprites/Menu/Exit.png"));
+    PImages.put("menuExitHov", loadImage("sprites/Menu/Exit_Hov.png"));
+    PImages.put("menuExitSel", loadImage("sprites/Menu/Exit_Sel.png"));
+    PImages.put("menOnline", loadImage("sprites/Menu/Online.png"));
+    PImages.put("menOnlineHov", loadImage("sprites/Menu/Online_Hov.png"));
+    PImages.put("menOnlineSel", loadImage("sprites/Menu/Online_Sel.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
     gameInstance = new GameInstance(new HUD(), new GameState(numplayers, mapwidth, mapheight));
     gameInstance.newGame();
+  }
+
+  public PImage getPImage(String name) {
+    return PImages.get(name);
+  }
+
+  public PImage loadImage2(String path) {
+    return loadImage(path);
   }
 
   @Override
