@@ -20,7 +20,7 @@ public class Button {
 
   boolean isClickable = true;
 
-
+  // Standard Button
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
     this.x1 = x1;
     this.y1 = y1;
@@ -36,6 +36,23 @@ public class Button {
     scene.addClickable(this.clickable);
   }
 
+  // Button with no text
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.callback = callback;
+    this.text = "";
+    this.background = background;
+    this.hoverBackground = hoverBackground;
+    this.clickBackground = clickBackground;
+
+    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
+    scene.addClickable(this.clickable);
+  }
+
+  // Button that can be disabled
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable) {
     this.x1 = x1;
     this.y1 = y1;
@@ -52,6 +69,24 @@ public class Button {
     scene.addClickable(this.clickable);
   }
 
+  // Button that can be disabled and has no text
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.callback = callback;
+    this.text = "";
+    this.background = background;
+    this.hoverBackground = hoverBackground;
+    this.clickBackground = clickBackground;
+    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
+    this.disabledBackground = disabledBackground;
+    this.isClickable = isClickable;
+    scene.addClickable(this.clickable);
+  }
+
+  // Button that uses default images
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, Window scene) {
     this.x1 = x1;
     this.y1 = y1;
