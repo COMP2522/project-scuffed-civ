@@ -8,7 +8,7 @@ public class Worker extends Unit{
     public Worker(Position position, Player owner) {
         super(position, owner);
         entityType = "worker";
-        texture = GameImages.get(entityType);
+        //texture = GameImages.get(entityType);
     }
     public Worker(Position position, int ownerID) {
         super(position, ownerID);

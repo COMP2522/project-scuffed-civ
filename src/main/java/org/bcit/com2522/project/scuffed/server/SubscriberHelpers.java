@@ -14,6 +14,8 @@ package org.bcit.com2522.project.scuffed.server;
          * See the License for the specific language governing permissions and
          * limitations under the License.
          */
+//More info regarding these example subscribers can be found here:
+//https://mongodb.github.io/mongo-java-driver/4.9/driver-reactive/getting-started/quick-start-primer/
 
         import com.mongodb.MongoTimeoutException;
         import org.bson.Document;
