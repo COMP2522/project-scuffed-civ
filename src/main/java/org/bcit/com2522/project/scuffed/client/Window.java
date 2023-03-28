@@ -63,11 +63,11 @@ public class Window extends PApplet {
     GameImages.put("soldier", loadImage( "sprites/soldier.png"));
     GameImages.put("worker", loadImage("sprites/worker.png"));
     GameImages.put("building", loadImage("sprites/building.png"));
-
+    GameImages.put("select", loadImage("sprites/select.png"));
     //Images for the UI. Buttons, Menus, Backgrounds, etc.
     UIImages = new HashMap<String, PImage>();
     UIImages.put("logo", loadImage("sprites/logo.png"));
-    UIImages.put("select", loadImage("sprites/select.png"));
+    
     UIImages.put("menuNew", loadImage("sprites/Menu/New.png"));
     UIImages.put("menuNewHov", loadImage("sprites/Menu/New_Hov.png"));
     UIImages.put("menuNewSel", loadImage("sprites/Menu/New_Sel.png"));
