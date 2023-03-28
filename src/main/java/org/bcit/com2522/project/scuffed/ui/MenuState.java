@@ -2,7 +2,7 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
-public abstract class UIState {
+public abstract class MenuState {
     ButtonManager buttonManager;
     protected Window scene;
     protected Menu menu;
@@ -13,7 +13,7 @@ public abstract class UIState {
 //        this.hud = hud;
 //    }
 
-    public UIState(Window scene, Menu menu, ButtonManager buttonManager) {
+    public MenuState(Window scene, Menu menu, ButtonManager buttonManager) {
         this.scene = scene;
         this.buttonManager = buttonManager;
         this.menu = menu;

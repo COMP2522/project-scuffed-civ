@@ -23,9 +23,12 @@ public class GameInstance {
     private ObjectOutputStream oos;
     public GameServer gameServer;
 
+    public Window scene;
 
-    public GameInstance() {
-        hud = new HUD();
+
+    public GameInstance(Window scene) {
+        this.scene = scene;
+        hud = new HUD(scene);
         gameState = new GameState();
     }
 
@@ -43,7 +46,7 @@ public class GameInstance {
         if (gameState.clickedMap(mousePos)){
             gameState.clicked(mousePos);
         } else {
-            hud.clicked(mousePos, scene);
+            hud.clicked(mousePos);
         }
     }
 
@@ -111,7 +114,7 @@ public class GameInstance {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
             GameState serverGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
-            GameInstance gameInstance = new GameInstance(new HUD(), serverGameState);
+            GameInstance gameInstance = new GameInstance(new HUD(scene), serverGameState);
         } catch (Exception e) {
             e.printStackTrace();
         }
