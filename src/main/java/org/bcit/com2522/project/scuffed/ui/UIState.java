@@ -7,6 +7,12 @@ public abstract class UIState {
     protected Window scene;
     protected Menu menu;
 
+//    public UIState(Window scene, HUD hud, ButtonManager buttonManager) {
+//        this.scene = scene;
+//        this.buttonManager = buttonManager;
+//        this.hud = hud;
+//    }
+
     public UIState(Window scene, Menu menu, ButtonManager buttonManager) {
         this.scene = scene;
         this.buttonManager = buttonManager;
