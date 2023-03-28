@@ -48,7 +48,7 @@ public class GameState { //everything manager this is the player manager
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
-        select = GameImages.get("select");
+        //select = GameImages.get("select");
         zoomAmount = 32;
         xShift = 0;
         yShift = 0;
@@ -74,7 +74,7 @@ public class GameState { //everything manager this is the player manager
         int cols = entities[0].length;
 
         // Calculate the number of grid sections along the x and y axes
-        System.out.println(players.size());
+        //System.out.println(players.size());
         ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);
         //TODO same logic should be used for all numbers of players
         if (players.size() == 2) {

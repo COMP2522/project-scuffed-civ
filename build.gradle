@@ -15,9 +15,9 @@ dependencies {
     implementation fileTree(dir: 'library', include: ['*.jar'])
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'org.mongodb:mongodb-driver-sync:4.9.0'
+//    implementation 'org.mongodb:mongodb-driver-sync:4.9.0'
     implementation 'org.reactivestreams:reactive-streams:1.0.4'
+    implementation 'org.mongodb:mongodb-driver-reactivestreams:4.9.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
