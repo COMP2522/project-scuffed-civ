@@ -18,6 +18,8 @@ public class Button {
   PImage disabledBackground;
   Window scene;
 
+  int fontSize = 32;
+
   boolean isClickable = true;
 
   // Standard Button
@@ -47,6 +49,7 @@ public class Button {
     this.background = background;
     this.hoverBackground = hoverBackground;
     this.clickBackground = clickBackground;
+
 
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
     scene.addClickable(this.clickable);
@@ -101,6 +104,28 @@ public class Button {
     scene.addClickable(this.clickable);
   }
 
+  // Versions of button but with text size added
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable, int textSize) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.callback = callback;
+    this.text = text;
+    this.background = background;
+    this.hoverBackground = hoverBackground;
+    this.clickBackground = clickBackground;
+    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
+    this.disabledBackground = disabledBackground;
+    this.isClickable = isClickable;
+    this.fontSize = textSize;
+    scene.addClickable(this.clickable);
+  }
+
+  public void setTextSize(int textSize) {
+    this.fontSize = textSize;
+  }
+
   public void setClickable(boolean isClickable) {
     this.isClickable = isClickable;
   }
@@ -117,8 +142,9 @@ public class Button {
       scene.image(background, x1, y1, x2 - x1, y2 - y1);
     }
     if (text != null) {
+      scene.textSize(fontSize);
+      scene.text(text, x1 + 10, y1 + fontSize);
       scene.textSize(32);
-      scene.text(text, x1 + 10, y1 + 32);
     }
 
   }
