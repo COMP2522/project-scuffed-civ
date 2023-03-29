@@ -53,7 +53,7 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
      * @param xShift the xShift of the map
      * @param yShift the yShift of the map
      */
-    public void moveTowards(Entity[][] entities, Position position, int xShift, int yShift) {
+    public void moveTowards(Entity[][] entities, Position position, int xShift, int yShift) { //TODO this is fucking things up atm, will be removed
         Position tempPos = getPosition();
         while (remainMove > 0 && !tempPos.equals(position)) {
             if (Math.abs(position.getX() - getPosition().getX()) >= Math.abs(position.getY() - getPosition().getY())) {

@@ -2,9 +2,9 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
-public class ServerLobbyUIState extends UIState {
+public class ServerLobbyMenuState extends MenuState {
 
-    public ServerLobbyUIState(Window scene, Menu menu) {
+    public ServerLobbyMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
     }
 

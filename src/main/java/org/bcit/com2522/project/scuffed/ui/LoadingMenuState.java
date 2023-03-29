@@ -2,11 +2,11 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
-public class LoadingUIState extends UIState {
+public class LoadingMenuState extends MenuState {
 
     private String loadingText;
 
-    public LoadingUIState(Window scene, Menu menu) {
+    public LoadingMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         loadingText = "Loading...";
     }
