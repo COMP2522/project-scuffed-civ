@@ -7,12 +7,6 @@ public abstract class MenuState {
     protected Window scene;
     protected Menu menu;
 
-//    public UIState(Window scene, HUD hud, ButtonManager buttonManager) {
-//        this.scene = scene;
-//        this.buttonManager = buttonManager;
-//        this.hud = hud;
-//    }
-
     public MenuState(Window scene, Menu menu, ButtonManager buttonManager) {
         this.scene = scene;
         this.buttonManager = buttonManager;

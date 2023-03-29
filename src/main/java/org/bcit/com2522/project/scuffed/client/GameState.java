@@ -336,7 +336,6 @@ public class GameState { //everything manager this is the player manager
      * @param scene the window to draw to
      */
     public void draw(Window scene) {
-        //scene.image(GameImages.get("background"), 0, 0);
         map.draw(zoomAmount, scene);
         for (Entity[] row: entities) {
             for (Entity entity: row) {
