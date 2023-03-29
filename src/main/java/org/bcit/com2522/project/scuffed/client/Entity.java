@@ -5,12 +5,11 @@ import processing.core.PImage;
 
 import java.awt.*;
 
-public abstract class Entity { //TODO: make this class abstract
+public abstract class Entity {
     protected int maxAction;
     protected int remainAction;
     protected int ownerID;
-
-    protected Player owner;
+    protected Player owner; //TODO remove this
     protected Color color;
     protected int maxHealth;
     protected int currentHealth;
@@ -20,23 +19,18 @@ public abstract class Entity { //TODO: make this class abstract
     protected PImage texture;
     protected String entityType; //building, soldier, worker
 
-    public Entity(Position position, Player owner) {
+    public Entity(Position position, int ownerId, Color pColor, int health, int cost) { //TODO make this the only constructor
         this.position = position;
-        this.ownerID = owner.getID();
-        this.owner = owner;
-        this.color = owner.getColor();
+        this.ownerID = ownerId;
+        this.owner = GameState.getPlayer(ownerId);
+        this.color = pColor;
         maxAction = 1;
         remainAction = 1;
-        maxHealth = 100;
+
+        maxHealth = health;
         currentHealth = maxHealth;
-    }
-    public Entity(Position position, int ownerID) {
-        this.position = position;
-        this.ownerID = ownerID;
-        maxAction = 1;
-        remainAction = 1;
-        maxHealth = 100;
-        currentHealth = maxHealth;
+
+        resourceCost = cost;
     }
 
     public void draw(int zoomAmount, Color color, Window scene) {

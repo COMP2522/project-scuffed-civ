@@ -22,7 +22,7 @@ public class Button {
 
   boolean isClickable = true;
 
-  // Standard Button
+  // Standard Button, has text and can not be disabled
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
     this.x1 = x1;
     this.y1 = y1;

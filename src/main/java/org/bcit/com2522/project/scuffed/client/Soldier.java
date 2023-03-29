@@ -2,27 +2,22 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
+import java.awt.*;
+
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 public class Soldier extends Unit{
+    public static final int cost = 1;
     int damage;
 
     int range;
 
-    public Soldier(Position position, Player owner) {
-        super(position, owner);
+    public Soldier(Position position, int ownerId, Color pColor, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
+        super(position, ownerId, pColor, health, cost, speed);
         entityType = "soldier";
         texture = GameImages.get("soldier");
-        damage = 50;
-        range = 5;
-    }
-
-    public Soldier(Position position, int ownerId) {
-        super(position, ownerId);
-        entityType = "soldier";
-        texture = GameImages.get("soldier");
-        damage = 50;
-        range = 5;
+        this.damage = damage;
+        this.range = range;
     }
 
     public void attack(Entity[][] entities, Entity target){
@@ -55,7 +50,15 @@ public class Soldier extends Unit{
         if(soldierObject == null) {
             return null;
         }
-        Soldier soldier = new Soldier(Position.fromJSONObject((JSONObject) soldierObject.get("position")), (int)(long) soldierObject.get("ownerId"));
+        Soldier soldier = new Soldier(
+                Position.fromJSONObject((JSONObject) soldierObject.get("position")),
+                (int)(long) soldierObject.get("ownerId"),
+                (Color) soldierObject.get("color"),
+                (int) soldierObject.get("maxHealth"),
+                Soldier.cost,
+                (int) soldierObject.get("speed"),
+                (int) soldierObject.get("damage"),
+                (int) soldierObject.get("range"));
         soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
         return soldier;
     }
