@@ -1,19 +1,18 @@
 package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import processing.core.PImage;
 import processing.core.PConstants;
 
 import java.io.File;
 
 import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
-public class MainMenuUIState extends UIState implements PConstants {
+public class MainMenuMenuState extends MenuState implements PConstants {
 
     GraphicManager graphicManager;
 
     private Label errorMessage;
-    public MainMenuUIState(Window scene, Menu menu) {
+    public MainMenuMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         graphicManager = scene.getGraphicManager();
 
@@ -59,17 +58,17 @@ public class MainMenuUIState extends UIState implements PConstants {
 
     public void onNewGameClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new NewGameUIState(scene, menu));
+        menu.setState(new NewGameMenuState(scene, menu));
     }
 
     public void onLoadGameClicked() {
         // Change the menu state to the Load Game state
         if (new File("saves/save.json").exists()) {
-            menu.setState(new LoadingUIState(scene, menu));
+            menu.setState(new LoadingMenuState(scene, menu));
 
             // Run the loading process in a separate thread
             scene.loadGame();
-            menu.setState(new MainMenuUIState(scene, menu));
+            menu.setState(new MainMenuMenuState(scene, menu));
 
         } else {
             errorMessage.draw();
@@ -78,7 +77,7 @@ public class MainMenuUIState extends UIState implements PConstants {
 
     public void onOnlineClicked() {
         // Change the menu state to the Online Multiplayer state
-        menu.setState(new OnlineUIState(scene, menu));
+        menu.setState(new OnlineMenuState(scene, menu));
     }
 
 //    public void onSettingsClicked() {

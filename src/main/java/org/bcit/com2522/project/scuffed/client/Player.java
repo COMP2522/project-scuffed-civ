@@ -12,6 +12,7 @@ public class Player { //gamestate is the player manager
   private Color color;
   private boolean isAi;
 
+
   public Player (int playerNum) {
     this.playerNum = playerNum;
     Random random = new Random();
@@ -52,16 +53,6 @@ public class Player { //gamestate is the player manager
 
   public int getPlayerNum() {
     return playerNum;
-  }
-
-  public void draw(Window scene) {
-    scene.fill(color.getRGB());
-    scene.text("Player " + (playerNum + 1), 700, 150); //print current player
-    scene.text("Resources " + (resources), 700, 300); //print player resources
-    scene.fill(200);
-    scene.rect(700, 550, 400, 200);
-    scene.fill(000);
-    scene.text("end turn", 725, 675); //print end turn box
   }
 
   public boolean hasLost(){
@@ -131,5 +122,9 @@ public class Player { //gamestate is the player manager
 
   public int getResources() {
     return resources;
+  }
+
+  public int getplayerNum() {
+    return playerNum;
   }
 }

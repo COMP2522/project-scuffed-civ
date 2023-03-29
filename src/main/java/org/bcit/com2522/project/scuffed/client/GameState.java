@@ -29,6 +29,8 @@ public class GameState { //everything manager this is the player manager
     int xShift;
     int yShift;
 
+
+
     PImage select;
     Position selectPosition;
     AI ai;

@@ -3,18 +3,16 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 
 public class Menu {
-     private UIState previousState;
-     public UIState currentState;
+     public MenuState currentState;
      Window scene;
 
     public Menu(Window scene) {
         this.scene = scene;
-        this.currentState = new MainMenuUIState(scene, this);
+        this.currentState = new MainMenuMenuState(scene, this);
     }
 
-    public void setState(UIState newState) {
+    public void setState(MenuState newState) {
         scene.wipeGraphics();
-        this.previousState = this.currentState;
         this.currentState = newState;
     }
 

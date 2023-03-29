@@ -3,7 +3,7 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
 
-public class HostGameUIState extends UIState {
+public class HostGameMenuState extends MenuState {
     private InputBox mapWidthInput;
     private InputBox mapHeightInput;
     private InputBox numPlayersInput;
@@ -14,7 +14,7 @@ public class HostGameUIState extends UIState {
     private Label numPlayersLabel;
     private Label errorMessageLabel;
     private boolean showError = false;
-    public HostGameUIState(Window scene, Menu menu) {
+    public HostGameMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -130,7 +130,7 @@ public class HostGameUIState extends UIState {
     @Override
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new OnlineUIState(scene, menu));
+        menu.setState(new OnlineMenuState(scene, menu));
     }
 
 

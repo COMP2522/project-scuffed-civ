@@ -2,9 +2,9 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
-public class OnlineUIState extends UIState {
+public class OnlineMenuState extends MenuState {
 
-    public OnlineUIState(Window scene, Menu menu) {
+    public OnlineMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -21,16 +21,16 @@ public class OnlineUIState extends UIState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new MainMenuUIState(scene, menu));
+        menu.setState(new MainMenuMenuState(scene, menu));
     }
 
     public void onHostClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new HostGameUIState(scene, menu));
+        menu.setState(new HostGameMenuState(scene, menu));
     }
 
     public void onJoinClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new JoinGameUIState(scene, menu));
+        menu.setState(new JoinGameMenuState(scene, menu));
     }
 }
