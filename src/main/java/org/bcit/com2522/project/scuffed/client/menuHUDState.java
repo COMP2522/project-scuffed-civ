@@ -38,10 +38,35 @@ public class menuHUDState extends HUDState {
       hud.scene.nextTurn();
     }, "End Turn", rivetPanel, rivetPanel, rivetPanel, hud.scene);
 
-    Button returnToMainMenuButton = new Button(centerX - 100, centerY - 100, centerX + 100, centerY + 100, () -> {
+    /*
+    buttons for the hud menu
+    1 = top left
+    2 = bottom right
+     */
+    Button returnToMainMenuButton = new Button(centerX - 150, centerY - 260, centerX + 150, centerY - 210, () -> {
       onMenuClicked();
-    }, "Return to Main Menu", rivetPanel, rivetPanel, rivetPanel, hud.scene);
+    }, "Main Menu", rivetPanel, rivetPanel, rivetPanel, hud.scene);
 
+    Button save = new Button(centerX - 150, centerY - 160, centerX + 150, centerY - 110, () -> {
+      hud.scene.saveGame();
+    }, "Save", rivetPanel, rivetPanel, rivetPanel, hud.scene);
+
+    Button settings = new Button(centerX - 150, centerY - 60, centerX + 150, centerY -10, () -> {
+      onMenuClicked();
+    }, "Settings", rivetPanel, rivetPanel, rivetPanel, hud.scene);
+
+    Button exitButton = new Button(centerX - 150, centerY + 40, centerX + 150, centerY + 90, () -> {
+      hud.scene.exit();
+    }, "Exit", rivetPanel, rivetPanel, rivetPanel, hud.scene);
+
+    Button resumeGame = new Button(centerX - 150, centerY + 140, centerX + 150, centerY + 190, () -> {
+      hud.setState(new inGameStartHUD(hud));
+    }, "Resume Game", rivetPanel, rivetPanel, rivetPanel, hud.scene);
+
+    buttonManager.add(resumeGame);
+    buttonManager.add(exitButton);
+    buttonManager.add(settings);
+    buttonManager.add(save);
     buttonManager.add(hudEndTurnButton);
     buttonManager.add(returnToMainMenuButton);
     buttonManager.add(hudMenuButton);
