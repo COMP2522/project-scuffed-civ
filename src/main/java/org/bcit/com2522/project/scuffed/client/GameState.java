@@ -168,13 +168,13 @@ public class GameState { //everything manager this is the player manager
 
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
-            shift(0, 1);
-        } else if(key == 'a') {
-            shift(1, 0);
-        } else if(key == 's') {
             shift(0, -1);
-        } else if(key == 'd') {
+        } else if(key == 'a') {
             shift(-1, 0);
+        } else if(key == 's') {
+            shift(0, 1);
+        } else if(key == 'd') {
+            shift(1, 0);
         }
 
         else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building

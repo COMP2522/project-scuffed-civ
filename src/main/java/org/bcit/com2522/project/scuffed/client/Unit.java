@@ -44,7 +44,7 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
             System.out.println("you can't move that far");
         } else {
             remainMove -= Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY());
-            this.position = position;
+            this.position = new Position(position.getX()-xShift, position.getY()-yShift);
             entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
             entities[position.getX()][position.getY()] = this;
         }
