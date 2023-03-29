@@ -3,20 +3,16 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
+import java.awt.*;
+
 public abstract class Unit extends Entity { //things that can move TODO: maybe make this abstract
     int maxMove;
     int remainMove;
 
-    public Unit(Position position, Player owner) {
-        super(position, owner);
-        maxMove = 6;
-        remainMove = maxMove;
-    }
-
-    public Unit(Position position, int ownerID) {
-        super(position, ownerID);
-        maxMove = 6;
-        remainMove = maxMove;
+    public Unit(Position position, int ownerId, Color pColor, int health, int cost, int speed) {
+        super(position, ownerId, pColor, health, cost);
+        this.maxMove = speed;
+        this.remainMove = maxMove;
     }
 
     public void resetMove() {

@@ -35,8 +35,6 @@ public class Player { //gamestate is the player manager
     hasLost = false;
   }
 
-
-
   public void addEntity(Position position) {
     //entities.add(new Entity(scene, position, this));
   }
