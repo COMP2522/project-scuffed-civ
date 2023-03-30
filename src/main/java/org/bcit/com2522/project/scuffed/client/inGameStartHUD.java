@@ -3,6 +3,8 @@ package org.bcit.com2522.project.scuffed.client;
 import org.bcit.com2522.project.scuffed.ui.Button;
 import org.bcit.com2522.project.scuffed.ui.ButtonManager;
 
+import javax.lang.model.type.UnionType;
+
 /**
  * The inGameStartHUD class is the HUD that is displayed when the game is started.
  * It provides specific implementation for the in-game starting HUD state
@@ -32,16 +34,55 @@ public class inGameStartHUD extends HUDState {
 
     Button hudMenuButton = new Button(centerX - 540, centerY - 360, centerX - 390, centerY - 310, () -> {
       hud.setState(new menuHUDState(hud));
-    }, "Menu", rivetPanel, rivetPanel, rivetPanel, hud.scene);
-
-    buttonManager.add(hudMenuButton);
+    }, "Menu", rivetPanel, rivetPanel, rivetPanel, hud.scene, rivetPanel,true, 28);
 
     Button hudEndTurnButton = new Button(centerX + 390, centerY - 360, centerX + 540, centerY - 310, () -> {
       hud.scene.nextTurn();
-    }, "End Turn", rivetPanel, rivetPanel, rivetPanel, hud.scene);
+    }, "End Turn", rivetPanel, rivetPanel, rivetPanel, hud.scene, rivetPanel,true, 20);
 
+    buttonManager.add(hudMenuButton);
     buttonManager.add(hudEndTurnButton);
   }
+
+  //load selected unit picture, name, and stats in bottom left corner
+  //load selected units buttons in bottom right corner
+//  public void loadSelectedUnitHUD() {
+//    Object selected = hud.scene.getSelected();
+//
+//    if (selected instanceof Unit && ((Unit) selected).getType() == UnionType.Soldier) {
+//      Unit unit = (Unit) selected;
+//      hud.scene.image(unit.getSprite(), centerX - 540, centerY + 160, 200, 200);
+//      hud.scene.textFont(fontMedium);
+//      hud.scene.text(unit.getName(), centerX - 540, centerY + 370);
+//      hud.scene.textFont(fontSmall);
+//      hud.scene.text("Health: " + unit.getHealth() + "/" + unit.getMaxHealth(), centerX - 540, centerY + 390);
+//      hud.scene.text("Attack: " + unit.getAttack(), centerX - 540, centerY + 410);
+//      hud.scene.text("Range: " + unit.getRange(), centerX - 540, centerY + 430);
+//      hud.scene.text("Movement: " + unit.getMovement(), centerX - 540, centerY + 450);
+//      hud.scene.text("Cost: " + unit.getCost(), centerX - 540, centerY + 470);
+//    } else if (selected instanceof Unit && ((Unit) selected).getType() == UnionType.Building) {
+//      Unit unit = (Unit) selected;
+//      hud.scene.image(unit.getSprite(), centerX - 540, centerY + 160, 200, 200);
+//      hud.scene.textFont(fontMedium);
+//      hud.scene.text(unit.getName(), centerX - 540, centerY + 370);
+//      hud.scene.textFont(fontSmall);
+//      hud.scene.text("Health: " + unit.getHealth() + "/" + unit.getMaxHealth(), centerX - 540, centerY + 390);
+//      hud.scene.text("Attack: " + unit.getAttack(), centerX - 540, centerY + 410);
+//      hud.scene.text("Range: " + unit.getRange(), centerX - 540, centerY + 430);
+//      hud.scene.text("Cost: " + unit.getCost(), centerX - 540, centerY + 450);
+//    } else if (selected instanceof Unit && ((Unit) selected).getType() == UnionType.Worker) {
+//      Unit unit = (Unit) selected;
+//      hud.scene.image(unit.getSprite(), centerX - 540, centerY + 160, 200, 200);
+//      hud.scene.textFont(fontMedium);
+//      hud.scene.text(unit.getName(), centerX - 540, centerY + 370);
+//      hud.scene.textFont(fontSmall);
+//      hud.scene.text("Health: " + unit.getHealth() + "/" + unit.getMaxHealth(), centerX - 540, centerY + 390);
+//      hud.scene.text("Attack: " + unit.getAttack(), centerX - 540, centerY + 410);
+//      hud.scene.text("Range: " + unit.getRange(), centerX - 540, centerY + 430);
+//      hud.scene.text("Movement: " + unit.getMovement(), centerX - 540, centerY + 450);
+//      hud.scene.text("Cost: " + unit.getCost(), centerX - 540, centerY + 470);
+//    }
+//  }
 
     /**
      * Draws the in-game starting HUD state rendering player information
@@ -65,8 +106,11 @@ public class inGameStartHUD extends HUDState {
     scene.text("Player" + (hud.currentPlayer.getplayerNum() + 1) + "\n" +
         "Resources " + (hud.currentPlayer.getResources()),
         centerX - 520, centerY - 120); //print player resources
+
     // draw the buttons
     buttonManager.draw();
   }
+
+
 
 }
