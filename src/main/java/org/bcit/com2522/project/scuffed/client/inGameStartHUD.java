@@ -32,21 +32,50 @@ public class inGameStartHUD extends HUDState {
 
     buttonManager = new ButtonManager(hud.scene);
 
-    Button hudMenuButton = new Button(centerX - 540, centerY - 360, centerX - 390, centerY - 310, () -> {
-      hud.setState(new menuHUDState(hud));
-    }, "Menu", rivetPanel, rivetPanel, rivetPanel, hud.scene, rivetPanel,true, 28);
+    Button hudMenuButton = new Button(
+        centerX - 540, centerY - 360, centerX - 390, centerY - 310,
+        () -> {hud.setState(new menuHUDState(hud));
+    }, "Menu", rivetPanel, rivetPanel, rivetPanel, hud.scene,
+        rivetPanel,true, 28 , 20, 5);
 
-    Button hudEndTurnButton = new Button(centerX + 390, centerY - 360, centerX + 540, centerY - 310, () -> {
-      hud.scene.nextTurn();
-    }, "End Turn", rivetPanel, rivetPanel, rivetPanel, hud.scene, rivetPanel,true, 20);
+    Button hudEndTurnButton = new Button(
+        centerX + 390, centerY - 360, centerX + 540, centerY - 310,
+        () -> {hud.scene.nextTurn();
+    }, "End Turn", rivetPanel, rivetPanel, rivetPanel, hud.scene,
+        rivetPanel,true, 20, 5, 10);
 
     buttonManager.add(hudMenuButton);
     buttonManager.add(hudEndTurnButton);
   }
 
-  //load selected unit picture, name, and stats in bottom left corner
-  //load selected units buttons in bottom right corner
-//  public void loadSelectedUnitHUD() {
+
+
+    /**
+     * Draws the in-game starting HUD state rendering player information
+     * and the buttons.
+     * @param scene
+     */
+  @Override
+  public void draw(Window scene) {
+    // draw the players information
+    //scene.image(rivetPanel, centerX - 540, centerY - 360, 150, 50);  // menu box, top left
+    //scene.image(rivetPanel, centerX + 390, centerY - 360, 150, 50);  // end turn box, top right
+    scene.image(rivetPanel, centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
+    scene.image(rivetPanel, centerX - 540, centerY + 160, 200, 200);  //  selected char box, bottom left
+    scene.image(rivetPanel, centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
+    scene.image(rivetPanel, centerX - 540, centerY - 150, 150, 200);   // player resources middle left
+
+    scene.textFont(fontLarge);
+    scene.text("Player " + (hud.currentPlayer.getplayerNum() + 1), centerX - 75, centerY - 325); //print current player
+
+    scene.textFont(fontSmall);
+    scene.text("Player" + (hud.currentPlayer.getplayerNum() + 1) + "\n" +
+        "Resources " + (hud.currentPlayer.getResources()),
+        centerX - 520, centerY - 120); //print player resources
+
+    //load selected unit picture, name, and stats in bottom left corner
+    //load selected units buttons in bottom right corner
+
 //    Object selected = hud.scene.getSelected();
 //
 //    if (selected instanceof Unit && ((Unit) selected).getType() == UnionType.Soldier) {
@@ -83,29 +112,6 @@ public class inGameStartHUD extends HUDState {
 //      hud.scene.text("Cost: " + unit.getCost(), centerX - 540, centerY + 470);
 //    }
 //  }
-
-    /**
-     * Draws the in-game starting HUD state rendering player information
-     * and the buttons.
-     * @param scene
-     */
-  @Override
-  public void draw(Window scene) {
-    // draw the players information
-    //scene.image(rivetPanel, centerX - 540, centerY - 360, 150, 50);  // menu box, top left
-    //scene.image(rivetPanel, centerX + 390, centerY - 360, 150, 50);  // end turn box, top right
-    scene.image(rivetPanel, centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
-    scene.image(rivetPanel, centerX - 540, centerY + 160, 200, 200);  //  selected char box, bottom left
-    scene.image(rivetPanel, centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
-    scene.image(rivetPanel, centerX - 540, centerY - 150, 150, 200);   // player resources middle left
-
-    scene.textFont(fontLarge);
-    scene.text("Player " + (hud.currentPlayer.getplayerNum() + 1), centerX - 75, centerY - 325); //print current player
-
-    scene.textFont(fontSmall);
-    scene.text("Player" + (hud.currentPlayer.getplayerNum() + 1) + "\n" +
-        "Resources " + (hud.currentPlayer.getResources()),
-        centerX - 520, centerY - 120); //print player resources
 
     // draw the buttons
     buttonManager.draw();

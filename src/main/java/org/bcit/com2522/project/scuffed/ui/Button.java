@@ -108,7 +108,10 @@ public class Button {
   }
 
   // Versions of button but with text size added
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable, int textSize, int offsetX, int offsetY) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene,
+                PImage disabledBackground, boolean isClickable, int textSize,
+                int offsetX, int offsetY) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
