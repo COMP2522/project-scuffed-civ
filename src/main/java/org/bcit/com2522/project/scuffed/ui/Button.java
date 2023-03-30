@@ -144,6 +144,17 @@ public class Button {
     scene.addClickable(this.clickable);
   }
 
+  // Non Functional Button
+  public Button(int x1, int y1, int x2, int y2, Window scene, PImage disabledBackground) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.disabledBackground = disabledBackground;
+    this.isClickable = false;
+
+  }
+
   public void setTextSize(int textSize) {
     this.fontSize = textSize;
   }
@@ -153,14 +164,14 @@ public class Button {
   }
 
   public void draw(Window scene) {
-    if (!isClickable && disabledBackground != null) {
+    if ((!isClickable && disabledBackground != null) || this.clickable == null) {
       scene.image(disabledBackground, x1, y1, x2 - x1, y2 - y1);
 
-    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed) {
+    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed && isClickable) {
       scene.image(clickBackground, x1, y1, x2 - x1, y2 - y1);
-    } else if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
+    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && isClickable) {
       scene.image(hoverBackground, x1, y1, x2 - x1, y2 - y1);
-    } else {
+    } else if (isClickable){
       scene.image(background, x1, y1, x2 - x1, y2 - y1);
     }
     if (text != null) {
@@ -172,7 +183,7 @@ public class Button {
   }
 
   public void click() {
-    if (!isClickable) {
+    if ( this.clickable == null || !isClickable) {
       return;
     }
     clickable.click();
@@ -209,6 +220,10 @@ public class Button {
   }
 
   public boolean isClicked(int x, int y) {
+    if ( this.clickable == null || !isClickable) {
+      System.out.println("Button is not clickable");
+      return false;
+    }
     return clickable.isHovered(x, y);
   }
 
