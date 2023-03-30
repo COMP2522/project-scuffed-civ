@@ -27,7 +27,7 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
         return unitObject;
     }
 
-    public Boolean withinMoveRange() {
+    public Boolean withinMoveRange(Position position) {
         return Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY()) <= remainMove;
     }
 
@@ -36,7 +36,7 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
         Position oldPos = getPosition();
         if (entities[position.getX() - xShift][position.getY() - yShift] != null) {
             System.out.println("that position is occupied");
-        } else if (!withinMoveRange()) {
+        } else if (!withinMoveRange(position)) {
             System.out.println("you can't move that far");
         } else {
             remainMove -= Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY());
