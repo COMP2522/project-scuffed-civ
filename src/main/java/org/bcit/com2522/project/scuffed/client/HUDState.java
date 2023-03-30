@@ -18,6 +18,9 @@ import processing.core.PVector;
 public abstract class HUDState {
     public HUD hud; // reference to the HUD object that this HUDState belongs to
     public PImage rivetPanel;
+    public PImage soldierSelectedIMG;
+    public PImage buildingSelectedIMG;
+    public PImage workerSelectedIMG;
     public PFont fontLarge;
     public PFont fontMedium;
     public PFont fontSmall;

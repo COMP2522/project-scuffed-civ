@@ -46,7 +46,7 @@ public class GameInstance {
         if (hud.clicked(mousePos)){
             hud.clicked(mousePos);
         } else if(gameState.clickedMap(mousePos)){
-            gameState.clicked(mousePos);
+            gameState.clicked(mousePos, scene);
         }
     }
 

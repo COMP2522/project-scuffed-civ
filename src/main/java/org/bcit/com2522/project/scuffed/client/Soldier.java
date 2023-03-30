@@ -71,4 +71,14 @@ public class Soldier extends Unit{
             return false;
         }
     }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getRange() {
+        return (range);
+    }
+
+
 }

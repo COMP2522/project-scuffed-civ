@@ -146,4 +146,8 @@ public abstract class Entity {
     public int getHealth() {
         return currentHealth;
     }
+
+  public int getCost() {
+        return resourceCost;
+  }
 }
