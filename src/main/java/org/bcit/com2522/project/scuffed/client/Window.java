@@ -76,6 +76,7 @@ public class Window extends PApplet {
     UIImages.put("menuLoad", loadImage("sprites/Menu/Load.png"));
     UIImages.put("menuLoadHov", loadImage("sprites/Menu/Load_Hov.png"));
     UIImages.put("menuLoadSel", loadImage("sprites/Menu/Load_Sel.png"));
+    UIImages.put("menuLoadGry", loadImage("sprites/Menu/Load_Gry.png"));
     UIImages.put("menuExit", loadImage("sprites/Menu/Exit.png"));
     UIImages.put("menuExitHov", loadImage("sprites/Menu/Exit_Hov.png"));
     UIImages.put("menuExitSel", loadImage("sprites/Menu/Exit_Sel.png"));
@@ -86,6 +87,8 @@ public class Window extends PApplet {
     UIImages.put("buttonHoverBackground", loadImage("sprites/Menu/button_blank.png"));
     UIImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
     UIImages.put("background", loadImage("sprites/backgroundDirt.png"));
+    UIImages.put("logo", loadImage("sprites/logo.png"));
+    UIImages.put("backgroundMenu", loadImage("sprites/Menu/backgroundMenu.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
