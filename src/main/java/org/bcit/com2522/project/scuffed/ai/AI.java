@@ -50,7 +50,7 @@ public class AI {
                 }
             } else if (entity instanceof Building) {
                 if (numSoldiers < 2 * numWorkers) {
-                    ((Building) entity).buildSoldier(gameState.getEntities());
+                    ((Building) entity).buildSoldier(gameState.getEntities(), 100, 50, 6, 6);
                     numSoldiers++;
                 } else {
                     ((Building) entity).buildWorker(gameState.getEntities());
