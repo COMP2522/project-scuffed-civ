@@ -2,6 +2,8 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.bcit.com2522.project.scuffed.ui.Button;
 import org.bcit.com2522.project.scuffed.ui.ButtonManager;
+import processing.core.PFont;
+import processing.core.PImage;
 
 import javax.lang.model.type.UnionType;
 
@@ -14,9 +16,19 @@ import javax.lang.model.type.UnionType;
  */
 public class inGameStartHUD extends HUDState {
 
+  Boolean selected;
+  PImage selectedHighRes;
+  String selectedName;
+  int selectedHealth;
+  int selectedAttack;
+  int selectedRange;
+  int selectedMovement;
+  int selectedCost;
+
   // Constructor takes a HUD object and calls the super constructor
   public inGameStartHUD(HUD hud) {
     super(hud);
+    selected = false;
   }
 
   /**
@@ -29,6 +41,9 @@ public class inGameStartHUD extends HUDState {
     fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", 24);
     fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", 15);
     rivetPanel = hud.scene.loadImage("sprites/RivetPanel.png");
+    soldierSelectedIMG = hud.scene.loadImage("sprites/SoldierSelectedIMG.jpg");
+    buildingSelectedIMG = hud.scene.loadImage("sprites/buildingSelectedIMG.jpg");
+    workerSelectedIMG = hud.scene.loadImage("sprites/WorkerSelectedIMG.jpg");
 
     buttonManager = new ButtonManager(hud.scene);
 
@@ -58,8 +73,6 @@ public class inGameStartHUD extends HUDState {
   @Override
   public void draw(Window scene) {
     // draw the players information
-    //scene.image(rivetPanel, centerX - 540, centerY - 360, 150, 50);  // menu box, top left
-    //scene.image(rivetPanel, centerX + 390, centerY - 360, 150, 50);  // end turn box, top right
     scene.image(rivetPanel, centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
     scene.image(rivetPanel, centerX - 540, centerY + 160, 200, 200);  //  selected char box, bottom left
     scene.image(rivetPanel, centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
@@ -76,47 +89,53 @@ public class inGameStartHUD extends HUDState {
     //load selected unit picture, name, and stats in bottom left corner
     //load selected units buttons in bottom right corner
 
-//    Object selected = hud.scene.getSelected();
-//
-//    if (selected instanceof Unit && ((Unit) selected).getType() == UnionType.Soldier) {
-//      Unit unit = (Unit) selected;
-//      hud.scene.image(unit.getSprite(), centerX - 540, centerY + 160, 200, 200);
-//      hud.scene.textFont(fontMedium);
-//      hud.scene.text(unit.getName(), centerX - 540, centerY + 370);
-//      hud.scene.textFont(fontSmall);
-//      hud.scene.text("Health: " + unit.getHealth() + "/" + unit.getMaxHealth(), centerX - 540, centerY + 390);
-//      hud.scene.text("Attack: " + unit.getAttack(), centerX - 540, centerY + 410);
-//      hud.scene.text("Range: " + unit.getRange(), centerX - 540, centerY + 430);
-//      hud.scene.text("Movement: " + unit.getMovement(), centerX - 540, centerY + 450);
-//      hud.scene.text("Cost: " + unit.getCost(), centerX - 540, centerY + 470);
-//    } else if (selected instanceof Unit && ((Unit) selected).getType() == UnionType.Building) {
-//      Unit unit = (Unit) selected;
-//      hud.scene.image(unit.getSprite(), centerX - 540, centerY + 160, 200, 200);
-//      hud.scene.textFont(fontMedium);
-//      hud.scene.text(unit.getName(), centerX - 540, centerY + 370);
-//      hud.scene.textFont(fontSmall);
-//      hud.scene.text("Health: " + unit.getHealth() + "/" + unit.getMaxHealth(), centerX - 540, centerY + 390);
-//      hud.scene.text("Attack: " + unit.getAttack(), centerX - 540, centerY + 410);
-//      hud.scene.text("Range: " + unit.getRange(), centerX - 540, centerY + 430);
-//      hud.scene.text("Cost: " + unit.getCost(), centerX - 540, centerY + 450);
-//    } else if (selected instanceof Unit && ((Unit) selected).getType() == UnionType.Worker) {
-//      Unit unit = (Unit) selected;
-//      hud.scene.image(unit.getSprite(), centerX - 540, centerY + 160, 200, 200);
-//      hud.scene.textFont(fontMedium);
-//      hud.scene.text(unit.getName(), centerX - 540, centerY + 370);
-//      hud.scene.textFont(fontSmall);
-//      hud.scene.text("Health: " + unit.getHealth() + "/" + unit.getMaxHealth(), centerX - 540, centerY + 390);
-//      hud.scene.text("Attack: " + unit.getAttack(), centerX - 540, centerY + 410);
-//      hud.scene.text("Range: " + unit.getRange(), centerX - 540, centerY + 430);
-//      hud.scene.text("Movement: " + unit.getMovement(), centerX - 540, centerY + 450);
-//      hud.scene.text("Cost: " + unit.getCost(), centerX - 540, centerY + 470);
-//    }
-//  }
+    if(selected) {
+      hud.scene.image(selectedHighRes, centerX - 540, centerY + 160, 200, 200);
+      hud.scene.textFont(fontMedium);
+      hud.scene.text(selectedName, centerX - 540, centerY + 370);
+      hud.scene.textFont(fontSmall);
+      hud.scene.text("Health: " + selectedHealth, centerX - 540, centerY + 390);
+      hud.scene.text("Attack: " + selectedAttack, centerX - 540, centerY + 410);
+      hud.scene.text("Range: " + selectedRange, centerX - 540, centerY + 430);
+      hud.scene.text("Movement: " + selectedMovement, centerX - 540, centerY + 450);
+      hud.scene.text("Cost: " + selectedCost, centerX - 540, centerY + 470);
+    }
 
     // draw the buttons
     buttonManager.draw();
   }
 
-
-
+  public void unitSelected(Entity selected){
+    this.selected = true;
+    if (selected instanceof Soldier) {
+      Soldier unit = (Soldier) selected;
+      selectedHighRes = soldierSelectedIMG;
+      selectedName = "Soldier";
+      selectedHealth = unit.getHealth();
+      selectedAttack = unit.getDamage();
+      selectedRange = unit.getRange();
+      selectedMovement = unit.getRemainMove();
+      selectedCost = unit.getCost();
+    } else if (selected instanceof Building) {
+      Building unit = (Building) selected;
+      selectedHighRes = buildingSelectedIMG;
+      selectedName = "Building";
+      selectedHealth = unit.getHealth();
+      selectedAttack = 0;
+      selectedRange = 0;
+      selectedMovement = 0;
+      selectedCost = unit.getCost();
+    } else if (selected instanceof Worker) {
+      Unit unit = (Unit) selected;
+      selectedHighRes = workerSelectedIMG;
+      selectedName = "Worker";
+      selectedHealth = unit.getHealth();
+      selectedAttack = 0;
+      selectedRange = 0;
+      selectedMovement = unit.getRemainMove();
+      selectedCost = unit.getCost();
+    }
+  }
 }
+
+

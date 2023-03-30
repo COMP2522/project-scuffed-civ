@@ -20,7 +20,7 @@ public class Window extends PApplet {
 
   public Menu menu;
 
-  public HUD hud;
+  //public HUD hud;
   public GameInstance gameInstance;
   public Boolean debugMode = false;
   static DebugMenu debugMenu;
