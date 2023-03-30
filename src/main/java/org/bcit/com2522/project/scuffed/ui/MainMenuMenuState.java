@@ -22,13 +22,17 @@ public class MainMenuMenuState extends MenuState implements PConstants {
     public void setup() {
         // Load images
 
+
         int height = scene.height;
+
+        Button menuBackground = new Button(0, 0, scene.width, scene.height, scene, UIImages.get("backgroundMenu"));
+
         File saveFile = new File("saves/save.json");
         System.out.println(saveFile.isFile());
         Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
                 "", UIImages.get("menuLoad"), UIImages.get("menuLoadHov"), UIImages.get("menuLoadSel"), scene, UIImages.get("menuLoadGry"), false);
         loadGameButton.setClickable(saveFile.isFile());
-        buttonManager.add(loadGameButton);
+
         // Create buttons
         Button newGameButton = new Button(50, height - 350, 250, height - 300, () -> onNewGameClicked(),
             "", UIImages.get("menuNew"), UIImages.get("menuNewHov"), UIImages.get("menuNewSel"), scene);
@@ -45,6 +49,8 @@ public class MainMenuMenuState extends MenuState implements PConstants {
         //Create error message label
         errorMessage = new Label(50, height - 200, "No save file found", 14, scene);
 
+        buttonManager.add(menuBackground);
+        buttonManager.add(loadGameButton);
 
         // Add buttons to ButtonManager
         buttonManager.add(newGameButton);

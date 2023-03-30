@@ -88,6 +88,7 @@ public class Window extends PApplet {
     UIImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
     UIImages.put("background", loadImage("sprites/backgroundDirt.png"));
     UIImages.put("logo", loadImage("sprites/logo.png"));
+    UIImages.put("backgroundMenu", loadImage("sprites/Menu/backgroundMenu.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
