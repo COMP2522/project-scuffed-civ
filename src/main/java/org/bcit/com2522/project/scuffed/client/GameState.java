@@ -31,9 +31,9 @@ public class GameState { //everything manager this is the player manager
     int xShift; //only used to change where the map is drawn
     int yShift; //only used to change where the map is drawn
 
-    PImage select;
-    Position selectPosition;
-    AI ai;
+    public PImage select;
+    public Position selectPosition;
+    public AI ai;
 
     /**
      * Constructor used for creating a new game.
@@ -63,6 +63,7 @@ public class GameState { //everything manager this is the player manager
      */
     public GameState(){
         zoomAmount = 32;
+        ai = new AI();
     };
 
     public static Player getPlayer(int ownerId) {
@@ -383,7 +384,6 @@ public class GameState { //everything manager this is the player manager
             for (int j = 0; j < entities[0].length; j++) {
                 if(entities[i][j] != null) {
                     Entity entity = entities[i][j];
-
                     Color color = entity.getOwner().getColor();
                     scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
                     scene.image(entity.texture, (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
@@ -394,7 +394,7 @@ public class GameState { //everything manager this is the player manager
 
         if (selected != null) { //prints box around selected entity
             selectPosition = selected.getPosition(entities);
-            scene.image(select, (selectPosition.getX() + xShift) * zoomAmount, (selectPosition.getY() + yShift) * zoomAmount);
+            scene.image(GameImages.get("select"), (selectPosition.getX() + xShift) * zoomAmount, (selectPosition.getY() + yShift) * zoomAmount);
         }
     }
 

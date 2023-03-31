@@ -77,6 +77,8 @@ public abstract class Entity {
         //entityObject.put("position", position.toJSONObject());
         entityObject.put("ownerId", ownerID);
         //entityObject.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
+        entityObject.put("maxAction", maxAction);
+        entityObject.put("maxHealth", maxHealth);
         entityObject.put("currentHealth", currentHealth);
         entityObject.put("remainAction", remainAction);
         entityObject.put("entityType", entityType);

@@ -20,6 +20,7 @@ public class Worker extends Unit{
 
     public JSONObject toJSONObject() {
         JSONObject workerObject = super.toJSONObject();
+        workerObject.put("speed", speed);
         return workerObject;
     }
 
@@ -30,9 +31,9 @@ public class Worker extends Unit{
         Worker worker = new Worker(
                 (int)(long)workerObject.get("ownerId"),
                 //(Color) workerObject.get("color"),
-                (int) workerObject.get("maxHealth"),
+                (int)(long) workerObject.get("maxHealth"),
                 Worker.cost,
-                (int) workerObject.get("speed"));
+                (int)(long) workerObject.get("speed"));
         worker.currentHealth = (int)(long) workerObject.get("currentHealth");
         return worker;
     }
