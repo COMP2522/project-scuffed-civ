@@ -24,9 +24,9 @@ public class NewGameMenuState extends MenuState {
     }
     @Override
     public void setup() {
-        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100, "16");
-        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100, "16");
-        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 1000, "2");
+        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 10000, "16");
+        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 10000, "16");
+        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10000, "2");
 
         mapWidthLabel = new Label(50, 95, "Map Width:", 14, scene);
         mapHeightLabel = new Label(50, 145, "Map Height:", 14, scene);
@@ -112,14 +112,14 @@ public class NewGameMenuState extends MenuState {
         int mapWidth = mapWidthInput.getIntValue();
         int mapHeight = mapHeightInput.getIntValue();
         int numPlayers = numPlayersInput.getIntValue();
-        if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 100) {
+        //if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 100) {
             scene.initGame(numPlayers, mapWidth, mapHeight);
             menu.setState(new MainMenuMenuState(scene, menu));
             scene.inGame = true;
             showError = false;
-        } else {
+        //} else {
             showError = true;
-        }
+        //}
     }
 
 
