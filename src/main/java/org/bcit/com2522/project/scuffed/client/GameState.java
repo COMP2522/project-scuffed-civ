@@ -251,6 +251,7 @@ public class GameState { //everything manager this is the player manager
         checkPlayerLoss();
         checkVictoryCondition();
 
+
         //randomly regenerates more resources for certain squares
         map.regenResources();
 
