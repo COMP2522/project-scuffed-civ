@@ -37,12 +37,12 @@ public abstract class Unit extends Entity { //things that can move
      * @param position the position to travel to
      */
     public void move(Entity[][] entities, Position position) {
-        Position oldPos = getPosition(entities);
         if (entities[position.getX()][position.getY()] != null) {
             System.out.println("that position is occupied");
         } else if (!withinMoveRange(position, entities)) {
             System.out.println("you can't move that far");
         } else {
+            Position oldPos = getPosition(entities);
             remainMove -= Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY());
             entities[oldPos.getX()][oldPos.getY()] = null;
             entities[position.getX()][position.getY()] = this;

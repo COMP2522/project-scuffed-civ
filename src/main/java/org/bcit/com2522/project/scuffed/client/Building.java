@@ -53,7 +53,7 @@ public class Building extends Entity{
     public void buildSoldier(Entity[][] entities, int health, int damage, int speed, int range) {
         Position free = getFreePosition(entities);
         if (canBuild(free, Soldier.cost)) {
-            entities[free.getX()][free.getY()] = new Soldier(free, ownerID, health, Soldier.cost, speed, damage, range);
+            entities[free.getX()][free.getY()] = new Soldier(ownerID, health, Soldier.cost, speed, damage, range);
             remainAction--;
             owner.spendResources(Soldier.cost);
         }

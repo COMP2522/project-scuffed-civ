@@ -12,7 +12,7 @@ public class Soldier extends Unit{
 
     int range;
 
-    public Soldier(Position position, int ownerId, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
+    public Soldier(int ownerId, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
         super(ownerId, health, cost, speed);
         entityType = "soldier";
         texture = GameImages.get("soldier");
@@ -51,7 +51,7 @@ public class Soldier extends Unit{
             return null;
         }
         Soldier soldier = new Soldier(
-                Position.fromJSONObject((JSONObject) soldierObject.get("position")),
+                //Position.fromJSONObject((JSONObject) soldierObject.get("position")),
                 (int)(long) soldierObject.get("ownerId"),
                 //(Color) soldierObject.get("color"),
                 (int) soldierObject.get("maxHealth"),
