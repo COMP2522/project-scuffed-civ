@@ -5,12 +5,12 @@ import org.json.simple.JSONObject;
 
 import java.awt.*;
 
-public abstract class Unit extends Entity { //things that can move TODO: maybe make this abstract
+public abstract class Unit extends Entity { //things that can move
     int maxMove;
     int remainMove;
 
-    public Unit(Position position, int ownerId, Color pColor, int health, int cost, int speed) {
-        super(position, ownerId, pColor, health, cost);
+    public Unit(int ownerId, int health, int cost, int speed) {
+        super(ownerId, health, cost);
         this.maxMove = speed;
         this.remainMove = maxMove;
     }
@@ -27,53 +27,26 @@ public abstract class Unit extends Entity { //things that can move TODO: maybe m
         return unitObject;
     }
 
-    public Boolean withinMoveRange() {
-        return Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY()) <= remainMove;
-    }
-
-    //TODO: combine this and moveTo
-    public void move(Entity[][] entities, Position position, int xShift, int yShift) {
-        Position oldPos = getPosition();
-        if (entities[position.getX() - xShift][position.getY() - yShift] != null) {
-            System.out.println("that position is occupied");
-        } else if (!withinMoveRange()) {
-            System.out.println("you can't move that far");
-        } else {
-            remainMove -= Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY());
-            this.position = new Position(position.getX()-xShift, position.getY()-yShift);
-            entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;
-            entities[position.getX()][position.getY()] = this;
-        }
+    public Boolean withinMoveRange(Position position, Entity[][] entities) {
+        return Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= remainMove;
     }
 
     /**
      *
-     * @param entities 2d array of entities on the map
-     * @param position the position to move towards
-     * @param xShift the xShift of the map
-     * @param yShift the yShift of the map
+     * @param entities current list of entities on the map
+     * @param position the position to travel to
      */
-    public void moveTowards(Entity[][] entities, Position position, int xShift, int yShift) { //TODO this is fucking things up atm, will be removed
-        Position tempPos = getPosition();
-        while (remainMove > 0 && !tempPos.equals(position)) {
-            if (Math.abs(position.getX() - getPosition().getX()) >= Math.abs(position.getY() - getPosition().getY())) {
-                if (position.getX() > tempPos.getX() && entities[tempPos.getX() + 1][tempPos.getY()] == null)
-                    tempPos.setX(tempPos.getX() + 1);
-                else if (position.getX() < tempPos.getX() && entities[tempPos.getX() - 1][tempPos.getY()] == null)
-                    tempPos.setX(tempPos.getX() - 1);
-            } else {
-                if (position.getY() > tempPos.getY() && entities[tempPos.getX()][tempPos.getY() + 1] == null)
-                    tempPos.setY(tempPos.getY() + 1);
-                else if (position.getY() < tempPos.getY() && entities[tempPos.getX()][tempPos.getY() - 1] == null)
-                    tempPos.setY(tempPos.getY() - 1);
-            }
-
-            move(entities, tempPos, xShift, yShift);
-            if (remainMove < 1 || tempPos.equals(getPosition()))
-                break;
+    public void move(Entity[][] entities, Position position) {
+        if (entities[position.getX()][position.getY()] != null) {
+            System.out.println("that position is occupied");
+        } else if (!withinMoveRange(position, entities)) {
+            System.out.println("you can't move that far");
+        } else {
+            Position oldPos = getPosition(entities);
+            remainMove -= Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY());
+            entities[oldPos.getX()][oldPos.getY()] = null;
+            entities[position.getX()][position.getY()] = this;
         }
-
-        entities[getPosition().getX()][getPosition().getY()] = this;
     }
 
     public int getRemainMove() {

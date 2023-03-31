@@ -121,8 +121,4 @@ public class Player { //gamestate is the player manager
   public int getResources() {
     return resources;
   }
-
-  public int getplayerNum() {
-    return playerNum;
-  }
 }
