@@ -5,7 +5,7 @@ import org.bcit.com2522.project.scuffed.client.Window;
 import java.util.ArrayList;
 
 public class ButtonManager{
-  ArrayList<Button> buttons = new ArrayList<Button>();
+  public ArrayList<Button> buttons = new ArrayList<Button>();
   Window scene;
 
   public ButtonManager(Window scene) {

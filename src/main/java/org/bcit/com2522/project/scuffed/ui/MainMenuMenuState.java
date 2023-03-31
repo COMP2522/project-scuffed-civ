@@ -1,19 +1,18 @@
 package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import processing.core.PImage;
 import processing.core.PConstants;
 
 import java.io.File;
 
 import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
-public class MainMenuUIState extends UIState implements PConstants {
+public class MainMenuMenuState extends MenuState implements PConstants {
 
     GraphicManager graphicManager;
 
     private Label errorMessage;
-    public MainMenuUIState(Window scene, Menu menu) {
+    public MainMenuMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         graphicManager = scene.getGraphicManager();
 
@@ -23,14 +22,17 @@ public class MainMenuUIState extends UIState implements PConstants {
     public void setup() {
         // Load images
 
+
         int height = scene.height;
+
+        Button menuBackground = new Button(0, 0, scene.width, scene.height, scene, UIImages.get("backgroundMenu"));
+
         File saveFile = new File("saves/save.json");
+        System.out.println(saveFile.isFile());
         Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
                 "", UIImages.get("menuLoad"), UIImages.get("menuLoadHov"), UIImages.get("menuLoadSel"), scene, UIImages.get("menuLoadGry"), false);
-        if (saveFile.isFile()) {
-            loadGameButton.setClickable(true);
-        }
-        buttonManager.add(loadGameButton);
+        loadGameButton.setClickable(saveFile.isFile());
+
         // Create buttons
         Button newGameButton = new Button(50, height - 350, 250, height - 300, () -> onNewGameClicked(),
             "", UIImages.get("menuNew"), UIImages.get("menuNewHov"), UIImages.get("menuNewSel"), scene);
@@ -40,17 +42,22 @@ public class MainMenuUIState extends UIState implements PConstants {
         Button exitButton = new Button(50, height - 100, 250, height - 50, () -> onBackClicked(),
             "", UIImages.get("menuExit"), UIImages.get("menuExitHov"), UIImages.get("menuExitSel"), scene);
 
-        graphicManager.addGraphic(500, height - 500, UIImages.get("logo"));
+
+        // Non functional button
+        Button logo = new Button(500, height - 500, 500 + UIImages.get("logo").width, height - 500 + UIImages.get("logo").height, scene, UIImages.get("logo"));
         System.out.println("Logo loaded");
         //Create error message label
         errorMessage = new Label(50, height - 200, "No save file found", 14, scene);
 
+        buttonManager.add(menuBackground);
+        buttonManager.add(loadGameButton);
 
         // Add buttons to ButtonManager
         buttonManager.add(newGameButton);
 
         buttonManager.add(onlineButton);
         buttonManager.add(exitButton);
+        buttonManager.add(logo);
 
         // TODO: Add settings button
 //        buttonManager.add(settingsButton);
@@ -59,17 +66,17 @@ public class MainMenuUIState extends UIState implements PConstants {
 
     public void onNewGameClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new NewGameUIState(scene, menu));
+        menu.setState(new NewGameMenuState(scene, menu));
     }
 
     public void onLoadGameClicked() {
         // Change the menu state to the Load Game state
         if (new File("saves/save.json").exists()) {
-            menu.setState(new LoadingUIState(scene, menu));
+            menu.setState(new LoadingMenuState(scene, menu));
 
             // Run the loading process in a separate thread
             scene.loadGame();
-            menu.setState(new MainMenuUIState(scene, menu));
+            menu.setState(new MainMenuMenuState(scene, menu));
 
         } else {
             errorMessage.draw();
@@ -78,7 +85,7 @@ public class MainMenuUIState extends UIState implements PConstants {
 
     public void onOnlineClicked() {
         // Change the menu state to the Online Multiplayer state
-        menu.setState(new OnlineUIState(scene, menu));
+        menu.setState(new OnlineMenuState(scene, menu));
     }
 
 //    public void onSettingsClicked() {

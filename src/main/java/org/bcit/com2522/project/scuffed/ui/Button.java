@@ -18,9 +18,14 @@ public class Button {
   PImage disabledBackground;
   Window scene;
 
+  int fontSize = 32;
+
+  int offsetX = 0;
+  int offsetY = 0;
+
   boolean isClickable = true;
 
-  // Standard Button
+  // Standard Button, has text and can not be disabled
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
     this.x1 = x1;
     this.y1 = y1;
@@ -47,6 +52,7 @@ public class Button {
     this.background = background;
     this.hoverBackground = hoverBackground;
     this.clickBackground = clickBackground;
+
 
     this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
     scene.addClickable(this.clickable);
@@ -101,30 +107,86 @@ public class Button {
     scene.addClickable(this.clickable);
   }
 
+  // Versions of button but with text size added
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene,
+                PImage disabledBackground, boolean isClickable, int textSize,
+                int offsetX, int offsetY) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.callback = callback;
+    this.text = text;
+    this.background = background;
+    this.hoverBackground = hoverBackground;
+    this.clickBackground = clickBackground;
+    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
+    this.disabledBackground = disabledBackground;
+    this.isClickable = isClickable;
+    this.fontSize = textSize;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+    scene.addClickable(this.clickable);
+  }
+
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable, int textSize) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.callback = callback;
+    this.text = text;
+    this.background = background;
+    this.hoverBackground = hoverBackground;
+    this.clickBackground = clickBackground;
+    this.clickable = new Clickable(x1, y1, x2, y2, callback, callback);
+    this.disabledBackground = disabledBackground;
+    this.isClickable = isClickable;
+    this.fontSize = textSize;
+    scene.addClickable(this.clickable);
+  }
+
+  // Non Functional Button
+  public Button(int x1, int y1, int x2, int y2, Window scene, PImage disabledBackground) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.disabledBackground = disabledBackground;
+    this.isClickable = false;
+
+  }
+
+  public void setTextSize(int textSize) {
+    this.fontSize = textSize;
+  }
+
   public void setClickable(boolean isClickable) {
     this.isClickable = isClickable;
   }
 
   public void draw(Window scene) {
-    if (!isClickable && disabledBackground != null) {
+    if ((!isClickable && disabledBackground != null) || this.clickable == null) {
       scene.image(disabledBackground, x1, y1, x2 - x1, y2 - y1);
 
-    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed) {
+    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed && isClickable) {
       scene.image(clickBackground, x1, y1, x2 - x1, y2 - y1);
-    } else if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
+    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && isClickable) {
       scene.image(hoverBackground, x1, y1, x2 - x1, y2 - y1);
-    } else {
+    } else if (isClickable){
       scene.image(background, x1, y1, x2 - x1, y2 - y1);
     }
     if (text != null) {
+      scene.textSize(fontSize);
+      scene.text(text, x1 + 10 + offsetX, y1 + fontSize + offsetY);
       scene.textSize(32);
-      scene.text(text, x1 + 10, y1 + 32);
     }
 
   }
 
   public void click() {
-    if (!isClickable) {
+    if ( this.clickable == null || !isClickable) {
       return;
     }
     clickable.click();
@@ -161,6 +223,10 @@ public class Button {
   }
 
   public boolean isClicked(int x, int y) {
+    if ( this.clickable == null || !isClickable) {
+      System.out.println("Button is not clickable");
+      return false;
+    }
     return clickable.isHovered(x, y);
   }
 

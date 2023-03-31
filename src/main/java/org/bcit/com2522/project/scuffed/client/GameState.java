@@ -22,12 +22,14 @@ public class GameState { //everything manager this is the player manager
     private String gameID;
     Map map;
     public Player currentPlayer;
-    ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
+    static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     Entity[][] entities;
     Entity selected;
     int zoomAmount = 32;
     int xShift;
     int yShift;
+
+
 
     PImage select;
     Position selectPosition;
@@ -63,6 +65,15 @@ public class GameState { //everything manager this is the player manager
         zoomAmount = 32;
     };
 
+    public static Player getPlayer(int ownerId) {
+        for (Player player: players) {
+            if (player.getID() == ownerId) {
+                return player;
+            }
+        }
+        return null;
+    }
+
     /**
      * Method called to initialize the game state that sets up a new worker entity for each player.
      */
@@ -80,9 +91,10 @@ public class GameState { //everything manager this is the player manager
         if (players.size() == 2) {
             Player player1 = playersQueueCopy.poll();
             Player player2 = playersQueueCopy.poll();
+            //TODO maybe an initWorkers function in player instead of in gamestate
 
-            entities[0][0] = new Worker(new Position(0, 0), player1);
-            entities[rows - 1][cols - 1] = new Worker(new Position(rows - 1, cols - 1), player2);
+            entities[0][0] = new Worker(new Position(0, 0), player1.getID(), player1.getColor(), 100, 1, 6);
+            entities[rows - 1][cols - 1] = new Worker(new Position(rows - 1, cols - 1), player2.getID(), player1.getColor(), 100, 1, 6);
         } else {
             int xSections = (int) Math.ceil(Math.sqrt(players.size()));
             int ySections = (int) Math.ceil((double) players.size() / xSections);
@@ -114,7 +126,7 @@ public class GameState { //everything manager this is the player manager
 //                            yPos = y * sectionHeight + sectionHeight - 1;
 //                        }
 
-                        entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player);
+                        entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player.getID(), player.getColor(), 100, 1, 6);
                     }
                 }
             }
@@ -138,7 +150,7 @@ public class GameState { //everything manager this is the player manager
      *
      * @param mousePos the position of the mouse in pixels
      */
-    public void clicked(PVector mousePos) {
+    public void clicked(PVector mousePos, Window scene) {
         int x = (int) (mousePos.x / zoomAmount) + xShift;
         int y = (int) (mousePos.y / zoomAmount) + yShift;
         Entity entity = entities[x][y];
@@ -146,6 +158,7 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Nothing Selected");
         } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) { //select own entity
             selected = entity;
+            ((inGameStartHUD)scene.gameInstance.hud.currentState).unitSelected(selected);
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
@@ -168,29 +181,39 @@ public class GameState { //everything manager this is the player manager
 
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
-            shift(0, 1);
-        } else if(key == 'a') {
-            shift(1, 0);
-        } else if(key == 's') {
             shift(0, -1);
-        } else if(key == 'd') {
+        } else if(key == 'a') {
             shift(-1, 0);
+        } else if(key == 's') {
+            shift(0, 1);
+        } else if(key == 'd') {
+            shift(1, 0);
         }
 
         else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building
             ((Worker) selected).buildBuilding(entities);
-        } else if(key == 'm' && selected instanceof Building) {
+        } else if(key == 'm' && selected instanceof Building) { //creates a worker (maker)
             ((Building) selected).buildWorker(entities);
-        } else if(key == 'f' && selected instanceof Building) {
-            ((Building) selected).buildSoldier(entities);
-        } else if(key == 'c' && selected instanceof Worker) {
+        } else if(key == 'f' && selected instanceof Building) { //creates a soldier (fighter)
+            ((Building) selected).buildSoldier(entities, 100, 50, 6, 6);
+        } else if(key == 'c' && selected instanceof Worker) { //collects
             ((Worker) selected).collect(map.get(selected.getPosition().getX() + xShift, selected.getPosition().getY() + yShift));
-        } else if (key == 'x') {
+        } else if (key == 'x') { //deselect any entity
             selected = null;
         }
 
+        else if(key == 'u' && selected instanceof Building){ //fighter with more health
+            ((Building) selected).buildSoldier(entities, 200, 50, 6, 6);
+        } else if(key == 'i' && selected instanceof Building){ //fighter with more damage
+            ((Building) selected).buildSoldier(entities, 100, 100, 6, 6);
+        } else if(key == 'o' && selected instanceof Building){ //fighter with more speed
+            ((Building) selected).buildSoldier(entities, 100, 50, 12, 6);
+        } else if(key == 'p' && selected instanceof Building){ //fighter with more range
+            ((Building) selected).buildSoldier(entities, 100, 50, 6, 12);
+        }
+
         else if (key == '\n' || key == '\r') {
-            System.out.println("enter pressed");
+            //System.out.println("enter pressed");
             nextTurn();
         } else if (key == ESC) {
             key = 0;

@@ -68,13 +68,14 @@ public class Window extends PApplet {
     //Images for the UI. Buttons, Menus, Backgrounds, etc.
     UIImages = new HashMap<String, PImage>();
     UIImages.put("logo", loadImage("sprites/logo.png"));
-
+    UIImages.put("select", loadImage("sprites/select.png"));
     UIImages.put("menuNew", loadImage("sprites/Menu/New.png"));
     UIImages.put("menuNewHov", loadImage("sprites/Menu/New_Hov.png"));
     UIImages.put("menuNewSel", loadImage("sprites/Menu/New_Sel.png"));
     UIImages.put("menuLoad", loadImage("sprites/Menu/Load.png"));
     UIImages.put("menuLoadHov", loadImage("sprites/Menu/Load_Hov.png"));
     UIImages.put("menuLoadSel", loadImage("sprites/Menu/Load_Sel.png"));
+    UIImages.put("menuLoadGry", loadImage("sprites/Menu/Load_Gry.png"));
     UIImages.put("menuExit", loadImage("sprites/Menu/Exit.png"));
     UIImages.put("menuExitHov", loadImage("sprites/Menu/Exit_Hov.png"));
     UIImages.put("menuExitSel", loadImage("sprites/Menu/Exit_Sel.png"));
@@ -84,10 +85,13 @@ public class Window extends PApplet {
     UIImages.put("buttonBackground", loadImage("sprites/Menu/background.png"));
     UIImages.put("buttonHoverBackground", loadImage("sprites/Menu/button_blank.png"));
     UIImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
+    UIImages.put("background", loadImage("sprites/backgroundDirt.png"));
+    UIImages.put("logo", loadImage("sprites/logo.png"));
+    UIImages.put("backgroundMenu", loadImage("sprites/Menu/backgroundMenu.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
-    gameInstance = new GameInstance(new HUD(), new GameState(numplayers, mapwidth, mapheight));
+    gameInstance = new GameInstance(new HUD(this), new GameState(numplayers, mapwidth, mapheight));
     gameInstance.newGame();
   }
 
@@ -110,16 +114,16 @@ public class Window extends PApplet {
     if (keyCode == ESC) {
       key = 0;
     }
-    if(menu.currentState instanceof NewGameUIState){
-        NewGameUIState newGameMenuState = (NewGameUIState) menu.currentState;
+    if(menu.currentState instanceof NewGameMenuState){
+        NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
         newGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof HostGameUIState){
-        HostGameUIState hostGameMenuState = (HostGameUIState) menu.currentState;
+    if(menu.currentState instanceof HostGameMenuState){
+        HostGameMenuState hostGameMenuState = (HostGameMenuState) menu.currentState;
         hostGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof JoinGameUIState){
-        JoinGameUIState joinGameMenuState = (JoinGameUIState) menu.currentState;
+    if(menu.currentState instanceof JoinGameMenuState){
+        JoinGameMenuState joinGameMenuState = (JoinGameMenuState) menu.currentState;
         joinGameMenuState.keyPressed(key);
     }
   }
@@ -144,8 +148,11 @@ public class Window extends PApplet {
   public void draw() {
     background(222);
     if(inGame){
+
+      background(UIImages.get("background"));
       gameInstance.draw(this);
     } else {
+      background(222);
       menu.draw();
     }
     // Debug Info - Can be added to
@@ -191,14 +198,14 @@ public class Window extends PApplet {
   }
 
   public void loadGame() {
-    gameInstance = new GameInstance();
+    gameInstance = new GameInstance(this);
     System.out.println("Loading game");
     gameInstance.loadGame();
     inGame = true;
   }
 
   public void joinGame(String hostIP, int port) {
-    gameInstance = new GameInstance();
+    gameInstance = new GameInstance(this);
     gameInstance.joinGame(hostIP, port);
   }
 
