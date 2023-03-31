@@ -228,9 +228,9 @@ public class GameState { //everything manager this is the player manager
                 mapElement.getValue().resize(zoomAmount, 0);
             }
             if (amount > 1)
-                shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
+                shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount)); //16, 11
             else
-                shift((int)(1080 * zoomAmount * amount), (int)(720 * zoomAmount * amount));
+                shift((int)(1080 / zoomAmount * -amount / 2), (int)(720 / zoomAmount * -amount / 2)); //
         }
     }
 
