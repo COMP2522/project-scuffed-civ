@@ -1,0 +1,66 @@
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/HUDState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/HUDState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/HUDState.java
+new file mode 100644
+--- /dev/null	(date 1679298508071)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/HUDState.java	(date 1679298508071)
+@@ -0,0 +1,55 @@
++package org.bcit.com2522.project.scuffed.ui;
++
++import org.bcit.com2522.project.scuffed.client.Window;
++
++public class HUDState extends MenuState {
++    private InputBox mapWidthInput;
++    private InputBox mapHeightInput;
++    private InputBox numPlayersInput;
++
++    private Label mapWidthLabel;
++
++    private Label mapHeightLabel;
++
++    private Label numPlayersLabel;
++
++    private Label errorMessageLabel;
++
++    private boolean showError = false;
++
++    public HUDState(Window scene, Menu menu) {
++        super(scene, menu, new ButtonManager(scene));
++        setup();
++    }
++
++    @Override
++    public void setup() {
++        int windowWidth = 1080;
++        int windowHeight = 720;
++        int buttonWidth = 200;
++        int buttonHeight = 50;
++        int buttonSpacing = 10;
++
++        Button backToMenuButton = new Button(windowWidth - buttonWidth * 3 - buttonSpacing * 2, windowHeight - buttonHeight - buttonSpacing, windowWidth - buttonWidth * 2 - buttonSpacing * 2, windowHeight - buttonSpacing, () -> onBackClicked(), "Back To Menu", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
++        Button endTurnButton = new Button(windowWidth - buttonWidth * 2 - buttonSpacing, windowHeight - buttonHeight - buttonSpacing, windowWidth - buttonWidth - buttonSpacing, windowHeight - buttonSpacing, () -> onEndTurnClicked(), "End Turn", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
++        Button saveButton = new Button(windowWidth - buttonWidth - buttonSpacing, windowHeight - buttonHeight - buttonSpacing, windowWidth - buttonSpacing, windowHeight - buttonSpacing, () -> onSaveClicked(), "Save", menu.buttonBackground, menu.buttonHoverBackground, menu.buttonClickBackground, scene);
++
++        buttonManager.add(backToMenuButton);
++        buttonManager.add(endTurnButton);
++        buttonManager.add(saveButton);
++    }
++
++    public void onBackClicked() {
++        menu.setState(new MainMenuState(scene, menu));
++    }
++
++    public void onEndTurnClicked() {
++        scene.endTurn();
++    }
++
++    public void onSaveClicked() {
++        scene.saveGame();
++    }
++
++
++}
+\ No newline at end of file

@@ -70,25 +70,6 @@ public class Map { //this is a tile manager
         return map;
     }
 
-    /**
-     * Creates a map from a JSONObject.
-     *
-     * @param mapObject JSONObject map
-     * @param scene Window scene
-     * @return Map map
-     */
-    public static Map fromJSONObject(JSONObject mapObject, Window scene) {
-        Map map = new Map();
-        map.width = ((Long) mapObject.get("width")).intValue();
-        map.height = ((Long) mapObject.get("height")).intValue();
-        map.tiles = new Tile[map.width][map.height];
-        for (int i = 0; i < map.tiles.length; i++) {
-            for (int j = 0; j < map.tiles[i].length; j++) {
-                map.tiles[i][j] = Tile.fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));
-            }
-        }
-        return map;
-    }
 
     /**
      * Creates a map from a JSONObject.
@@ -98,8 +79,10 @@ public class Map { //this is a tile manager
      */
     public static Map fromJSONObject(JSONObject mapObject) {
         Map map = new Map();
-        map.width = (int)(long) mapObject.get("width");
-        map.height = (int)(long) mapObject.get("height");
+        Object widthObject = mapObject.get("width");
+        Object heightObject = mapObject.get("height");
+        map.width = widthObject instanceof Long ? (int)(long)widthObject : (int)widthObject;
+        map.height = heightObject instanceof Long ? (int)(long)heightObject : (int)heightObject;
         map.tiles = new Tile[map.width][map.height];
         for (int i = 0; i < map.tiles.length; i++) {
             for (int j = 0; j < map.tiles[i].length; j++) {

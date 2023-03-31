@@ -1,0 +1,20 @@
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/HUD.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\npublic class HUD {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/HUD.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/HUD.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/HUD.java	(revision 34a1fff2482ebf6b5312a137389a48d486bb34c0)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/HUD.java	(date 1679298155489)
+@@ -1,4 +1,9 @@
+ package org.bcit.com2522.project.scuffed.ui;
+ 
++import org.bcit.com2522.project.scuffed.client.Window;
++import processing.core.PApplet;
++
+ public class HUD {
++
++
+ }

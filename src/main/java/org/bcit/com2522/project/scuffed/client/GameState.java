@@ -21,8 +21,8 @@ import static processing.core.PConstants.*;
 import org.bcit.com2522.project.scuffed.ai.AI;
 
 public class GameState { //everything manager this is the player manager
-    private int gameId;
-    private Map map;
+    private String gameID;
+    Map map;
     public Player currentPlayer;
     static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     private Entity[][] entities;
@@ -31,9 +31,8 @@ public class GameState { //everything manager this is the player manager
     int xShift; //only used to change where the map is drawn
     int yShift; //only used to change where the map is drawn
 
-    PImage select;
-    Position selectPosition;
-    AI ai;
+    public Position selectPosition;
+    public AI ai;
 
     /**
      * Constructor used for creating a new game.
@@ -43,14 +42,13 @@ public class GameState { //everything manager this is the player manager
      * @param mapheight height of the map
      */
     public GameState(int numplayers, int mapwidth, int mapheight) {
-        this.gameId = new Random().nextInt(10000); //make a random gameId
+        this.gameID = "Game" + new Random().nextInt(10000); //make a random gameId
         players = new ArrayDeque<>(numplayers);
         entities = new Entity[mapwidth][mapheight];
         map = new Map(mapwidth, mapheight);
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
-        select = GameImages.get("select");
         zoomAmount = 32;
         xShift = (1080 / zoomAmount - mapwidth) / 2;
         yShift = (720 / zoomAmount - mapwidth) / 2;
@@ -63,6 +61,7 @@ public class GameState { //everything manager this is the player manager
      */
     public GameState(){
         zoomAmount = 32;
+        ai = new AI();
     };
 
     public static Player getPlayer(int ownerId) {
@@ -85,7 +84,7 @@ public class GameState { //everything manager this is the player manager
         int cols = entities[0].length;
 
         // Calculate the number of grid sections along the x and y axes
-        System.out.println(players.size());
+        //System.out.println(players.size());
         ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);
         //TODO same logic should be used for all numbers of players
         if (players.size() == 2) {
@@ -261,12 +260,11 @@ public class GameState { //everything manager this is the player manager
                 //mapElement.getValue().resize(zoomAmount, 0);
                 mapElement.setValue(nearestNeighborResize(mapElement.getValue(), amount, zoomAmount));
             }
-            for (Entity[] row : entities) {
-                for (Entity entity : row) {
-                    if (entity != null)
-                        entity.texture = nearestNeighborResize(entity.texture, amount, zoomAmount);
-                }
-            }
+//            for (Entity[] row : entities) {
+//                for (Entity entity : row) {
+//                    //if (entity != null) entity.texture = nearestNeighborResize(entity.texture, amount, zoomAmount);
+//                }
+//            }
             zoomAmount = (int)(zoomAmount * amount);
             if (amount > 1)
                 shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
@@ -295,7 +293,6 @@ public class GameState { //everything manager this is the player manager
         moveToNextPlayer();
         checkPlayerLoss();
         checkVictoryCondition();
-
 
         //randomly regenerates more resources for certain squares
         map.regenResources();
@@ -383,10 +380,9 @@ public class GameState { //everything manager this is the player manager
             for (int j = 0; j < entities[0].length; j++) {
                 if(entities[i][j] != null) {
                     Entity entity = entities[i][j];
-
                     Color color = entity.getOwner().getColor();
                     scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-                    scene.image(entity.texture, (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+                    scene.image(GameImages.get(entity.entityType), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
                     scene.noTint();
                 }
             }
@@ -394,7 +390,7 @@ public class GameState { //everything manager this is the player manager
 
         if (selected != null) { //prints box around selected entity
             selectPosition = selected.getPosition(entities);
-            scene.image(select, (selectPosition.getX() + xShift) * zoomAmount, (selectPosition.getY() + yShift) * zoomAmount);
+            scene.image(GameImages.get("select"), (selectPosition.getX() + xShift) * zoomAmount, (selectPosition.getY() + yShift) * zoomAmount);
         }
     }
 
@@ -417,7 +413,7 @@ public class GameState { //everything manager this is the player manager
      */
     public JSONObject toJSONObject() {
         JSONObject gameState = new JSONObject();
-        gameState.put("gameId", this.gameId);
+        gameState.put("gameID", this.gameID);
         gameState.put("map", map.toJSONObject());
         gameState.put("currentPlayer", currentPlayer.toJSONObject());
         JSONArray playerArray = new JSONArray();
@@ -447,7 +443,7 @@ public class GameState { //everything manager this is the player manager
      */
     public static GameState fromJSONObject(JSONObject gameStateJSON) {
         GameState gameState = new GameState();
-        gameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
+        gameState.gameID = (String)(gameStateJSON.get("gameID"));
         gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
         gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer")) ;
         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
@@ -493,5 +489,9 @@ public class GameState { //everything manager this is the player manager
 
     public Map getMap() {
         return map;
+    }
+
+    public String getGameID() {
+        return gameID;
     }
 }

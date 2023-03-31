@@ -58,4 +58,5 @@ public class Building extends Entity{
             owner.spendResources(Soldier.cost);
         }
     }
+
 }

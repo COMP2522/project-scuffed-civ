@@ -6,35 +6,37 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.net.*;
+import java.util.*;
 
 /**
- * Coordinates the game state between multiple clients using the ClientHandler inner class to designate a new
- * Thread for each new client. [in progress]
+ * [CURRENTLY NON-FUNCTIONAL]
+ *
+ * Coordinates the game state between multiple players using the ClientHandler inner class to designate a new
+ * Thread for each new client. This version is meant to work for clients on the same wifi network as the host.
  *
  * @author Cameron Walford
- * @version 0.1
+ * @version 1.0
  */
-public class GameServer {
+public class GameServer implements Runnable {
     private ServerSocket serverSocket;
     private GameState gameState;
     private int port;
-    String hostIP;
+    private String hostIP;
 
     /**
      * The list of clients connected to the server.
      */
     private final List<ClientHandler> clients = Collections.synchronizedList(new LinkedList<>());
+    public GameServer(GameState gameState, int port) {
+        this.gameState = gameState;
+        this.port = port;
+        this.hostIP = getLocalIpAddress();
+    }
 
-    public void start(GameState gameState, int port) {
+    public void run() {
         try {
             serverSocket = new ServerSocket(port);
-            this.port = port;
-            this.hostIP = serverSocket.getInetAddress().getHostAddress();
             System.out.println("Server started on " + hostIP + ":" + port);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -80,6 +82,41 @@ public class GameServer {
         client.sendGameState(gameState);
     }
 
+    /**
+     * Finds the local IP address of the machine running the server. This is for playing
+     * multiplayer on the same wifi network.
+     *
+     * @return String representation of the local IP address (IPV4)
+     */
+    public static String getLocalIpAddress() {
+        try {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (!networkInterface.isLoopback() && networkInterface.isUp()) {
+                    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress inetAddress = inetAddresses.nextElement();
+                        if (!inetAddress.isLoopbackAddress() && inetAddress.getAddress().length == 4) {
+                            return inetAddress.getHostAddress();
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public HashSet<String> getConnectedPlayers() {
+        HashSet<String> connectedPlayers = new HashSet<>();
+        for (ClientHandler client : clients) {
+            connectedPlayers.add(client.clientSocket.getInetAddress().getHostAddress());
+        }
+        return connectedPlayers;
+    }
+
 
     /**
      * Handles each new connection made to the GameServer.
@@ -89,6 +126,8 @@ public class GameServer {
      */
     class ClientHandler extends Thread{
         private final Socket clientSocket;
+
+        public String clientUsername;
         private final ObjectOutputStream oos;
         private final ObjectInputStream ois;
 
@@ -117,6 +156,7 @@ public class GameServer {
 
             try {
                 while (true) {
+                    clientUsername = (String) ois.readObject();
                     GameState updatedGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
                     gameState = updatedGameState;
                     broadcastGameState(gameState, this);
