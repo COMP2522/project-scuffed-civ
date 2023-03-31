@@ -6,6 +6,10 @@ import java.awt.*;
 
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
+/**
+ *  Class representing a worker unit that can build buildings and harvest resources.
+ *  Each player starts with one worker unit.
+ */
 public class Worker extends Unit{
 
     public static final int cost = 1;
@@ -15,11 +19,12 @@ public class Worker extends Unit{
     public Worker(int ownerID, int health, int cost, int speed) {
         super(ownerID, health, cost, speed);
         entityType = "worker";
-        texture = GameImages.get(entityType);
+//        texture = GameImages.get(entityType);
     }
 
     public JSONObject toJSONObject() {
         JSONObject workerObject = super.toJSONObject();
+        workerObject.put("speed", speed);
         return workerObject;
     }
 
@@ -29,10 +34,9 @@ public class Worker extends Unit{
         }
         Worker worker = new Worker(
                 (int)(long)workerObject.get("ownerId"),
-                //(Color) workerObject.get("color"),
-                (int) workerObject.get("maxHealth"),
+                (int)(long) workerObject.get("maxHealth"),
                 Worker.cost,
-                (int) workerObject.get("speed"));
+                (int)(long) workerObject.get("speed"));
         worker.currentHealth = (int)(long) workerObject.get("currentHealth");
         return worker;
     }

@@ -7,8 +7,10 @@ public class JoinGameMenuState extends MenuState {
 
     private InputBox portInput;
     private InputBox hostIPInput;
+    private InputBox usernameInput;
     private Label hostIPInputLabel;
     private Label portInputLabel;
+    private Label usernameInputLabel;
     private Label errorMessageLabel;
     private boolean showError = false;
 
@@ -22,13 +24,15 @@ public class JoinGameMenuState extends MenuState {
         // Create buttons
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
         Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join", scene);
-        // Create input box for host IP and port
+        // Create input box for host IP, port, and username
         portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, "8080");
         hostIPInput = new InputBox(50, 100, 250, 30, scene, "", "string");
+        usernameInput = new InputBox(50, 150, 250, 30, scene, "", "string");
 
         // Add labels for the input boxes
         portInputLabel = new Label(50, 45, "Port:", 14, scene);
         hostIPInputLabel = new Label(50, 95, "Host IP:", 14, scene);
+        usernameInputLabel = new Label(50, 145, "Username:", 14, scene);
         errorMessageLabel = new Label(50, 250, "Invalid input!", 14, scene);
 
         // Add the buttons to the button manager
@@ -44,6 +48,8 @@ public class JoinGameMenuState extends MenuState {
         portInputLabel.draw();
         hostIPInput.draw();
         hostIPInputLabel.draw();
+        usernameInput.draw();
+        usernameInputLabel.draw();
 
         if (showError) {
             errorMessageLabel.draw();
@@ -56,13 +62,20 @@ public class JoinGameMenuState extends MenuState {
         if (super.clicked(xpos, ypos)) {
             return true;
         }
-       if (hostIPInput.isClicked(xpos, ypos)) {
+        if (hostIPInput.isClicked(xpos, ypos)) {
             hostIPInput.setSelected(true);
             portInput.setSelected(false);
+            usernameInput.setSelected(false);
             return true;
         } else if (portInput.isClicked(xpos, ypos)) {
             portInput.setSelected(true);
             hostIPInput.setSelected(false);
+            usernameInput.setSelected(false);
+            return true;
+        } else if (usernameInput.isClicked(xpos, ypos)) {
+            usernameInput.setSelected(true);
+            hostIPInput.setSelected(false);
+            portInput.setSelected(false);
             return true;
         }
         return false;
@@ -74,12 +87,16 @@ public class JoinGameMenuState extends MenuState {
                 hostIPInput.removeCharacter();
             } else if (portInput.isSelected()) {
                 portInput.removeCharacter();
+            } else if (usernameInput.isSelected()) {
+                usernameInput.removeCharacter();
             }
         } else {
             if (hostIPInput.isSelected()) {
                 hostIPInput.addCharacter(key);
             } else if (portInput.isSelected()) {
                 portInput.addCharacter(key);
+            } else if (usernameInput.isSelected()) {
+                usernameInput.addCharacter(key);
             }
         }
     }
@@ -90,13 +107,14 @@ public class JoinGameMenuState extends MenuState {
     }
 
     public void onJoinClicked() {
-        // Get the port and host IP from the input boxes
+        // Get the port, host IP, and username from the input boxes
         int port = portInput.getIntValue();
         String hostIP = hostIPInput.getStringValue();
-        // Check if the port and host IP are valid
-        if (port >= 1 && port <= 60000 && hostIP != null) {
+        String username = usernameInput.getStringValue();
+        // Check if the port, host IP, and username are valid
+        if (port >= 1 && port <= 60000 && hostIP != null && username != null && !username.equals("")) {
             // Join the game
-            scene.joinGame(hostIP, port);
+            scene.joinGame(hostIP, port, username);
             showError = false;
         } else {
             showError = true;

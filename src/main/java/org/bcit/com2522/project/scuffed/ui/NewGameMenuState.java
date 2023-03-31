@@ -22,6 +22,7 @@ public class NewGameMenuState extends MenuState {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
+
     @Override
     public void setup() {
         mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 10000, "16");
@@ -85,7 +86,6 @@ public class NewGameMenuState extends MenuState {
         return false;
     }
 
-
     public void keyPressed(char key) {
         if (key == PApplet.BACKSPACE) {
             if (mapWidthInput.isSelected()) {
@@ -105,8 +105,6 @@ public class NewGameMenuState extends MenuState {
             }
         }
     }
-
-    // ...
 
     public void onStartClicked() {
         int mapWidth = mapWidthInput.getIntValue();

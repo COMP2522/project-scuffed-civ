@@ -1,0 +1,533 @@
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/UIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\n\r\npublic abstract class UIState {\r\n    ButtonManager buttonManager;\r\n    protected Window scene;\r\n    protected Menu menu;\r\n\r\n    public UIState(Window scene, Menu menu, ButtonManager buttonManager) {\r\n        this.scene = scene;\r\n        this.buttonManager = buttonManager;\r\n        this.menu = menu;\r\n    }\r\n\r\n    public void draw() {\r\n        buttonManager.draw();\r\n    }\r\n\r\n    public boolean clicked(int xpos, int ypos) {\r\n        // Check if any buttons were clicked and perform actions\r\n        for (Button button : buttonManager.buttons) {\r\n            if (button.isClicked(xpos, ypos)) {\r\n                button.click();\r\n                return true;\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n\r\n    /**\r\n     * SetUp the buttons and inputs for the menu state\r\n     */\r\n    public abstract void setup();\r\n\r\n    /**\r\n     * Called when the back/exit button is clicked\r\n     */\r\n    public abstract void onBackClicked(); // go back to the previous menu state\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/UIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/UIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/UIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/UIState.java	(date 1679543315990)
+@@ -3,18 +3,18 @@
+ import org.bcit.com2522.project.scuffed.client.Window;
+ 
+ public abstract class UIState {
+-    ButtonManager buttonManager;
+-    protected Window scene;
+-    protected Menu menu;
++    protected GraphicManager graphicManager;
++    protected ButtonManager buttonManager;
++    protected UI UI;
+ 
+-    public UIState(Window scene, Menu menu, ButtonManager buttonManager) {
+-        this.scene = scene;
++    public UIState(UI UI) {
+         this.buttonManager = buttonManager;
+-        this.menu = menu;
++        this.UI = UI;
+     }
+ 
+-    public void draw() {
++    public void draw(Window scene) {
+         buttonManager.draw();
++        graphicManager.draw();
+     }
+ 
+     public boolean clicked(int xpos, int ypos) {
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/MainMenuUIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\n\r\nimport java.io.File;\r\n\r\npublic class MainMenuUIState extends UIState {\r\n\r\n    GraphicManager graphicManager;\r\n\r\n    private Label errorMessage;\r\n    public MainMenuUIState(Window scene, Menu menu) {\r\n\r\n        super(scene, menu, new ButtonManager(scene));\r\n        graphicManager = scene.getGraphicManager();\r\n        setup();\r\n    }\r\n    @Override\r\n    public void setup() {\r\n        // Create buttons\r\n        Button newGameButton = new Button(50, 100, 250, 150, () -> onNewGameClicked() , \"New Game\", scene);\r\n        Button loadGameButton = new Button(50, 200, 250, 250, () -> onLoadGameClicked(), \"Load Game\", scene);\r\n        Button onlineButton = new Button(50, 300, 250, 350, () -> onOnlineClicked(), \"Online\", scene);\r\n        Button exitButton = new Button(50, 500, 250, 550, () -> onBackClicked(), \"Exit\", scene);\r\n        \r\n\r\n\r\n\r\n        //Create error message label\r\n        errorMessage = new Label(50, 400, \"No save file found\", 14, scene);\r\n\r\n        // Add buttons to ButtonManager\r\n        buttonManager.add(newGameButton);\r\n        buttonManager.add(loadGameButton);\r\n        buttonManager.add(onlineButton);\r\n        buttonManager.add(exitButton);\r\n\r\n        // TODO: Add settings button\r\n//        buttonManager.add(settingsButton);\r\n\r\n    }\r\n\r\n    public void onNewGameClicked() {\r\n        // Change the menu state to the New Game state\r\n        menu.setState(new NewGameUIState(scene, menu));\r\n    }\r\n\r\n    public void onLoadGameClicked() {\r\n        // Change the menu state to the Load Game state\r\n        if (new File(\"saves/save.json\").exists()) {\r\n            menu.setState(new LoadingUIState(scene, menu));\r\n\r\n            // Run the loading process in a separate thread\r\n            scene.loadGame();\r\n            menu.setState(new MainMenuUIState(scene, menu));\r\n\r\n        } else {\r\n            errorMessage.draw();\r\n        }\r\n    }\r\n\r\n    public void onOnlineClicked() {\r\n        // Change the menu state to the Online Multiplayer state\r\n        menu.setState(new OnlineUIState(scene, menu));\r\n    }\r\n\r\n//    public void onSettingsClicked() {\r\n//        // Change the menu state to the Settings state\r\n//        menu.setState(new SettingsMenuState(scene, menu));\r\n//    }\r\n\r\n    public void onBackClicked() {\r\n        // exit the game\r\n        scene.exit();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/MainMenuUIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/MainMenuUIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/MainMenuUIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/MainMenuUIState.java	(date 1679543315994)
+@@ -6,12 +6,10 @@
+ 
+ public class MainMenuUIState extends UIState {
+ 
+-    GraphicManager graphicManager;
+ 
+     private Label errorMessage;
+-    public MainMenuUIState(Window scene, Menu menu) {
+-
+-        super(scene, menu, new ButtonManager(scene));
++    public MainMenuUIState(UI UI) {
++        super(UI);
+         graphicManager = scene.getGraphicManager();
+         setup();
+     }
+@@ -42,17 +40,17 @@
+ 
+     public void onNewGameClicked() {
+         // Change the menu state to the New Game state
+-        menu.setState(new NewGameUIState(scene, menu));
++        UI.setState("newGameState");
+     }
+ 
+     public void onLoadGameClicked() {
+         // Change the menu state to the Load Game state
+         if (new File("saves/save.json").exists()) {
+-            menu.setState(new LoadingUIState(scene, menu));
++            UI.setState("loadingState");
+ 
+             // Run the loading process in a separate thread
+             scene.loadGame();
+-            menu.setState(new MainMenuUIState(scene, menu));
++            UI.setState(new MainMenuUIState(scene, UI));
+ 
+         } else {
+             errorMessage.draw();
+@@ -61,7 +59,7 @@
+ 
+     public void onOnlineClicked() {
+         // Change the menu state to the Online Multiplayer state
+-        menu.setState(new OnlineUIState(scene, menu));
++        UI.setState(new OnlineUIState(scene, UI));
+     }
+ 
+ //    public void onSettingsClicked() {
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/NewGameUIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\nimport processing.core.PApplet;\r\n\r\npublic class NewGameUIState extends UIState {\r\n    private InputBox mapWidthInput;\r\n    private InputBox mapHeightInput;\r\n    private InputBox numPlayersInput;\r\n\r\n    private Label mapWidthLabel;\r\n\r\n    private Label mapHeightLabel;\r\n\r\n    private Label numPlayersLabel;\r\n\r\n    private Label errorMessageLabel;\r\n\r\n    private boolean showError = false;\r\n\r\n    public NewGameUIState(Window scene, Menu menu) {\r\n        super(scene, menu, new ButtonManager(scene));\r\n        setup();\r\n    }\r\n    @Override\r\n    public void setup() {\r\n        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100, \"16\");\r\n        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100, \"16\");\r\n        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 1000, \"2\");\r\n\r\n        mapWidthLabel = new Label(50, 95, \"Map Width:\", 14, scene);\r\n        mapHeightLabel = new Label(50, 145, \"Map Height:\", 14, scene);\r\n        numPlayersLabel = new Label(50, 195, \"Number of Players:\", 14, scene);\r\n        errorMessageLabel = new Label(50, 250, \"Invalid input! Please enter values within the specified range.\", 14, scene);\r\n\r\n        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), \"back\", scene);\r\n        Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), \"start\", scene);\r\n\r\n        buttonManager.add(backButton);\r\n        buttonManager.add(startButton);\r\n    }\r\n\r\n    public void onBackClicked() {\r\n        // Change the menu state to the New Game state\r\n        menu.setState(new MainMenuUIState(scene, menu));\r\n    }\r\n\r\n    @Override\r\n    public void draw() {\r\n        super.draw();\r\n        mapWidthInput.draw();\r\n        mapHeightInput.draw();\r\n        numPlayersInput.draw();\r\n        mapWidthLabel.draw();\r\n        mapHeightLabel.draw();\r\n        numPlayersLabel.draw();\r\n\r\n        if(showError) {\r\n            errorMessageLabel.draw();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public boolean clicked(int xpos, int ypos) {\r\n        // Check if any buttons or inputs were clicked and perform actions\r\n        if(super.clicked(xpos, ypos)) {\r\n            return true;\r\n        }\r\n        if(mapWidthInput.isClicked(xpos, ypos)){\r\n            mapWidthInput.setSelected(true);\r\n            mapHeightInput.setSelected(false);\r\n            numPlayersInput.setSelected(false);\r\n            return true;\r\n        }else if(mapHeightInput.isClicked(xpos, ypos)){\r\n            mapWidthInput.setSelected(false);\r\n            mapHeightInput.setSelected(true);\r\n            numPlayersInput.setSelected(false);\r\n            return true;\r\n        }else if(numPlayersInput.isClicked(xpos, ypos)){\r\n            mapWidthInput.setSelected(false);\r\n            mapHeightInput.setSelected(false);\r\n            numPlayersInput.setSelected(true);\r\n            return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n\r\n    public void keyPressed(char key) {\r\n        if (key == PApplet.BACKSPACE) {\r\n            if (mapWidthInput.isSelected()) {\r\n                mapWidthInput.removeCharacter();\r\n            } else if (mapHeightInput.isSelected()) {\r\n                mapHeightInput.removeCharacter();\r\n            } else if (numPlayersInput.isSelected()) {\r\n                numPlayersInput.removeCharacter();\r\n            }\r\n        } else {\r\n            if (mapWidthInput.isSelected()) {\r\n                mapWidthInput.addCharacter(key);\r\n            } else if (mapHeightInput.isSelected()) {\r\n                mapHeightInput.addCharacter(key);\r\n            } else if (numPlayersInput.isSelected()) {\r\n                numPlayersInput.addCharacter(key);\r\n            }\r\n        }\r\n    }\r\n\r\n    // ...\r\n\r\n    public void onStartClicked() {\r\n        int mapWidth = mapWidthInput.getIntValue();\r\n        int mapHeight = mapHeightInput.getIntValue();\r\n        int numPlayers = numPlayersInput.getIntValue();\r\n        if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 100) {\r\n            scene.initGame(numPlayers, mapWidth, mapHeight);\r\n            scene.inGame = true;\r\n            showError = false;\r\n        } else {\r\n            showError = true;\r\n        }\r\n    }\r\n\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/NewGameUIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/NewGameUIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/NewGameUIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/NewGameUIState.java	(date 1679543316002)
+@@ -18,8 +18,8 @@
+ 
+     private boolean showError = false;
+ 
+-    public NewGameUIState(Window scene, Menu menu) {
+-        super(scene, menu, new ButtonManager(scene));
++    public NewGameUIState(Window scene, UI UI) {
++        super(UI, new ButtonManager(scene));
+         setup();
+     }
+     @Override
+@@ -42,7 +42,7 @@
+ 
+     public void onBackClicked() {
+         // Change the menu state to the New Game state
+-        menu.setState(new MainMenuUIState(scene, menu));
++        UI.setState(new MainMenuUIState(scene, UI));
+     }
+ 
+     @Override
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/JoinGameUIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\nimport processing.core.PApplet;\r\n\r\npublic class JoinGameUIState extends UIState {\r\n\r\n    private InputBox portInput;\r\n    private InputBox hostIPInput;\r\n    private Label hostIPInputLabel;\r\n    private Label portInputLabel;\r\n    private Label errorMessageLabel;\r\n    private boolean showError = false;\r\n\r\n    public JoinGameUIState(Window scene, Menu menu) {\r\n        super(scene, menu, new ButtonManager(scene));\r\n        setup();\r\n    }\r\n\r\n    @Override\r\n    public void setup() {\r\n        // Create buttons\r\n        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), \"back\", scene);\r\n        Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), \"Join\", scene);\r\n        // Create input box for host IP and port\r\n        portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, \"8080\");\r\n        hostIPInput = new InputBox(50, 100, 250, 30, scene, \"\", \"string\");\r\n\r\n        // Add labels for the input boxes\r\n        portInputLabel = new Label(50, 45, \"Port:\", 14, scene);\r\n        hostIPInputLabel = new Label(50, 95, \"Host IP:\", 14, scene);\r\n        errorMessageLabel = new Label(50, 250, \"Invalid input!\", 14, scene);\r\n\r\n        // Add the buttons to the button manager\r\n        buttonManager.add(backButton);\r\n        buttonManager.add(joinButton);\r\n    }\r\n\r\n\r\n    @Override\r\n    public void draw() {\r\n        super.draw();\r\n        portInput.draw();\r\n        portInputLabel.draw();\r\n        hostIPInput.draw();\r\n        hostIPInputLabel.draw();\r\n\r\n        if (showError) {\r\n            errorMessageLabel.draw();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public boolean clicked(int xpos, int ypos) {\r\n        // Check if any buttons or inputs were clicked and perform actions\r\n        if (super.clicked(xpos, ypos)) {\r\n            return true;\r\n        }\r\n       if (hostIPInput.isClicked(xpos, ypos)) {\r\n            hostIPInput.setSelected(true);\r\n            portInput.setSelected(false);\r\n            return true;\r\n        } else if (portInput.isClicked(xpos, ypos)) {\r\n            portInput.setSelected(true);\r\n            hostIPInput.setSelected(false);\r\n            return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n    public void keyPressed(char key) {\r\n        if (key == PApplet.BACKSPACE) {\r\n            if (hostIPInput.isSelected()) {\r\n                hostIPInput.removeCharacter();\r\n            } else if (portInput.isSelected()) {\r\n                portInput.removeCharacter();\r\n            }\r\n        } else {\r\n            if (hostIPInput.isSelected()) {\r\n                hostIPInput.addCharacter(key);\r\n            } else if (portInput.isSelected()) {\r\n                portInput.addCharacter(key);\r\n            }\r\n        }\r\n    }\r\n\r\n    public void onBackClicked() {\r\n        // Change the menu state to the New Game state\r\n        menu.setState(new OnlineUIState(scene, menu));\r\n    }\r\n\r\n    public void onJoinClicked() {\r\n        // Get the port and host IP from the input boxes\r\n        int port = portInput.getIntValue();\r\n        String hostIP = hostIPInput.getStringValue();\r\n        // Check if the port and host IP are valid\r\n        if (port >= 1 && port <= 60000 && hostIP != null) {\r\n            // Join the game\r\n            scene.joinGame(hostIP, port);\r\n            showError = false;\r\n        } else {\r\n            showError = true;\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/JoinGameUIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/JoinGameUIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/JoinGameUIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/JoinGameUIState.java	(date 1679543512170)
+@@ -1,6 +1,5 @@
+ package org.bcit.com2522.project.scuffed.ui;
+ 
+-import org.bcit.com2522.project.scuffed.client.Window;
+ import processing.core.PApplet;
+ 
+ public class JoinGameUIState extends UIState {
+@@ -12,8 +11,8 @@
+     private Label errorMessageLabel;
+     private boolean showError = false;
+ 
+-    public JoinGameUIState(Window scene, Menu menu) {
+-        super(scene, menu, new ButtonManager(scene));
++    public JoinGameUIState(UI UI) {
++        super(UI, new ButtonManager(scene));
+         setup();
+     }
+ 
+@@ -86,7 +85,7 @@
+ 
+     public void onBackClicked() {
+         // Change the menu state to the New Game state
+-        menu.setState(new OnlineUIState(scene, menu));
++        UI.setState(new OnlineUIState(scene, UI));
+     }
+ 
+     public void onJoinClicked() {
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/OnlineUIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\n\r\npublic class OnlineUIState extends UIState {\r\n\r\n    public OnlineUIState(Window scene, Menu menu) {\r\n        super(scene, menu, new ButtonManager(scene));\r\n        setup();\r\n    }\r\n    @Override\r\n    public void setup() {\r\n        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), \"back\", scene);\r\n        Button hostButton = new Button(50, 200, 250, 250, () -> onHostClicked(), \"Host Game\", scene);\r\n        Button joinButton = new Button(50, 300, 250, 350, () -> onJoinClicked(), \"Join Game\", scene);\r\n\r\n        buttonManager.add(backButton);\r\n        buttonManager.add(hostButton);\r\n        buttonManager.add(joinButton);\r\n    }\r\n\r\n    public void onBackClicked() {\r\n        // Change the menu state to the New Game state\r\n        menu.setState(new MainMenuUIState(scene, menu));\r\n    }\r\n\r\n    public void onHostClicked() {\r\n        // Change the menu state to the New Game state\r\n        menu.setState(new HostGameUIState(scene, menu));\r\n    }\r\n\r\n    public void onJoinClicked() {\r\n        // Change the menu state to the New Game state\r\n        menu.setState(new JoinGameUIState(scene, menu));\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/OnlineUIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/OnlineUIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/OnlineUIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/OnlineUIState.java	(date 1679543512178)
+@@ -4,8 +4,8 @@
+ 
+ public class OnlineUIState extends UIState {
+ 
+-    public OnlineUIState(Window scene, Menu menu) {
+-        super(scene, menu, new ButtonManager(scene));
++    public OnlineUIState(Window scene, UI UI) {
++        super(UI);
+         setup();
+     }
+     @Override
+@@ -21,16 +21,16 @@
+ 
+     public void onBackClicked() {
+         // Change the menu state to the New Game state
+-        menu.setState(new MainMenuUIState(scene, menu));
++        UI.setState(new MainMenuUIState(UI));
+     }
+ 
+     public void onHostClicked() {
+         // Change the menu state to the New Game state
+-        menu.setState(new HostGameUIState(scene, menu));
++        UI.setState(new HostGameUIState(UI));
+     }
+ 
+     public void onJoinClicked() {
+         // Change the menu state to the New Game state
+-        menu.setState(new JoinGameUIState(scene, menu));
++        UI.setState(new JoinGameUIState(UI));
+     }
+ }
+Index: src/main/java/org/bcit/com2522/project/scuffed/client/GameState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.client;\r\n\r\nimport org.json.simple.JSONArray;\r\nimport org.json.simple.JSONObject;\r\nimport org.json.simple.parser.JSONParser;\r\nimport org.json.simple.parser.ParseException;\r\nimport processing.core.PImage;\r\nimport processing.core.PVector;\r\n\r\nimport java.io.*;\r\nimport java.util.ArrayDeque;\r\nimport java.util.ArrayList;\r\nimport java.util.Random;\r\nimport java.util.stream.Collectors;\r\n\r\nimport static org.bcit.com2522.project.scuffed.client.Window.PImages;\r\nimport static processing.core.PConstants.*;\r\n\r\nimport org.bcit.com2522.project.scuffed.ai.AI;\r\n\r\npublic class GameState { //everything manager this is the player manager\r\n    int gameId;\r\n    Map map;\r\n    public Player currentPlayer;\r\n    ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players\r\n    Entity[][] entities;\r\n    Entity selected;\r\n    int zoomAmount = 32;\r\n    int xShift;\r\n    int yShift;\r\n\r\n    PImage select;\r\n    Position selectPosition;\r\n    AI ai;\r\n\r\n    /**\r\n     * Constructor used for creating a new game.\r\n     *\r\n     * @param numplayers number of players in the game\r\n     * @param mapwidth width of the map\r\n     * @param mapheight height of the map\r\n     */\r\n    public GameState(int numplayers, int mapwidth, int mapheight) {\r\n        this.gameId = new Random().nextInt(10000); //make a random gameId\r\n        players = new ArrayDeque<>(numplayers);\r\n        entities = new Entity[mapwidth][mapheight];\r\n        map = new Map(mapwidth, mapheight);\r\n        for(int i = 0; i < numplayers; i++) {\r\n            players.add(new Player(i));\r\n        }\r\n        select = PImages.get(\"select\");\r\n        zoomAmount = 32;\r\n        xShift = 0;\r\n        yShift = 0;\r\n\r\n        ai = new AI();\r\n    }\r\n\r\n    /**\r\n     * Constructor used primarily when loading a game state from a JSON file.\r\n     */\r\n    public GameState(){\r\n        zoomAmount = 32;\r\n    };\r\n\r\n    /**\r\n     * Method called to initialize the game state that sets up a new worker entity for each player.\r\n     */\r\n    public void init() {\r\n        // Initialize the currentPlayer as the first player in the queue\r\n        currentPlayer = players.peek();\r\n\r\n        int rows = entities.length;\r\n        int cols = entities[0].length;\r\n\r\n        // Calculate the number of grid sections along the x and y axes\r\n        System.out.println(players.size());\r\n        ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);\r\n        //TODO same logic should be used for all numbers of players\r\n        if (players.size() == 2) {\r\n            Player player1 = playersQueueCopy.poll();\r\n            Player player2 = playersQueueCopy.poll();\r\n\r\n            entities[0][0] = new Worker(new Position(0, 0), player1);\r\n            entities[rows - 1][cols - 1] = new Worker(new Position(rows - 1, cols - 1), player2);\r\n        } else {\r\n            int xSections = (int) Math.ceil(Math.sqrt(players.size()));\r\n            int ySections = (int) Math.ceil((double) players.size() / xSections);\r\n\r\n            // Calculate the width and height of each grid section\r\n            int sectionWidth = rows / xSections;\r\n            int sectionHeight = cols / ySections;\r\n\r\n            // Create a copy of the playersQueue to iterate over without affecting the original queue\r\n\r\n            for (int y = 0; y < ySections; y++) {\r\n                for (int x = 0; x < xSections; x++) {\r\n                    if (!playersQueueCopy.isEmpty()) {\r\n                        Player player = playersQueueCopy.poll();\r\n\r\n                        // Calculate the position of the worker for the current player\r\n                        int xPos;\r\n                        int yPos;\r\n\r\n//                        if (x % 2 == 0) {\r\n                            xPos = x * sectionWidth;\r\n//                        } else {\r\n//                            xPos = x * sectionWidth + sectionWidth - 1;\r\n//                        }\r\n\r\n//                        if (y % 2 == 0) {\r\n                            yPos = y * sectionHeight;\r\n//                        } else {\r\n//                            yPos = y * sectionHeight + sectionHeight - 1;\r\n//                        }\r\n\r\n                        entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player);\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Checks whether a click was on the map.\r\n     *\r\n     * @param mousePos the position of the mouse\r\n     * @return true if the click was on the map, false otherwise\r\n     */\r\n    public boolean clickedMap(PVector mousePos) {\r\n        int x = (int) (mousePos.x / zoomAmount) + xShift;\r\n        int y = (int) (mousePos.y / zoomAmount) + yShift;\r\n        return x >= 0 && x < entities.length && y >= 0 && y < entities[0].length;\r\n    }\r\n\r\n    /**\r\n     * Method called when the map is clicked.\r\n     *\r\n     * @param mousePos the position of the mouse in pixels\r\n     */\r\n    public void clicked(PVector mousePos) {\r\n        int x = (int) (mousePos.x / zoomAmount) + xShift;\r\n        int y = (int) (mousePos.y / zoomAmount) + yShift;\r\n        Entity entity = entities[x][y];\r\n        if (entity == null && selected == null) { //select empty tile\r\n            System.out.println(\"Nothing Selected\");\r\n        } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) { //select own entity\r\n            selected = entity;\r\n            System.out.println(\"Selected entity class: \" + selected.getClass().getName());\r\n            System.out.println(\"Selected entity ownerID: \" + selected.getOwnerID());\r\n            System.out.println(\"Selected entity position: \" + selected.getPosition());\r\n        } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier\r\n            Soldier soldier = (Soldier) selected;\r\n            if (soldier.withinRange(new Position(x, y)) && soldier.canAct()) {\r\n                if (entity.takeDamage(soldier.attack())) {\r\n                    entities[x][y] = null;\r\n                }\r\n                System.out.println(\"you did some damage\");\r\n            } else {\r\n                System.out.println(\"enemy is either out of range or you are out of actions\");\r\n            }\r\n        } else if (entity == null && selected instanceof Unit) { //move\r\n            Unit unit = (Unit) selected;\r\n            Position oldPos = selected.getPosition();\r\n            if (unit.moveTo(new Position(x - xShift, y - yShift))) {\r\n                entities[oldPos.getX() + xShift][oldPos.getY() + yShift] = null;\r\n                entities[x][y] = selected;\r\n                //selected = null;\r\n            }\r\n        } else {\r\n            System.out.println(\"Invalid selection\");\r\n        }\r\n    }\r\n\r\n    public void keyPressed(char key, Window scene) {\r\n        if(key == 'w') {\r\n            shift(0, 1);\r\n        } else if(key == 'a') {\r\n            shift(1, 0);\r\n        } else if(key == 's') {\r\n            shift(0, -1);\r\n        } else if(key == 'd') {\r\n            shift(-1, 0);\r\n        }\r\n\r\n        else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building\r\n            selected.buildBuilding(entities);\r\n        } else if(key == 'm' && selected instanceof Building) {\r\n            ((Building) selected).buildWorker(entities);\r\n        } else if(key == 'f' && selected instanceof Building) {\r\n            ((Building) selected).buildSoldier(entities);\r\n        } else if(key == 'c' && selected instanceof Worker) {\r\n            ((Worker) selected).collect(map.get(selected.getPosition().getX() + xShift, selected.getPosition().getY() + yShift));\r\n        }\r\n\r\n        else if (key == '\\n' || key == '\\r') {\r\n            System.out.println(\"enter pressed\");\r\n            nextTurn();\r\n        } else if (key == ESC) {\r\n            key = 0;\r\n            scene.saveGame();\r\n            scene.inGame = false;\r\n        }\r\n        if (key == CODED) {\r\n            if (scene.keyCode == UP) {\r\n                zoom(2);\r\n            } else if (scene.keyCode == DOWN) {\r\n                zoom(0.5f);\r\n            }\r\n        }\r\n    }\r\n\r\n    public void zoom(float amount) {\r\n        //TODO change to nearest neighbor resizing if possible\r\n        if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {\r\n            zoomAmount = (int)(zoomAmount * amount);\r\n            for (java.util.Map.Entry<String, PImage> mapElement : PImages.entrySet()) {\r\n                mapElement.getValue().resize(zoomAmount, 0);\r\n            }\r\n        }\r\n    }\r\n\r\n    //moving around the map, does not take unit movement into account.\r\n    public void shift(int x, int y) {\r\n        xShift -= x;\r\n        yShift -= y;\r\n        map.shift(x, y);\r\n        for (Entity[] row: entities) {\r\n            for (Entity element: row) {\r\n                if(element != null) {\r\n                    element.shift(new Position(element.getPosition().getX() + (x),\r\n                            element.getPosition().getY() + (y)));\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Sets the current player to the next in the queue and checks win conditions\r\n     */\r\n    public void nextTurn() {\r\n        resetEntityActions();\r\n        moveToNextPlayer();\r\n        checkPlayerLoss();\r\n        checkVictoryCondition();\r\n\r\n        //randomly regenerates more resources for certain squares\r\n        map.regenResources();\r\n\r\n        selected = null;\r\n\r\n         if (currentPlayer.isAI()) {\r\n             ai.start(this);\r\n         }\r\n    }\r\n\r\n    /**\r\n     * Checks if the game has been won\r\n     */\r\n    private void resetEntityActions() {\r\n        for (Entity[] row : entities) {\r\n            for (Entity element : row) {\r\n                if (element != null) {\r\n                    element.resetAction();\r\n                    if (element instanceof Unit) {\r\n                        ((Unit) element).resetMove();\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Moves to the next player\r\n     */\r\n    private void moveToNextPlayer() {\r\n        players.offer(players.poll());\r\n        currentPlayer = players.peek();\r\n    }\r\n\r\n    /**\r\n     * Checks if the current player has lost, and if so, moves to the next player\r\n     */\r\n    private void checkPlayerLoss() {\r\n        if (!currentPlayer.getHasLost()) {\r\n            boolean hasLost = true;\r\n            for (Entity[] row : entities) {\r\n                for (Entity element : row) {\r\n                    if (element != null && element.getOwnerID() == currentPlayer.getID()) {\r\n                        hasLost = false;\r\n                        break;\r\n                    }\r\n                }\r\n            }\r\n            if (hasLost) {\r\n                currentPlayer.lose();\r\n                nextTurn();\r\n            }\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Checks if the game is over, and if so, prints a message and exits the program\r\n     */\r\n    private void checkVictoryCondition() {\r\n        ArrayList<Player> alivePlayers = new ArrayList<Player>();\r\n        for (Player player : players) {\r\n            if (!player.getHasLost()) {\r\n                alivePlayers.add(player);\r\n            }\r\n        }\r\n        if (alivePlayers.size() == 1) {\r\n            System.out.println(\"Player \" + alivePlayers.get(0).getID()+1 + \" won\");\r\n            System.out.println(\"hit escape to return to the main menu!\");\r\n        }\r\n    }\r\n\r\n\r\n    /**\r\n     * Draws the map and all entities in the gamestate\r\n     * @param scene the window to draw to\r\n     */\r\n    public void draw(Window scene) {\r\n        map.draw(zoomAmount, scene);\r\n        for (Entity[] row: entities) {\r\n            for (Entity entity: row) {\r\n                if(entity != null) {\r\n                    entity.draw(zoomAmount, entity.color, scene);\r\n                }\r\n            }\r\n        }\r\n        if (selected != null) {\r\n            selectPosition = selected.getPosition();\r\n            scene.image(select, selectPosition.getX() * zoomAmount, selectPosition.getY() * zoomAmount);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Prints all entities in the gamestate to the console for debugging purposes\r\n     */\r\n    public void printEntities() {\r\n        for (Entity[] row: entities) {\r\n            for (Entity element: row) {\r\n                if(element != null) {\r\n                    System.out.println(element);\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Saves the current gamestate to a json file in the \"saves\" folder\r\n     * currently called at end of player turn\r\n     */\r\n    public JSONObject toJSONObject() {\r\n        JSONObject gameState = new JSONObject();\r\n        gameState.put(\"gameId\", this.gameId);\r\n        gameState.put(\"map\", map.toJSONObject());\r\n        gameState.put(\"currentPlayer\", currentPlayer.toJSONObject());\r\n        JSONArray playerArray = new JSONArray();\r\n        for (Player player : players) {\r\n            playerArray.add(player.toJSONObject());\r\n        }\r\n        gameState.put(\"players\", playerArray);\r\n        JSONArray entityArray = new JSONArray();\r\n        for (Entity[] row : entities) {\r\n            JSONArray rowArray = new JSONArray();\r\n            for (Entity entity : row) {\r\n                if (entity != null) {\r\n                    rowArray.add(entity.toJSONObject());\r\n                } else {\r\n                    rowArray.add(null);\r\n                }\r\n            }\r\n            entityArray.add(rowArray);\r\n        }\r\n        gameState.put(\"entities\", entityArray);\r\n        return gameState;\r\n    }\r\n\r\n    /**\r\n     * Reads JSON and creates a gamestate from it\r\n     * @param gameStateJSON the json to read\r\n     */\r\n    public static GameState fromJSONObject(JSONObject gameStateJSON) {\r\n        GameState gameState = new GameState();\r\n        gameState.gameId = ((Number) gameStateJSON.get(\"gameId\")).intValue();\r\n        gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get(\"map\"));\r\n        gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get(\"currentPlayer\")) ;\r\n        JSONArray playersArray = (JSONArray) gameStateJSON.get(\"players\");\r\n        gameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))\r\n                .collect(Collectors.toCollection(ArrayDeque::new));\r\n        JSONArray entitiesArray = (JSONArray) gameStateJSON.get(\"entities\");\r\n        Entity[][] entities = new Entity[gameState.map.width][gameState.map.width];\r\n        for (int i = 0; i < entitiesArray.size(); i++) {\r\n            JSONArray row = (JSONArray) entitiesArray.get(i);\r\n            for (int j = 0; j < row.size(); j++) {\r\n                entities[i][j] = Entity.fromJSONObject((JSONObject) row.get(j));\r\n            }\r\n        }\r\n        gameState.entities = entities;\r\n        return gameState;\r\n    }\r\n\r\n    /**\r\n     * Loads a gamestate from a json file in the \"saves\" folder\r\n     * if there's an error, try adding a saves folder to the root directory\r\n     *\r\n     * @return the loaded gamestate\r\n     * @throws FileNotFoundException\r\n     */\r\n    public static GameState load() throws FileNotFoundException {\r\n        GameState loadedGameState = new GameState();\r\n        JSONParser parser = new JSONParser();\r\n        try (FileReader saveReader = new FileReader(\"saves/save.json\")) {\r\n            loadedGameState = fromJSONObject((JSONObject) parser.parse(saveReader));\r\n        } catch (IOException | ParseException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return loadedGameState;\r\n    }\r\n\r\n    public Entity[][] getEntities() {\r\n        return entities;\r\n    }\r\n\r\n    public int getCurrentPlayerID() {\r\n        return currentPlayer.getID();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/client/GameState.java b/src/main/java/org/bcit/com2522/project/scuffed/client/GameState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/client/GameState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/client/GameState.java	(date 1679543316012)
+@@ -61,6 +61,8 @@
+      */
+     public GameState(){
+         zoomAmount = 32;
++        xShift = 0;
++        yShift = 0;
+     };
+ 
+     /**
+@@ -348,12 +350,15 @@
+         }
+     }
+ 
++
+     /**
+      * Saves the current gamestate to a json file in the "saves" folder
+      * currently called at end of player turn
+      */
+     public JSONObject toJSONObject() {
+         JSONObject gameState = new JSONObject();
++        gameState.put("xShift", xShift);
++        gameState.put("yShift", yShift);
+         gameState.put("gameId", this.gameId);
+         gameState.put("map", map.toJSONObject());
+         gameState.put("currentPlayer", currentPlayer.toJSONObject());
+@@ -385,6 +390,8 @@
+     public static GameState fromJSONObject(JSONObject gameStateJSON) {
+         GameState gameState = new GameState();
+         gameState.gameId = ((Number) gameStateJSON.get("gameId")).intValue();
++        gameState.xShift = ((Number) gameStateJSON.get("xShift")).intValue();
++        gameState.yShift = ((Number) gameStateJSON.get("yShift")).intValue();
+         gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
+         gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer")) ;
+         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
+Index: src/main/java/org/bcit/com2522/project/scuffed/client/Map.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.client;\r\n\r\nimport org.json.simple.JSONArray;\r\nimport org.json.simple.JSONObject;\r\nimport processing.core.PImage;\r\n\r\nimport java.awt.*;\r\nimport java.io.Serializable;\r\n\r\nimport static org.bcit.com2522.project.scuffed.client.Window.PImages;\r\nimport static processing.awt.ShimAWT.loadImage;\r\n\r\npublic class Map { //this is a tile manager\r\n    int width;\r\n    int height;\r\n    Tile[][] tiles;\r\n    private Color color;\r\n\r\n    /**\r\n     * Constructor used in loading a map from JSON.\r\n     */\r\n    public Map(){\r\n        this.color = (Color.red);\r\n    }\r\n\r\n    public Map (int width, int height) {\r\n        this.width = width;\r\n        this.height = height;\r\n        tiles = new Tile[width][height];\r\n        for(int i = 0; i < width; i++) {\r\n            for (int j = 0; j < height; j++) {\r\n                tiles[i][j] = new Tile(new Position(i,j));\r\n            }\r\n        }\r\n\r\n        this.color = (Color.red);\r\n    }\r\n\r\n    public void shift(int x, int y) {\r\n        for (Tile[] row: tiles) {\r\n            for (Tile element: row) {\r\n                element.setPosition(new Position(element.getPosition().getX() + x,\r\n                        element.getPosition().getY() + y));\r\n            }\r\n        }\r\n    }\r\n\r\n    public void draw(int zoomAmount, Window scene) {\r\n        //this.scene.fill(color.getRed());\r\n        //this.scene.circle(50, 50, 50);\r\n        //this.scene.image(grass, 500,500);\r\n        for (Tile[] row: tiles) {\r\n            for (Tile element: row) {\r\n                if(element.getType() == 0)\r\n                    scene.image(PImages.get(\"grassTile\"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);\r\n                else if(element.getType() == 1)\r\n                    scene.image(PImages.get(\"rockTile\"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);\r\n                else if(element.getType() == 2)\r\n                    scene.image(PImages.get(\"waterTile\"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);\r\n                else if(element.getType() == 3)\r\n                    scene.image(PImages.get(\"sandTile\"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);\r\n            }\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Converts the map to a JSONObject that stores a 2d JSONArray of tiles.\r\n     *\r\n     * @return JSONObject map\r\n     */\r\n    public JSONObject toJSONObject() {\r\n        JSONObject map = new JSONObject();\r\n        JSONArray tilesArray = new JSONArray();\r\n        for (Tile[] row: tiles) {\r\n            JSONArray rowArray = new JSONArray();\r\n            for (Tile element: row) {\r\n                rowArray.add(element.toJSONObject());\r\n            }\r\n            tilesArray.add(rowArray);\r\n        }\r\n        map.put(\"tiles\", tilesArray);\r\n        map.put(\"width\", width);\r\n        map.put(\"height\", height);\r\n        return map;\r\n    }\r\n\r\n    /**\r\n     * Creates a map from a JSONObject.\r\n     *\r\n     * @param mapObject JSONObject map\r\n     * @param scene Window scene\r\n     * @return Map map\r\n     */\r\n    public static Map fromJSONObject(JSONObject mapObject, Window scene) {\r\n        Map map = new Map();\r\n        map.width = ((Long) mapObject.get(\"width\")).intValue();\r\n        map.height = ((Long) mapObject.get(\"height\")).intValue();\r\n        map.tiles = new Tile[map.width][map.height];\r\n        for (int i = 0; i < map.tiles.length; i++) {\r\n            for (int j = 0; j < map.tiles[i].length; j++) {\r\n                map.tiles[i][j] = Tile.fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get(\"tiles\")).get(i)).get(j));\r\n            }\r\n        }\r\n        return map;\r\n    }\r\n\r\n    /**\r\n     * Creates a map from a JSONObject.\r\n     *\r\n     * @param mapObject JSONObject map\r\n     * @param scene Window scene\r\n     * @return Map map\r\n     */\r\n    public static Map fromJSONObject(JSONObject mapObject) {\r\n        Map map = new Map();\r\n        map.width = (int)(long) mapObject.get(\"width\");\r\n        map.height = (int)(long) mapObject.get(\"height\");\r\n        map.tiles = new Tile[map.width][map.height];\r\n        for (int i = 0; i < map.tiles.length; i++) {\r\n            for (int j = 0; j < map.tiles[i].length; j++) {\r\n                map.tiles[i][j] = Tile.fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get(\"tiles\")).get(i)).get(j));\r\n            }\r\n        }\r\n        return map;\r\n    }\r\n\r\n    public Tile get(int x, int y) {\r\n        return tiles[x][y];\r\n    }\r\n\r\n    public void regenResources() {\r\n        for (Tile[] row: tiles) {\r\n            for (Tile tile: row) {\r\n                int regen = (int) (Math.random() * 10); // 0-9\r\n                if (regen == 9 && tile.getType() < 3) {\r\n                    tile.increaseType();\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/client/Map.java b/src/main/java/org/bcit/com2522/project/scuffed/client/Map.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/client/Map.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/client/Map.java	(date 1679543316015)
+@@ -138,4 +138,13 @@
+             }
+         }
+     }
++
++    public void resetPositions(int xShift, int yShift) {
++        for (Tile[] row: tiles) {
++            for (Tile element: row) {
++                element.setPosition(new Position(element.getPosition().getX() - xShift,
++                        element.getPosition().getY() - yShift));
++            }
++        }
++    }
+ }
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/HostGameUIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\nimport processing.core.PApplet;\r\n\r\npublic class HostGameUIState extends UIState {\r\n    private InputBox mapWidthInput;\r\n    private InputBox mapHeightInput;\r\n    private InputBox numPlayersInput;\r\n    private InputBox portInput;\r\n    private Label portInputLabel;\r\n    private Label mapWidthLabel;\r\n    private Label mapHeightLabel;\r\n    private Label numPlayersLabel;\r\n    private Label errorMessageLabel;\r\n    private boolean showError = false;\r\n    public HostGameUIState(Window scene, Menu menu) {\r\n        super(scene, menu, new ButtonManager(scene));\r\n        setup();\r\n    }\r\n    @Override\r\n    public void setup() {\r\n        portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, \"8080\");\r\n        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100, \"16\");\r\n        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100, \"16\");\r\n        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10, \"2\");\r\n\r\n        portInputLabel = new Label(50, 45, \"Port:\", 14, scene);\r\n        mapWidthLabel = new Label(50, 95, \"Map Width:\", 14, scene);\r\n        mapHeightLabel = new Label(50, 145, \"Map Height:\", 14, scene);\r\n        numPlayersLabel = new Label(50, 195, \"Number of Players:\", 14, scene);\r\n        errorMessageLabel = new Label(50, 250, \"Invalid input! Please enter values within the specified range.\", 14, scene);\r\n\r\n        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), \"back\", scene);\r\n        Button startButton = new Button(50, 600, 250, 650, () -> onStartServerClicked(), \"Start Server\", scene);\r\n\r\n        buttonManager.add(backButton);\r\n        buttonManager.add(startButton);\r\n\r\n    }\r\n\r\n    @Override\r\n    public void draw() {\r\n        super.draw();\r\n        portInput.draw();\r\n        mapWidthInput.draw();\r\n        mapHeightInput.draw();\r\n        numPlayersInput.draw();\r\n        portInputLabel.draw();\r\n        mapWidthLabel.draw();\r\n        mapHeightLabel.draw();\r\n        numPlayersLabel.draw();\r\n\r\n        if(showError) {\r\n            errorMessageLabel.draw();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public boolean clicked(int xpos, int ypos) {\r\n        // Check if any buttons or inputs were clicked and perform actions\r\n        if(super.clicked(xpos, ypos)) {\r\n            return true;\r\n        }\r\n        if(mapWidthInput.isClicked(xpos, ypos)){\r\n            mapWidthInput.setSelected(true);\r\n            mapHeightInput.setSelected(false);\r\n            numPlayersInput.setSelected(false);\r\n            return true;\r\n        }else if(mapHeightInput.isClicked(xpos, ypos)){\r\n            mapWidthInput.setSelected(false);\r\n            mapHeightInput.setSelected(true);\r\n            numPlayersInput.setSelected(false);\r\n            return true;\r\n        }else if(numPlayersInput.isClicked(xpos, ypos)){\r\n            mapWidthInput.setSelected(false);\r\n            mapHeightInput.setSelected(false);\r\n            numPlayersInput.setSelected(true);\r\n            return true;\r\n        } else if( portInput.isClicked(xpos, ypos) ) {\r\n            portInput.setSelected(true);\r\n            mapWidthInput.setSelected(false);\r\n            mapHeightInput.setSelected(false);\r\n            numPlayersInput.setSelected(false);\r\n            return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n    public void keyPressed(char key) {\r\n        if (key == PApplet.BACKSPACE) {\r\n            if (mapWidthInput.isSelected()) {\r\n                mapWidthInput.removeCharacter();\r\n            } else if (mapHeightInput.isSelected()) {\r\n                mapHeightInput.removeCharacter();\r\n            } else if (numPlayersInput.isSelected()) {\r\n                numPlayersInput.removeCharacter();\r\n            } else if( portInput.isSelected() ) {\r\n                portInput.removeCharacter();\r\n            }\r\n        } else {\r\n            if (mapWidthInput.isSelected()) {\r\n                mapWidthInput.addCharacter(key);\r\n            } else if (mapHeightInput.isSelected()) {\r\n                mapHeightInput.addCharacter(key);\r\n            } else if (numPlayersInput.isSelected()) {\r\n                numPlayersInput.addCharacter(key);\r\n            } else if( portInput.isSelected() ) {\r\n                portInput.addCharacter(key);\r\n            }\r\n\r\n        }\r\n    }\r\n\r\n    // ...\r\n    public void onStartServerClicked() {\r\n        int port = portInput.getIntValue();\r\n        int mapWidth = mapWidthInput.getIntValue();\r\n        int mapHeight = mapHeightInput.getIntValue();\r\n        int numPlayers = numPlayersInput.getIntValue();\r\n        if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {\r\n            scene.initGameServer(numPlayers, mapWidth, mapHeight, port);\r\n            scene.inGame = true;\r\n            showError = false;\r\n        } else {\r\n            showError = true;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void onBackClicked() {\r\n        // Change the menu state to the New Game state\r\n        menu.setState(new OnlineUIState(scene, menu));\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/HostGameUIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/HostGameUIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/HostGameUIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/HostGameUIState.java	(date 1679543512175)
+@@ -1,6 +1,5 @@
+ package org.bcit.com2522.project.scuffed.ui;
+ 
+-import org.bcit.com2522.project.scuffed.client.Window;
+ import processing.core.PApplet;
+ 
+ public class HostGameUIState extends UIState {
+@@ -14,8 +13,8 @@
+     private Label numPlayersLabel;
+     private Label errorMessageLabel;
+     private boolean showError = false;
+-    public HostGameUIState(Window scene, Menu menu) {
+-        super(scene, menu, new ButtonManager(scene));
++    public HostGameUIState(UI UI) {
++        super(UI, new ButtonManager(scene));
+         setup();
+     }
+     @Override
+@@ -130,7 +129,7 @@
+     @Override
+     public void onBackClicked() {
+         // Change the menu state to the New Game state
+-        menu.setState(new OnlineUIState(scene, menu));
++        UI.setState(new OnlineUIState(scene, UI));
+     }
+ 
+ 
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/LoadingUIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\n\r\npublic class LoadingUIState extends UIState {\r\n\r\n    private String loadingText;\r\n\r\n    public LoadingUIState(Window scene, Menu menu) {\r\n        super(scene, menu, new ButtonManager(scene));\r\n        loadingText = \"Loading...\";\r\n    }\r\n\r\n    @Override\r\n    public void setup() {\r\n    }\r\n\r\n\r\n    @Override\r\n    public void draw() {\r\n        scene.background(200);\r\n        scene.fill(0);\r\n        scene.textSize(24);\r\n        scene.textAlign(scene.CENTER, scene.CENTER);\r\n        scene.text(loadingText, scene.width / 2, scene.height / 2);\r\n    }\r\n\r\n    @Override\r\n    public void onBackClicked() {\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/LoadingUIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/LoadingUIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/LoadingUIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/LoadingUIState.java	(date 1679543316021)
+@@ -6,8 +6,8 @@
+ 
+     private String loadingText;
+ 
+-    public LoadingUIState(Window scene, Menu menu) {
+-        super(scene, menu, new ButtonManager(scene));
++    public LoadingUIState(Window scene, UI UI) {
++        super(UI, new ButtonManager(scene));
+         loadingText = "Loading...";
+     }
+ 
+Index: src/main/java/org/bcit/com2522/project/scuffed/client/Window.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.client;\r\n\r\nimport org.bcit.com2522.project.scuffed.server.GameServer;\r\nimport org.bcit.com2522.project.scuffed.ui.*;\r\nimport org.json.simple.JSONObject;\r\nimport processing.core.PApplet;\r\nimport processing.core.PImage;\r\nimport processing.core.PVector;\r\n\r\nimport java.io.*;\r\nimport java.net.Socket;\r\nimport java.util.HashMap;\r\n\r\n/**\r\n *\r\n * @author bean\r\n *\r\n */\r\npublic class Window extends PApplet {\r\n  public static HashMap<String, PImage> PImages;\r\n  public boolean inGame = false;\r\n\r\n  public Menu menu;\r\n  public GameInstance gameInstance;\r\n  public Boolean debugMode = false;\r\n  static DebugMenu debugMenu;\r\n  public ClickableManager clickableManager;\r\n  public GraphicManager graphicManager;\r\n\r\n\r\n  /**\r\n   * Called once at the beginning of the program.\r\n   */\r\n  public void settings() {\r\n    size(1080, 720);\r\n  }\r\n\r\n  /**\r\n   * Called once at the beginning of the program.\r\n   * Initializes all objects.\r\n   */\r\n  public void setup() {\r\n    initPImages();\r\n    this.init();\r\n  }\r\n\r\n  public void init() {\r\n    //map = new Map(this, 20, 20);\r\n    clickableManager = new ClickableManager(this);\r\n    surface.setTitle(\"Scuffed - Main Menu\");\r\n    menu = new Menu(this);\r\n  }\r\n\r\n  /**\r\n   * This initializes one HashMap to hold the PImages for all classes\r\n   */\r\n  public void initPImages(){\r\n    PImages = new HashMap<String, PImage>();\r\n    PImages.put(\"grassTile\", loadImage(\"sprites/Menu/tile_grass.png\"));\r\n    PImages.put(\"rockTile\", loadImage(\"sprites/Menu/tile_rocks.png\"));\r\n    PImages.put(\"waterTile\", loadImage(\"sprites/Menu/tile_water.png\"));\r\n    PImages.put(\"sandTile\", loadImage(\"sprites/Menu/tile_sand.png\"));\r\n    PImages.put(\"buttonBackground\", loadImage(\"sprites/Menu/background.png\"));\r\n    PImages.put(\"buttonHoverBackground\", loadImage(\"sprites/Menu/button_blank.png\"));\r\n    PImages.put(\"buttonClickBackground\", loadImage(\"sprites/Menu/button_blank_pressed.png\"));\r\n    PImages.put(\"soldier\", loadImage( \"sprites/soldier.png\"));\r\n    PImages.put(\"worker\", loadImage(\"sprites/worker.png\"));\r\n    PImages.put(\"building\", loadImage(\"sprites/building.png\"));\r\n    PImages.put(\"logo\", loadImage(\"sprites/logo.png\"));\r\n    PImages.put(\"select\", loadImage(\"sprites/select.png\"));\r\n  }\r\n\r\n  public void initGame(int numplayers, int mapwidth, int mapheight) {\r\n    gameInstance = new GameInstance(new HUD(), new GameState(numplayers, mapwidth, mapheight));\r\n    gameInstance.newGame();\r\n  }\r\n\r\n  @Override\r\n  public void keyPressed() {\r\n    if(inGame) {\r\n      gameInstance.keyPressed(key, this);\r\n    }\r\n    if (keyCode == 114) {\r\n      debugMode = !debugMode;\r\n    }\r\n    if (keyCode == ESC) {\r\n      key = 0;\r\n    }\r\n    if(menu.currentState instanceof NewGameUIState){\r\n        NewGameUIState newGameMenuState = (NewGameUIState) menu.currentState;\r\n        newGameMenuState.keyPressed(key);\r\n    }\r\n    if(menu.currentState instanceof HostGameUIState){\r\n        HostGameUIState hostGameMenuState = (HostGameUIState) menu.currentState;\r\n        hostGameMenuState.keyPressed(key);\r\n    }\r\n    if(menu.currentState instanceof JoinGameUIState){\r\n        JoinGameUIState joinGameMenuState = (JoinGameUIState) menu.currentState;\r\n        joinGameMenuState.keyPressed(key);\r\n    }\r\n  }\r\n\r\n  @Override\r\n  public void mouseClicked() {\r\n    PVector mousePos = new PVector(mouseX, mouseY);\r\n    if(inGame) {\r\n      gameInstance.clicked(mousePos, this);\r\n      surface.setTitle(\"Scuffed Civ\");\r\n    } else {\r\n      menu.clicked(mouseX, mouseY);\r\n      surface.setTitle(\"Scuffed - \" + menu.currentState.getClass().getSimpleName());\r\n    }\r\n  }\r\n\r\n  /**\r\n   * Called on every frame. Updates scene object\r\n   * state and redraws the scene. Drawings appear\r\n   * in order of function calls.\r\n   */\r\n  public void draw() {\r\n    background(222);\r\n    if(inGame){\r\n      gameInstance.draw(this);\r\n    } else {\r\n      menu.draw();\r\n    }\r\n    // Debug Info - Can be added to\r\n    if(debugMode) {\r\n      debugMenu.draw();\r\n    }\r\n    //graphicManager.drawGraphics();\r\n  }\r\n\r\n  public ClickableManager getClickableManager() {\r\n    return clickableManager;\r\n  }\r\n\r\n  public void addClickable(Clickable clickable) {\r\n    clickableManager.add(clickable);\r\n  }\r\n\r\n  public void removeClickable(Clickable clickable) {\r\n    clickableManager.remove(clickable);\r\n  }\r\n\r\n  public GraphicManager getGraphicManager() {\r\n    return graphicManager;\r\n  }\r\n\r\n\r\n\r\n  public Player getCurrentPlayer() {\r\n    if(gameInstance == null){\r\n      return null;\r\n    }\r\n    return gameInstance.getCurrentPlayer();\r\n  }\r\n\r\n  public void nextTurn() {\r\n    gameInstance.nextTurn();\r\n  }\r\n\r\n  public void loadGame() {\r\n    gameInstance = new GameInstance();\r\n    System.out.println(\"Loading game\");\r\n    gameInstance.loadGame();\r\n    inGame = true;\r\n  }\r\n\r\n  public void joinGame(String hostIP, int port) {\r\n    gameInstance = new GameInstance();\r\n    gameInstance.joinGame(hostIP, port);\r\n  }\r\n\r\n  public void saveGame() {\r\n    gameInstance.saveGame();\r\n  }\r\n\r\n\r\n  //TODO: implement actual server\r\n  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {\r\n//    this.port = port;\r\n//    this.hostIP = \"localhost\";\r\n//    gameServer = new GameServer();\r\n//    gameState = new GameState(numplayers, mapwidth, mapheight);\r\n//    gameServer.start(gameState, port);\r\n//    gameState.init();\r\n  }\r\n\r\n\r\n  /**\r\n   * Main function.\r\n   *\r\n   * @param passedArgs arguments from command line\r\n   */\r\n  public static void main(String[] passedArgs) {\r\n    String[] appletArgs = new String[]{\"eatBubbles\"};\r\n    Window eatBubbles = new Window();\r\n    debugMenu = new DebugMenu(eatBubbles);\r\n    PApplet.runSketch(appletArgs, eatBubbles);\r\n  }\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/client/Window.java b/src/main/java/org/bcit/com2522/project/scuffed/client/Window.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/client/Window.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/client/Window.java	(date 1679543372998)
+@@ -20,7 +20,7 @@
+   public static HashMap<String, PImage> PImages;
+   public boolean inGame = false;
+ 
+-  public Menu menu;
++  public UI UI;
+   public GameInstance gameInstance;
+   public Boolean debugMode = false;
+   static DebugMenu debugMenu;
+@@ -32,6 +32,7 @@
+    * Called once at the beginning of the program.
+    */
+   public void settings() {
++    noSmooth();
+     size(1080, 720);
+   }
+ 
+@@ -48,7 +49,7 @@
+     //map = new Map(this, 20, 20);
+     clickableManager = new ClickableManager(this);
+     surface.setTitle("Scuffed - Main Menu");
+-    menu = new Menu(this);
++    UI = new UI(this);
+   }
+ 
+   /**
+@@ -86,16 +87,16 @@
+     if (keyCode == ESC) {
+       key = 0;
+     }
+-    if(menu.currentState instanceof NewGameUIState){
+-        NewGameUIState newGameMenuState = (NewGameUIState) menu.currentState;
++    if(UI.currentState instanceof NewGameUIState){
++        NewGameUIState newGameMenuState = (NewGameUIState) UI.currentState;
+         newGameMenuState.keyPressed(key);
+     }
+-    if(menu.currentState instanceof HostGameUIState){
+-        HostGameUIState hostGameMenuState = (HostGameUIState) menu.currentState;
++    if(UI.currentState instanceof HostGameUIState){
++        HostGameUIState hostGameMenuState = (HostGameUIState) UI.currentState;
+         hostGameMenuState.keyPressed(key);
+     }
+-    if(menu.currentState instanceof JoinGameUIState){
+-        JoinGameUIState joinGameMenuState = (JoinGameUIState) menu.currentState;
++    if(UI.currentState instanceof JoinGameUIState){
++        JoinGameUIState joinGameMenuState = (JoinGameUIState) UI.currentState;
+         joinGameMenuState.keyPressed(key);
+     }
+   }
+@@ -107,8 +108,8 @@
+       gameInstance.clicked(mousePos, this);
+       surface.setTitle("Scuffed Civ");
+     } else {
+-      menu.clicked(mouseX, mouseY);
+-      surface.setTitle("Scuffed - " + menu.currentState.getClass().getSimpleName());
++      UI.clicked(mouseX, mouseY);
++      surface.setTitle("Scuffed - " + UI.currentState.getClass().getSimpleName());
+     }
+   }
+ 
+@@ -122,7 +123,7 @@
+     if(inGame){
+       gameInstance.draw(this);
+     } else {
+-      menu.draw();
++      UI.draw();
+     }
+     // Debug Info - Can be added to
+     if(debugMode) {
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/Menu.java
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/Menu.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/Menu.java
+deleted file mode 100644
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/Menu.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ /dev/null	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
+@@ -1,28 +0,0 @@
+-package org.bcit.com2522.project.scuffed.ui;
+-
+-import org.bcit.com2522.project.scuffed.client.Window;
+-
+-public class Menu {
+-     private UIState previousState;
+-     public UIState currentState;
+-     Window scene;
+-
+-    public Menu(Window scene) {
+-        this.scene = scene;
+-        this.currentState = new MainMenuUIState(scene, this);
+-    }
+-
+-    public void setState(UIState newState) {
+-        this.previousState = this.currentState;
+-        this.currentState = newState;
+-    }
+-
+-    public void draw() {
+-        currentState.draw();
+-    }
+-
+-    public boolean clicked(int xpos, int ypos) {
+-        return currentState.clicked(xpos, ypos);
+-    }
+-
+- }
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/UI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/UI.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/UI.java
+new file mode 100644
+--- /dev/null	(date 1679543315997)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/UI.java	(date 1679543315997)
+@@ -0,0 +1,45 @@
++package org.bcit.com2522.project.scuffed.ui;
++
++import org.bcit.com2522.project.scuffed.client.Window;
++
++import java.util.HashMap;
++
++public class UI {
++     public UIState currentState;
++     public HashMap<String, UIState> UIStates;
++     Window scene;
++
++    public UI(Window scene) {
++        this.currentState = new MainMenuUIState(scene, this);
++        initUIStates();
++    }
++
++    public void setState(UIState newState) {
++
++    }
++
++    public void setState(String state) {
++        this.currentState = UIStates.get(state);
++    }
++
++    public void setMainMenuState() {
++        this.currentState = UIStates.get("MainMenu");
++    }
++
++    public void draw() {
++        currentState.draw(scene);
++    }
++
++    public boolean clicked(int xpos, int ypos) {
++        return currentState.clicked(xpos, ypos);
++    }
++
++    public void initUIStates() {
++        UIStates = new HashMap<String, UIState>();
++        UIStates.put("MainMenu", new MainMenuUIState(this, scene));
++
++    }
++
++
++
++ }
+Index: keybinds.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>w - move camera up\r\na - move camera left\r\ns - move camera down\r\nd - move camera right\r\nb - create building (requires building or worker to be selected)\r\nm - create worker (maker) (requires building to be selected)\r\nf - create soldier (fighter) (requires building to be selected)\r\nc - collect (requires worker to be selected)\r\nenter - next turn\r\nup arrow - zoom in\r\ndown arrow - zoom out\r\nf3 - debug menu
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/keybinds.txt b/keybinds.txt
+--- a/keybinds.txt	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/keybinds.txt	(date 1679543373014)
+@@ -9,4 +9,4 @@
+ enter - next turn
+ up arrow - zoom in
+ down arrow - zoom out
+-f3 - debug menu
+\ No newline at end of file
++f3 - debug UI
+\ No newline at end of file
+Index: src/main/java/org/bcit/com2522/project/scuffed/ui/ServerLobbyUIState.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.ui;\r\n\r\nimport org.bcit.com2522.project.scuffed.client.Window;\r\n\r\npublic class ServerLobbyUIState extends UIState {\r\n\r\n    public ServerLobbyUIState(Window scene, Menu menu) {\r\n        super(scene, menu, new ButtonManager(scene));\r\n    }\r\n\r\n    @Override\r\n    public void setup() {\r\n        //TODO: show list of connected players' clientIds\r\n        //TODO: indicate which player is the host\r\n        //TODO: Add button to ready up\r\n        //TODO: Add button to start game that's only visible to the host when everyone is ready\r\n        //TODO: Add button to leave game\r\n    }\r\n\r\n    @Override\r\n    public void onBackClicked() {\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/ui/ServerLobbyUIState.java b/src/main/java/org/bcit/com2522/project/scuffed/ui/ServerLobbyUIState.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/ui/ServerLobbyUIState.java	(revision 39ed0f648d95e533e3542a2e2ab763f22630b4a4)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/ui/ServerLobbyUIState.java	(date 1679543373016)
+@@ -4,8 +4,8 @@
+ 
+ public class ServerLobbyUIState extends UIState {
+ 
+-    public ServerLobbyUIState(Window scene, Menu menu) {
+-        super(scene, menu, new ButtonManager(scene));
++    public ServerLobbyUIState(Window scene, UI UI) {
++        super(UI, new ButtonManager(scene));
+     }
+ 
+     @Override
