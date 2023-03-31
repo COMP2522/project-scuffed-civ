@@ -92,25 +92,6 @@ public class Map { //this is a tile manager
         return map;
     }
 
-    /**
-     * Creates a map from a JSONObject for server.
-     *
-     * @param mapObject JSONObject map
-     * @return Map map
-     */
-    public static Map fromJSONObjectForServer(JSONObject mapObject) {
-        Map map = new Map();
-        map.width = (int)(long) mapObject.get("width");
-        map.height = (int)(long) mapObject.get("height");
-        map.tiles = new Tile[map.width][map.height];
-        for (int i = 0; i < map.tiles.length; i++) {
-            for (int j = 0; j < map.tiles[i].length; j++) {
-                map.tiles[i][j] = Tile.fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));
-            }
-        }
-        return map;
-    }
-
     public Tile get(int x, int y) {
         return tiles[x][y];
     }

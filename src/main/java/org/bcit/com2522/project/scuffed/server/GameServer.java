@@ -7,10 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * [CURRENTLY NON-FUNCTIONAL]
@@ -21,7 +18,7 @@ import java.util.List;
  * @author Cameron Walford
  * @version 1.0
  */
-public class GameServer {
+public class GameServer implements Runnable {
     private ServerSocket serverSocket;
     private GameState gameState;
     private int port;
@@ -31,12 +28,15 @@ public class GameServer {
      * The list of clients connected to the server.
      */
     private final List<ClientHandler> clients = Collections.synchronizedList(new LinkedList<>());
+    public GameServer(GameState gameState, int port) {
+        this.gameState = gameState;
+        this.port = port;
+        this.hostIP = getLocalIpAddress();
+    }
 
-    public void start(GameState gameState, int port) {
+    public void run() {
         try {
             serverSocket = new ServerSocket(port);
-            this.port = port;
-            this.hostIP = getLocalIpAddress();
             System.out.println("Server started on " + hostIP + ":" + port);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -109,6 +109,15 @@ public class GameServer {
         return null;
     }
 
+    public HashSet<String> getConnectedPlayers() {
+        HashSet<String> connectedPlayers = new HashSet<>();
+        for (ClientHandler client : clients) {
+            connectedPlayers.add(client.clientSocket.getInetAddress().getHostAddress());
+        }
+        return connectedPlayers;
+    }
+
+
     /**
      * Handles each new connection made to the GameServer.
      *
@@ -117,6 +126,8 @@ public class GameServer {
      */
     class ClientHandler extends Thread{
         private final Socket clientSocket;
+
+        public String clientUsername;
         private final ObjectOutputStream oos;
         private final ObjectInputStream ois;
 
@@ -145,6 +156,7 @@ public class GameServer {
 
             try {
                 while (true) {
+                    clientUsername = (String) ois.readObject();
                     GameState updatedGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
                     gameState = updatedGameState;
                     broadcastGameState(gameState, this);

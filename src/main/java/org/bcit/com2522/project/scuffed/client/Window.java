@@ -7,6 +7,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Window class that holds the main method and initializes the game. It provides
@@ -188,9 +189,9 @@ public class Window extends PApplet {
     inGame = true;
   }
 
-  public void joinGame(String hostIP, int port) {
+  public void joinGame(String hostIP, int port, String clientUsername) {
     gameInstance = new GameInstance(this);
-    gameInstance.joinGame(hostIP, port);
+    gameInstance.joinGame(hostIP, port, clientUsername);
   }
 
   public void saveGame() {
@@ -198,16 +199,15 @@ public class Window extends PApplet {
   }
 
   //TODO: implement actual server
-  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
+  public void initOnlineGame(int numplayers, int mapwidth, int mapheight, int port) {
     gameInstance = new GameInstance(this);
     GameState gameState = new GameState(numplayers, mapwidth, mapheight);
-    gameState.init();
-    GameServer gameServer = new GameServer();
-    gameServer.start(gameState, port);
+    GameServer gameServer = new GameServer(gameState, port);
     gameInstance.setGameState(gameState);
     gameInstance.setGameServer(gameServer);
-
+    gameInstance.startServer();
   }
+
 
 
   /**
@@ -220,5 +220,9 @@ public class Window extends PApplet {
     Window eatBubbles = new Window();
     debugMenu = new DebugMenu(eatBubbles);
     PApplet.runSketch(appletArgs, eatBubbles);
+  }
+
+  public HashSet<String> getConnectedPlayers() {
+    return gameInstance.getConnectedPlayers();
   }
 }

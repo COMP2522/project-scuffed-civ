@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +25,8 @@ public class GameInstance {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     public GameServer gameServer;
+
+    boolean isOnline = false;
 
     public Window scene;
 
@@ -134,7 +137,8 @@ public class GameInstance {
      * @param hostIP
      * @param port the port to host the server
      */
-    public void joinGame(String hostIP, int port) {
+    public void joinGame(String hostIP, int port, String clientUsername) {
+        isOnline = true;
         System.out.println("Joining game at " + hostIP + ":" + port);
         this.hostIP = hostIP;
         this.port = port;
@@ -143,14 +147,21 @@ public class GameInstance {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
             System.out.println("ois" + ois.readObject());
-            GameState serverGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
-            GameInstance gameInstance = new GameInstance(new HUD(scene), serverGameState);
+            this.gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
         } catch (Exception e) {
             System.out.println("Error connecting to server at " + hostIP + ":" + port);
             e.printStackTrace();
             //briefly display error message in center of screen
         }
+        try {
+            oos.writeObject(clientUsername);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
@@ -158,5 +169,25 @@ public class GameInstance {
 
     public void setGameServer(GameServer gameServer) {
         this.gameServer = gameServer;
+    }
+
+    public void startServer() {
+        isOnline = true;
+        Thread server= new Thread(gameServer);
+        server.start();
+    }
+
+    public void start () {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                sendGameState(gameState);
+            }
+        }, 0, 1000);
+    }
+
+    public HashSet<String> getConnectedPlayers() {
+        return gameServer.getConnectedPlayers();
     }
 }

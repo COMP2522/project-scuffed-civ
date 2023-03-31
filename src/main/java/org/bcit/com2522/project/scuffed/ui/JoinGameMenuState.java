@@ -7,8 +7,10 @@ public class JoinGameMenuState extends MenuState {
 
     private InputBox portInput;
     private InputBox hostIPInput;
+    private InputBox usernameInput;
     private Label hostIPInputLabel;
     private Label portInputLabel;
+    private Label usernameInputLabel;
     private Label errorMessageLabel;
     private boolean showError = false;
 
@@ -22,19 +24,22 @@ public class JoinGameMenuState extends MenuState {
         // Create buttons
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
         Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join", scene);
-        // Create input box for host IP and port
+        // Create input box for host IP, port, and username
         portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, "8080");
         hostIPInput = new InputBox(50, 100, 250, 30, scene, "", "string");
+        usernameInput = new InputBox(50, 150, 250, 30, scene, "", "string");
 
         // Add labels for the input boxes
         portInputLabel = new Label(50, 45, "Port:", 14, scene);
         hostIPInputLabel = new Label(50, 95, "Host IP:", 14, scene);
+        usernameInputLabel = new Label(50, 145, "Username:", 14, scene);
         errorMessageLabel = new Label(50, 250, "Invalid input!", 14, scene);
 
         // Add the buttons to the button manager
         buttonManager.add(backButton);
         buttonManager.add(joinButton);
     }
+
 
 
     @Override
@@ -70,13 +75,17 @@ public class JoinGameMenuState extends MenuState {
 
     public void keyPressed(char key) {
         if (key == PApplet.BACKSPACE) {
-            if (hostIPInput.isSelected()) {
+            if (usernameInput.isSelected()) {
+                usernameInput.removeCharacter();
+            } else if (hostIPInput.isSelected()) {
                 hostIPInput.removeCharacter();
             } else if (portInput.isSelected()) {
                 portInput.removeCharacter();
             }
         } else {
-            if (hostIPInput.isSelected()) {
+            if (usernameInput.isSelected()) {
+                usernameInput.addCharacter(key);
+            } else if (hostIPInput.isSelected()) {
                 hostIPInput.addCharacter(key);
             } else if (portInput.isSelected()) {
                 portInput.addCharacter(key);
@@ -91,12 +100,16 @@ public class JoinGameMenuState extends MenuState {
 
     public void onJoinClicked() {
         // Get the port and host IP from the input boxes
+        String username = usernameInput.getStringValue();
+        // Get the port and host IP from the input boxes
         int port = portInput.getIntValue();
         String hostIP = hostIPInput.getStringValue();
         // Check if the port and host IP are valid
+
+
         if (port >= 1 && port <= 60000 && hostIP != null) {
             // Join the game
-            scene.joinGame(hostIP, port);
+            scene.joinGame(hostIP, port, username);
             showError = false;
         } else {
             showError = true;

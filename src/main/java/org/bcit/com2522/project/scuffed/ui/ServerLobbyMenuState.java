@@ -29,17 +29,17 @@ public class ServerLobbyMenuState extends MenuState {
     public void draw() {
         super.draw();
         titleLabel.draw();
-       // playersLabel.setText("Players Connected: " + scene.getPlayers().size());
+        playersLabel.setText("Players Connected: " + scene.getConnectedPlayers().size());
         playersLabel.draw();
     }
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new NewGameMenuState(scene, menu));
+        menu.setState(new HostGameMenuState(scene, menu));
     }
 
     public void onStartClicked() {
         // Start the game
-       // scene.startGame();
+        scene.inGame = true;
     }
 }
