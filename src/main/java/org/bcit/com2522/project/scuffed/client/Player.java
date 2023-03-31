@@ -12,6 +12,9 @@ public class Player { //gamestate is the player manager
   private Color color;
   private boolean isAi;
 
+  private int xShift;
+  private int yShift;
+
 
   public Player (int playerNum) {
     this.playerNum = playerNum;
@@ -124,10 +127,15 @@ public class Player { //gamestate is the player manager
     return resources;
   }
 
+  public void setShift(int x, int y) {
+    xShift = x;
+    yShift = y;
+  }
+
     public int getYShift() {
-      return 0;
+      return yShift;
     }
     public int getXShift() {
-      return 0;
+      return xShift;
     }
 }

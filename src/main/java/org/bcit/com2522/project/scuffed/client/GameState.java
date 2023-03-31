@@ -259,11 +259,7 @@ public class GameState { //everything manager this is the player manager
                 //mapElement.getValue().resize(zoomAmount, 0);
                 mapElement.setValue(nearestNeighborResize(mapElement.getValue(), amount, zoomAmount));
             }
-//            for (Entity[] row : entities) {
-//                for (Entity entity : row) {
-//                    //if (entity != null) entity.texture = nearestNeighborResize(entity.texture, amount, zoomAmount);
-//                }
-//            }
+
             zoomAmount = (int)(zoomAmount * amount);
             if (amount > 1)
                 shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
@@ -323,8 +319,15 @@ public class GameState { //everything manager this is the player manager
      * Moves to the next player
      */
     private void moveToNextPlayer() {
+        currentPlayer.setShift(xShift, yShift);
+
         players.offer(players.poll());
         currentPlayer = players.peek();
+
+
+        for (int i = 0; i < 2; i++) {
+            zoom(0.5f);
+        }
 
         yShift = currentPlayer.getYShift();
         xShift = currentPlayer.getXShift();
