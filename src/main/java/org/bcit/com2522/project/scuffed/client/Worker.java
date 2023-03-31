@@ -15,7 +15,7 @@ public class Worker extends Unit{
     public Worker(int ownerID, int health, int cost, int speed) {
         super(ownerID, health, cost, speed);
         entityType = "worker";
-        texture = GameImages.get(entityType);
+//        texture = GameImages.get(entityType);
     }
 
     public JSONObject toJSONObject() {

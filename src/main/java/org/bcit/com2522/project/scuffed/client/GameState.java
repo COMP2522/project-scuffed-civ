@@ -31,7 +31,6 @@ public class GameState { //everything manager this is the player manager
     int xShift; //only used to change where the map is drawn
     int yShift; //only used to change where the map is drawn
 
-    public PImage select;
     public Position selectPosition;
     public AI ai;
 
@@ -50,7 +49,6 @@ public class GameState { //everything manager this is the player manager
         for(int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
-        select = GameImages.get("select");
         zoomAmount = 32;
         xShift = (1080 / zoomAmount - mapwidth) / 2;
         yShift = (720 / zoomAmount - mapwidth) / 2;
@@ -262,12 +260,11 @@ public class GameState { //everything manager this is the player manager
                 //mapElement.getValue().resize(zoomAmount, 0);
                 mapElement.setValue(nearestNeighborResize(mapElement.getValue(), amount, zoomAmount));
             }
-            for (Entity[] row : entities) {
-                for (Entity entity : row) {
-                    if (entity != null)
-                        entity.texture = nearestNeighborResize(entity.texture, amount, zoomAmount);
-                }
-            }
+//            for (Entity[] row : entities) {
+//                for (Entity entity : row) {
+//                    //if (entity != null) entity.texture = nearestNeighborResize(entity.texture, amount, zoomAmount);
+//                }
+//            }
             zoomAmount = (int)(zoomAmount * amount);
             if (amount > 1)
                 shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
@@ -296,7 +293,6 @@ public class GameState { //everything manager this is the player manager
         moveToNextPlayer();
         checkPlayerLoss();
         checkVictoryCondition();
-
 
         //randomly regenerates more resources for certain squares
         map.regenResources();
@@ -386,7 +382,7 @@ public class GameState { //everything manager this is the player manager
                     Entity entity = entities[i][j];
                     Color color = entity.getOwner().getColor();
                     scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-                    scene.image(entity.texture, (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+                    scene.image(GameImages.get(entity.entityType), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
                     scene.noTint();
                 }
             }

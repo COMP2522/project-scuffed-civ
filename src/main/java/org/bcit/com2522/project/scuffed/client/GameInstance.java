@@ -98,14 +98,14 @@ public class GameInstance {
         }
     }
 
-
-        public void receiveGameState() {
+    public void receiveGameState() {
         try {
             gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+
     public void joinGame(String hostIP, int port) {
         System.out.println("Joining game at " + hostIP + ":" + port);
         this.hostIP = hostIP;

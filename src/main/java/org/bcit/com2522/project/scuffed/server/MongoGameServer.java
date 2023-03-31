@@ -65,7 +65,6 @@ public class MongoGameServer {
         System.out.println(gameJSON);
         Document gameStateDocument = Document.parse(gameJSON);
         database.getCollection(gameState.getGameID()).insertOne(gameStateDocument);
-
         joinGame("host", serverID);
     }
 
