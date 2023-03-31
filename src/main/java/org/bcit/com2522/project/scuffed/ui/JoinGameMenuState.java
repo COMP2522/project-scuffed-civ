@@ -41,7 +41,6 @@ public class JoinGameMenuState extends MenuState {
     }
 
 
-
     @Override
     public void draw() {
         super.draw();
@@ -49,6 +48,8 @@ public class JoinGameMenuState extends MenuState {
         portInputLabel.draw();
         hostIPInput.draw();
         hostIPInputLabel.draw();
+        usernameInput.draw();
+        usernameInputLabel.draw();
 
         if (showError) {
             errorMessageLabel.draw();
@@ -61,13 +62,20 @@ public class JoinGameMenuState extends MenuState {
         if (super.clicked(xpos, ypos)) {
             return true;
         }
-       if (hostIPInput.isClicked(xpos, ypos)) {
+        if (hostIPInput.isClicked(xpos, ypos)) {
             hostIPInput.setSelected(true);
             portInput.setSelected(false);
+            usernameInput.setSelected(false);
             return true;
         } else if (portInput.isClicked(xpos, ypos)) {
             portInput.setSelected(true);
             hostIPInput.setSelected(false);
+            usernameInput.setSelected(false);
+            return true;
+        } else if (usernameInput.isClicked(xpos, ypos)) {
+            usernameInput.setSelected(true);
+            hostIPInput.setSelected(false);
+            portInput.setSelected(false);
             return true;
         }
         return false;
@@ -75,20 +83,20 @@ public class JoinGameMenuState extends MenuState {
 
     public void keyPressed(char key) {
         if (key == PApplet.BACKSPACE) {
-            if (usernameInput.isSelected()) {
-                usernameInput.removeCharacter();
-            } else if (hostIPInput.isSelected()) {
+            if (hostIPInput.isSelected()) {
                 hostIPInput.removeCharacter();
             } else if (portInput.isSelected()) {
                 portInput.removeCharacter();
+            } else if (usernameInput.isSelected()) {
+                usernameInput.removeCharacter();
             }
         } else {
-            if (usernameInput.isSelected()) {
-                usernameInput.addCharacter(key);
-            } else if (hostIPInput.isSelected()) {
+            if (hostIPInput.isSelected()) {
                 hostIPInput.addCharacter(key);
             } else if (portInput.isSelected()) {
                 portInput.addCharacter(key);
+            } else if (usernameInput.isSelected()) {
+                usernameInput.addCharacter(key);
             }
         }
     }
@@ -99,15 +107,12 @@ public class JoinGameMenuState extends MenuState {
     }
 
     public void onJoinClicked() {
-        // Get the port and host IP from the input boxes
-        String username = usernameInput.getStringValue();
-        // Get the port and host IP from the input boxes
+        // Get the port, host IP, and username from the input boxes
         int port = portInput.getIntValue();
         String hostIP = hostIPInput.getStringValue();
-        // Check if the port and host IP are valid
-
-
-        if (port >= 1 && port <= 60000 && hostIP != null) {
+        String username = usernameInput.getStringValue();
+        // Check if the port, host IP, and username are valid
+        if (port >= 1 && port <= 60000 && hostIP != null && username != null && !username.equals("")) {
             // Join the game
             scene.joinGame(hostIP, port, username);
             showError = false;
