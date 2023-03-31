@@ -227,6 +227,10 @@ public class GameState { //everything manager this is the player manager
             for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
                 mapElement.getValue().resize(zoomAmount, 0);
             }
+            if (amount > 1)
+                shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
+            else
+                shift((int)(1080 * zoomAmount * amount), (int)(720 * zoomAmount * amount));
         }
     }
 
