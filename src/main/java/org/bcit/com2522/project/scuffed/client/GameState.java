@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -220,17 +221,57 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    public void zoom(float amount) {
-        //TODO change to nearest neighbor resizing if possible
-        if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
-            zoomAmount = (int)(zoomAmount * amount);
-            for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
-                mapElement.getValue().resize(zoomAmount, 0);
+    public int[] resizePixels(int[] pixels,int w1,int h1,int w2,int h2) {
+        int[] temp = new int[w2*h2] ;
+        int x_ratio = (int)((w1<<16)/w2) +1;
+        int y_ratio = (int)((h1<<16)/h2) +1;
+        int x2, y2 ;
+        for (int i=0;i<h2;i++) {
+            for (int j=0;j<w2;j++) {
+                x2 = ((j*x_ratio)>>16);
+                y2 = ((i*y_ratio)>>16);
+                temp[(i * w2) + j] = pixels[(y2 * w1) + x2];
             }
+        }
+        return temp;
+    }
+
+    public PImage nearestNeighborResize(PImage image, float amount, int currentSize) {
+        int[] imagePixels = new int[1024];
+        int scale = currentSize / 32;
+
+        for (int x = 0; x < 32; x++) {
+            for (int y = 0; y < 32; y++) {
+                imagePixels[32 * y + x] = image.get(x * scale,y * scale);
+            }
+        }
+        if (amount > 1) { //zoom in
+            imagePixels = resizePixels(imagePixels, 32, 32, currentSize * 2, currentSize * 2);
+            image = new PImage(currentSize * 2, currentSize * 2, imagePixels, true, new PApplet());
+        } else { //zoom out
+            imagePixels = resizePixels(imagePixels, 32, 32, currentSize / 2, currentSize / 2);
+            image = new PImage(currentSize / 2, currentSize / 2, imagePixels, true, new PApplet());
+        }
+        return image;
+    }
+
+    public void zoom(float amount) {
+        if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
+            for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
+                //mapElement.getValue().resize(zoomAmount, 0);
+                mapElement.setValue(nearestNeighborResize(mapElement.getValue(), amount, zoomAmount));
+            }
+            for (Entity[] row : entities) {
+                for (Entity entity : row) {
+                    if (entity != null)
+                        entity.texture = nearestNeighborResize(entity.texture, amount, zoomAmount);
+                }
+            }
+            zoomAmount = (int)(zoomAmount * amount);
             if (amount > 1)
-                shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount)); //16, 11
+                shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
             else
-                shift((int)(1080 / zoomAmount * -amount / 2), (int)(720 / zoomAmount * -amount / 2)); //
+                shift((int)(1080 / zoomAmount * -amount / 2), (int)(720 / zoomAmount * -amount / 2));
         }
     }
 
