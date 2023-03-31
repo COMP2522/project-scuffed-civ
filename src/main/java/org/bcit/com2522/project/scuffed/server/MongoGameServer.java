@@ -24,12 +24,13 @@ import com.mongodb.client.model.changestream.ChangeStreamDocument;
 
 import org.bcit.com2522.project.scuffed.server.SubscriberHelpers.PrintDocumentSubscriber;
 
+import static com.mongodb.client.model.Filters.eq;
+
 public class MongoGameServer {
 
     private MongoDatabase database;
     private static String defaultUsername = "cam";
     private static String defaultPassword = "passWord";
-
     private MongoCollection collection;
     private String serverID;
 
@@ -59,10 +60,10 @@ public class MongoGameServer {
     public void createNewGame(GameState gameState) {
         connectToDatabase(defaultUsername, defaultPassword);
         setServerID(gameState.getGameID());
-        database.createCollection(serverID);
+        database.createCollection(serverID).subscribe(new SubscriberHelpers.PrintSubscriber<>("Collection created successfully"));
         JSONObject gameJSONObject = gameState.toJSONObject();
         String gameJSON = gameJSONObject.toJSONString();
-        System.out.println(gameJSON);
+        //System.out.println(gameJSON);
         Document gameStateDocument = Document.parse(gameJSON);
         database.getCollection(gameState.getGameID()).insertOne(gameStateDocument);
         joinGame("host", serverID);
@@ -74,20 +75,38 @@ public class MongoGameServer {
      * @param serverID as a String
      */
     public void joinGame(String userID, String serverID) {
-        if(database == null){
+        if (database == null) {
             connectToDatabase(defaultUsername, defaultPassword);
             setServerID(serverID);
         }
         collection = database.getCollection(serverID);
 
-        collection.watch().subscribe(new PrintDocumentSubscriber());
-        //Publisher<Document> publisher = collection.find(eq("gameID", serverID)).first();
-        //System.out.println("Successfully retrieved game " + serverID + "!");
+        // Watch for changes in the collection and print the updated document to the console
+        collection.watch()
+                .fullDocument(FullDocument.UPDATE_LOOKUP)
+                .subscribe(new Subscriber<ChangeStreamDocument<Document>>() {
+                    @Override
+                    public void onSubscribe(Subscription subscription) {
+                        subscription.request(Long.MAX_VALUE);
+                    }
 
-    }
+                    @Override
+                    public void onNext(ChangeStreamDocument<Document> changeStreamDocument) {
+                        System.out.println("Change detected: " + changeStreamDocument.getFullDocument().toJson());
+                    }
 
-    public void deleteAllGames(){
+                    @Override
+                    public void onError(Throwable throwable) {
+                        System.err.println("Error: " + throwable.getMessage());
+                    }
 
+                    @Override
+                    public void onComplete() {
+                        System.out.println("Change stream completed");
+                    }
+                });
+
+        collection.updateOne(eq("gameID", serverID), new Document("$push", new Document("players", userID)));
     }
 
     /**
@@ -104,15 +123,19 @@ public class MongoGameServer {
      *
      * @param args arguments from command line
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         String userID = "bob";
         MongoGameServer server = new MongoGameServer();
         GameState gameState = new GameState(4, 20, 20);
         gameState.init();
         server.createNewGame(gameState);
-        //server.joinGame(userID, server.serverID);
 
+        // Add some sample updates to test the change stream functionality
+        server.joinGame("alice", server.serverID);
+        Thread.sleep(5000);
+        server.collection.updateOne(eq("gameID", server.serverID), new Document("$set", new Document("gameState.gridSize", 25)));
+        Thread.sleep(5000);
+        server.collection.updateOne(eq("gameID", server.serverID), new Document("$set", new Document("gameState.numberOfPlayers", 5)));
+        Thread.sleep(10000);
     }
-
-
 }

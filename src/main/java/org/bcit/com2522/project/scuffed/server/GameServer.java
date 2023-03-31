@@ -6,26 +6,26 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * [CURRENTLY NON-FUNCTIONAL]
  *
- * Coordinates the game state between multiple clients using the ClientHandler inner class to designate a new
- * Thread for each new client.
+ * Coordinates the game state between multiple players using the ClientHandler inner class to designate a new
+ * Thread for each new client. This version is meant to work for clients on the same wifi network as the host.
  *
  * @author Cameron Walford
- * @version 0.1
+ * @version 1.0
  */
 public class GameServer {
     private ServerSocket serverSocket;
     private GameState gameState;
     private int port;
-    String hostIP;
+    private String hostIP;
 
     /**
      * The list of clients connected to the server.
@@ -36,7 +36,7 @@ public class GameServer {
         try {
             serverSocket = new ServerSocket(port);
             this.port = port;
-            this.hostIP = serverSocket.getInetAddress().getHostAddress();
+            this.hostIP = getLocalIpAddress();
             System.out.println("Server started on " + hostIP + ":" + port);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -82,6 +82,32 @@ public class GameServer {
         client.sendGameState(gameState);
     }
 
+    /**
+     * Finds the local IP address of the machine running the server. This is for playing
+     * multiplayer on the same wifi network.
+     *
+     * @return String representation of the local IP address (IPV4)
+     */
+    public static String getLocalIpAddress() {
+        try {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (!networkInterface.isLoopback() && networkInterface.isUp()) {
+                    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                    while (inetAddresses.hasMoreElements()) {
+                        InetAddress inetAddress = inetAddresses.nextElement();
+                        if (!inetAddress.isLoopbackAddress() && inetAddress.getAddress().length == 4) {
+                            return inetAddress.getHostAddress();
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Handles each new connection made to the GameServer.

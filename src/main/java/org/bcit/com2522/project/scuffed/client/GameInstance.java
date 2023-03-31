@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameInstance {
     public HUD hud;
@@ -54,6 +56,11 @@ public class GameInstance {
         gameState.keyPressed(key, scene);
     }
 
+    /**
+     * Converts the game state to a JSON object and saves it to the save.json file.
+     *
+     * @param client
+     */
     public void saveGame() {
         System.out.println("Saving game");
         JSONObject gameStateJSON = gameState.toJSONObject();
@@ -65,10 +72,18 @@ public class GameInstance {
         }
     }
 
+    /**
+     * Returns the current player of the game state.
+     *
+     * @return
+     */
     public Player getCurrentPlayer() {
         return gameState.currentPlayer;
     }
 
+    /**
+     * Loads a game from the save.json file.
+     */
     public void loadGame() {
         try {
             gameState = GameState.load();
@@ -78,12 +93,19 @@ public class GameInstance {
         }
     }
 
+    /**
+     * Ends the current player's turn and starts the next player's turn.
+     */
     public void nextTurn() {
         System.out.println("next turn in game instance was called");
         gameState.nextTurn();
         hud.currentPlayer = gameState.currentPlayer;
     }
 
+    /**
+     * Starts a new game by initializing the game state and setting the current player of the
+     * hud to the current player of the game state.
+     */
     public void newGame() {
         gameState.init();
         hud.currentPlayer = gameState.currentPlayer;
@@ -106,6 +128,12 @@ public class GameInstance {
         }
     }
 
+    /**
+     * Starts a new game as a server.
+     *
+     * @param hostIP
+     * @param port the port to host the server
+     */
     public void joinGame(String hostIP, int port) {
         System.out.println("Joining game at " + hostIP + ":" + port);
         this.hostIP = hostIP;
@@ -114,11 +142,21 @@ public class GameInstance {
             socket = new Socket(hostIP, port);
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
+            System.out.println("ois" + ois.readObject());
             GameState serverGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
             GameInstance gameInstance = new GameInstance(new HUD(scene), serverGameState);
         } catch (Exception e) {
+            System.out.println("Error connecting to server at " + hostIP + ":" + port);
             e.printStackTrace();
+            //briefly display error message in center of screen
         }
+    }
 
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void setGameServer(GameServer gameServer) {
+        this.gameServer = gameServer;
     }
 }

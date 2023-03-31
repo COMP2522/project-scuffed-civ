@@ -70,17 +70,19 @@ public class Map { //this is a tile manager
         return map;
     }
 
+
     /**
      * Creates a map from a JSONObject.
      *
      * @param mapObject JSONObject map
-     * @param scene Window scene
      * @return Map map
      */
-    public static Map fromJSONObject(JSONObject mapObject, Window scene) {
+    public static Map fromJSONObject(JSONObject mapObject) {
         Map map = new Map();
-        map.width = ((Long) mapObject.get("width")).intValue();
-        map.height = ((Long) mapObject.get("height")).intValue();
+        Object widthObject = mapObject.get("width");
+        Object heightObject = mapObject.get("height");
+        map.width = widthObject instanceof Long ? (int)(long)widthObject : (int)widthObject;
+        map.height = heightObject instanceof Long ? (int)(long)heightObject : (int)heightObject;
         map.tiles = new Tile[map.width][map.height];
         for (int i = 0; i < map.tiles.length; i++) {
             for (int j = 0; j < map.tiles[i].length; j++) {
@@ -91,12 +93,12 @@ public class Map { //this is a tile manager
     }
 
     /**
-     * Creates a map from a JSONObject.
+     * Creates a map from a JSONObject for server.
      *
      * @param mapObject JSONObject map
      * @return Map map
      */
-    public static Map fromJSONObject(JSONObject mapObject) {
+    public static Map fromJSONObjectForServer(JSONObject mapObject) {
         Map map = new Map();
         map.width = (int)(long) mapObject.get("width");
         map.height = (int)(long) mapObject.get("height");

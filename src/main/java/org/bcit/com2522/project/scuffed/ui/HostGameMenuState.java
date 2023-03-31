@@ -119,8 +119,9 @@ public class HostGameMenuState extends MenuState {
         int mapHeight = mapHeightInput.getIntValue();
         int numPlayers = numPlayersInput.getIntValue();
         if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
-            scene.initGameServer(numPlayers, mapWidth, mapHeight, port);
-            scene.inGame = true;
+            menu.scene.initGameServer(numPlayers, mapWidth, mapHeight, port);
+            menu.setState(new ServerLobbyMenuState(scene, menu));
+
             showError = false;
         } else {
             showError = true;

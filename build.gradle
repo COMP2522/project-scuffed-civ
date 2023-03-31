@@ -25,3 +25,16 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+/**
+ * Creates the saves directory if it doesn't exist.
+ * Not sure if it's working properly yet.
+ */
+task buildSavesDir {
+    doLast {
+        def savesDir = new File(projectDir, "saves")
+        if (!savesDir.exists()) {
+            savesDir.mkdirs()
+        }
+    }
+}

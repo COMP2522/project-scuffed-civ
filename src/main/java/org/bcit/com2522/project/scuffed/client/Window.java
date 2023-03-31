@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.bcit.com2522.project.scuffed.ui.*;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -8,14 +9,14 @@ import processing.core.PVector;
 import java.util.HashMap;
 
 /**
+ * Window class that holds the main method and initializes the game. It provides
  *
- * @author bean
- *
+ * @author Keagan Purtell, Emma Meredith-Black, Brenndan Doyle, and Cameron Walford
+ * @Version 0.5
  */
 public class Window extends PApplet {
   public static HashMap<String, PImage> GameImages;
   public static HashMap<String, PImage> UIImages;
-
   public boolean inGame = false;
 
   public Menu menu;
@@ -24,7 +25,6 @@ public class Window extends PApplet {
   static DebugMenu debugMenu;
   public ClickableManager clickableManager;
   public GraphicManager graphicManager;
-
 
   /**
    * Called once at the beginning of the program.
@@ -95,14 +95,6 @@ public class Window extends PApplet {
     gameInstance.newGame();
   }
 
-  public PImage getPImage(String name) {
-    return GameImages.get(name);
-  }
-
-  public PImage loadImage2(String path) {
-    return loadImage(path);
-  }
-
   @Override
   public void keyPressed() {
     if(inGame) {
@@ -148,7 +140,6 @@ public class Window extends PApplet {
   public void draw() {
     background(222);
     if(inGame){
-
       background(UIImages.get("background"));
       gameInstance.draw(this);
     } else {
@@ -162,9 +153,6 @@ public class Window extends PApplet {
     graphicManager.drawGraphics();
   }
 
-  public ClickableManager getClickableManager() {
-    return clickableManager;
-  }
 
   public void addClickable(Clickable clickable) {
     clickableManager.add(clickable);
@@ -180,10 +168,6 @@ public class Window extends PApplet {
 
   public void wipeGraphics() {
     graphicManager.wipeGraphics();
-  }
-
-  public PImage getLoadedPImage(String name) {
-    return GameImages.get(name);
   }
 
   public Player getCurrentPlayer() {
@@ -213,15 +197,16 @@ public class Window extends PApplet {
     gameInstance.saveGame();
   }
 
-
   //TODO: implement actual server
   public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
-//    this.port = port;
-//    this.hostIP = "localhost";
-//    gameServer = new GameServer();
-//    gameState = new GameState(numplayers, mapwidth, mapheight);
-//    gameServer.start(gameState, port);
-//    gameState.init();
+    gameInstance = new GameInstance(this);
+    GameState gameState = new GameState(numplayers, mapwidth, mapheight);
+    gameState.init();
+    GameServer gameServer = new GameServer();
+    gameServer.start(gameState, port);
+    gameInstance.setGameState(gameState);
+    gameInstance.setGameServer(gameServer);
+
   }
 
 
@@ -236,7 +221,4 @@ public class Window extends PApplet {
     debugMenu = new DebugMenu(eatBubbles);
     PApplet.runSketch(appletArgs, eatBubbles);
   }
-
-
-
 }
