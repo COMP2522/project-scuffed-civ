@@ -40,7 +40,9 @@ public abstract class Entity {
     }
 
     //finds the nearest non-filled position
-    public Position getFreePosition(Entity[][] entities) { //TODO: fix this mess
+    public Position getFreePosition(Entity[][] entities) { //TODO: fix this mess; doesn't account for map shift
+        Position shiftedPosition = new Position(position.getX(), position.getY()); //- xShift - yShift
+
         if (getPosition().getY() == 0 || entities[getPosition().getX()][getPosition().getY() - 1] != null) {
             if (getPosition().getX() == entities.length - 1 || entities[getPosition().getX() + 1][getPosition().getY()] != null) {
                 if (getPosition().getY() == entities[0].length - 1 || entities[getPosition().getX()][getPosition().getY() + 1] != null) {
@@ -146,4 +148,8 @@ public abstract class Entity {
     public int getHealth() {
         return currentHealth;
     }
+
+  public int getCost() {
+        return resourceCost;
+  }
 }

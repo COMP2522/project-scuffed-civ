@@ -113,19 +113,8 @@ public class GameState { //everything manager this is the player manager
                         // Calculate the position of the worker for the current player
                         int xPos;
                         int yPos;
-
-//                        if (x % 2 == 0) {
                             xPos = x * sectionWidth;
-//                        } else {
-//                            xPos = x * sectionWidth + sectionWidth - 1;
-//                        }
-
-//                        if (y % 2 == 0) {
                             yPos = y * sectionHeight;
-//                        } else {
-//                            yPos = y * sectionHeight + sectionHeight - 1;
-//                        }
-
                         entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player.getID(), player.getColor(), 100, 1, 6);
                     }
                 }
@@ -150,28 +139,29 @@ public class GameState { //everything manager this is the player manager
      *
      * @param mousePos the position of the mouse in pixels
      */
-    public void clicked(PVector mousePos) {
+    public void clicked(PVector mousePos, Window scene) {
         int x = (int) (mousePos.x / zoomAmount) + xShift;
         int y = (int) (mousePos.y / zoomAmount) + yShift;
-        Entity entity = entities[x][y];
-        if (entity == null && selected == null) { //select empty tile
+        Entity clicked = entities[x][y];
+        if (clicked == null && selected == null) { //select empty tile
             System.out.println("Nothing Selected");
-        } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) { //select own entity
-            selected = entity;
+        } else if (clicked != null && clicked.getOwnerID() == currentPlayer.getID()) { //select own entity
+            selected = clicked;
+            ((inGameStartHUD)scene.gameInstance.hud.currentState).unitSelected(selected);
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
             System.out.println("Selected entity health: " + selected.getHealth());
-        } else if(entity != null && selected == null) {
-            selected = entity;
+        } else if(clicked != null && selected == null) {
+            selected = clicked;
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition());
             System.out.println("Selected entity health: " + selected.getHealth());
             selected = null;
-        } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
-            ((Soldier) selected).attack(entities, entity);
-        } else if (entity == null && selected instanceof Unit) { //move
+        } else if (clicked != null && selected instanceof Soldier && clicked.getOwnerID() != currentPlayer.getID()) { //attack with soldier
+            ((Soldier) selected).attack(entities, clicked);
+        } else if (clicked == null && selected instanceof Unit) { //move
             ((Unit) selected).move(entities, new Position(x, y), xShift, yShift);
         } else {
             System.out.println("Invalid selection");
