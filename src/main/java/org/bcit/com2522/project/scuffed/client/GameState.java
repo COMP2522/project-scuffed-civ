@@ -4,9 +4,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -19,17 +21,15 @@ import static processing.core.PConstants.*;
 import org.bcit.com2522.project.scuffed.ai.AI;
 
 public class GameState { //everything manager this is the player manager
-    int gameId;
-    Map map;
+    private int gameId;
+    private Map map;
     public Player currentPlayer;
     static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
-    Entity[][] entities;
-    Entity selected;
-    int zoomAmount = 32;
-    int xShift;
-    int yShift;
-
-
+    private Entity[][] entities;
+    private Entity selected;
+    int zoomAmount;
+    int xShift; //only used to change where the map is drawn
+    int yShift; //only used to change where the map is drawn
 
     PImage select;
     Position selectPosition;
@@ -52,8 +52,8 @@ public class GameState { //everything manager this is the player manager
         }
         select = GameImages.get("select");
         zoomAmount = 32;
-        xShift = 0;
-        yShift = 0;
+        xShift = (1080 / zoomAmount - mapwidth) / 2;
+        yShift = (720 / zoomAmount - mapwidth) / 2;
 
         ai = new AI();
     }
@@ -93,8 +93,8 @@ public class GameState { //everything manager this is the player manager
             Player player2 = playersQueueCopy.poll();
             //TODO maybe an initWorkers function in player instead of in gamestate
 
-            entities[0][0] = new Worker(new Position(0, 0), player1.getID(), player1.getColor(), 100, 1, 6);
-            entities[rows - 1][cols - 1] = new Worker(new Position(rows - 1, cols - 1), player2.getID(), player1.getColor(), 100, 1, 6);
+            entities[0][0] = new Worker(player1.getID(), 100, 1, 6);
+            entities[rows - 1][cols - 1] = new Worker(player2.getID(), 100, 1, 6);
         } else {
             int xSections = (int) Math.ceil(Math.sqrt(players.size()));
             int ySections = (int) Math.ceil((double) players.size() / xSections);
@@ -113,20 +113,9 @@ public class GameState { //everything manager this is the player manager
                         // Calculate the position of the worker for the current player
                         int xPos;
                         int yPos;
-
-//                        if (x % 2 == 0) {
                             xPos = x * sectionWidth;
-//                        } else {
-//                            xPos = x * sectionWidth + sectionWidth - 1;
-//                        }
-
-//                        if (y % 2 == 0) {
                             yPos = y * sectionHeight;
-//                        } else {
-//                            yPos = y * sectionHeight + sectionHeight - 1;
-//                        }
-
-                        entities[xPos][yPos] = new Worker(new Position(xPos, yPos), player.getID(), player.getColor(), 100, 1, 6);
+                        entities[xPos][yPos] = new Worker(player.getID(), 100, 1, 6);
                     }
                 }
             }
@@ -140,8 +129,8 @@ public class GameState { //everything manager this is the player manager
      * @return true if the click was on the map, false otherwise
      */
     public boolean clickedMap(PVector mousePos) {
-        int x = (int) (mousePos.x / zoomAmount) + xShift;
-        int y = (int) (mousePos.y / zoomAmount) + yShift;
+        int x = (int) (mousePos.x / zoomAmount) - xShift;
+        int y = (int) (mousePos.y / zoomAmount) - yShift;
         return x >= 0 && x < entities.length && y >= 0 && y < entities[0].length;
     }
 
@@ -151,29 +140,29 @@ public class GameState { //everything manager this is the player manager
      * @param mousePos the position of the mouse in pixels
      */
     public void clicked(PVector mousePos, Window scene) {
-        int x = (int) (mousePos.x / zoomAmount) + xShift;
-        int y = (int) (mousePos.y / zoomAmount) + yShift;
-        Entity entity = entities[x][y];
-        if (entity == null && selected == null) { //select empty tile
+        int x = (int) (mousePos.x / zoomAmount) - xShift;
+        int y = (int) (mousePos.y / zoomAmount) - yShift;
+        Entity clicked = entities[x][y];
+        if (clicked == null && selected == null) { //select empty tile
             System.out.println("Nothing Selected");
-        } else if (entity != null && entity.getOwnerID() == currentPlayer.getID()) { //select own entity
-            selected = entity;
+        } else if (clicked != null && clicked.getOwnerID() == currentPlayer.getID()) { //select own entity
+            selected = clicked;
             ((inGameStartHUD)scene.gameInstance.hud.currentState).unitSelected(selected);
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
-            System.out.println("Selected entity position: " + selected.getPosition());
+            System.out.println("Selected entity position: " + selected.getPosition(entities));
             System.out.println("Selected entity health: " + selected.getHealth());
-        } else if(entity != null && selected == null) {
-            selected = entity;
+        } else if(clicked != null && selected == null) {
+            selected = clicked;
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
-            System.out.println("Selected entity position: " + selected.getPosition());
+            System.out.println("Selected entity position: " + selected.getPosition(entities));
             System.out.println("Selected entity health: " + selected.getHealth());
             selected = null;
-        } else if (entity != null && selected instanceof Soldier && entity.getOwnerID() != currentPlayer.getID()) { //attack with soldier
-            ((Soldier) selected).attack(entities, entity);
-        } else if (entity == null && selected instanceof Unit) { //move
-            ((Unit) selected).move(entities, new Position(x, y), xShift, yShift);
+        } else if (clicked != null && selected instanceof Soldier && clicked.getOwnerID() != currentPlayer.getID()) { //attack with soldier
+            ((Soldier) selected).attack(entities, clicked);
+        } else if (clicked == null && selected instanceof Unit) { //move
+            ((Unit) selected).move(entities, new Position(x, y));
         } else {
             System.out.println("Invalid selection");
         }
@@ -181,13 +170,15 @@ public class GameState { //everything manager this is the player manager
 
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
-            shift(0, -1);
-        } else if(key == 'a') {
-            shift(-1, 0);
-        } else if(key == 's') {
             shift(0, 1);
-        } else if(key == 'd') {
+        } else if(key == 'a') {
             shift(1, 0);
+        } else if(key == 's') {
+            shift(0, -1);
+        } else if(key == 'd') {
+            shift(-1, 0);
+        } else if (key == ' ') {
+            resetShift();
         }
 
         else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building
@@ -197,7 +188,7 @@ public class GameState { //everything manager this is the player manager
         } else if(key == 'f' && selected instanceof Building) { //creates a soldier (fighter)
             ((Building) selected).buildSoldier(entities, 100, 50, 6, 6);
         } else if(key == 'c' && selected instanceof Worker) { //collects
-            ((Worker) selected).collect(map.get(selected.getPosition().getX() + xShift, selected.getPosition().getY() + yShift));
+            ((Worker) selected).collect(map.get(selected.getPosition(entities)));
         } else if (key == 'x') { //deselect any entity
             selected = null;
         }
@@ -219,8 +210,6 @@ public class GameState { //everything manager this is the player manager
             key = 0;
             scene.saveGame();
             scene.inGame = false;
-        } else if (key == ' ') {
-            resetShift();
         }
 
         if (key == CODED) {
@@ -232,13 +221,57 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    public void zoom(float amount) {
-        //TODO change to nearest neighbor resizing if possible
-        if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
-            zoomAmount = (int)(zoomAmount * amount);
-            for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
-                mapElement.getValue().resize(zoomAmount, 0);
+    public int[] resizePixels(int[] pixels,int w1,int h1,int w2,int h2) {
+        int[] temp = new int[w2*h2] ;
+        int x_ratio = (int)((w1<<16)/w2) +1;
+        int y_ratio = (int)((h1<<16)/h2) +1;
+        int x2, y2 ;
+        for (int i=0;i<h2;i++) {
+            for (int j=0;j<w2;j++) {
+                x2 = ((j*x_ratio)>>16);
+                y2 = ((i*y_ratio)>>16);
+                temp[(i * w2) + j] = pixels[(y2 * w1) + x2];
             }
+        }
+        return temp;
+    }
+
+    public PImage nearestNeighborResize(PImage image, float amount, int currentSize) {
+        int[] imagePixels = new int[1024];
+        int scale = currentSize / 32;
+
+        for (int x = 0; x < 32; x++) {
+            for (int y = 0; y < 32; y++) {
+                imagePixels[32 * y + x] = image.get(x * scale,y * scale);
+            }
+        }
+        if (amount > 1) { //zoom in
+            imagePixels = resizePixels(imagePixels, 32, 32, currentSize * 2, currentSize * 2);
+            image = new PImage(currentSize * 2, currentSize * 2, imagePixels, true, new PApplet());
+        } else { //zoom out
+            imagePixels = resizePixels(imagePixels, 32, 32, currentSize / 2, currentSize / 2);
+            image = new PImage(currentSize / 2, currentSize / 2, imagePixels, true, new PApplet());
+        }
+        return image;
+    }
+
+    public void zoom(float amount) {
+        if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
+            for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
+                //mapElement.getValue().resize(zoomAmount, 0);
+                mapElement.setValue(nearestNeighborResize(mapElement.getValue(), amount, zoomAmount));
+            }
+            for (Entity[] row : entities) {
+                for (Entity entity : row) {
+                    if (entity != null)
+                        entity.texture = nearestNeighborResize(entity.texture, amount, zoomAmount);
+                }
+            }
+            zoomAmount = (int)(zoomAmount * amount);
+            if (amount > 1)
+                shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
+            else
+                shift((int)(1080 / zoomAmount * -amount / 2), (int)(720 / zoomAmount * -amount / 2));
         }
     }
 
@@ -246,27 +279,13 @@ public class GameState { //everything manager this is the player manager
     public void shift(int x, int y) {
         xShift -= x;
         yShift -= y;
-        shift2(x, y);
     }
 
     public void resetShift() {
-        shift2(xShift, yShift);
-
         xShift = 0;
         yShift = 0;
     }
 
-    private void shift2(int xShift, int yShift) {
-        map.shift(xShift, yShift);
-        for (Entity[] row: entities) {
-            for (Entity element: row) {
-                if(element != null) {
-                    element.shift(new Position(element.getPosition().getX() + (xShift),
-                            element.getPosition().getY() + (yShift)));
-                }
-            }
-        }
-    }
 
     /**
      * Sets the current player to the next in the queue and checks win conditions
@@ -276,6 +295,7 @@ public class GameState { //everything manager this is the player manager
         moveToNextPlayer();
         checkPlayerLoss();
         checkVictoryCondition();
+
 
         //randomly regenerates more resources for certain squares
         map.regenResources();
@@ -357,17 +377,24 @@ public class GameState { //everything manager this is the player manager
      * @param scene the window to draw to
      */
     public void draw(Window scene) {
-        map.draw(zoomAmount, scene);
-        for (Entity[] row: entities) {
-            for (Entity entity: row) {
-                if(entity != null) {
-                    entity.draw(zoomAmount, entity.color, scene);
+        map.draw(zoomAmount, scene, xShift, yShift);
+
+        for (int i = 0; i < entities.length; i++) { //prints the maps entities
+            for (int j = 0; j < entities[0].length; j++) {
+                if(entities[i][j] != null) {
+                    Entity entity = entities[i][j];
+
+                    Color color = entity.getOwner().getColor();
+                    scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+                    scene.image(entity.texture, (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+                    scene.noTint();
                 }
             }
         }
-        if (selected != null) {
-            selectPosition = selected.getPosition();
-            scene.image(select, selectPosition.getX() * zoomAmount, selectPosition.getY() * zoomAmount);
+
+        if (selected != null) { //prints box around selected entity
+            selectPosition = selected.getPosition(entities);
+            scene.image(select, (selectPosition.getX() + xShift) * zoomAmount, (selectPosition.getY() + yShift) * zoomAmount);
         }
     }
 
@@ -439,10 +466,10 @@ public class GameState { //everything manager this is the player manager
     }
 
     /**
-     * Loads a gamestate from a json file in the "saves" folder
+     * Loads a gameState from a json file in the "saves" folder
      * if there's an error, try adding a saves folder to the root directory
      *
-     * @return the loaded gamestate
+     * @return the loaded gameState
      * @throws FileNotFoundException
      */
     public static GameState load() throws FileNotFoundException {
