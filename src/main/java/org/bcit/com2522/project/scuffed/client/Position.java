@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import java.io.Serializable;
 
 /**
- * Represents the position on the map
+ * Represents the position on the map, this should only be used to reference location relative to the map, not relative to the screen >:(
  *
  */
 public class Position{

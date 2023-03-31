@@ -12,8 +12,8 @@ public class Soldier extends Unit{
 
     int range;
 
-    public Soldier(Position position, int ownerId, Color pColor, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
-        super(position, ownerId, pColor, health, cost, speed);
+    public Soldier(Position position, int ownerId, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
+        super(ownerId, health, cost, speed);
         entityType = "soldier";
         texture = GameImages.get("soldier");
         this.damage = damage;
@@ -21,10 +21,10 @@ public class Soldier extends Unit{
     }
 
     public void attack(Entity[][] entities, Entity target){
-        if (!withinRange(target.getPosition())) {
+        if (!withinRange(target.getPosition(entities), entities)) {
             System.out.println("enemy is out of range");
             return;
-        } else if (!canAct()) {
+        } else if (cannotAct()) {
             System.out.println("you are out of actions");
             return;
         } else {
@@ -35,7 +35,7 @@ public class Soldier extends Unit{
 
 
         if (target.getHealth() <= 0) {
-            entities[target.getPosition().getX()][target.getPosition().getY()] = null;
+            entities[target.getPosition(entities).getX()][target.getPosition(entities).getY()] = null;
         }
     }
 
@@ -53,7 +53,7 @@ public class Soldier extends Unit{
         Soldier soldier = new Soldier(
                 Position.fromJSONObject((JSONObject) soldierObject.get("position")),
                 (int)(long) soldierObject.get("ownerId"),
-                (Color) soldierObject.get("color"),
+                //(Color) soldierObject.get("color"),
                 (int) soldierObject.get("maxHealth"),
                 Soldier.cost,
                 (int) soldierObject.get("speed"),
@@ -63,8 +63,8 @@ public class Soldier extends Unit{
         return soldier;
     }
 
-    public boolean withinRange(Position position) {
-        if(Math.abs(position.getX() - this.position.getX()) + Math.abs(position.getY() - this.position.getY()) <= range) {
+    public boolean withinRange(Position position, Entity[][] entities) {
+        if(Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= range) {
             return true;
         } else {
             System.out.println("that position is out of range");

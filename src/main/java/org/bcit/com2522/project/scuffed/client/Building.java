@@ -11,8 +11,8 @@ public class Building extends Entity{
     public static final int health = 200;
     public static final int cost = 2;
 
-    public Building(Position position, int ownerID, Color pColor, int health, int cost) {
-        super(position, ownerID, pColor, health, cost);
+    public Building(int ownerID, int health, int cost) {
+        super(ownerID, health, cost);
         texture = GameImages.get("building");
         entityType = "building";
     }
@@ -32,9 +32,9 @@ public class Building extends Entity{
             return null;
         }
         Building building = new Building(
-                Position.fromJSONObject((JSONObject) buildingObject.get("position")),
+                //Position.fromJSONObject((JSONObject) buildingObject.get("position")),
                 (int)(long) buildingObject.get("ownerId"),
-                (Color) buildingObject.get("color"),
+                //(Color) buildingObject.get("color"),
                 (int) buildingObject.get("maxHealth"),
                 Building.cost);
         building.currentHealth = (int) (long) buildingObject.get("currentHealth");
@@ -44,7 +44,7 @@ public class Building extends Entity{
     public void buildWorker(Entity[][] entities) {
         Position free = getFreePosition(entities);
         if (canBuild(free, Worker.cost)) {
-            entities[free.getX()][free.getY()] = new Worker(free, ownerID, color, Worker.health, Worker.cost, Worker.speed);
+            entities[free.getX()][free.getY()] = new Worker(ownerID, Worker.health, Worker.cost, Worker.speed);
             remainAction--;
             owner.spendResources(1);
         }
@@ -53,7 +53,7 @@ public class Building extends Entity{
     public void buildSoldier(Entity[][] entities, int health, int damage, int speed, int range) {
         Position free = getFreePosition(entities);
         if (canBuild(free, Soldier.cost)) {
-            entities[free.getX()][free.getY()] = new Soldier(free, ownerID, color, health, Soldier.cost, speed, damage, range);
+            entities[free.getX()][free.getY()] = new Soldier(free, ownerID, health, Soldier.cost, speed, damage, range);
             remainAction--;
             owner.spendResources(Soldier.cost);
         }

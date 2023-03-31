@@ -10,20 +10,17 @@ public abstract class Entity {
     protected int remainAction;
     protected int ownerID;
     protected Player owner; //TODO remove this
-    protected Color color;
+    //protected Color color;
     protected int maxHealth;
     protected int currentHealth;
     protected int resourceCost;
-
-    protected Position position;
     protected PImage texture;
     protected String entityType; //building, soldier, worker
 
-    public Entity(Position position, int ownerId, Color pColor, int health, int cost) { //TODO make this the only constructor
-        this.position = position;
+    public Entity(int ownerId, int health, int cost) { //TODO make this the only constructor
         this.ownerID = ownerId;
         this.owner = GameState.getPlayer(ownerId);
-        this.color = pColor;
+        //this.color = pColor;
         maxAction = 1;
         remainAction = 1;
 
@@ -33,46 +30,36 @@ public abstract class Entity {
         resourceCost = cost;
     }
 
-    public void draw(int zoomAmount, Color color, Window scene) {
-        scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-        scene.image(texture, this.position.getX() * zoomAmount, this.position.getY() * zoomAmount);
-        scene.noTint();
+    public Position getPosition(Entity[][] entities) {
+        for (int i = 0; i < entities.length; i++) {
+            for (int j = 0; j < entities[0].length; j++) {
+                if (entities[i][j] == this) {
+                    return new Position(i,j);
+                }
+            }
+        }
+        return null;
     }
 
     //finds the nearest non-filled position
-    public Position getFreePosition(Entity[][] entities) { //TODO: fix this mess; doesn't account for map shift
-        Position shiftedPosition = new Position(position.getX(), position.getY()); //- xShift - yShift
-
-        if (getPosition().getY() == 0 || entities[getPosition().getX()][getPosition().getY() - 1] != null) {
-            if (getPosition().getX() == entities.length - 1 || entities[getPosition().getX() + 1][getPosition().getY()] != null) {
-                if (getPosition().getY() == entities[0].length - 1 || entities[getPosition().getX()][getPosition().getY() + 1] != null) {
-                    if (getPosition().getX() == 0 || entities[getPosition().getX() - 1][getPosition().getY()] != null) {
+    public Position getFreePosition(Entity[][] entities) {
+        if (getPosition(entities).getY() == 0 || entities[getPosition(entities).getX()][getPosition(entities).getY() - 1] != null) {
+            if (getPosition(entities).getX() == entities.length - 1 || entities[getPosition(entities).getX() + 1][getPosition(entities).getY()] != null) {
+                if (getPosition(entities).getY() == entities[0].length - 1 || entities[getPosition(entities).getX()][getPosition(entities).getY() + 1] != null) {
+                    if (getPosition(entities).getX() == 0 || entities[getPosition(entities).getX() - 1][getPosition(entities).getY()] != null) {
                         return null;
                     }
-                    return new Position (getPosition().getX() - 1, getPosition().getY());
+                    return new Position (getPosition(entities).getX() - 1, getPosition(entities).getY());
                 }
-                return new Position(getPosition().getX(), getPosition().getY() + 1);
+                return new Position(getPosition(entities).getX(), getPosition(entities).getY() + 1);
             }
-            return new Position(getPosition().getX() + 1, getPosition().getY());
+            return new Position(getPosition(entities).getX() + 1, getPosition(entities).getY());
         }
-        return new Position(getPosition().getX(), getPosition().getY() - 1);
+        return new Position(getPosition(entities).getX(), getPosition(entities).getY() - 1);
     }
 
     public void resetAction() {
         remainAction = maxAction;
-    }
-
-    //shifts the map entirely
-    public void shift(Position position) {
-        this.position = position;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
     }
 
     public int getOwnerID () {
@@ -82,9 +69,9 @@ public abstract class Entity {
 
     public JSONObject toJSONObject() {
         JSONObject entityObject = new JSONObject();
-        entityObject.put("position", position.toJSONObject());
+        //entityObject.put("position", position.toJSONObject());
         entityObject.put("ownerId", ownerID);
-        entityObject.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
+        //entityObject.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
         entityObject.put("currentHealth", currentHealth);
         entityObject.put("remainAction", remainAction);
         entityObject.put("entityType", entityType);
@@ -101,15 +88,15 @@ public abstract class Entity {
         switch(entityType) {
             case "building":
                 Building building = Building.fromJSONObject(entityObject);
-                building.color = Color.decode((String) entityObject.get("color"));
+                //building.color = Color.decode((String) entityObject.get("color"));
                 return building;
             case "soldier":
                 Soldier soldier = Soldier.fromJSONObject(entityObject);
-                soldier.color = Color.decode((String) entityObject.get("color"));
+                //soldier.color = Color.decode((String) entityObject.get("color"));
                 return soldier;
             case "worker":
                 Worker worker = Worker.fromJSONObject(entityObject);
-                worker.color = Color.decode((String) entityObject.get("color"));
+                //worker.color = Color.decode((String) entityObject.get("color"));
                 return worker;
             default:
                 throw new IllegalArgumentException("this is not a valid entityType: " + entityType);
@@ -117,8 +104,8 @@ public abstract class Entity {
 
     }
 
-    public boolean canAct() {
-        return remainAction >= 1;
+    public boolean cannotAct() {
+        return remainAction < 1;
     }
 
     //public void act() {remainAction--;}
@@ -132,7 +119,7 @@ public abstract class Entity {
             System.out.println("there are no available spaces to place a entity");
             return false;
         }
-        if (!canAct()) {
+        if (cannotAct()) {
             System.out.println("this entity is out of actions");
             return false;
         }
@@ -152,4 +139,8 @@ public abstract class Entity {
   public int getCost() {
         return resourceCost;
   }
+
+    public Player getOwner() {
+        return owner;
+    }
 }
