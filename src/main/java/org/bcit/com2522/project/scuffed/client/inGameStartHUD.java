@@ -79,10 +79,10 @@ public class inGameStartHUD extends HUDState {
     scene.image(rivetPanel, centerX - 540, centerY - 150, 150, 200);   // player resources middle left
 
     scene.textFont(fontLarge);
-    scene.text("Player " + (hud.currentPlayer.getplayerNum() + 1), centerX - 75, centerY - 325); //print current player
+    scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1), centerX - 75, centerY - 325); //print current player
 
     scene.textFont(fontSmall);
-    scene.text("Player" + (hud.currentPlayer.getplayerNum() + 1) + "\n" +
+    scene.text("Player" + (hud.currentPlayer.getPlayerNum() + 1) + "\n" +
         "Resources " + (hud.currentPlayer.getResources()),
         centerX - 520, centerY - 120); //print player resources
 

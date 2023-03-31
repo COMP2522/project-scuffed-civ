@@ -93,10 +93,10 @@ public class menuHUDState extends HUDState {
     scene.image(rivetPanel, centerX - 540, centerY - 150, 150, 200);   // player resources middle left
 
     scene.textFont(fontLarge);
-    scene.text("Player " + (hud.currentPlayer.getplayerNum() + 1), centerX - 50, centerY - 335); //print current player
+    scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1), centerX - 50, centerY - 335); //print current player
 
     scene.textFont(fontSmall);
-    scene.text("Player" + (hud.currentPlayer.getplayerNum() + 1) + "\n" +"Resources " + (hud.currentPlayer.getResources()), centerX - 530, centerY - 120); //print player resources
+    scene.text("Player" + (hud.currentPlayer.getPlayerNum() + 1) + "\n" +"Resources " + (hud.currentPlayer.getResources()), centerX - 530, centerY - 120); //print player resources
 
     buttonManager.draw();
   }

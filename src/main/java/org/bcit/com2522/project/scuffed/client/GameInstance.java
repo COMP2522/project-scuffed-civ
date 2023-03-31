@@ -79,6 +79,7 @@ public class GameInstance {
     }
 
     public void nextTurn() {
+        System.out.println("next turn in game instance was called");
         gameState.nextTurn();
         hud.currentPlayer = gameState.currentPlayer;
     }

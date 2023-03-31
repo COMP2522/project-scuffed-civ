@@ -26,36 +26,25 @@ public class Map { //this is a tile manager
         tiles = new Tile[width][height];
         for(int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                tiles[i][j] = new Tile(new Position(i,j));
+                tiles[i][j] = new Tile();
             }
         }
 
         this.color = (Color.red);
     }
 
-    public void shift(int x, int y) {
-        for (Tile[] row: tiles) {
-            for (Tile element: row) {
-                element.setPosition(new Position(element.getPosition().getX() + x,
-                        element.getPosition().getY() + y));
-            }
-        }
-    }
+    public void draw(int zoomAmount, Window scene, int xShift, int yShift) {
 
-    public void draw(int zoomAmount, Window scene) {
-        //this.scene.fill(color.getRed());
-        //this.scene.circle(50, 50, 50);
-        //this.scene.image(grass, 500,500);
-        for (Tile[] row: tiles) {
-            for (Tile element: row) {
-                if(element.getType() == 0)
-                    scene.image(GameImages.get("grassTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
-                else if(element.getType() == 1)
-                    scene.image(GameImages.get("rockTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
-                else if(element.getType() == 2)
-                    scene.image(GameImages.get("waterTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
-                else if(element.getType() == 3)
-                    scene.image(GameImages.get("sandTile"), element.getPosition().getX()*zoomAmount,element.getPosition().getY()*zoomAmount);
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[0].length; j++) {
+                if(tiles[i][j].getType() == 0)
+                    scene.image(GameImages.get("grassTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
+                else if(tiles[i][j].getType() == 1)
+                    scene.image(GameImages.get("rockTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
+                else if(tiles[i][j].getType() == 2)
+                    scene.image(GameImages.get("waterTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
+                else if(tiles[i][j].getType() == 3)
+                    scene.image(GameImages.get("sandTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
             }
         }
     }
@@ -105,7 +94,6 @@ public class Map { //this is a tile manager
      * Creates a map from a JSONObject.
      *
      * @param mapObject JSONObject map
-     * @param scene Window scene
      * @return Map map
      */
     public static Map fromJSONObject(JSONObject mapObject) {
@@ -123,6 +111,10 @@ public class Map { //this is a tile manager
 
     public Tile get(int x, int y) {
         return tiles[x][y];
+    }
+
+    public Tile get(Position position) {
+        return tiles[position.getX()][position.getY()];
     }
 
     public void regenResources() {

@@ -12,8 +12,8 @@ public class Worker extends Unit{
     public static final int health = 100;
     public static final int speed = 5;
 
-    public Worker(Position position, int ownerID, Color pColor, int health, int cost, int speed) {
-        super(position, ownerID, pColor, health, cost, speed);
+    public Worker(int ownerID, int health, int cost, int speed) {
+        super(ownerID, health, cost, speed);
         entityType = "worker";
         texture = GameImages.get(entityType);
     }
@@ -27,9 +27,9 @@ public class Worker extends Unit{
         if(workerObject == null) {
             return null;
         }
-        Worker worker = new Worker(Position.fromJSONObject((JSONObject) workerObject.get("position")),
+        Worker worker = new Worker(
                 (int)(long)workerObject.get("ownerId"),
-                (Color) workerObject.get("color"),
+                //(Color) workerObject.get("color"),
                 (int) workerObject.get("maxHealth"),
                 Worker.cost,
                 (int) workerObject.get("speed"));
@@ -42,7 +42,7 @@ public class Worker extends Unit{
         if (this instanceof Worker) {
             Position free = getFreePosition(entities);
             if (canBuild(free, Building.cost)) {
-                building = new Building(free, ownerID, color, Building.health, Building.cost);
+                building = new Building(ownerID, Building.health, Building.cost);
                 entities[free.getX()][free.getY()] = building;
                 remainAction--;
                 owner.spendResources(Building.cost);
@@ -52,7 +52,7 @@ public class Worker extends Unit{
     }
 
     public void collect(Tile tile) {
-        if (!canAct()) {
+        if (cannotAct()) {
             System.out.println("you do not have enough actions left");
             return;
         }

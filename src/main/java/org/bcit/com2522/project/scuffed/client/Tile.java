@@ -7,46 +7,33 @@ import java.io.Serializable;
 import static processing.awt.ShimAWT.loadImage;
 
 public class Tile{
-    private Position position;
     private int type;
 
-    public Tile(Position position) {
+    public Tile() {
         type = (int) (Math.random() * 4); // 0-3
-        this.position = position;
     }
 
     /**
      * Constructor for loading a map from a file. //TODO: maybe add an "occupied" boolean to this class
      *
-     * @param position
      * @param type
      */
-    public Tile(Position position, int type) {
-        this.position = position;
+    public Tile(int type) {
         this.type = type;
-    }
-
-
-    public Position getPosition() {
-        return position;
     }
 
     public int getType() {
         return type;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
     public JSONObject toJSONObject() {
         JSONObject obj = new JSONObject();
-        obj.put("position", position.toJSONObject());
+        //obj.put("position", position.toJSONObject());
         obj.put("type", type);
         return obj;
     }
     public static Tile fromJSONObject(JSONObject tiles) {
-        Tile tile = new Tile(Position.fromJSONObject((JSONObject) tiles.get("position")), (int)(long) tiles.get("type"));
+        Tile tile = new Tile((int)(long) tiles.get("type"));
         return tile;
     }
 
