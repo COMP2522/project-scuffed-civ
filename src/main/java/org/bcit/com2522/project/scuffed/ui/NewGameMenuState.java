@@ -58,6 +58,7 @@ public class NewGameMenuState extends MenuState {
         if(showError) {
             errorMessageLabel.draw();
         }
+        drawHollowGrid(mapWidthInput.getIntValue(), mapHeightInput.getIntValue(), 400, 100, 800, 500);
     }
 
     @Override
@@ -119,6 +120,24 @@ public class NewGameMenuState extends MenuState {
             showError = false;
         } else {
             showError = true;
+        }
+    }
+
+    void drawHollowGrid(int rows, int cols, float x1, float y1, float x2, float y2) {
+        float cellWidth = (x2 - x1) / cols;
+        float cellHeight = (y2 - y1) / rows;
+
+        float strokeWidth = (float) (Math.min(cellWidth, cellHeight) / 10.0);
+        scene.strokeWeight(strokeWidth);
+        scene.stroke(0);
+        scene.noFill();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                float xPos = x1 + (j * cellWidth);
+                float yPos = y1 + (i * cellHeight);
+                scene.rect(xPos, yPos, cellWidth, cellHeight);
+            }
         }
     }
 
