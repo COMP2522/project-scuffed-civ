@@ -4,10 +4,7 @@ import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.json.simple.JSONObject;
 import processing.core.PVector;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Timer;
@@ -64,12 +61,18 @@ public class GameInstance {
      *
      * @param client
      */
-    public void saveGame() {
+    public void saveGame() throws IOException {
         System.out.println("Saving game");
         JSONObject gameStateJSON = gameState.toJSONObject();
-        try (FileWriter saveFile = new FileWriter("saves/save.json")) {
-            saveFile.write(gameStateJSON.toJSONString());
-            saveFile.flush();
+        File saveFile = new File("library/saves.json");
+        if(saveFile.createNewFile()){
+            //System.out.println("new save file created");
+        } else {
+           // System.out.println("overwriting save");
+        }
+        try (FileWriter saveWriter = new FileWriter(saveFile)) {
+            saveWriter.write(gameStateJSON.toJSONString());
+            saveWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

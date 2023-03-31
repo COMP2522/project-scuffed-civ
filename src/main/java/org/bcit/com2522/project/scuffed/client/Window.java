@@ -6,6 +6,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -195,7 +196,11 @@ public class Window extends PApplet {
   }
 
   public void saveGame() {
-    gameInstance.saveGame();
+    try {
+      gameInstance.saveGame();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   //TODO: implement actual server
