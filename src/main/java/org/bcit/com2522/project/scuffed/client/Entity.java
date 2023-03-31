@@ -9,8 +9,7 @@ public abstract class Entity {
     protected int maxAction;
     protected int remainAction;
     protected int ownerID;
-    protected Player owner; //TODO remove this
-    //protected Color color;
+    protected Player owner;
     protected int maxHealth;
     protected int currentHealth;
     protected int resourceCost;
@@ -41,21 +40,27 @@ public abstract class Entity {
         return null;
     }
 
-    //finds the nearest non-filled position
+    /**
+     * finds the nearest non-filled position
+     *
+     * @param entities list of entities
+     */
     public Position getFreePosition(Entity[][] entities) {
-        if (getPosition(entities).getY() == 0 || entities[getPosition(entities).getX()][getPosition(entities).getY() - 1] != null) {
-            if (getPosition(entities).getX() == entities.length - 1 || entities[getPosition(entities).getX() + 1][getPosition(entities).getY()] != null) {
-                if (getPosition(entities).getY() == entities[0].length - 1 || entities[getPosition(entities).getX()][getPosition(entities).getY() + 1] != null) {
-                    if (getPosition(entities).getX() == 0 || entities[getPosition(entities).getX() - 1][getPosition(entities).getY()] != null) {
-                        return null;
-                    }
-                    return new Position (getPosition(entities).getX() - 1, getPosition(entities).getY());
-                }
-                return new Position(getPosition(entities).getX(), getPosition(entities).getY() + 1);
-            }
+        //the position above the entity
+        if (getPosition(entities).getY() != 0 && entities[getPosition(entities).getX()][getPosition(entities).getY() - 1] == null)
+            return new Position(getPosition(entities).getX(), getPosition(entities).getY() - 1);
+        //the position to the right of the entity
+        else if (getPosition(entities).getX() != entities.length - 1 && entities[getPosition(entities).getX() + 1][getPosition(entities).getY()] == null)
             return new Position(getPosition(entities).getX() + 1, getPosition(entities).getY());
-        }
-        return new Position(getPosition(entities).getX(), getPosition(entities).getY() - 1);
+        //the position below the entity
+        else if (getPosition(entities).getY() != entities[0].length - 1 && entities[getPosition(entities).getX()][getPosition(entities).getY() + 1] == null)
+            return new Position(getPosition(entities).getX(), getPosition(entities).getY() + 1);
+        //the position to the left of the entity
+        else if (getPosition(entities).getX() != 0 && entities[getPosition(entities).getX() - 1][getPosition(entities).getY()] == null)
+            return new Position (getPosition(entities).getX() - 1, getPosition(entities).getY());
+        //there are no free positions
+        else
+            return null;
     }
 
     public void resetAction() {

@@ -421,10 +421,10 @@ public class GameState { //everything manager this is the player manager
     }
 
     /**
-     * Loads a gamestate from a json file in the "saves" folder
+     * Loads a gameState from a json file in the "saves" folder
      * if there's an error, try adding a saves folder to the root directory
      *
-     * @return the loaded gamestate
+     * @return the loaded gameState
      * @throws FileNotFoundException
      */
     public static GameState load() throws FileNotFoundException {
