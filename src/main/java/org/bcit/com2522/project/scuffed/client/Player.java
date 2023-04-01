@@ -123,4 +123,11 @@ public class Player { //gamestate is the player manager
   public int getResources() {
     return resources;
   }
+
+    public int getYShift() {
+      return 0;
+    }
+    public int getXShift() {
+      return 0;
+    }
 }

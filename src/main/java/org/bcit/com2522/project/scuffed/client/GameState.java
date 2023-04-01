@@ -203,7 +203,6 @@ public class GameState { //everything manager this is the player manager
         }
 
         else if (key == '\n' || key == '\r') {
-            //System.out.println("enter pressed");
             nextTurn();
         } else if (key == ESC) {
             key = 0;
@@ -280,8 +279,8 @@ public class GameState { //everything manager this is the player manager
     }
 
     public void resetShift() {
-        xShift = 0;
-        yShift = 0;
+        xShift = (1080 / zoomAmount - map.width) / 2;
+        yShift = (720 / zoomAmount - map.height) / 2;
     }
 
 
@@ -326,6 +325,9 @@ public class GameState { //everything manager this is the player manager
     private void moveToNextPlayer() {
         players.offer(players.poll());
         currentPlayer = players.peek();
+
+        yShift = currentPlayer.getYShift();
+        xShift = currentPlayer.getXShift();
     }
 
     /**
