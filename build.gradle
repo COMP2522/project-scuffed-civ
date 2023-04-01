@@ -6,7 +6,6 @@ group 'org.bcit.com2522.project.scuffed'
 version '1.0-SNAPSHOT'
 
 
-
 repositories {
     mavenCentral()
 }
@@ -31,10 +30,12 @@ test {
  * Not sure if it's working properly yet.
  */
 task buildSavesDir {
-    doLast {
+    doFirst() {
         def savesDir = new File(projectDir, "saves")
         if (!savesDir.exists()) {
             savesDir.mkdirs()
         }
     }
 }
+
+

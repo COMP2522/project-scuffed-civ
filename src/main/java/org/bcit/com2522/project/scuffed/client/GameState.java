@@ -299,9 +299,9 @@ public class GameState { //everything manager this is the player manager
 
         selected = null;
 
-         if (currentPlayer.isAI()) {
-             ai.start(this);
-         }
+//         if (currentPlayer.isAI()) {
+//             ai.start(this);
+//         }
     }
 
     /**
@@ -471,7 +471,8 @@ public class GameState { //everything manager this is the player manager
     public static GameState load() throws FileNotFoundException {
         GameState loadedGameState = new GameState();
         JSONParser parser = new JSONParser();
-        try (FileReader saveReader = new FileReader("saves/save.json")) {
+        File saveFile = new File("saves/save.json");
+        try (FileReader saveReader = new FileReader(saveFile)) {
             loadedGameState = fromJSONObject((JSONObject) parser.parse(saveReader));
         } catch (IOException | ParseException e) {
             e.printStackTrace();
