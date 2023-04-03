@@ -1,0 +1,122 @@
+Index: src/main/java/org/bcit/com2522/project/scuffed/server/MongoPublisher.java
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/server/MongoPublisher.java b/src/main/java/org/bcit/com2522/project/scuffed/server/MongoPublisher.java
+deleted file mode 100644
+--- a/src/main/java/org/bcit/com2522/project/scuffed/server/MongoPublisher.java	(revision a34ec1b880e17ecea615499365c4291815a30382)
++++ /dev/null	(revision a34ec1b880e17ecea615499365c4291815a30382)
+@@ -1,14 +0,0 @@
+-package org.bcit.com2522.project.scuffed.server;
+-
+-import com.mongodb.client.model.changestream.ChangeStreamDocument;
+-import org.bson.Document;
+-import org.reactivestreams.Publisher;
+-import org.reactivestreams.Subscriber;
+-
+-public class MongoPublisher implements Publisher<ChangeStreamDocument<Document>> {
+-
+-    @Override
+-    public void subscribe(Subscriber<? super ChangeStreamDocument<Document>> s) {
+-
+-    }
+-}
+Index: src/main/java/org/bcit/com2522/project/scuffed/server/MongoSubscriber.java
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/server/MongoSubscriber.java b/src/main/java/org/bcit/com2522/project/scuffed/server/MongoSubscriber.java
+deleted file mode 100644
+--- a/src/main/java/org/bcit/com2522/project/scuffed/server/MongoSubscriber.java	(revision a34ec1b880e17ecea615499365c4291815a30382)
++++ /dev/null	(revision a34ec1b880e17ecea615499365c4291815a30382)
+@@ -1,4 +0,0 @@
+-package org.bcit.com2522.project.scuffed.server;
+-
+-public class MongoSubscriber {
+-}
+Index: src/main/java/org/bcit/com2522/project/scuffed/server/MongoGameServer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.bcit.com2522.project.scuffed.server;\r\n\r\nimport com.mongodb.ConnectionString;\r\nimport com.mongodb.MongoClientSettings;\r\nimport com.mongodb.ServerApi;\r\nimport com.mongodb.ServerApiVersion;\r\n\r\nimport com.mongodb.reactivestreams.client.*; //http://mongodb.github.io/mongo-java-driver/4.9/apidocs/mongodb-driver-reactivestreams/com/mongodb/reactivestreams/client/package-summary.html\r\n\r\n\r\nimport org.bcit.com2522.project.scuffed.client.GameState;\r\nimport org.bson.Document;\r\nimport org.reactivestreams.Publisher;\r\nimport org.reactivestreams.Subscriber;\r\nimport org.reactivestreams.Subscription;\r\n\r\nimport org.json.simple.JSONObject;\r\n\r\nimport com.mongodb.client.model.Aggregates;\r\nimport com.mongodb.client.model.Filters;\r\nimport com.mongodb.client.model.changestream.FullDocument;\r\nimport com.mongodb.client.model.changestream.ChangeStreamDocument;\r\n\r\n\r\nimport org.bcit.com2522.project.scuffed.server.SubscriberHelpers.PrintDocumentSubscriber;\r\n\r\npublic class MongoGameServer {\r\n\r\n    private MongoDatabase database;\r\n    private static String defaultUsername = \"cam\";\r\n    private static String defaultPassword = \"passWord\";\r\n\r\n    private MongoCollection collection;\r\n    private String serverID;\r\n\r\n    /**\r\n     * Connects to MongoDB server and initializes the database.\r\n     *\r\n     * @param username as a String\r\n     * @param password as a String\r\n     */\r\n    private void connectToDatabase(String username, String password) {\r\n        ConnectionString connectionString = new ConnectionString(\"mongodb+srv://\"+ username + \":\" + password + \"@scuffedciv.nwbjiwh.mongodb.net/?retryWrites=true&w=majority\");\r\n        MongoClientSettings settings = MongoClientSettings.builder()\r\n                .applyConnectionString(connectionString)\r\n                .serverApi(ServerApi.builder()\r\n                        .version(ServerApiVersion.V1)\r\n                        .build())\r\n                .build();\r\n        MongoClient mongoClient = MongoClients.create(settings);\r\n        database = mongoClient.getDatabase(\"ScuffedCiv\");\r\n    }\r\n\r\n    /**\r\n     * Creates a new game by connecting to the database and creating a new collection.\r\n     *\r\n     * @param gameState the GameState initialized by the host\r\n     */\r\n    public void createNewGame(GameState gameState) {\r\n        connectToDatabase(defaultUsername, defaultPassword);\r\n        setServerID(gameState.getGameID());\r\n        database.createCollection(serverID);\r\n        JSONObject gameJSONObject = gameState.toJSONObject();\r\n        String gameJSON = gameJSONObject.toJSONString();\r\n        System.out.println(gameJSON);\r\n        Document gameStateDocument = Document.parse(gameJSON);\r\n        database.getCollection(gameState.getGameID()).insertOne(gameStateDocument);\r\n\r\n        joinGame(\"host\", serverID);\r\n    }\r\n\r\n    /**\r\n     * Joins a game by connecting to the database and subscribing to the game's collection.\r\n     *\r\n     * @param serverID as a String\r\n     */\r\n    public void joinGame(String userID, String serverID) {\r\n        if(database == null){\r\n            connectToDatabase(defaultUsername, defaultPassword);\r\n            setServerID(serverID);\r\n        }\r\n        collection = database.getCollection(serverID);\r\n\r\n        collection.watch().subscribe(new PrintDocumentSubscriber());\r\n        //Publisher<Document> publisher = collection.find(eq(\"gameID\", serverID)).first();\r\n        //System.out.println(\"Successfully retrieved game \" + serverID + \"!\");\r\n\r\n    }\r\n\r\n    public void deleteAllGames(){\r\n\r\n    }\r\n\r\n    /**\r\n     * Sets the serverID to the given gameID.\r\n     *\r\n     * @param gameID as a String\r\n     */\r\n    private void setServerID(String gameID) {\r\n        serverID = gameID;\r\n    }\r\n\r\n    /**\r\n     * Main function. for testing purposes.\r\n     *\r\n     * @param args arguments from command line\r\n     */\r\n    public static void main(String[] args) {\r\n        String userID = \"bob\";\r\n        MongoGameServer server = new MongoGameServer();\r\n        GameState gameState = new GameState(4, 20, 20);\r\n        gameState.init();\r\n        server.createNewGame(gameState);\r\n        //server.joinGame(userID, server.serverID);\r\n\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/bcit/com2522/project/scuffed/server/MongoGameServer.java b/src/main/java/org/bcit/com2522/project/scuffed/server/MongoGameServer.java
+--- a/src/main/java/org/bcit/com2522/project/scuffed/server/MongoGameServer.java	(revision a34ec1b880e17ecea615499365c4291815a30382)
++++ b/src/main/java/org/bcit/com2522/project/scuffed/server/MongoGameServer.java	(date 1680237101179)
+@@ -16,6 +16,7 @@
+ 
+ import org.json.simple.JSONObject;
+ 
++
+ import com.mongodb.client.model.Aggregates;
+ import com.mongodb.client.model.Filters;
+ import com.mongodb.client.model.changestream.FullDocument;
+@@ -24,6 +25,8 @@
+ 
+ import org.bcit.com2522.project.scuffed.server.SubscriberHelpers.PrintDocumentSubscriber;
+ 
++import java.util.concurrent.CompletableFuture;
++
+ public class MongoGameServer {
+ 
+     private MongoDatabase database;
+@@ -64,7 +67,7 @@
+         String gameJSON = gameJSONObject.toJSONString();
+         System.out.println(gameJSON);
+         Document gameStateDocument = Document.parse(gameJSON);
+-        database.getCollection(gameState.getGameID()).insertOne(gameStateDocument);
++        database.getCollection(gameState.getGameID()).insertOne(gameStateDocument).subscribe(new SubscriberHelpers.OperationSubscriber<>());
+ 
+         joinGame("host", serverID);
+     }
+@@ -82,14 +85,38 @@
+         collection = database.getCollection(serverID);
+ 
+         collection.watch().subscribe(new PrintDocumentSubscriber());
++
++
++        collection.insertOne(new Document("userID", userID)).subscribe(new SubscriberHelpers.OperationSubscriber<>());
+         //Publisher<Document> publisher = collection.find(eq("gameID", serverID)).first();
+         //System.out.println("Successfully retrieved game " + serverID + "!");
+ 
+     }
+ 
+-    public void deleteAllGames(){
++    public void disconnect(){
++
++    }
+ 
++    public void sendUpdate(String userID, Document updatedGameState){
++        if (collection != null) {
++            updatedGameState.put("userID", userID);
++            collection.insertOne(updatedGameState).subscribe(new SubscriberHelpers.OperationSubscriber<>());
++        }
+     }
++
++    /**
++     * Subscribes to the game's collection returning the GameState.
++     *
++     * @param userID
++     * @param subscriber
++     * @return
++     */
++    public void subscribeToUpdates(String userID, Subscriber<Document> subscriber){
++        if (collection != null) {
++            collection.watch().subscribe(subscriber);
++        }
++    }
++
+ 
+     /**
+      * Sets the serverID to the given gameID.
+@@ -113,6 +140,13 @@
+         server.createNewGame(gameState);
+         //server.joinGame(userID, server.serverID);
+ 
++        Document gameUpdate = new Document("action", "move")
++                .append("x", 5)
++                .append("y", 6);
++        server.sendUpdate(userID, gameUpdate);
++
++        Subscriber<Document> updateSubscriber = new PrintDocumentSubscriber();
++        server.subscribeToUpdates(userID, updateSubscriber);
+     }
+ 
+ 

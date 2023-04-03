@@ -1,32 +1,32 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.bcit.com2522.project.scuffed.ui.*;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
+ * Window class that holds the main method and initializes the game. It provides
  *
- * @author bean
- *
+ * @author Keagan Purtell, Emma Meredith-Black, Brenndan Doyle, and Cameron Walford
+ * @Version 0.5
  */
 public class Window extends PApplet {
   public static HashMap<String, PImage> GameImages;
   public static HashMap<String, PImage> UIImages;
-
   public boolean inGame = false;
 
   public Menu menu;
-
-  //public HUD hud;
   public GameInstance gameInstance;
   public Boolean debugMode = false;
   static DebugMenu debugMenu;
   public ClickableManager clickableManager;
   public GraphicManager graphicManager;
-
 
   /**
    * Called once at the beginning of the program.
@@ -70,6 +70,7 @@ public class Window extends PApplet {
     //Images for the UI. Buttons, Menus, Backgrounds, etc.
     UIImages = new HashMap<String, PImage>();
     UIImages.put("logo", loadImage("sprites/logo.png"));
+    UIImages.put("select", loadImage("sprites/select.png"));
     UIImages.put("menuNew", loadImage("sprites/Menu/New.png"));
     UIImages.put("menuNewHov", loadImage("sprites/Menu/New_Hov.png"));
     UIImages.put("menuNewSel", loadImage("sprites/Menu/New_Sel.png"));
@@ -94,14 +95,6 @@ public class Window extends PApplet {
   public void initGame(int numplayers, int mapwidth, int mapheight) {
     gameInstance = new GameInstance(new HUD(this), new GameState(numplayers, mapwidth, mapheight));
     gameInstance.newGame();
-  }
-
-  public PImage getPImage(String name) {
-    return GameImages.get(name);
-  }
-
-  public PImage loadImage2(String path) {
-    return loadImage(path);
   }
 
   @Override
@@ -147,9 +140,8 @@ public class Window extends PApplet {
    * in order of function calls.
    */
   public void draw() {
-
+    background(222);
     if(inGame){
-
       background(UIImages.get("background"));
       gameInstance.draw(this);
     } else {
@@ -163,9 +155,6 @@ public class Window extends PApplet {
     graphicManager.drawGraphics();
   }
 
-  public ClickableManager getClickableManager() {
-    return clickableManager;
-  }
 
   public void addClickable(Clickable clickable) {
     clickableManager.add(clickable);
@@ -181,10 +170,6 @@ public class Window extends PApplet {
 
   public void wipeGraphics() {
     graphicManager.wipeGraphics();
-  }
-
-  public PImage getLoadedPImage(String name) {
-    return GameImages.get(name);
   }
 
   public Player getCurrentPlayer() {
@@ -205,25 +190,29 @@ public class Window extends PApplet {
     inGame = true;
   }
 
-  public void joinGame(String hostIP, int port) {
+  public void joinGame(String hostIP, int port, String clientUsername) {
     gameInstance = new GameInstance(this);
-    gameInstance.joinGame(hostIP, port);
+    gameInstance.joinGame(hostIP, port, clientUsername);
   }
 
   public void saveGame() {
-    gameInstance.saveGame();
+    try {
+      gameInstance.saveGame();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
-
 
   //TODO: implement actual server
-  public void initGameServer(int numplayers, int mapwidth, int mapheight, int port) {
-//    this.port = port;
-//    this.hostIP = "localhost";
-//    gameServer = new GameServer();
-//    gameState = new GameState(numplayers, mapwidth, mapheight);
-//    gameServer.start(gameState, port);
-//    gameState.init();
+  public void initOnlineGame(int numplayers, int mapwidth, int mapheight, int port) {
+    gameInstance = new GameInstance(this);
+    GameState gameState = new GameState(numplayers, mapwidth, mapheight);
+    GameServer gameServer = new GameServer(gameState, port);
+    gameInstance.setGameState(gameState);
+    gameInstance.setGameServer(gameServer);
+    gameInstance.startServer();
   }
+
 
 
   /**
@@ -238,6 +227,7 @@ public class Window extends PApplet {
     PApplet.runSketch(appletArgs, eatBubbles);
   }
 
-
-
+  public HashSet<String> getConnectedPlayers() {
+    return gameInstance.getConnectedPlayers();
+  }
 }

@@ -3,8 +3,6 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 import processing.core.PImage;
 
-import java.awt.*;
-
 public abstract class Entity {
     protected int maxAction;
     protected int remainAction;
@@ -16,7 +14,7 @@ public abstract class Entity {
     protected PImage texture;
     protected String entityType; //building, soldier, worker
 
-    public Entity(int ownerId, int health, int cost) { //TODO make this the only constructor
+    public Entity(int ownerId, int health, int cost) {
         this.ownerID = ownerId;
         this.owner = GameState.getPlayer(ownerId);
         //this.color = pColor;
@@ -77,6 +75,8 @@ public abstract class Entity {
         //entityObject.put("position", position.toJSONObject());
         entityObject.put("ownerId", ownerID);
         //entityObject.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
+        entityObject.put("maxAction", maxAction);
+        entityObject.put("maxHealth", maxHealth);
         entityObject.put("currentHealth", currentHealth);
         entityObject.put("remainAction", remainAction);
         entityObject.put("entityType", entityType);

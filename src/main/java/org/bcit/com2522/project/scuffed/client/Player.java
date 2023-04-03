@@ -12,6 +12,9 @@ public class Player { //gamestate is the player manager
   private Color color;
   private boolean isAi;
 
+  private int xShift;
+  private int yShift;
+
 
   public Player (int playerNum) {
     this.playerNum = playerNum;
@@ -68,6 +71,7 @@ public class Player { //gamestate is the player manager
     Player player = new Player((int)(long) playerObject.get("playerNum"));
     player.resources = (int)(long) playerObject.get("resources");
     player.color = Color.decode((String) playerObject.get("color"));
+    player.isAi = (boolean) playerObject.get("isAi");
     return player;
   }
 
@@ -75,6 +79,7 @@ public class Player { //gamestate is the player manager
     JSONObject player = new JSONObject();
     player.put("playerNum", playerNum);
     player.put("resources", resources);
+    player.put("isAi", isAi);
     player.put("color", "#" + Integer.toHexString(color.getRGB()).substring(2));
     return player;
   }
@@ -121,4 +126,16 @@ public class Player { //gamestate is the player manager
   public int getResources() {
     return resources;
   }
+
+  public void setShift(int x, int y) {
+    xShift = x;
+    yShift = y;
+  }
+
+    public int getYShift() {
+      return yShift;
+    }
+    public int getXShift() {
+      return xShift;
+    }
 }

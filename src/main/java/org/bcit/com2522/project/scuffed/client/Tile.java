@@ -9,14 +9,17 @@ import static processing.awt.ShimAWT.loadImage;
 public class Tile{
     private int type;
 
+    /**
+     *  for creating a new tile.
+     */
     public Tile() {
         type = (int) (Math.random() * 4); // 0-3
     }
 
     /**
-     * Constructor for loading a map from a file. //TODO: maybe add an "occupied" boolean to this class
+     *  for loading a tile from JSON.
      *
-     * @param type
+     *  @param type
      */
     public Tile(int type) {
         this.type = type;

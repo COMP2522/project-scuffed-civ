@@ -9,7 +9,6 @@ import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 public class Soldier extends Unit{
     public static final int cost = 1;
     int damage;
-
     int range;
 
     public Soldier(int ownerId, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
@@ -46,6 +45,12 @@ public class Soldier extends Unit{
         return soldierObject;
     }
 
+    /**
+     * Creates a Soldier object from a JSONObject
+     *
+     * @param soldierObject
+     * @return
+     */
     public static Soldier fromJSONObject(JSONObject soldierObject) {
         if(soldierObject == null) {
             return null;
@@ -54,11 +59,11 @@ public class Soldier extends Unit{
                 //Position.fromJSONObject((JSONObject) soldierObject.get("position")),
                 (int)(long) soldierObject.get("ownerId"),
                 //(Color) soldierObject.get("color"),
-                (int) soldierObject.get("maxHealth"),
+                (int)(long) soldierObject.get("maxHealth"),
                 Soldier.cost,
-                (int) soldierObject.get("speed"),
-                (int) soldierObject.get("damage"),
-                (int) soldierObject.get("range"));
+                (int)(long) soldierObject.get("speed"),
+                (int)(long) soldierObject.get("damage"),
+                (int)(long) soldierObject.get("range"));
         soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
         return soldier;
     }
