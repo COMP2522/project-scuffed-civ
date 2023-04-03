@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.ai.AIManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,7 +33,6 @@ public class GameState { //everything manager this is the player manager
     int yShift; //only used to change where the map is drawn
 
     public Position selectPosition;
-    public AI ai;
 
     /**
      * Constructor used for creating a new game.
@@ -53,7 +53,9 @@ public class GameState { //everything manager this is the player manager
         xShift = (1080 / zoomAmount - mapwidth) / 2;
         yShift = (720 / zoomAmount - mapwidth) / 2;
 
-        ai = new AI();
+        for (Player player : players) {
+            player.setShift((1080 / zoomAmount - mapwidth) / 2, (720 / zoomAmount - mapwidth) / 2); //change to center on their worker
+        }
     }
 
     /**
@@ -61,7 +63,6 @@ public class GameState { //everything manager this is the player manager
      */
     public GameState(){
         zoomAmount = 32;
-        ai = new AI();
     };
 
     public static Player getPlayer(int ownerId) {
@@ -294,9 +295,9 @@ public class GameState { //everything manager this is the player manager
 
         selected = null;
 
-//         if (currentPlayer.isAI()) {
-//             ai.start(this);
-//         }
+         if (currentPlayer.isAI()) {
+             AIManager.start(this);
+         }
     }
 
     /**
@@ -499,5 +500,34 @@ public class GameState { //everything manager this is the player manager
 
     public String getGameID() {
         return gameID;
+    }
+
+    /**
+     * assumes quality is for currentPlayer.
+     *
+     * returns 0 if the gameStates have equal value.
+     * returns -1 if this has lower value than passed in gameState
+     * returns 1 if this has higher value than passed in gameState
+     * @param gameState
+     * @return
+     */
+    public int compareTo(GameState gameState) {
+        if (this.getValue() > gameState.getValue()) {
+            return 1;
+        } else if (this.getValue() < gameState.getValue()) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    private int getValue() {
+
+        //health of enemies added up
+        //health of allies added up (this works with number of allies)
+        //position of allies
+        //position of enemies
+
+        return 0;
     }
 }

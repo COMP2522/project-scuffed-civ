@@ -52,4 +52,8 @@ public abstract class Unit extends Entity { //things that can move
     public int getRemainMove() {
         return remainMove;
     }
+
+    public int getMaxMove() {
+        return maxMove;
+    }
 }

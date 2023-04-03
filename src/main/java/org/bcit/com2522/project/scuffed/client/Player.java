@@ -24,7 +24,7 @@ public class Player { //gamestate is the player manager
     resources = 2;
 
 
-    if (playerNum == 1) {
+    if (playerNum == 1) { //TODO: change this logic later
       isAi = true;
     }
     else {
