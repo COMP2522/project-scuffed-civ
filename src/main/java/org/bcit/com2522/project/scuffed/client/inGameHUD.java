@@ -2,10 +2,7 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.bcit.com2522.project.scuffed.ui.Button;
 import org.bcit.com2522.project.scuffed.ui.ButtonManager;
-import processing.core.PFont;
 import processing.core.PImage;
-
-import javax.lang.model.type.UnionType;
 
 /**
  * The inGameStartHUD class is the HUD that is displayed when the game is started.
@@ -14,19 +11,20 @@ import javax.lang.model.type.UnionType;
  * @author Brendan Doyle
  * @version 1.0
  */
-public class inGameStartHUD extends HUDState {
+public class inGameHUD extends HUDState {
 
-  Boolean selected;
-  PImage selectedHighRes;
-  String selectedName;
-  int selectedHealth;
-  int selectedAttack;
-  int selectedRange;
-  int selectedMovement;
-  int selectedCost;
+  public Boolean selected;
+  public PImage selectedHighRes;
+  public String selectedName;
+  public int selectedHealth;
+  public int selectedAttack;
+  public int selectedRange;
+  public int selectedMovement;
+  public int selectedCost;
+  public Entity selectedEntity;
 
   // Constructor takes a HUD object and calls the super constructor
-  public inGameStartHUD(HUD hud) {
+  public inGameHUD(HUD hud) {
     super(hud);
     selected = false;
   }
@@ -72,33 +70,34 @@ public class inGameStartHUD extends HUDState {
      */
   @Override
   public void draw(Window scene) {
-    // draw the players information
+
+    // UI panels
     scene.image(rivetPanel, centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
     scene.image(rivetPanel, centerX - 540, centerY + 160, 200, 200);  //  selected char box, bottom left
     scene.image(rivetPanel, centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
     scene.image(rivetPanel, centerX - 540, centerY - 150, 150, 200);   // player resources middle left
 
+    // Displays the current player's name
     scene.textFont(fontLarge);
     scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1), centerX - 75, centerY - 325); //print current player
 
+    // Displays the current player's resources
     scene.textFont(fontSmall);
-    scene.text("Player" + (hud.currentPlayer.getPlayerNum() + 1) + "\n" +
-        "Resources " + (hud.currentPlayer.getResources()),
-        centerX - 520, centerY - 120); //print player resources
+    scene.text("Mats: " + (hud.currentPlayer.getResources()), centerX - 520, centerY - 117); //print player resources
+    scene.text("Moves:" + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity).getRemainMove() : 0), centerX - 520, centerY - 97);
 
     //load selected unit picture, name, and stats in bottom left corner
     //load selected units buttons in bottom right corner
-
     if(selected) {
-      hud.scene.image(selectedHighRes, centerX - 540, centerY + 160, 200, 200);
-      hud.scene.textFont(fontMedium);
-      hud.scene.text(selectedName, centerX - 540, centerY + 370);
-      hud.scene.textFont(fontSmall);
-      hud.scene.text("Health: " + selectedHealth, centerX - 540, centerY + 390);
-      hud.scene.text("Attack: " + selectedAttack, centerX - 540, centerY + 410);
-      hud.scene.text("Range: " + selectedRange, centerX - 540, centerY + 430);
-      hud.scene.text("Movement: " + selectedMovement, centerX - 540, centerY + 450);
-      hud.scene.text("Cost: " + selectedCost, centerX - 540, centerY + 470);
+      hud.scene.image(selectedHighRes, centerX - 523, centerY + 177, 165, 165);
+      scene.textFont(fontMedium);
+      scene.text(selectedName, centerX - 490, centerY + 150);
+      scene.textFont(fontSmall);
+      scene.text("Health: " + selectedHealth, centerX - 520, centerY -77);
+      scene.text("Attack: " + selectedAttack, centerX - 520, centerY - 57);
+      scene.text("Range: " + selectedRange, centerX - 520, centerY - 37);
+      scene.text("Movement: " + selectedMovement, centerX - 523, centerY - 17);
+      scene.text("Cost: " + selectedCost, centerX - 523, centerY + 3);
     }
 
     // draw the buttons
@@ -107,6 +106,7 @@ public class inGameStartHUD extends HUDState {
 
   public void unitSelected(Entity selected){
     this.selected = true;
+    this.selectedEntity = selected;
     if (selected instanceof Soldier) {
       Soldier unit = (Soldier) selected;
       selectedHighRes = soldierSelectedIMG;
@@ -116,6 +116,7 @@ public class inGameStartHUD extends HUDState {
       selectedRange = unit.getRange();
       selectedMovement = unit.getRemainMove();
       selectedCost = unit.getCost();
+
     } else if (selected instanceof Building) {
       Building unit = (Building) selected;
       selectedHighRes = buildingSelectedIMG;

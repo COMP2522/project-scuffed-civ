@@ -2,8 +2,6 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.bcit.com2522.project.scuffed.ui.Button;
 import org.bcit.com2522.project.scuffed.ui.ButtonManager;
-import org.bcit.com2522.project.scuffed.ui.MainMenuMenuState;
-import org.bcit.com2522.project.scuffed.ui.Menu;
 
 /**
  * Provides a specific implementation for the menu in-game HUD state.
@@ -60,7 +58,7 @@ public class menuHUDState extends HUDState {
     }, "Exit", rivetPanel, rivetPanel, rivetPanel, hud.scene);
 
     Button resumeGame = new Button(centerX - 150, centerY + 140, centerX + 150, centerY + 190, () -> {
-      hud.setState(new inGameStartHUD(hud));
+      hud.setState(new inGameHUD(hud));
     }, "Resume Game", rivetPanel, rivetPanel, rivetPanel, hud.scene);
 
     buttonManager.add(resumeGame);

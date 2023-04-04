@@ -1,6 +1,5 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.bcit.com2522.project.scuffed.ui.MenuState;
 import processing.core.PVector;
 
 /**
@@ -18,7 +17,7 @@ public class HUD {
     // and sets the initial state to the inGameStartHUD state
     public HUD(Window scene) {
         this.scene = scene;
-        this.currentState = new inGameStartHUD(this);
+        this.currentState = new inGameHUD(this);
     }
 
     /**
