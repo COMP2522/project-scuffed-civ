@@ -83,21 +83,21 @@ public class inGameHUD extends HUDState {
 
     // Displays the current player's resources
     scene.textFont(fontSmall);
-    scene.text("Resources " + (hud.currentPlayer.getResources()), centerX - 520, centerY - 120); //print player resources
-    scene.text("Remaining Moves" + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity).getRemainMove() : 0), centerX - 520, centerY - 80);
+    scene.text("Mats: " + (hud.currentPlayer.getResources()), centerX - 520, centerY - 117); //print player resources
+    scene.text("Moves:" + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity).getRemainMove() : 0), centerX - 520, centerY - 97);
 
     //load selected unit picture, name, and stats in bottom left corner
     //load selected units buttons in bottom right corner
     if(selected) {
       hud.scene.image(selectedHighRes, centerX - 523, centerY + 177, 165, 165);
       scene.textFont(fontMedium);
-      hud.scene.text(selectedName, centerX - 540, centerY + 370);
+      scene.text(selectedName, centerX - 490, centerY + 150);
       scene.textFont(fontSmall);
-      scene.text("Health: " + selectedHealth, centerX - 300, centerY + 390);
-      hud.scene.text("Attack: " + selectedAttack, centerX - 300, centerY + 410);
-      hud.scene.text("Range: " + selectedRange, centerX - 300, centerY + 430);
-      hud.scene.text("Movement: " + selectedMovement, centerX - 300, centerY + 450);
-      hud.scene.text("Cost: " + selectedCost, centerX - 300, centerY + 470);
+      scene.text("Health: " + selectedHealth, centerX - 520, centerY -77);
+      scene.text("Attack: " + selectedAttack, centerX - 520, centerY - 57);
+      scene.text("Range: " + selectedRange, centerX - 520, centerY - 37);
+      scene.text("Movement: " + selectedMovement, centerX - 523, centerY - 17);
+      scene.text("Cost: " + selectedCost, centerX - 523, centerY + 3);
     }
 
     // draw the buttons
