@@ -146,7 +146,7 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Nothing Selected");
         } else if (clicked != null && clicked.getOwnerID() == currentPlayer.getID()) { //select own entity
             selected = clicked;
-            ((inGameStartHUD)scene.gameInstance.hud.currentState).unitSelected(selected);
+            ((inGameHUD)scene.gameInstance.hud.currentState).unitSelected(selected);
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition(entities));

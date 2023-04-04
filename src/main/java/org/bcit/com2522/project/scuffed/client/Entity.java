@@ -148,4 +148,9 @@ public abstract class Entity {
     public Player getOwner() {
         return owner;
     }
+
+    public int getRemainAction() {
+        return remainAction;
+    }
+
 }
