@@ -38,13 +38,13 @@ public class Map { //this is a tile manager
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
                 if(tiles[i][j].getType() == 0)
-                    scene.image(GameImages.get("grassTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
-                else if(tiles[i][j].getType() == 1)
-                    scene.image(GameImages.get("rockTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
-                else if(tiles[i][j].getType() == 2)
-                    scene.image(GameImages.get("waterTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
-                else if(tiles[i][j].getType() == 3)
                     scene.image(GameImages.get("sandTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
+                else if(tiles[i][j].getType() == 1)
+                    scene.image(GameImages.get("waterTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
+                else if(tiles[i][j].getType() == 2)
+                    scene.image(GameImages.get("rockTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
+                else if(tiles[i][j].getType() == 3)
+                    scene.image(GameImages.get("grassTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
             }
         }
     }
