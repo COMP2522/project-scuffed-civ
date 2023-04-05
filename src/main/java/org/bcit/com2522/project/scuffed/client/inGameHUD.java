@@ -154,6 +154,7 @@ public class inGameHUD extends HUDState {
     scene.image(rivetPanel,   centerX - 540, centerY + 160, 200, 200); //  selected char box, bottom left
     scene.image(rivetPanel,   centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
     scene.image(rivetPanel,   centerX - 540, centerY - 150, 125, 230); // player resources middle left
+    scene.image(rivetPanel,   centerX + 415, centerY - 150, 125, 230); // player stats middle right
     scene.image(resourcesIMG, centerX - 520, centerY - 120, 25,  25);  // resources icon
     scene.image(healthIMG,    centerX - 520, centerY - 90,  25,  25);  // health icon
     scene.image(attackIMG,    centerX - 520, centerY - 60,  25,  25);  // attack icon
