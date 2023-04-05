@@ -19,12 +19,12 @@ public class Button {
   PImage disabledBackground;
   Window scene;
 
-<<<<<<< Updated upstream
+
   PFont font;
-=======
+
   String tooltip;
   int tooltipSize;
->>>>>>> Stashed changes
+
 
   int fontSize = 32;
 

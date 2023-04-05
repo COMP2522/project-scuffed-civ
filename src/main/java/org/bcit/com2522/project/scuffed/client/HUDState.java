@@ -81,7 +81,14 @@ public abstract class HUDState {
      * The Rusted metal.
      */
     public PImage rustedMetal;
-
+    public PImage iconB;
+    public PImage iconC;
+    public PImage iconF;
+    public PImage iconM;
+    public PImage iconX;
+    public PImage iconWASD;
+    public PImage arrowKeysIMG;
+    public PImage bottomCornerPanel;
     /**
      * The Center x.
      */

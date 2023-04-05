@@ -87,7 +87,7 @@ public class Window extends PApplet {
     UIImages.put("buttonBackground", loadImage("sprites/Menu/background.png"));
     UIImages.put("buttonHoverBackground", loadImage("sprites/Menu/button_blank.png"));
     UIImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
-    UIImages.put("background", loadImage("sprites/backgroundDirt.png"));
+    UIImages.put("background", loadImage("sprites/inGameBackgroundWoods.jpg"));
     UIImages.put("logo", loadImage("sprites/logo.png"));
     UIImages.put("backgroundMenu", loadImage("sprites/Menu/backgroundMenu.png"));
     //cant figure out how to make use of these in the inGameHUD class...WIP

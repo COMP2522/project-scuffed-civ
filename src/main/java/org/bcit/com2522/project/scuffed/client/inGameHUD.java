@@ -19,7 +19,7 @@ public class inGameHUD extends HUDState {
    */
   public Boolean selected;
   /**
-   * The Selected high res.
+   * The Selected high-res.
    */
   public PImage selectedHighRes;
   /**
@@ -62,6 +62,10 @@ public class inGameHUD extends HUDState {
     selected = false;
   }
 
+  public static void select(Entity selected) {
+
+  }
+
   /**
    * Sets up the buttons and UI elements for the inGameStartHUD state.
    * Creates the buttons and adds them to the button manager.
@@ -72,6 +76,7 @@ public class inGameHUD extends HUDState {
     fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", 24);
     fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", 15);
     rivetPanel = hud.scene.loadImage("sprites/RivetPanel.png");
+    bottomCornerPanel = hud.scene.loadImage("sprites/bottomCornerPanels.png");
     soldierSelectedIMG = hud.scene.loadImage("sprites/highResSoldier.jpg");
     buildingSelectedIMG = hud.scene.loadImage("sprites/highResFactory.jpg");
     workerSelectedIMG = hud.scene.loadImage("sprites/highResWorker.jpg");
@@ -82,6 +87,13 @@ public class inGameHUD extends HUDState {
     attackIMG = hud.scene.loadImage("sprites/damage.png");
     resourcesIMG = hud.scene.loadImage("sprites/resources.png");
     rangeIMG = hud.scene.loadImage("sprites/range.png");
+    iconB = hud.scene.loadImage("sprites/iconB.png");
+    iconC = hud.scene.loadImage("sprites/iconC.png");
+    iconF = hud.scene.loadImage("sprites/iconF.png");
+    iconM = hud.scene.loadImage("sprites/iconM.png");
+    iconX = hud.scene.loadImage("sprites/iconX.png");
+    iconWASD = hud.scene.loadImage("sprites/WASD.png");
+    arrowKeysIMG = hud.scene.loadImage("sprites/iconArrows.png");
 
 
 
@@ -97,41 +109,8 @@ public class inGameHUD extends HUDState {
         centerX + 390, centerY - 360, centerX + 540, centerY - 310,
         () -> {hud.scene.nextTurn();
     }, "End Turn", rivetPanel, rivetPanel, rivetPanel, hud.scene,
-        rivetPanel,true, 20, 5, 10);
-//    Button buildBuildingButton = new Button(
-//        centerX + 360, centerY + 260, centerX + 440, centerY + 340,
-//        () -> {
-//          if (selectedEntity instanceof Worker) {
-//            ((Worker) selectedEntity).buildBuilding();
-//          }
-//        }
-//        , "Building", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
-//        rustedMetalIMG,true, 15, -10, 30);
-//
-//    Button buildSoldierButton = new Button(
-//        centerX + 360, centerY + 180, centerX + 440, centerY + 260,
-//        () -> {
-//          if (selectedEntity instanceof Building) {
-//            ((Building) selectedEntity).buildSoldier();
-//          }
-//        }
-//        , "Soldier", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
-//        rustedMetalIMG,true, 15, - 10, 30);
-//
-//
-//    Button buildWorkerButton = new Button(
-//        centerX + 440, centerY + 180, centerX + 520, centerY + 260,
-//        () -> {
-//          if (selectedEntity instanceof Building) {
-//            ((Building) selectedEntity).buildWorker();
-//          }
-//        }
-//        , "Worker", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
-//        rustedMetalIMG,true, 15, -10, 30);
-//
-//    buttonManager.add(buildWorkerButton);
-//    buttonManager.add(buildSoldierButton);
-//    buttonManager.add(buildBuildingButton);
+        rivetPanel,true, 28, 5, 10);
+
 
     buttonManager.add(hudMenuButton);
     buttonManager.add(hudEndTurnButton);
@@ -151,16 +130,23 @@ public class inGameHUD extends HUDState {
       System.out.println("rivetPanel is null");
     }
     scene.image(rivetPanel,   centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
-    scene.image(rivetPanel,   centerX - 540, centerY + 160, 200, 200); //  selected char box, bottom left
-    scene.image(rivetPanel,   centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
+    scene.image(bottomCornerPanel,   centerX - 540, centerY + 160, 200, 200); //  selected char box, bottom left
+    scene.image(bottomCornerPanel,   centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
     scene.image(rivetPanel,   centerX - 540, centerY - 150, 125, 230); // player resources middle left
-    scene.image(rivetPanel,   centerX + 415, centerY - 150, 125, 230); // player stats middle right
+    scene.image(rivetPanel,   centerX + 340, centerY - 150, 200, 230); // player stats middle right
     scene.image(resourcesIMG, centerX - 520, centerY - 120, 25,  25);  // resources icon
     scene.image(healthIMG,    centerX - 520, centerY - 90,  25,  25);  // health icon
     scene.image(attackIMG,    centerX - 520, centerY - 60,  25,  25);  // attack icon
     scene.image(rangeIMG,     centerX - 520, centerY - 30,  25,  25);  // range icon
     scene.image(moveIMG,      centerX - 520, centerY - 0,   25,  25);  // move icon
     scene.image(coinIMG,      centerX - 520, centerY + 30,  25,  25);  // coin icon
+    scene.image(arrowKeysIMG, centerX + 365, centerY - 125, 25,  25);  // arrow keys icon
+    scene.image(iconWASD,     centerX + 365, centerY - 100, 25,  25);  // WASD icon
+    scene.image(iconB,        centerX + 365, centerY - 75, 25,  25);  // B icon
+    scene.image(iconC,        centerX + 365, centerY - 50,  25,  25);  // C icon
+    scene.image(iconF,        centerX + 365, centerY - 25,  25,  25);  // F icon
+    scene.image(iconM,        centerX + 365, centerY , 25,  25);  // M icon
+    scene.image(iconX,        centerX + 365, centerY + 25, 25,  25);  // X icon
 
     // Displays the current player's name
     scene.textFont(fontLarge);
@@ -185,6 +171,14 @@ public class inGameHUD extends HUDState {
       scene.text(": " + selectedRange,  centerX - 495, centerY - 10);
       scene.text(": " + selectedCost,   centerX - 495, centerY + 50);
     }
+    scene.textFont(fontSmall);
+    scene.text(": Zoom In/Out", centerX + 395, centerY - 105);
+    scene.text(": Move Map", centerX + 395, centerY - 80);
+    scene.text(": Build", centerX + 395, centerY - 55);
+    scene.text(": Collect", centerX + 395, centerY - 30);
+    scene.text(": Make Soldier", centerX + 395, centerY - 5);
+    scene.text(": Make Worker", centerX + 395, centerY + 20);
+    scene.text(": Deselect", centerX + 395, centerY + 45);
 
     buttonManager.draw();
 
@@ -195,7 +189,7 @@ public class inGameHUD extends HUDState {
    *
    * @param selected the selected
    */
-  public void unitSelected(Entity selected){
+  public void unitSelected(Entity selected, Entity[][] entities){
     this.selected = true;
     this.selectedEntity = selected;
     if (selected instanceof Soldier) {
@@ -228,6 +222,43 @@ public class inGameHUD extends HUDState {
       selectedMovement = unit.getRemainMove();
       selectedCost     = unit.getCost();
     }
+
+    Button buildBuildingButton = new Button(
+        centerX + 360, centerY + 260, centerX + 440, centerY + 340,
+        () -> {
+          if (selectedEntity instanceof Worker) {
+            ((Worker) selectedEntity).buildBuilding(entities);
+          }
+        }
+        , "Building", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
+        rustedMetalIMG,true, 15, -10, 30);
+
+    Button buildSoldierButton = new Button(
+        centerX + 360, centerY + 180, centerX + 440, centerY + 260,
+        () -> {
+          if (selectedEntity instanceof Building) {
+            ((Building) selectedEntity).buildSoldier(entities, 1, 1, 1, 1);
+          }
+        }
+        , "Soldier", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
+        rustedMetalIMG,true, 15, - 10, 30);
+
+
+    Button buildWorkerButton = new Button(
+        centerX + 440, centerY + 180, centerX + 520, centerY + 260,
+        () -> {
+          if (selectedEntity instanceof Building) {
+            ((Building) selectedEntity).buildWorker(entities);
+          }
+        }
+        , "Worker", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
+        rustedMetalIMG,true, 15, -10, 30);
+
+
+
+    buttonManager.add(buildWorkerButton);
+    buttonManager.add(buildSoldierButton);
+    buttonManager.add(buildBuildingButton);
   }
 
 }
