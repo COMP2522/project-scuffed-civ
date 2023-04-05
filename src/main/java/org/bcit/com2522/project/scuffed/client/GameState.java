@@ -143,10 +143,11 @@ public class GameState { //everything manager this is the player manager
         int y = (int) (mousePos.y / zoomAmount) - yShift;
         Entity clicked = entities[x][y];
         if (clicked == null && selected == null) { //select empty tile
+
             System.out.println("Nothing Selected");
         } else if (clicked != null && clicked.getOwnerID() == currentPlayer.getID()) { //select own entity
             selected = clicked;
-            ((inGameHUD)scene.gameInstance.hud.currentState).unitSelected(selected);
+            ((inGameHUD)scene.gameInstance.hud.currentState).unitSelected(selected, entities);
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition(entities));

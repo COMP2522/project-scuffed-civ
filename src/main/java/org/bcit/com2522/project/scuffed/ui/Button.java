@@ -19,12 +19,12 @@ public class Button {
   PImage disabledBackground;
   Window scene;
 
-<<<<<<< Updated upstream
+
   PFont font;
-=======
+
   String tooltip;
   int tooltipSize;
->>>>>>> Stashed changes
+
 
   int fontSize = 32;
 
@@ -32,6 +32,7 @@ public class Button {
   int offsetY = 0;
 
   boolean isClickable = true;
+  private boolean active;
 
   // Standard Button, has text and can not be disabled
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
@@ -302,6 +303,6 @@ public class Button {
   }
 
   public void setActive(boolean active) {
-    this.isClickable = active;
+    this.active = active;
   }
 }
