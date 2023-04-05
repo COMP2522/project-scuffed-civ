@@ -88,7 +88,7 @@ public abstract class HUDState {
     public PImage iconX;
     public PImage iconWASD;
     public PImage arrowKeysIMG;
-    public PImage bottomCornerPanel;
+    public PImage panel;
     /**
      * The Center x.
      */
