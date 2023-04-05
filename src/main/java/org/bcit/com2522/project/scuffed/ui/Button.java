@@ -229,7 +229,7 @@ public class Button {
         scene.text(tooltip, tooltipX, scene.mouseY);
         scene.textSize(32);
       }
-    } else if (isClickable){
+    } else if (isClickable) {
       scene.image(background, x1, y1, x2 - x1, y2 - y1);
     }
     if (text != null) {
@@ -245,7 +245,7 @@ public class Button {
   }
 
   public void click() {
-    if ( this.clickable == null || !isClickable) {
+    if (this.clickable == null || !isClickable) {
       return;
     }
     clickable.click();
@@ -286,7 +286,7 @@ public class Button {
   }
 
   public boolean isClicked(int x, int y) {
-    if ( this.clickable == null || !isClickable) {
+    if (this.clickable == null || !isClickable) {
       System.out.println("Button is not clickable");
       return false;
     }
@@ -300,9 +300,5 @@ public class Button {
     this.hoverBackground = null;
     this.clickBackground = null;
     scene.removeClickable(clickable);
-  }
-
-  public void setActive(boolean active) {
-    this.active = active;
   }
 }

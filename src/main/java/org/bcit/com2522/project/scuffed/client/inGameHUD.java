@@ -76,7 +76,7 @@ public class inGameHUD extends HUDState {
     fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", 24);
     fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", 15);
     rivetPanel = hud.scene.loadImage("sprites/RivetPanel.png");
-    bottomCornerPanel = hud.scene.loadImage("sprites/bottomCornerPanels.png");
+    panel = hud.scene.loadImage("sprites/workPlease.png");
     soldierSelectedIMG = hud.scene.loadImage("sprites/highResSoldier.jpg");
     buildingSelectedIMG = hud.scene.loadImage("sprites/highResFactory.jpg");
     workerSelectedIMG = hud.scene.loadImage("sprites/highResWorker.jpg");
@@ -102,14 +102,14 @@ public class inGameHUD extends HUDState {
     Button hudMenuButton = new Button(
         centerX - 540, centerY - 360, centerX - 390, centerY - 310,
         () -> {hud.setState(new menuHUDState(hud));
-    }, "Menu", rivetPanel, rivetPanel, rivetPanel, hud.scene,
+    }, "Menu", panel, panel, panel, hud.scene,
         rivetPanel,true, 28 , 20, 5);
 
     Button hudEndTurnButton = new Button(
         centerX + 390, centerY - 360, centerX + 540, centerY - 310,
         () -> {hud.scene.nextTurn();
-    }, "End Turn", rivetPanel, rivetPanel, rivetPanel, hud.scene,
-        rivetPanel,true, 28, 5, 10);
+    }, "End Turn", panel, panel, panel, hud.scene,
+        rivetPanel,true, 28, 5, 5);
 
 
     buttonManager.add(hudMenuButton);
@@ -124,16 +124,12 @@ public class inGameHUD extends HUDState {
   @Override
   public void draw(Window scene) {
     // UI panels
-    if (rivetPanel != null) {
-      scene.image(rivetPanel, centerX - 100, centerY - 360, 200, 50);
-    } else {
-      System.out.println("rivetPanel is null");
-    }
-    scene.image(rivetPanel,   centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
-    scene.image(bottomCornerPanel,   centerX - 540, centerY + 160, 200, 200); //  selected char box, bottom left
-    scene.image(bottomCornerPanel,   centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
-    scene.image(rivetPanel,   centerX - 540, centerY - 150, 125, 230); // player resources middle left
-    scene.image(rivetPanel,   centerX + 340, centerY - 150, 200, 230); // player stats middle right
+
+    scene.image(panel,   centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
+    scene.image(panel,   centerX - 540, centerY + 160, 200, 200); //  selected char box, bottom left
+    scene.image(panel,   centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
+    scene.image(panel,   centerX - 540, centerY - 165, 125, 280); // player resources middle left
+    scene.image(panel,   centerX + 340, centerY - 165, 200, 280); // player stats middle right
     scene.image(resourcesIMG, centerX - 520, centerY - 120, 25,  25);  // resources icon
     scene.image(healthIMG,    centerX - 520, centerY - 90,  25,  25);  // health icon
     scene.image(attackIMG,    centerX - 520, centerY - 60,  25,  25);  // attack icon
@@ -149,9 +145,9 @@ public class inGameHUD extends HUDState {
     scene.image(iconX,        centerX + 365, centerY + 25, 25,  25);  // X icon
 
     // Displays the current player's name
-    scene.textFont(fontLarge);
+    scene.textFont(fontMedium);
     scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1),
-        centerX - 75, centerY - 325); //print current player
+        centerX - 55, centerY - 330); //print current player
 
     // Displays the current player's resources
     scene.textFont(fontMedium);
@@ -162,9 +158,9 @@ public class inGameHUD extends HUDState {
     //load selected unit picture, name, and stats in bottom left corner
     //load selected units buttons in bottom right corner
     if(selected) {
-      hud.scene.image(selectedHighRes, centerX - 523, centerY + 177, 165, 165);
+      hud.scene.image(selectedHighRes, centerX - 532, centerY + 180, 187, 180);
       scene.textFont(fontMedium);
-      scene.text(selectedName, centerX - 490, centerY + 150);
+      scene.text(selectedName, centerX - 490, centerY + 155);
       scene.textFont(fontMedium);
       scene.text(": " + selectedHealth, centerX - 495, centerY - 70);
       scene.text(": " + selectedAttack, centerX - 495, centerY - 40);
