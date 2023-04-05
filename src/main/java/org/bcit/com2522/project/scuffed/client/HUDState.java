@@ -16,7 +16,7 @@ import processing.core.PVector;
  */
 
 public abstract class HUDState {
-    public HUD hud; // reference to the HUD object that this HUDState belongs to
+    public HUD hud;
     public PImage rivetPanel;
     public PImage soldierSelectedIMG;
     public PImage buildingSelectedIMG;
@@ -24,6 +24,13 @@ public abstract class HUDState {
     public PFont fontLarge;
     public PFont fontMedium;
     public PFont fontSmall;
+    public PImage rustedMetalIMG;
+    public PImage coinIMG;
+    public PImage moveIMG;
+    public PImage healthIMG;
+    public PImage attackIMG;
+    public PImage resourcesIMG;
+    public PImage rangeIMG;
 
     // center of the screen
     int centerX;

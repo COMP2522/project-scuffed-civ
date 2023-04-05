@@ -12,6 +12,9 @@ public class HUD {
     public Player currentPlayer;
     public HUDState currentState;
     Window scene; // reference to the main window
+    public Building selectedBuilding;
+    public Soldier selectedSoldier;
+    public Worker selectedWorker;
 
     // constructor initializes the HUD object with a given Window object scene
     // and sets the initial state to the inGameStartHUD state
@@ -53,4 +56,6 @@ public class HUD {
         return currentState.clicked((int)mousePos.x, (int)mousePos.y);
     }
 
+    public void buildSoldier() {
+    }
 }

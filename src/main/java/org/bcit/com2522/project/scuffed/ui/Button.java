@@ -301,5 +301,7 @@ public class Button {
     scene.removeClickable(clickable);
   }
 
-
+  public void setActive(boolean active) {
+    this.isClickable = active;
+  }
 }
