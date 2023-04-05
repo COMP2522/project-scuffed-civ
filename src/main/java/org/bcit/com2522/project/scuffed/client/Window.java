@@ -90,6 +90,18 @@ public class Window extends PApplet {
     UIImages.put("background", loadImage("sprites/backgroundDirt.png"));
     UIImages.put("logo", loadImage("sprites/logo.png"));
     UIImages.put("backgroundMenu", loadImage("sprites/Menu/backgroundMenu.png"));
+    //cant figure out how to make use of these in the inGameHUD class...WIP
+//    UIImages.put("rivetPanel", loadImage("sprites/RivetPanel.png"));
+//    UIImages.put("soldierSelectedIMG", loadImage("sprites/highResSoldier.jpg"));
+//    UIImages.put("buildingSelectedIMG", loadImage("sprites/highResFactory.jpg"));
+//    UIImages.put("workerSelectedIMG", loadImage("sprites/highResWorker.jpg"));
+//    UIImages.put("rustedMetalIMG", loadImage("sprites/rustedMetalIMG.jpg"));
+//    UIImages.put("coinIMG", loadImage("sprites/coin.png"));
+//    UIImages.put("moveIMG", loadImage("sprites/movement.png"));
+//    UIImages.put("healthIMG", loadImage("sprites/Health.png"));
+//    UIImages.put("attackIMG", loadImage("sprites/damage.png"));
+//    UIImages.put("resourcesIMG", loadImage("sprites/resources.png"));
+//    UIImages.put("rangeIMG", loadImage("sprites/range.png"));
   }
 
   public void initGame(int numplayers, int mapwidth, int mapheight) {
