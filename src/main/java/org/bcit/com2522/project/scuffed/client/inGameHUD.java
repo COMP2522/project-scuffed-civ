@@ -3,6 +3,7 @@ package org.bcit.com2522.project.scuffed.client;
 import org.bcit.com2522.project.scuffed.ui.Button;
 import org.bcit.com2522.project.scuffed.ui.ButtonManager;
 import processing.core.PImage;
+
 import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 /**
@@ -99,53 +100,55 @@ public class inGameHUD extends HUDState {
     workerButtonIcon = hud.scene.loadImage("sprites/workerButtonIcon.png");
 
 
-
     buttonManager = new ButtonManager(hud.scene);
 
     Button hudMenuButton = new Button(
         centerX - 540, centerY - 360, centerX - 390, centerY - 310,
-        () -> {hud.setState(new menuHUDState(hud));
-    }, "Menu", panel, panel, panel, hud.scene,
-        rivetPanel,true, 28 , 20, 5);
+        () -> {
+          hud.setState(new menuHUDState(hud));
+        }, "Menu", panel, panel, panel, hud.scene,
+        rivetPanel, true, 28, 20, 5);
 
     Button hudEndTurnButton = new Button(
         centerX + 390, centerY - 360, centerX + 540, centerY - 310,
-        () -> {hud.scene.nextTurn();
-    }, "End Turn", panel, panel, panel, hud.scene,
-        rivetPanel,true, 28, 5, 5);
+        () -> {
+          hud.scene.nextTurn();
+        }, "End Turn", panel, panel, panel, hud.scene,
+        rivetPanel, true, 28, 5, 5);
 
 
     buttonManager.add(hudMenuButton);
     buttonManager.add(hudEndTurnButton);
   }
 
-    /**
-     * Draws the in-game starting HUD state rendering player information
-     * and the buttons.
-     * @param scene
-     */
+  /**
+   * Draws the in-game starting HUD state rendering player information
+   * and the buttons.
+   *
+   * @param scene
+   */
   @Override
   public void draw(Window scene) {
     // UI panels
 
-    scene.image(panel,   centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
-    scene.image(panel,   centerX - 540, centerY + 160, 200, 200); //  selected char box, bottom left
-    scene.image(panel,   centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
-    scene.image(panel,   centerX - 540, centerY - 165, 125, 280); // player resources middle left
-    scene.image(panel,   centerX + 340, centerY - 165, 200, 280); // player stats middle right
-    scene.image(resourcesIMG, centerX - 520, centerY - 120, 25,  25);  // resources icon
-    scene.image(healthIMG,    centerX - 520, centerY - 90,  25,  25);  // health icon
-    scene.image(attackIMG,    centerX - 520, centerY - 60,  25,  25);  // attack icon
-    scene.image(rangeIMG,     centerX - 520, centerY - 30,  25,  25);  // range icon
-    scene.image(moveIMG,      centerX - 520, centerY - 0,   25,  25);  // move icon
-    scene.image(coinIMG,      centerX - 520, centerY + 30,  25,  25);  // coin icon
-    scene.image(arrowKeysIMG, centerX + 365, centerY - 125, 25,  25);  // arrow keys icon
-    scene.image(iconWASD,     centerX + 365, centerY - 100, 25,  25);  // WASD icon
-    scene.image(iconB,        centerX + 365, centerY - 75, 25,  25);  // B icon
-    scene.image(iconC,        centerX + 365, centerY - 50,  25,  25);  // C icon
-    scene.image(iconF,        centerX + 365, centerY - 25,  25,  25);  // F icon
-    scene.image(iconM,        centerX + 365, centerY , 25,  25);  // M icon
-    scene.image(iconX,        centerX + 365, centerY + 25, 25,  25);  // X icon
+    scene.image(panel, centerX - 100, centerY - 360, 200, 50);  // Player selected name box, top middle
+    scene.image(panel, centerX - 540, centerY + 160, 200, 200); //  selected char box, bottom left
+    scene.image(panel, centerX + 340, centerY + 160, 200, 200); // player buttons bottom right
+    scene.image(panel, centerX - 540, centerY - 165, 125, 280); // player resources middle left
+    scene.image(panel, centerX + 340, centerY - 165, 200, 280); // player stats middle right
+    scene.image(resourcesIMG, centerX - 520, centerY - 120, 25, 25);  // resources icon
+    scene.image(healthIMG, centerX - 520, centerY - 90, 25, 25);  // health icon
+    scene.image(attackIMG, centerX - 520, centerY - 60, 25, 25);  // attack icon
+    scene.image(rangeIMG, centerX - 520, centerY - 30, 25, 25);  // range icon
+    scene.image(moveIMG, centerX - 520, centerY - 0, 25, 25);  // move icon
+    scene.image(coinIMG, centerX - 520, centerY + 30, 25, 25);  // coin icon
+    scene.image(arrowKeysIMG, centerX + 365, centerY - 125, 25, 25);  // arrow keys icon
+    scene.image(iconWASD, centerX + 365, centerY - 100, 25, 25);  // WASD icon
+    scene.image(iconB, centerX + 365, centerY - 75, 25, 25);  // B icon
+    scene.image(iconC, centerX + 365, centerY - 50, 25, 25);  // C icon
+    scene.image(iconF, centerX + 365, centerY - 25, 25, 25);  // F icon
+    scene.image(iconM, centerX + 365, centerY, 25, 25);  // M icon
+    scene.image(iconX, centerX + 365, centerY + 25, 25, 25);  // X icon
 
     // Displays the current player's name
     scene.textFont(fontMedium);
@@ -160,15 +163,15 @@ public class inGameHUD extends HUDState {
 
     //load selected unit picture, name, and stats in bottom left corner
     //load selected units buttons in bottom right corner
-    if(selected) {
+    if (selected) {
       hud.scene.image(selectedHighRes, centerX - 532, centerY + 180, 187, 180);
       scene.textFont(fontSmall);
       scene.text(selectedName, centerX - 470, centerY + 175);
       scene.textFont(fontMedium);
       scene.text(": " + selectedHealth, centerX - 495, centerY - 70);
       scene.text(": " + selectedAttack, centerX - 495, centerY - 40);
-      scene.text(": " + selectedRange,  centerX - 495, centerY - 10);
-      scene.text(": " + selectedCost,   centerX - 495, centerY + 50);
+      scene.text(": " + selectedRange, centerX - 495, centerY - 10);
+      scene.text(": " + selectedCost, centerX - 495, centerY + 50);
     }
     scene.textFont(fontSmall);
     scene.text(": Zoom In/Out", centerX + 395, centerY - 105);
@@ -188,38 +191,38 @@ public class inGameHUD extends HUDState {
    *
    * @param selected the selected
    */
-  public void unitSelected(Entity selected, Entity[][] entities){
+  public void unitSelected(Entity selected, Entity[][] entities) {
     this.selected = true;
     this.selectedEntity = selected;
     if (selected instanceof Soldier) {
       Soldier unit = (Soldier) selected;
-      selectedHighRes  = soldierSelectedIMG;
-      selectedName     = "Soldier";
-      selectedHealth   = unit.getHealth();
-      selectedAttack   = unit.getDamage();
-      selectedRange    = unit.getRange();
+      selectedHighRes = soldierSelectedIMG;
+      selectedName = "Soldier";
+      selectedHealth = unit.getHealth();
+      selectedAttack = unit.getDamage();
+      selectedRange = unit.getRange();
       selectedMovement = unit.getRemainMove();
-      selectedCost     = unit.getCost();
+      selectedCost = unit.getCost();
 
     } else if (selected instanceof Building) {
       Building unit = (Building) selected;
-      selectedHighRes  = buildingSelectedIMG;
-      selectedName     = "Building";
-      selectedHealth   = unit.getHealth();
-      selectedAttack   = 0;
-      selectedRange    = 0;
+      selectedHighRes = buildingSelectedIMG;
+      selectedName = "Building";
+      selectedHealth = unit.getHealth();
+      selectedAttack = 0;
+      selectedRange = 0;
       selectedMovement = 0;
-      selectedCost     = unit.getCost();
+      selectedCost = unit.getCost();
 
     } else if (selected instanceof Worker) {
       Unit unit = (Unit) selected;
-      selectedHighRes  = workerSelectedIMG;
-      selectedName     = "Worker";
-      selectedHealth   = unit.getHealth();
-      selectedAttack   = 0;
-      selectedRange    = 0;
+      selectedHighRes = workerSelectedIMG;
+      selectedName = "Worker";
+      selectedHealth = unit.getHealth();
+      selectedAttack = 0;
+      selectedRange = 0;
       selectedMovement = unit.getRemainMove();
-      selectedCost     = unit.getCost();
+      selectedCost = unit.getCost();
     }
 
     Button buildBuildingButton = new Button(
@@ -249,7 +252,6 @@ public class inGameHUD extends HUDState {
           }
         }
         , " ", workerButtonIcon, workerButtonIcon, workerButtonIcon, hud.scene);
-
 
 
     buttonManager.add(buildWorkerButton);

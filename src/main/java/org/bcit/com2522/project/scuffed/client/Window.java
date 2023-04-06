@@ -62,9 +62,9 @@ public class Window extends PApplet {
     GameImages.put("rockTile", loadImage("sprites/Menu/tile_rocks.png"));
     GameImages.put("waterTile", loadImage("sprites/Menu/tile_water.png"));
     GameImages.put("sandTile", loadImage("sprites/Menu/tile_sand.png"));
-    GameImages.put("soldier", loadImage( "sprites/soldier.png"));
-    GameImages.put("worker", loadImage("sprites/worker.png"));
-    GameImages.put("building", loadImage("sprites/building.png"));
+    GameImages.put("soldier", loadImage( "sprites/soldierUnit.png"));
+    GameImages.put("worker", loadImage("sprites/workerUnit.png"));
+    GameImages.put("building", loadImage("sprites/buildingUnit.png"));
     GameImages.put("select", loadImage("sprites/select.png"));
 
     //Images for the UI. Buttons, Menus, Backgrounds, etc.
