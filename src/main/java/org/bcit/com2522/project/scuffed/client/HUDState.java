@@ -89,6 +89,9 @@ public abstract class HUDState {
     public PImage iconWASD;
     public PImage arrowKeysIMG;
     public PImage panel;
+    public PImage gunButtonIcon;
+    public PImage buildingButtonIcon;
+    public PImage workerButtonIcon;
     /**
      * The Center x.
      */

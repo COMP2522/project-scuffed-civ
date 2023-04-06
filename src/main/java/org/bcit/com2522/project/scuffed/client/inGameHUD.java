@@ -94,6 +94,9 @@ public class inGameHUD extends HUDState {
     iconX = hud.scene.loadImage("sprites/iconX.png");
     iconWASD = hud.scene.loadImage("sprites/WASD.png");
     arrowKeysIMG = hud.scene.loadImage("sprites/iconArrows.png");
+    gunButtonIcon = hud.scene.loadImage("sprites/gunButtonIcon.png");
+    buildingButtonIcon = hud.scene.loadImage("sprites/buildingButtonIcon.png");
+    workerButtonIcon = hud.scene.loadImage("sprites/workerButtonIcon.png");
 
 
 
@@ -159,8 +162,8 @@ public class inGameHUD extends HUDState {
     //load selected units buttons in bottom right corner
     if(selected) {
       hud.scene.image(selectedHighRes, centerX - 532, centerY + 180, 187, 180);
-      scene.textFont(fontMedium);
-      scene.text(selectedName, centerX - 490, centerY + 155);
+      scene.textFont(fontSmall);
+      scene.text(selectedName, centerX - 470, centerY + 175);
       scene.textFont(fontMedium);
       scene.text(": " + selectedHealth, centerX - 495, centerY - 70);
       scene.text(": " + selectedAttack, centerX - 495, centerY - 40);
@@ -220,35 +223,32 @@ public class inGameHUD extends HUDState {
     }
 
     Button buildBuildingButton = new Button(
-        centerX + 360, centerY + 260, centerX + 440, centerY + 340,
+        centerX + 350, centerY + 250, centerX + 440, centerY + 320,
         () -> {
           if (selectedEntity instanceof Worker) {
             ((Worker) selectedEntity).buildBuilding(entities);
           }
         }
-        , "Building", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
-        rustedMetalIMG,true, 15, -10, 30);
+        , " ", buildingButtonIcon, buildingButtonIcon, buildingButtonIcon, hud.scene);
 
     Button buildSoldierButton = new Button(
-        centerX + 360, centerY + 180, centerX + 440, centerY + 260,
+        centerX + 350, centerY + 180, centerX + 440, centerY + 250,
         () -> {
           if (selectedEntity instanceof Building) {
             ((Building) selectedEntity).buildSoldier(entities, 1, 1, 1, 1);
           }
         }
-        , "Soldier", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
-        rustedMetalIMG,true, 15, - 10, 30);
+        , " ", gunButtonIcon, gunButtonIcon, gunButtonIcon, hud.scene);
 
 
     Button buildWorkerButton = new Button(
-        centerX + 440, centerY + 180, centerX + 520, centerY + 260,
+        centerX + 440, centerY + 177, centerX + 530, centerY + 249,
         () -> {
           if (selectedEntity instanceof Building) {
             ((Building) selectedEntity).buildWorker(entities);
           }
         }
-        , "Worker", rustedMetalIMG, rustedMetalIMG, rustedMetalIMG, hud.scene,
-        rustedMetalIMG,true, 15, -10, 30);
+        , " ", workerButtonIcon, workerButtonIcon, workerButtonIcon, hud.scene);
 
 
 

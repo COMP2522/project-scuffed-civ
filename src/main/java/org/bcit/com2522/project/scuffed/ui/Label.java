@@ -60,7 +60,7 @@ public class Label{
 
     public void draw() {
         scene.pushStyle();
-        scene.fill(0);
+        scene.fill(255, 255, 255);
         scene.textSize(textSize);
         scene.text(text, x, y);
         scene.popStyle();
