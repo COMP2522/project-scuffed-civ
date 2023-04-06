@@ -4,6 +4,8 @@ import org.bcit.com2522.project.scuffed.ui.Button;
 import org.bcit.com2522.project.scuffed.ui.ButtonManager;
 import processing.core.PImage;
 
+
+
 /**
  * The inGameHUD class is the HUD that is displayed when playing the game.
  * It provides specific implementation for the in-game HUD state
@@ -121,7 +123,7 @@ public class inGameHUD extends HUDState {
       return new Button(
           centerX - 540, centerY - 360, centerX - 390, centerY - 310,
           () -> {
-            hud.setState(new MenuHUDState(hud));
+            hud.setState(new menuHUDState(hud));
           }, "Menu", panel, panel, panel, hud.scene,
           rivetPanel, true, 28, 20, 5);
   }
