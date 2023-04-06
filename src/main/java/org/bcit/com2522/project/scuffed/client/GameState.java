@@ -444,7 +444,7 @@ public class GameState { //everything manager this is the player manager
     }
 
     /**
-     * Reads JSON and creates a gamestate from it
+     * Reads JSON and creates a game state from it
      * @param gameStateJSON the json to read
      */
     public static GameState fromJSONObject(JSONObject gameStateJSON) {
