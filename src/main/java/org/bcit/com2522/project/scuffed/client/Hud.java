@@ -9,7 +9,7 @@ import processing.core.PVector;
  * @author Brendan Doyle
  * @version 1.0
  */
-public class HUD {
+public class Hud {
   /**
    * The Current player.
    */
@@ -17,7 +17,7 @@ public class HUD {
   /**
    * The Current state.
    */
-  public HUDState currentState;
+  public HudState currentState;
   /**
    * The Scene.
    */
@@ -28,12 +28,12 @@ public class HUD {
    *
    * @param scene the scene
    */
-// constructor initializes the HUD object with a given Window object scene
-    // and sets the initial state to the inGameStartHUD state
-    public HUD(Window scene) {
-        this.scene = scene;
-        this.currentState = new inGameHUD(this);
-    }
+  // constructor initializes the HUD object with a given Window object scene
+  // and sets the initial state to the inGameStartHUD state
+  public Hud(Window scene) {
+    this.scene = scene;
+    this.currentState = new InGameHud(this);
+  }
 
   /**
    * Sets the current state of the HUD to a new HUDState object.
@@ -41,10 +41,10 @@ public class HUD {
    *
    * @param newState the new state
    */
-  public void setState(HUDState newState) {
-        scene.wipeGraphics();
-        this.currentState = newState;
-    }
+  public void setState(HudState newState) {
+    scene.wipeGraphics();
+    this.currentState = newState;
+  }
 
   /**
    * Calls the draw method of the current HUDState objec,
@@ -53,8 +53,8 @@ public class HUD {
    * @param scene the scene
    */
   public void draw(Window scene) {
-        currentState.draw(scene);
-    }
+    currentState.draw(scene);
+  }
 
   /**
    * Checks mouse position and calls the clicked method of the
@@ -65,7 +65,7 @@ public class HUD {
    */
   public boolean clicked(PVector mousePos) {
 
-        return currentState.clicked((int)mousePos.x, (int)mousePos.y);
-    }
+    return currentState.clicked((int) mousePos.x, (int) mousePos.y);
+  }
 
 }
