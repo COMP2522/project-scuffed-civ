@@ -3,14 +3,23 @@ package org.bcit.com2522.project.scuffed.client;
 import org.bcit.com2522.project.scuffed.ui.Button;
 import org.bcit.com2522.project.scuffed.ui.ButtonManager;
 
-
 /**
- * Provides a specific implementation for the menu in-game HUD state.
+ * The Menuhudstate class is an implementation of the HudState abstract class and represents
+ * the menu in-game HUD state. It is responsible for setting up, displaying, and
+ * managing the in-game menu, which includes creating and handling various UI elements
+ * like buttons and images. The class defines the positions, sizes, and actions of the buttons,
+ * and also loads fonts and images required for the menu.
  *
  * @author Brendan Doyle
- * @version 1.0
+ * @version 2.0
  */
 public class Menuhudstate extends HudState {
+
+  /**
+   * Creates constants for the fonts sizes and the UI element coordinates.
+   *
+   * @param hud the HUD object
+   */
   private static final int FONTSIZELARGE = 30;
   private static final int FONTSIZEMEDIUM = 24;
   private static final int FONTSIZESMALL = 15;
@@ -40,15 +49,15 @@ public class Menuhudstate extends HudState {
   /**
    * Instantiates a new Menu hud state.
    *
-   * @param hud the hud
+   * @param hud the HUD object
    */
   public Menuhudstate(Hud hud) {
     super(hud);
   }
 
   /**
-   * Sets up the buttons and UI elements for the menuHUDState.
-   * Creates the buttons and adds them to the button manager.
+   * Sets up the menu by loading the fonts and images required for the menu, and
+   * creating the buttons.
    */
   @Override
   public void setup() {
@@ -57,18 +66,27 @@ public class Menuhudstate extends HudState {
     setupButtons();
   }
 
+  /**
+   * Loads the fonts required for the menu.
+   */
   private void setupFonts() {
     fontLarge = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZELARGE);
     fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZEMEDIUM);
     fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZESMALL);
   }
 
+  /**
+   * Loads the images required for the menu used in the panels.
+   */
   private void setupImages() {
     rivetPanel = hud.scene.loadImage("sprites/RivetPanel.png");
     rustedMetal = hud.scene.loadImage("sprites/rustedMetalIMG.jpg");
     panel = hud.scene.loadImage("sprites/workPlease.png");
   }
 
+  /**
+   * Creates the buttons for the menu.
+   */
   private void setupButtons() {
     buttonManager = new ButtonManager(hud.scene);
 
@@ -85,6 +103,9 @@ public class Menuhudstate extends HudState {
     buttonManager.add(returnToMainMenuButton);
   }
 
+  /**
+   * Displays the return to main menu button.
+   */
   private Button createReturnToMainMenuButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY - MAIN_MENU_BUTTON_Y,
         centerX + MENU_BUTTON_X, centerY - MAIN_MENU_BUTTON_Y2,
@@ -94,6 +115,9 @@ public class Menuhudstate extends HudState {
         true, BUTTON_FONT_SIZE, MAIN_MENU_TEXT_X, BUTTON_TEXT_Y);
   }
 
+  /**
+   * Displays the save button.
+   */
   private Button createSaveButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY - SAVE_BUTTON_Y1,
         centerX + MENU_BUTTON_X, centerY - SAVE_BUTTON_Y2, () -> {
@@ -102,6 +126,9 @@ public class Menuhudstate extends HudState {
         true, BUTTON_FONT_SIZE, SAVE_TEXT_X, BUTTON_TEXT_Y);
   }
 
+  /**
+   * Displays the settings button.
+   */
   private Button createSettingsButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY - SETTING_BUTTON_Y1,
         centerX + MENU_BUTTON_X, centerY - SETTING_BUTTON_Y2, () -> {
@@ -110,6 +137,9 @@ public class Menuhudstate extends HudState {
         true, BUTTON_FONT_SIZE, SETTING_TEXT_X, BUTTON_TEXT_Y);
   }
 
+  /**
+   * Displays the exit button.
+   */
   private Button createExitButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY + EXIT_BUTTON_Y1,
         centerX + MENU_BUTTON_X, centerY + EXIT_BUTTON_Y2, () -> {
@@ -118,6 +148,9 @@ public class Menuhudstate extends HudState {
         true, BUTTON_FONT_SIZE, EXIT_TEXT_X, BUTTON_TEXT_Y);
   }
 
+  /**
+   * Displays the resume game button.
+   */
   private Button createResumeGameButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY + RESUME_BUTTON_Y1,
         centerX + MENU_BUTTON_X, centerY + RESUME_BUTTON_Y2, () -> {
@@ -126,22 +159,25 @@ public class Menuhudstate extends HudState {
         true, BUTTON_FONT_SIZE, RESUME_TEXT_X, BUTTON_TEXT_Y);
   }
 
+  /**
+   * Draws the background for the menu.
+   *
+   * @param scene of the window
+   */
   private void gameMenuBackground(Window scene) {
     scene.image(panel, centerX - MENU_BACKGROUND_X, centerY - MENU_BACKGROUND_Y,
         centerX - MENU_BACKGROUND_X2, centerY + MENU_BACKGROUND_Y2);
   }
 
-
   /**
-   * On menu clicked.
+   * Responsible for changing the game state when a menu button is clicked.
    */
   public void onMenuClicked() {
     hud.scene.inGame = false;
   }
 
   /**
-   * Draws the in-game starting HUD state rendering player information
-   * and the buttons.
+   * Draws the menu, its panels, and buttons.
    *
    * @param scene of the window
    */

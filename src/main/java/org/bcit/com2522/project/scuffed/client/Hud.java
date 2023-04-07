@@ -21,15 +21,13 @@ public class Hud {
   /**
    * The Scene.
    */
-  Window scene; // reference to the main window
+  Window scene;
 
   /**
    * Instantiates a new Hud.
    *
    * @param scene the scene
    */
-  // constructor initializes the HUD object with a given Window object scene
-  // and sets the initial state to the inGameStartHUD state
   public Hud(Window scene) {
     this.scene = scene;
     this.currentState = new InGameHud(this);
@@ -47,7 +45,7 @@ public class Hud {
   }
 
   /**
-   * Calls the draw method of the current HUDState objec,
+   * Calls the draw method of the current HUDState object,
    * passing the scene. Is responsible for drawing the current state.
    *
    * @param scene the scene
@@ -61,7 +59,7 @@ public class Hud {
    * current HUDState object. Is responsible for handling mouse clicks.
    *
    * @param mousePos the mouse pos
-   * @return boolean boolean
+   * @return boolean
    */
   public boolean clicked(PVector mousePos) {
 
