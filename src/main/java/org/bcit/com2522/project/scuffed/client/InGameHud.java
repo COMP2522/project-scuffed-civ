@@ -5,13 +5,19 @@ import org.bcit.com2522.project.scuffed.ui.ButtonManager;
 import processing.core.PImage;
 
 /**
- * The inGameHUD class is the HUD that is displayed when playing the game.
- * It provides specific implementation for the in-game HUD state
+ * This class, InGameHud, is an implementation of a Heads-Up Display (HUD) state for a game.
+ * It extends the HudState class and is responsible for displaying various information about
+ * the game state while the game is in progress. The information displayed includes the
+ * selected unit's details, player information, resources, controls, and icons for various actions.
  *
  * @author Brendan Doyle
  * @version 2.0
  */
 public class InGameHud extends HudState {
+
+  /**
+   * Coordinates for the different UI elements and font sizes.
+   */
   private static final int FONTSIZELARGE = 30;
   private static final int FONTSIZEMEDIUM = 24;
   private static final int FONTSIZESMALL = 15;
@@ -96,48 +102,47 @@ public class InGameHud extends HudState {
   private static final int DEFAULT_STAT = 00;
 
   /**
-   * The Selected.
+   * Whether the unit is selected.
    */
   public Boolean selected;
   /**
-   * The Selected high-res.
+   * Loads a high resolution image for the unit that is selected.
    */
   public PImage selectedHighRes;
 
   /**
-   * The Selected name.
+   * Loads the selected unit's name.
    */
   public String selectedName;
   /**
-   * The Selected health.
+   * Loads the selected unit's health.
    */
   public int selectedHealth;
   /**
-   * The Selected attack.
+   * Loads the selected unit's attack damage.
    */
   public int selectedAttack;
   /**
-   * The Selected range.
+   * Loads the selected unit's attack range.
    */
   public int selectedRange;
   /**
-   * The Selected movement.
+   * Loads the selected unit's movement left.
    */
   public int selectedMovement;
   /**
-   * The Selected cost.
+   * Loads the selected unit's cost to build.
    */
   public int selectedCost;
   /**
-   * The Selected entity.
+   * Loads the selected unit's entity object.
    */
   public Entity selectedEntity;
-
 
   /**
    * Instantiates a new In game hud.
    *
-   * @param hud the hud
+   * @param hud is an instance of the Hud class.
    */
   public InGameHud(Hud hud) {
     super(hud);
@@ -145,8 +150,7 @@ public class InGameHud extends HudState {
   }
 
   /**
-   * Sets up the buttons and UI elements for the inGameStartHUD state.
-   * Creates the buttons and adds them to the button manager.
+   * Loads the fonts, images, and buttons for the in game hud.
    */
   @Override
   public void setup() {
@@ -161,12 +165,18 @@ public class InGameHud extends HudState {
     buttonManager.add(hudEndTurnButton);
   }
 
+  /**
+   * Loads the fonts for the in game hud.
+   */
   private void loadFonts() {
     fontLarge = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZELARGE);
     fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZEMEDIUM);
     fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZESMALL);
   }
 
+  /**
+   * Loads the images for the in game hud.
+   */
   private void loadImages() {
     rivetPanel = hud.scene.loadImage("sprites/RivetPanel.png");
     panel = hud.scene.loadImage("sprites/workPlease.png");
@@ -192,10 +202,18 @@ public class InGameHud extends HudState {
     workerButtonIcon = hud.scene.loadImage("sprites/workerButtonIcon.png");
   }
 
+  /**
+   * Creates the button manager for the in game hud.
+   */
   private void createButtonManager() {
     buttonManager = new ButtonManager(hud.scene);
   }
 
+  /**
+   * Creates the menu button for the in game hud.
+   *
+   * @return the button
+   */
   private Button createMenuButton() {
     return new Button(
         centerX - MENU_BUTTON_X, centerY - MENU_BUTTON_Y,
@@ -206,6 +224,11 @@ public class InGameHud extends HudState {
         rivetPanel, true, BUTTON_FONT_SIZE, BUTTON_FONT_X, BUTTON_FONT_Y);
   }
 
+  /**
+   * Creates the end turn button for the in game hud.
+   *
+   * @return the button
+   */
   private Button createEndTurnButton() {
     return new Button(
         centerX + MENU_BUTTON_X2, centerY - MENU_BUTTON_Y,
@@ -217,10 +240,9 @@ public class InGameHud extends HudState {
   }
 
   /**
-   * Draws the in-game starting HUD state rendering player information
-   * and the buttons.
+   * Updates the in game UI elements: selected unit info, player info, and controls and buttons.
    *
-   * @param scene the scene
+   * @param scene from the Window class
    */
   @Override
   public void draw(Window scene) {
@@ -234,6 +256,11 @@ public class InGameHud extends HudState {
     buttonManager.draw();
   }
 
+  /**
+   * Draws the UI panels for the in game hud.
+   *
+   * @param scene from the Window class
+   */
   private void drawUiPanels(Window scene) {
     scene.image(panel, centerX - PLAYER_PANEL_X1, centerY - PLAYER_PANEL_Y1,
         PLAYER_PANEL_X2, PLAYER_PANEL_Y2);  // Player selected name box, top middle
@@ -247,6 +274,11 @@ public class InGameHud extends HudState {
         KEYBINDS_PANEL_WIDTH, KEYBINDS_PANEL_HEIGHT); // player stats middle right
   }
 
+  /**
+   * Draws the icons for the in game hud.
+   *
+   * @param scene from the Window class
+   */
   private void drawIcons(Window scene) {
     scene.image(arrowKeysImg, centerX + STAT_ICON_X1, centerY - ZOOM_ICON_Y1,
         ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // arrow keys icon
@@ -264,14 +296,23 @@ public class InGameHud extends HudState {
         ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // X icon
   }
 
+  /**
+   * Draws the player info for the in game hud.
+   *
+   * @param scene from the Window class
+   */
   private void drawPlayerNum(Window scene) {
     scene.textFont(fontMedium);
     scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1),
         centerX - PLAYER_NUM_X1, centerY - PLAYER_NUM_Y1);
   }
 
+  /**
+   * Draws the player resources for the in game hud.
+   *
+   * @param scene from the Window class
+   */
   private void drawPlayerResources(Window scene) {
-    // Displays the current player's resources
     scene.textFont(fontMedium);
     scene.text(": " + (hud.currentPlayer.getResources()), centerX - PLAYER_RESOURCES_X1,
         centerY - PLAYER_RESOURCES_Y1); //print player resources
@@ -280,6 +321,11 @@ public class InGameHud extends HudState {
         .getRemainMove() : 0), centerX - PLAYER_RESOURCES_X1, centerY + PLAYER_MOVE_Y1);
   }
 
+  /**
+   * Draws the player info for the in game hud.
+   *
+   * @param scene from the Window class
+   */
   private void drawPlayerInfo(Window scene) {
     scene.image(resourcesImg, centerX - INFO_ICON_X1, centerY - COLLECTED_ICON_Y1,
         ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // resources icon
@@ -297,6 +343,11 @@ public class InGameHud extends HudState {
 
   }
 
+  /**
+   * Draws the selected info for the in game hud.
+   *
+   * @param scene from the Window class
+   */
   private void drawSelectedInfo(Window scene) {
     if (selected) {
       hud.scene.image(selectedHighRes, centerX - SELECTED_IMG_X1,
@@ -317,6 +368,11 @@ public class InGameHud extends HudState {
     }
   }
 
+  /**
+   * Draws the controls for the in game hud.
+   *
+   * @param scene from the Window class
+   */
   private void drawControls(Window scene) {
     scene.textFont(fontSmall);
     scene.text(": Zoom In/Out", centerX + CONTROL_TEXT_X, centerY - ARROW_TEXT_Y);
@@ -339,6 +395,11 @@ public class InGameHud extends HudState {
     setUnitSpecificButtons(entities);
   }
 
+  /**
+   * Sets the unit specific buttons.
+   *
+   * @param selected the new unit specific buttons
+   */
   private void setSelectedEntityInfo(Entity selected) {
     this.selected = true;
     this.selectedEntity = selected;
@@ -351,6 +412,11 @@ public class InGameHud extends HudState {
     }
   }
 
+  /**
+   * Gets the soldiers stats when selected.
+   *
+   * @param unit soldier stats
+   */
   private void setSoldierInfo(Soldier unit) {
     selectedHighRes = soldierSelectedImg;
     selectedName = "Soldier";
@@ -361,6 +427,11 @@ public class InGameHud extends HudState {
     selectedCost = unit.getCost();
   }
 
+  /**
+   * Gets the buildings stats when selected.
+   *
+   * @param unit building stats
+   */
   private void setBuildingInfo(Building unit) {
     selectedHighRes = buildingSelectedImg;
     selectedName = "Building";
@@ -371,6 +442,11 @@ public class InGameHud extends HudState {
     selectedCost = unit.getCost();
   }
 
+  /**
+   * Gets the workers stats when selected.
+   *
+   * @param unit the worker stats
+   */
   private void setWorkerInfo(Worker unit) {
     selectedHighRes = workerSelectedImg;
     selectedName = "Worker";
@@ -381,6 +457,11 @@ public class InGameHud extends HudState {
     selectedCost = unit.getCost();
   }
 
+  /**
+   * Sets the unit specific buttons.
+   *
+   * @param entities the 2d entities array
+   */
   private void setUnitSpecificButtons(Entity[][] entities) {
     Button buildBuildingButton = createBuildBuildingButton(entities);
     Button buildSoldierButton = createBuildSoldierButton(entities);
@@ -391,6 +472,12 @@ public class InGameHud extends HudState {
     buttonManager.add(buildBuildingButton);
   }
 
+  /**
+   * Creates the build building button.
+   *
+   * @param entities the entities
+   * @return the button
+   */
   private Button createBuildBuildingButton(Entity[][] entities) {
     return new Button(
         centerX + BUILD_BUILDING_BUTTON_X1, centerY + BUILD_BUILDING_BUTTON_Y1,
@@ -403,6 +490,12 @@ public class InGameHud extends HudState {
         " ", buildingButtonIcon, buildingButtonIcon, buildingButtonIcon, hud.scene);
   }
 
+  /**
+   * Creates the build soldier button.
+   *
+   * @param entities the entities
+   * @return the button
+   */
   private Button createBuildSoldierButton(Entity[][] entities) {
     return new Button(
         centerX + BUILD_SOLDIER_BUTTON_X1, centerY + BUILD_SOLDIER_BUTTON_Y1,
@@ -415,6 +508,12 @@ public class InGameHud extends HudState {
         " ", gunButtonIcon, gunButtonIcon, gunButtonIcon, hud.scene);
   }
 
+  /**
+   * Creates the build worker button.
+   *
+   * @param entities the entities
+   * @return the button
+   */
   private Button createBuildWorkerButton(Entity[][] entities) {
     return new Button(
         centerX + BUILD_WORKER_BUTTON_X1, centerY + BUILD_WORKER_BUTTON_Y1,

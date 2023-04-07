@@ -135,7 +135,6 @@ public abstract class HudState {
   /**
    * The Button manager.
    */
-  // Button manager for this state
   ButtonManager buttonManager;
 
   /**
@@ -165,7 +164,7 @@ public abstract class HudState {
    *
    * @param xpos the xpos
    * @param ypos the ypos
-   * @return boolean boolean
+   * @return boolean
    */
   public boolean clicked(int xpos, int ypos) {
     for (Button button : buttonManager.buttons) {
