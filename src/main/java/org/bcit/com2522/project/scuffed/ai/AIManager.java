@@ -34,8 +34,10 @@ public class AIManager {
             GameState GS = GSGenerator.generateGameStateFromEntity(allies, copyOfGameState);
             gameStates.add(GS);
 
-            allies.add(allies.get(0));
-            allies.remove(0);
+            if (allies.size() > 0) {
+                allies.add(allies.get(0));
+                allies.remove(0);
+            }
         }
 
 

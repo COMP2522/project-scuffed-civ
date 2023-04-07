@@ -28,7 +28,8 @@ public abstract class Unit extends Entity { //things that can move
     }
 
     public Boolean withinMoveRange(Position position, Entity[][] entities) {
-        return Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= remainMove;
+        return Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= remainMove &&
+                position.getX() >= 0 && position.getX() < entities.length && position.getY() >= 0 && position.getY() < entities[0].length;
     }
 
     /**
@@ -41,6 +42,8 @@ public abstract class Unit extends Entity { //things that can move
             System.out.println("that position is occupied");
         } else if (!withinMoveRange(position, entities)) {
             System.out.println("you can't move that far");
+        } else if (position.getX() < 0 || position.getX() >= entities.length || position.getY() < 0 || position.getY() >= entities[0].length) {
+            System.out.println("that position is outside of the map");
         } else {
             Position oldPos = getPosition(entities);
             remainMove -= Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY());

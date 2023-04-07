@@ -3,7 +3,6 @@ package org.bcit.com2522.project.scuffed.ai;
 import org.bcit.com2522.project.scuffed.client.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class GSGenerator {
     public static GameState state;
@@ -17,31 +16,54 @@ public class GSGenerator {
         if (entity instanceof Unit unit) {
             for (int i = -unit.getMaxMove(); i <= unit.getMaxMove(); i++) { //every possible move
                 for (int j = -unit.getMaxMove(); j <= unit.getMaxMove(); j++) {
-                    Unit thisUnit = unit;
-                    Position position = thisUnit.getPosition(state.getEntities());
-                    if ((thisUnit.withinMoveRange(new Position(position.getX() + i, position.getY() + j), state.getEntities()))) {
-                        thisUnit.move(state.getEntities(), new Position(position.getX() + i, position.getY() + j));
-                        possibleMoves.addAll(generateActions(thisUnit));
+                    Position position = unit.getPosition(state.getEntities());
+                    if (position != null && (unit.withinMoveRange(new Position(position.getX() + i, position.getY() + j), state.getEntities()))) {
+                        GameState gs = state;
+                        unit = ((Unit)gs.getEntities()[unit.getPosition(gs.getEntities()).getX()][unit.getPosition(gs.getEntities()).getY()]);
+                        unit.move(gs.getEntities(), new Position(position.getX() + i, position.getY() + j));
+
+                        possibleMoves.add(gs);
+                        //possibleMoves.addAll(generateActions(unit));
+                        generateActions(unit, possibleMoves);
                     }
                 }
             }
         } else {
             Building building = ((Building) entity);
-            possibleMoves.addAll(generateActions(building));
+            GameState gs = state;
+            possibleMoves.add(gs);
+            generateActions(building, possibleMoves);
         }
         return possibleMoves;
     }
 
-    private static Collection<? extends GameState> generateActions(Entity entity) {
-        ArrayList<GameState> actions = new ArrayList<GameState>();
-        if (entity instanceof Soldier) {
-            //similar logic to the move function
+    private static void generateActions(Entity entity, ArrayList<GameState> gs) {
+        if (entity instanceof Soldier soldier) {
+            for (int i = -soldier.getRange(); i <= soldier.getRange(); i++) { //every possible move
+                for (int j = -soldier.getRange(); j <= soldier.getRange(); j++) {
+                    Position position = entity.getPosition(gs.get(gs.size() - 1).getEntities());
+                    if (position != null && (soldier.withinRange(new Position(position.getX() + i, position.getY() + j), gs.get(gs.size() - 1).getEntities()))) {
+                        GameState gs1 = gs.get(gs.size() - 1);
+                        soldier.attack(gs1.getEntities(), gs1.getEntities()[position.getX() + i][position.getY() + j]);
+                        gs.add(gs1);
+                    }
+                }
+            }
         } else if (entity instanceof Worker) {
-            //make copy
+            GameState gs1 = gs.get(gs.size() - 1);
+            GameState gs2 = gs.get(gs.size() - 1);
+            ((Worker)gs1.getEntities()[entity.getPosition(gs1.getEntities()).getX()][entity.getPosition(gs1.getEntities()).getY()]).buildBuilding(gs1.getEntities());
+            ((Worker)gs2.getEntities()[entity.getPosition(gs2.getEntities()).getX()][entity.getPosition(gs2.getEntities()).getY()]).collect(gs2.getMap().get(entity.getPosition(gs2.getEntities())));
+            gs.add(gs1);
+            gs.add(gs2);
         } else if (entity instanceof Building) {
-            //make copy
+            GameState gs1 = gs.get(gs.size() - 1);
+            GameState gs2 = gs.get(gs.size() - 1);
+            ((Building)gs1.getEntities()[entity.getPosition(gs1.getEntities()).getX()][entity.getPosition(gs1.getEntities()).getY()]).buildSoldier(gs1.getEntities(), 1, 1, 1, 1);
+            ((Building)gs2.getEntities()[entity.getPosition(gs2.getEntities()).getX()][entity.getPosition(gs2.getEntities()).getY()]).buildWorker(gs1.getEntities());
+            gs.add(gs1);
+            gs.add(gs2);
         }
-        return actions;
     }
 
     //determinebestmove

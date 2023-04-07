@@ -20,12 +20,17 @@ public class Soldier extends Unit{
     }
 
     public void attack(Entity[][] entities, Entity target){
-        if (!withinRange(target.getPosition(entities), entities)) {
+        if (target == null) {
+            System.out.println("there is not an enemy there");
+            return;
+        } else if (!withinRange(target.getPosition(entities), entities)) {
             System.out.println("enemy is out of range");
             return;
         } else if (cannotAct()) {
             System.out.println("you are out of actions");
             return;
+        } else if (target.getOwner() == this.getOwner()) {
+            System.out.println("no friendly fire");
         } else {
             target.takeDamage(damage);
             System.out.println("you did some damage");
@@ -69,7 +74,8 @@ public class Soldier extends Unit{
     }
 
     public boolean withinRange(Position position, Entity[][] entities) {
-        if(Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= range) {
+        if(Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= range &&
+                position.getX() >= 0 && position.getX() < entities.length && position.getY() >= 0 && position.getY() < entities[0].length) {
             return true;
         } else {
             System.out.println("that position is out of range");

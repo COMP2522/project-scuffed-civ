@@ -522,7 +522,6 @@ public class GameState { //everything manager this is the player manager
     }
 
     private int getValue() {
-
         //health of enemies added up
         //health of allies added up (this works with number of allies)
         //position of allies
