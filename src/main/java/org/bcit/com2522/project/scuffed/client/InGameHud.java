@@ -11,7 +11,7 @@ import processing.core.PImage;
  * @author Brendan Doyle
  * @version 2.0
  */
-public class inGameHUD extends HUDState {
+public class InGameHud extends HudState {
   private static final int FONTSIZELARGE = 30;
   private static final int FONTSIZEMEDIUM = 24;
   private static final int FONTSIZESMALL = 15;
@@ -21,6 +21,7 @@ public class inGameHUD extends HUDState {
   private static final int BUTTON_FONT_SIZE = 28;
   private static final int BUTTON_FONT_Y = 5;
   private static final int BUTTON_FONT_X = 20;
+  private static final int END_BUTTON_FONT_X = 10;
   private static final int MENU_BUTTON_X = 540;
   private static final int PLAYER_PANEL_X1 = 100;
   private static final int PLAYER_PANEL_Y1 = 360;
@@ -133,28 +134,15 @@ public class inGameHUD extends HUDState {
   public Entity selectedEntity;
 
 
-
-
-
   /**
    * Instantiates a new In game hud.
    *
    * @param hud the hud
    */
-// Constructor takes a HUD object and calls the super constructor
-  public inGameHUD(HUD hud) {
+  public InGameHud(Hud hud) {
     super(hud);
     selected = false;
   }
-
-//  /**
-//   * Select.
-//   *
-//   * @param selected the selected
-//   */
-////  public static void select(Entity selected) {
-////
-////  }
 
   /**
    * Sets up the buttons and UI elements for the inGameStartHUD state.
@@ -173,7 +161,7 @@ public class inGameHUD extends HUDState {
     buttonManager.add(hudEndTurnButton);
   }
 
-  private void loadFonts(){
+  private void loadFonts() {
     fontLarge = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZELARGE);
     fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZEMEDIUM);
     fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZESMALL);
@@ -182,23 +170,23 @@ public class inGameHUD extends HUDState {
   private void loadImages() {
     rivetPanel = hud.scene.loadImage("sprites/RivetPanel.png");
     panel = hud.scene.loadImage("sprites/workPlease.png");
-    soldierSelectedIMG = hud.scene.loadImage("sprites/highResSoldier.jpg");
-    buildingSelectedIMG = hud.scene.loadImage("sprites/highResFactory.jpg");
-    workerSelectedIMG = hud.scene.loadImage("sprites/highResWorker.jpg");
-    rustedMetalIMG = hud.scene.loadImage("sprites/rustedMetalIMG.jpg");
-    coinIMG = hud.scene.loadImage("sprites/coin.png");
-    moveIMG = hud.scene.loadImage("sprites/movement.png");
-    healthIMG = hud.scene.loadImage("sprites/Health.png");
-    attackIMG = hud.scene.loadImage("sprites/damage.png");
-    resourcesIMG = hud.scene.loadImage("sprites/resources.png");
-    rangeIMG = hud.scene.loadImage("sprites/range.png");
+    soldierSelectedImg = hud.scene.loadImage("sprites/highResSoldier.jpg");
+    buildingSelectedImg = hud.scene.loadImage("sprites/highResFactory.jpg");
+    workerSelectedImg = hud.scene.loadImage("sprites/highResWorker.jpg");
+    rustedMetalImg = hud.scene.loadImage("sprites/rustedMetalIMG.jpg");
+    coinImg = hud.scene.loadImage("sprites/coin.png");
+    moveImg = hud.scene.loadImage("sprites/movement.png");
+    healthImg = hud.scene.loadImage("sprites/Health.png");
+    attackImg = hud.scene.loadImage("sprites/damage.png");
+    resourcesImg = hud.scene.loadImage("sprites/resources.png");
+    rangeImg = hud.scene.loadImage("sprites/range.png");
     iconB = hud.scene.loadImage("sprites/iconB.png");
     iconC = hud.scene.loadImage("sprites/iconC.png");
     iconF = hud.scene.loadImage("sprites/iconF.png");
     iconM = hud.scene.loadImage("sprites/iconM.png");
     iconX = hud.scene.loadImage("sprites/iconX.png");
-    iconWASD = hud.scene.loadImage("sprites/WASD.png");
-    arrowKeysIMG = hud.scene.loadImage("sprites/iconArrows.png");
+    iconWasd = hud.scene.loadImage("sprites/WASD.png");
+    arrowKeysImg = hud.scene.loadImage("sprites/iconArrows.png");
     gunButtonIcon = hud.scene.loadImage("sprites/gunButtonIcon.png");
     buildingButtonIcon = hud.scene.loadImage("sprites/buildingButtonIcon.png");
     workerButtonIcon = hud.scene.loadImage("sprites/workerButtonIcon.png");
@@ -209,32 +197,34 @@ public class inGameHUD extends HUDState {
   }
 
   private Button createMenuButton() {
-      return new Button(
-          centerX - MENU_BUTTON_X, centerY - MENU_BUTTON_Y, centerX - MENU_BUTTON_X2, centerY - MENU_BUTTON_Y2,
-          () -> {
-            hud.setState(new menuHUDState(hud));
-          }, "Menu", panel, panel, panel, hud.scene,
-          rivetPanel, true, BUTTON_FONT_SIZE, BUTTON_FONT_X, BUTTON_FONT_Y);
+    return new Button(
+        centerX - MENU_BUTTON_X, centerY - MENU_BUTTON_Y,
+        centerX - MENU_BUTTON_X2, centerY - MENU_BUTTON_Y2,
+        () -> {
+          hud.setState(new Menuhudstate(hud));
+        }, "Menu", panel, panel, panel, hud.scene,
+        rivetPanel, true, BUTTON_FONT_SIZE, BUTTON_FONT_X, BUTTON_FONT_Y);
   }
 
-  private Button createEndTurnButton(){
+  private Button createEndTurnButton() {
     return new Button(
-        centerX + MENU_BUTTON_X2, centerY - MENU_BUTTON_Y, centerX + MENU_BUTTON_X, centerY - MENU_BUTTON_Y2,
+        centerX + MENU_BUTTON_X2, centerY - MENU_BUTTON_Y,
+        centerX + MENU_BUTTON_X, centerY - MENU_BUTTON_Y2,
         () -> {
           hud.scene.nextTurn();
         }, "End Turn", panel, panel, panel, hud.scene,
-        rivetPanel, true, BUTTON_FONT_SIZE, BUTTON_FONT_X, BUTTON_FONT_Y);
+        rivetPanel, true, BUTTON_FONT_SIZE, END_BUTTON_FONT_X, BUTTON_FONT_Y);
   }
 
   /**
    * Draws the in-game starting HUD state rendering player information
    * and the buttons.
    *
-   * @param scene
+   * @param scene the scene
    */
   @Override
   public void draw(Window scene) {
-    drawUIPanels(scene);
+    drawUiPanels(scene);
     drawIcons(scene);
     drawPlayerInfo(scene);
     drawSelectedInfo(scene);
@@ -242,52 +232,75 @@ public class inGameHUD extends HUDState {
     drawPlayerNum(scene);
     drawPlayerResources(scene);
     buttonManager.draw();
-    }
-
-    private void drawUIPanels(Window scene) {
-      scene.image(panel, centerX - PLAYER_PANEL_X1,centerY - PLAYER_PANEL_Y1, PLAYER_PANEL_X2, PLAYER_PANEL_Y2);  // Player selected name box, top middle
-      scene.image(panel, centerX - SELECTED_PANEL_X1,centerY + SELECTED_PANEL_Y1, BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT); //  selected char box, bottom left
-      scene.image(panel, centerX + SELECTED_BUTTONS_PANEL_X1,centerY + SELECTED_BUTTONS_PANEL_Y1, BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT); // player buttons bottom right
-      scene.image(panel, centerX - RESOURCE_PANEL_X1,centerY - RESOURCE_PANEL_Y1, RESOURCE_PANEL_WIDTH, RESOURCE_PANEL_HEIGHT); // player resources middle left
-      scene.image(panel, centerX + KEYBINDS_PANEL_X1,centerY - KEYBINDS_PANEL_Y1, KEYBINDS_PANEL_WIDTH, KEYBINDS_PANEL_HEIGHT); // player stats middle right
-    }
-
-    private void drawIcons(Window scene) {
-      scene.image(arrowKeysIMG, centerX + STAT_ICON_X1, centerY - ZOOM_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // arrow keys icon
-      scene.image(iconWASD,     centerX + STAT_ICON_X1, centerY - WASD_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // WASD icon
-      scene.image(iconB,        centerX + STAT_ICON_X1, centerY - B_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // B icon
-      scene.image(iconC,        centerX + STAT_ICON_X1, centerY - C_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // C icon
-      scene.image(iconF,        centerX + STAT_ICON_X1, centerY - F_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // F icon
-      scene.image(iconM,        centerX + STAT_ICON_X1, centerY - M_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // M icon
-      scene.image(iconX,        centerX + STAT_ICON_X1, centerY + X_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // X icon
-    }
-    private void drawPlayerNum(Window scene) {
-      scene.textFont(fontMedium);
-      scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1),
-          centerX - PLAYER_NUM_X1, centerY - PLAYER_NUM_Y1);
   }
+
+  private void drawUiPanels(Window scene) {
+    scene.image(panel, centerX - PLAYER_PANEL_X1, centerY - PLAYER_PANEL_Y1,
+        PLAYER_PANEL_X2, PLAYER_PANEL_Y2);  // Player selected name box, top middle
+    scene.image(panel, centerX - SELECTED_PANEL_X1, centerY + SELECTED_PANEL_Y1,
+        BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT); //  selected char box, bottom left
+    scene.image(panel, centerX + SELECTED_BUTTONS_PANEL_X1, // player buttons bottom right
+        centerY + SELECTED_BUTTONS_PANEL_Y1, BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT);
+    scene.image(panel, centerX - RESOURCE_PANEL_X1, centerY - RESOURCE_PANEL_Y1,
+        RESOURCE_PANEL_WIDTH, RESOURCE_PANEL_HEIGHT); // player resources middle left
+    scene.image(panel, centerX + KEYBINDS_PANEL_X1, centerY - KEYBINDS_PANEL_Y1,
+        KEYBINDS_PANEL_WIDTH, KEYBINDS_PANEL_HEIGHT); // player stats middle right
+  }
+
+  private void drawIcons(Window scene) {
+    scene.image(arrowKeysImg, centerX + STAT_ICON_X1, centerY - ZOOM_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // arrow keys icon
+    scene.image(iconWasd, centerX + STAT_ICON_X1, centerY - WASD_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // WASD icon
+    scene.image(iconB, centerX + STAT_ICON_X1, centerY - B_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // B icon
+    scene.image(iconC, centerX + STAT_ICON_X1, centerY - C_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // C icon
+    scene.image(iconF, centerX + STAT_ICON_X1, centerY - F_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // F icon
+    scene.image(iconM, centerX + STAT_ICON_X1, centerY - M_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // M icon
+    scene.image(iconX, centerX + STAT_ICON_X1, centerY + X_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // X icon
+  }
+
+  private void drawPlayerNum(Window scene) {
+    scene.textFont(fontMedium);
+    scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1),
+        centerX - PLAYER_NUM_X1, centerY - PLAYER_NUM_Y1);
+  }
+
   private void drawPlayerResources(Window scene) {
     // Displays the current player's resources
     scene.textFont(fontMedium);
-    scene.text(": " + (hud.currentPlayer.getResources()), centerX - PLAYER_RESOURCES_X1, centerY - PLAYER_RESOURCES_Y1); //print player resources
-    scene.text(": " + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity)
+    scene.text(": " + (hud.currentPlayer.getResources()), centerX - PLAYER_RESOURCES_X1,
+        centerY - PLAYER_RESOURCES_Y1); //print player resources
+    scene.text(": "
+        + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity)
         .getRemainMove() : 0), centerX - PLAYER_RESOURCES_X1, centerY + PLAYER_MOVE_Y1);
   }
 
-    private void drawPlayerInfo(Window scene) {
-      scene.image(resourcesIMG, centerX - INFO_ICON_X1, centerY - COLLECTED_ICON_Y1, ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // resources icon
-      scene.image(healthIMG,    centerX - INFO_ICON_X1, centerY - HEALTH_ICON_Y1,    ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // health icon
-      scene.image(attackIMG,    centerX - INFO_ICON_X1, centerY - DAMAGE_ICON_Y1,    ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // attack icon
-      scene.image(rangeIMG,     centerX - INFO_ICON_X1, centerY - RANGE_ICON_Y1,     ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // range icon
-      scene.image(moveIMG,      centerX - INFO_ICON_X1, centerY + MOVEMENT_ICON_Y1,  ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // move icon
-      scene.image(coinIMG,      centerX - INFO_ICON_X1, centerY + COST_ICON_Y1,      ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // coin icon
+  private void drawPlayerInfo(Window scene) {
+    scene.image(resourcesImg, centerX - INFO_ICON_X1, centerY - COLLECTED_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // resources icon
+    scene.image(healthImg, centerX - INFO_ICON_X1, centerY - HEALTH_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // health icon
+    scene.image(attackImg, centerX - INFO_ICON_X1, centerY - DAMAGE_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // attack icon
+    scene.image(rangeImg, centerX - INFO_ICON_X1, centerY - RANGE_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // range icon
+    scene.image(moveImg, centerX - INFO_ICON_X1, centerY + MOVEMENT_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // move icon
+    scene.image(coinImg, centerX - INFO_ICON_X1, centerY + COST_ICON_Y1,
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // coin icon
 
 
-    }
+  }
 
   private void drawSelectedInfo(Window scene) {
     if (selected) {
-      hud.scene.image(selectedHighRes, centerX - SELECTED_IMG_X1, centerY + SELECTED_IMG_Y1, SELECTED_IMG_WIDTH, SELECTED_IMG_HEIGHT);
+      hud.scene.image(selectedHighRes, centerX - SELECTED_IMG_X1,
+          centerY + SELECTED_IMG_Y1, SELECTED_IMG_WIDTH, SELECTED_IMG_HEIGHT);
       scene.textFont(fontSmall);
       scene.text(selectedName, centerX - SELECTED_NAME_X, centerY + SELECTED_NAME_Y);
       scene.textFont(fontMedium);
@@ -339,7 +352,7 @@ public class inGameHUD extends HUDState {
   }
 
   private void setSoldierInfo(Soldier unit) {
-    selectedHighRes = soldierSelectedIMG;
+    selectedHighRes = soldierSelectedImg;
     selectedName = "Soldier";
     selectedHealth = unit.getHealth();
     selectedAttack = unit.getDamage();
@@ -349,7 +362,7 @@ public class inGameHUD extends HUDState {
   }
 
   private void setBuildingInfo(Building unit) {
-    selectedHighRes = buildingSelectedIMG;
+    selectedHighRes = buildingSelectedImg;
     selectedName = "Building";
     selectedHealth = unit.getHealth();
     selectedAttack = DEFAULT_STAT;
@@ -359,7 +372,7 @@ public class inGameHUD extends HUDState {
   }
 
   private void setWorkerInfo(Worker unit) {
-    selectedHighRes = workerSelectedIMG;
+    selectedHighRes = workerSelectedImg;
     selectedName = "Worker";
     selectedHealth = unit.getHealth();
     selectedAttack = DEFAULT_STAT;
@@ -380,35 +393,38 @@ public class inGameHUD extends HUDState {
 
   private Button createBuildBuildingButton(Entity[][] entities) {
     return new Button(
-        centerX + BUILD_BUILDING_BUTTON_X1, centerY + BUILD_BUILDING_BUTTON_Y1, centerX + BUILD_BUILDING_BUTTON_X2, centerY + BUILD_BUILDING_BUTTON_Y2,
+        centerX + BUILD_BUILDING_BUTTON_X1, centerY + BUILD_BUILDING_BUTTON_Y1,
+        centerX + BUILD_BUILDING_BUTTON_X2, centerY + BUILD_BUILDING_BUTTON_Y2,
         () -> {
           if (selectedEntity instanceof Worker) {
             ((Worker) selectedEntity).buildBuilding(entities);
           }
-        }
-        , " ", buildingButtonIcon, buildingButtonIcon, buildingButtonIcon, hud.scene);
+        },
+        " ", buildingButtonIcon, buildingButtonIcon, buildingButtonIcon, hud.scene);
   }
 
   private Button createBuildSoldierButton(Entity[][] entities) {
     return new Button(
-        centerX + BUILD_SOLDIER_BUTTON_X1, centerY + BUILD_SOLDIER_BUTTON_Y1, centerX + BUILD_SOLDIER_BUTTON_X2, centerY + BUILD_SOLDIER_BUTTON_Y2,
+        centerX + BUILD_SOLDIER_BUTTON_X1, centerY + BUILD_SOLDIER_BUTTON_Y1,
+        centerX + BUILD_SOLDIER_BUTTON_X2, centerY + BUILD_SOLDIER_BUTTON_Y2,
         () -> {
           if (selectedEntity instanceof Building) {
             ((Building) selectedEntity).buildSoldier(entities, 1, 1, 1, 1);
           }
-        }
-        , " ", gunButtonIcon, gunButtonIcon, gunButtonIcon, hud.scene);
+        },
+        " ", gunButtonIcon, gunButtonIcon, gunButtonIcon, hud.scene);
   }
 
   private Button createBuildWorkerButton(Entity[][] entities) {
     return new Button(
-        centerX + BUILD_WORKER_BUTTON_X1, centerY + BUILD_WORKER_BUTTON_Y1, centerX + BUILD_WORKER_BUTTON_X2, centerY + BUILD_WORKER_BUTTON_Y2,
+        centerX + BUILD_WORKER_BUTTON_X1, centerY + BUILD_WORKER_BUTTON_Y1,
+        centerX + BUILD_WORKER_BUTTON_X2, centerY + BUILD_WORKER_BUTTON_Y2,
         () -> {
           if (selectedEntity instanceof Building) {
             ((Building) selectedEntity).buildWorker(entities);
           }
-        }
-        , " ", workerButtonIcon, workerButtonIcon, workerButtonIcon, hud.scene);
+        },
+        " ", workerButtonIcon, workerButtonIcon, workerButtonIcon, hud.scene);
   }
 
 }

@@ -17,7 +17,7 @@ public class GameInstance {
     /**
      * The Hud.
      */
-    public HUD hud;
+    public Hud hud;
     /**
      * The Game state.
      */
@@ -56,7 +56,7 @@ public class GameInstance {
      */
     public GameInstance(Window scene) {
         this.scene = scene;
-        hud = new HUD(scene);
+        hud = new Hud(scene);
         gameState = new GameState();
     }
 
@@ -66,7 +66,7 @@ public class GameInstance {
      * @param hud       the hud
      * @param gameState the game state
      */
-    public GameInstance(HUD hud, GameState gameState) {
+    public GameInstance(Hud hud, GameState gameState) {
         this.hud = hud;
         this.gameState = gameState;
     }
@@ -108,7 +108,7 @@ public class GameInstance {
     /**
      * Converts the game state to a JSON object and saves it to the save.json file.
      *
-     * @param client
+     * @param
      * @throws IOException the io exception
      */
     public void saveGame() throws IOException {

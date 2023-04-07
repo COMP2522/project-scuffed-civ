@@ -142,7 +142,7 @@ public class Window extends PApplet {
    * @param mapheight  the mapheight
    */
   public void initGame(int numplayers, int mapwidth, int mapheight) {
-    gameInstance = new GameInstance(new HUD(this), new GameState(numplayers, mapwidth, mapheight));
+    gameInstance = new GameInstance(new Hud(this), new GameState(numplayers, mapwidth, mapheight));
     gameInstance.newGame();
   }
 
