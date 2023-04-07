@@ -33,6 +33,19 @@ public class Map { //this is a tile manager
         this.color = (Color.red);
     }
 
+    public Map(Map map) {
+        this.width = map.width;
+        this.height = map.height;
+        this.tiles = new Tile[map.tiles.length][map.tiles[0].length];
+
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[0].length; j++) {
+                Tile tile = map.tiles[i][j];
+                this.tiles[i][j] = new Tile(map.tiles[i][j].getType());
+            }
+        }
+    }
+
     public void draw(int zoomAmount, Window scene, int xShift, int yShift) {
 
         for (int i = 0; i < tiles.length; i++) {

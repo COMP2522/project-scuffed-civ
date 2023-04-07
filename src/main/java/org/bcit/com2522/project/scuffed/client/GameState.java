@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 import static processing.core.PConstants.*;
 
-import org.bcit.com2522.project.scuffed.ai.AI;
-
 public class GameState { //everything manager this is the player manager
     private String gameID;
     Map map;
@@ -64,6 +62,32 @@ public class GameState { //everything manager this is the player manager
     public GameState(){
         zoomAmount = 32;
     };
+
+    /**
+     * this function is used by the AI to create a deep copy of the GameState
+     * @param state the state to make a copy of
+     */
+    public GameState(GameState state) {
+        this.gameID = state.gameID;
+        this.map = new Map(state.map);
+        this.currentPlayer = new Player(state.currentPlayer);
+        this.players = new ArrayDeque<Player>(state.players);
+        this.entities = new Entity[state.entities.length][state.entities[0].length];
+        for (int i = 0; i < entities.length; i++) {
+            for (int j = 0; j < entities[0].length; j++) {
+                Entity entity = state.entities[i][j];
+                if (entity != null) {
+                    if (state.entities[i][j] instanceof Worker)
+                        this.entities[i][j] = new Worker(entity.getOwnerID(), entity.getHealth(), entity.getCost(), ((Unit) entity).getMaxMove());
+                    else if (state.entities[i][j] instanceof Building)
+                        this.entities[i][j] = new Building(entity.getOwnerID(), entity.getHealth(), entity.getCost());
+                    else
+                        this.entities[i][j] = new Soldier(entity.getOwnerID(), entity.getHealth(), entity.getCost(), ((Soldier) entity).getMaxMove(), ((Soldier) entity).getDamage(), ((Soldier) entity).getRange());
+                }
+            }
+        }
+        this.selected = null;
+    }
 
     public static Player getPlayer(int ownerId) {
         for (Player player: players) {
@@ -522,11 +546,35 @@ public class GameState { //everything manager this is the player manager
     }
 
     private int getValue() {
-        //health of enemies added up
-        //health of allies added up (this works with number of allies)
+        int playerHP = 0;
+        int playerDMG = 0;
+        int enemyHP = 0;
+        int enemyDMG = 0;
+
+        for (int i = 0; i < entities.length; i++) {
+            for (int j = 0; j < entities[0].length; j++) {
+                Entity entity = entities[i][j];
+                if(entity != null) {
+                    if (entity.getOwner() == currentPlayer) {
+                        playerHP += entity.getHealth();
+                        if (entity instanceof Soldier soldier) {
+                            playerDMG += soldier.getDamage();
+                        }
+                        if (entity.getPosition(entities).getX() == 5) {
+                            playerHP += 10000;
+                        }
+                    } else {
+                        enemyHP += entity.getHealth();
+                        if (entity instanceof Soldier soldier) {
+                            enemyDMG += soldier.getDamage();
+                        }
+                    }
+                }
+            }
+        }
         //position of allies
         //position of enemies
 
-        return 0;
+        return playerHP + playerDMG - enemyDMG - enemyHP;
     }
 }

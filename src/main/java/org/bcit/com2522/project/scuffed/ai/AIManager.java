@@ -27,12 +27,14 @@ public class AIManager {
             }
         }
 
+        System.out.format("%d allies \n", allies.size());
+
+
         //generate GameStates using GSGenerator
         ArrayList<GameState> gameStates = new ArrayList<GameState>();
         for (int i = 0; i < allies.size(); i++) {
-            GameState copyOfGameState = gameState;
-            GameState GS = GSGenerator.generateGameStateFromEntity(allies, copyOfGameState);
-            gameStates.add(GS);
+            //GameState GS = GSGenerator.generateGameStateFromEntity(allies, gameState);
+            gameStates.add(GSGenerator.generateGameStateFromEntity(allies, gameState));
 
             if (allies.size() > 0) {
                 allies.add(allies.get(0));
@@ -40,6 +42,8 @@ public class AIManager {
             }
         }
 
+
+        System.out.format("%d possible turns \n", gameStates.size());
 
         //pick best turn
         GameState bestGameTurn = gameStates.get(0);

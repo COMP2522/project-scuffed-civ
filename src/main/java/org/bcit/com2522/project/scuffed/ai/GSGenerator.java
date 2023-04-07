@@ -18,13 +18,14 @@ public class GSGenerator {
                 for (int j = -unit.getMaxMove(); j <= unit.getMaxMove(); j++) {
                     Position position = unit.getPosition(state.getEntities());
                     if (position != null && (unit.withinMoveRange(new Position(position.getX() + i, position.getY() + j), state.getEntities()))) {
-                        GameState gs = state;
-                        unit = ((Unit)gs.getEntities()[unit.getPosition(gs.getEntities()).getX()][unit.getPosition(gs.getEntities()).getY()]);
-                        unit.move(gs.getEntities(), new Position(position.getX() + i, position.getY() + j));
+                        System.out.println("adding a move");
+                        GameState gs = new GameState(state); //creates a deep copy of state
+                        Unit unit2 = ((Unit)gs.getEntities()[unit.getPosition(state.getEntities()).getX()][unit.getPosition(state.getEntities()).getY()]);
+                        unit2.move(gs.getEntities(), new Position(position.getX() + i, position.getY() + j));
 
                         possibleMoves.add(gs);
                         //possibleMoves.addAll(generateActions(unit));
-                        generateActions(unit, possibleMoves);
+                        generateActions(unit2, possibleMoves);
                     }
                 }
             }
@@ -43,24 +44,26 @@ public class GSGenerator {
                 for (int j = -soldier.getRange(); j <= soldier.getRange(); j++) {
                     Position position = entity.getPosition(gs.get(gs.size() - 1).getEntities());
                     if (position != null && (soldier.withinRange(new Position(position.getX() + i, position.getY() + j), gs.get(gs.size() - 1).getEntities()))) {
-                        GameState gs1 = gs.get(gs.size() - 1);
+                        GameState gs1 = new GameState(gs.get(gs.size() - 1));
                         soldier.attack(gs1.getEntities(), gs1.getEntities()[position.getX() + i][position.getY() + j]);
                         gs.add(gs1);
                     }
                 }
             }
         } else if (entity instanceof Worker) {
-            GameState gs1 = gs.get(gs.size() - 1);
-            GameState gs2 = gs.get(gs.size() - 1);
-            ((Worker)gs1.getEntities()[entity.getPosition(gs1.getEntities()).getX()][entity.getPosition(gs1.getEntities()).getY()]).buildBuilding(gs1.getEntities());
-            ((Worker)gs2.getEntities()[entity.getPosition(gs2.getEntities()).getX()][entity.getPosition(gs2.getEntities()).getY()]).collect(gs2.getMap().get(entity.getPosition(gs2.getEntities())));
+            GameState gs0 = gs.get(gs.size() - 1);
+            GameState gs1 = new GameState(gs0);
+            GameState gs2 = new GameState(gs0);
+            ((Worker)gs1.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).buildBuilding(gs1.getEntities());
+            ((Worker)gs2.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).collect(gs2.getMap().get(entity.getPosition(gs0.getEntities())));
             gs.add(gs1);
             gs.add(gs2);
         } else if (entity instanceof Building) {
-            GameState gs1 = gs.get(gs.size() - 1);
-            GameState gs2 = gs.get(gs.size() - 1);
-            ((Building)gs1.getEntities()[entity.getPosition(gs1.getEntities()).getX()][entity.getPosition(gs1.getEntities()).getY()]).buildSoldier(gs1.getEntities(), 1, 1, 1, 1);
-            ((Building)gs2.getEntities()[entity.getPosition(gs2.getEntities()).getX()][entity.getPosition(gs2.getEntities()).getY()]).buildWorker(gs1.getEntities());
+            GameState gs0 = gs.get(gs.size() - 1);
+            GameState gs1 = new GameState(gs0);
+            GameState gs2 = new GameState(gs0);
+            ((Building)gs1.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).buildSoldier(gs1.getEntities(), 1, 1, 1, 1);
+            ((Building)gs2.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).buildWorker(gs2.getEntities());
             gs.add(gs1);
             gs.add(gs2);
         }
@@ -81,6 +84,7 @@ public class GSGenerator {
 
     private static void takeBestMove(Entity entity) {
         ArrayList<GameState> possibleMoves = generateMoves(entity);
+        System.out.format("%d possible moves\n", possibleMoves.size());
 
         state = determineBestMove(possibleMoves);
     }

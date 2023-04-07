@@ -30,7 +30,7 @@ public abstract class Entity {
     public Position getPosition(Entity[][] entities) {
         for (int i = 0; i < entities.length; i++) {
             for (int j = 0; j < entities[0].length; j++) {
-                if (entities[i][j] == this) {
+                if (this.equals(entities[i][j])) {
                     return new Position(i,j);
                 }
             }

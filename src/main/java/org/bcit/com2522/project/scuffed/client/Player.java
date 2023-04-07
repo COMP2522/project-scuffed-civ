@@ -39,7 +39,15 @@ public class Player { //gamestate is the player manager
     hasLost = false;
   }
 
-  public void addEntity(Position position) {
+    public Player(Player player) {
+      this.resources = player.resources;
+      this.playerNum = player.playerNum;
+      this.hasLost = player.hasLost;
+      this.color = player.color;
+      this.isAi = player.isAi;
+    }
+
+    public void addEntity(Position position) {
     //entities.add(new Entity(scene, position, this));
   }
 
