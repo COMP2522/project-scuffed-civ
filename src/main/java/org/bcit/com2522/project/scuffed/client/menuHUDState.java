@@ -11,6 +11,31 @@ import org.bcit.com2522.project.scuffed.ui.ButtonManager;
  * @version 1.0
  */
 public class menuHUDState extends HUDState {
+  private static final int FONTSIZELARGE = 30;
+  private static final int FONTSIZEMEDIUM = 24;
+  private static final int FONTSIZESMALL = 15;
+  private static final int BUTTON_FONT_SIZE = 28;
+  private static final int BUTTON_TEXT_Y = 8;
+  private static final int MENU_BUTTON_X = 150;
+  private static final int MAIN_MENU_BUTTON_Y = 260;
+  private static final int MAIN_MENU_BUTTON_Y2 = 210;
+  private static final int MAIN_MENU_TEXT_X = 65;
+  private static final int SAVE_BUTTON_Y1 = 160;
+  private static final int SAVE_BUTTON_Y2 = 110;
+  private static final int SAVE_TEXT_X = 105;
+  private static final int SETTING_BUTTON_Y1 = 60;
+  private static final int SETTING_BUTTON_Y2 = 10;
+  private static final int SETTING_TEXT_X = 85;
+  private static final int EXIT_BUTTON_Y1 = 40;
+  private static final int EXIT_BUTTON_Y2 = 90;
+  private static final int EXIT_TEXT_X = 110;
+  private static final int RESUME_BUTTON_Y1 = 140;
+  private static final int RESUME_BUTTON_Y2 = 190;
+  private static final int RESUME_TEXT_X = 40;
+  private static final int MENU_BACKGROUND_X = 200;
+  private static final int MENU_BACKGROUND_Y = 300;
+  private static final int MENU_BACKGROUND_X2 = 150;
+  private static final int MENU_BACKGROUND_Y2 = 200;
 
   /**
    * Instantiates a new Menu hud state.
@@ -33,9 +58,9 @@ public class menuHUDState extends HUDState {
     setupButtons();
   }
   private void setupFonts() {
-    fontLarge = hud.scene.createFont("fonts/Retro Gaming.ttf", 30);
-    fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", 24);
-    fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", 15);
+    fontLarge = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZELARGE);
+    fontMedium = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZEMEDIUM);
+    fontSmall = hud.scene.createFont("fonts/Retro Gaming.ttf", FONTSIZESMALL);
   }
 
   private void setupImages() {
@@ -61,41 +86,45 @@ public class menuHUDState extends HUDState {
   }
 
   private Button createReturnToMainMenuButton() {
-    return new Button(centerX - 150, centerY - 260, centerX + 150, centerY - 210, () -> {
+    return new Button(centerX - MENU_BUTTON_X, centerY - MAIN_MENU_BUTTON_Y, centerX + MENU_BUTTON_X, centerY - MAIN_MENU_BUTTON_Y2, () -> {
       onMenuClicked();
     }, "Main Menu", panel, panel, panel, hud.scene,
-        panel, true, 28, 65, 8);
+        panel, true, BUTTON_FONT_SIZE, MAIN_MENU_TEXT_X, BUTTON_TEXT_Y);
   }
 
   private Button createSaveButton() {
-    return new Button(centerX - 150, centerY - 160, centerX + 150, centerY - 110, () -> {
+    return new Button(centerX - MENU_BUTTON_X, centerY - SAVE_BUTTON_Y1, centerX + MENU_BUTTON_X, centerY - SAVE_BUTTON_Y2, () -> {
       hud.scene.saveGame();
     }, "Save", panel, panel, panel, hud.scene,
-        panel, true, 28, 105, 8);
+        panel, true, BUTTON_FONT_SIZE, SAVE_TEXT_X, BUTTON_TEXT_Y);
   }
 
   private Button createSettingsButton() {
-    return new Button(centerX - 150, centerY - 60, centerX + 150, centerY - 10, () -> {
+    return new Button(centerX - MENU_BUTTON_X, centerY - SETTING_BUTTON_Y1, centerX + MENU_BUTTON_X, centerY - SETTING_BUTTON_Y2, () -> {
       onMenuClicked();
     }, "Settings", panel, panel, panel, hud.scene,
-        panel, true, 28, 85, 8);
+        panel, true, BUTTON_FONT_SIZE, SETTING_TEXT_X, BUTTON_TEXT_Y);
   }
 
   private Button createExitButton() {
-    return new Button(centerX - 150, centerY + 40, centerX + 150, centerY + 90,
+    return new Button(centerX - MENU_BUTTON_X, centerY + EXIT_BUTTON_Y1, centerX + MENU_BUTTON_X, centerY + EXIT_BUTTON_Y2,
         () -> {
           hud.scene.exit();
         }, "Exit", panel, panel, panel, hud.scene
-        , rivetPanel, true, 28, 110, 8);
+        , rivetPanel, true, BUTTON_FONT_SIZE, EXIT_TEXT_X, BUTTON_TEXT_Y);
   }
 
   private Button createResumeGameButton() {
-    return new Button(centerX - 150, centerY + 140, centerX + 150, centerY + 190,
+    return new Button(centerX - MENU_BUTTON_X, centerY + RESUME_BUTTON_Y1, centerX + MENU_BUTTON_X, centerY + RESUME_BUTTON_Y2,
         () -> {
           hud.setState(new inGameHUD(hud));
         }, "Resume Game", panel, panel, panel, hud.scene,
-        panel, true, 28, 40, 8);
+        panel, true, BUTTON_FONT_SIZE, RESUME_TEXT_X, BUTTON_TEXT_Y);
   }
+  private void gameMenuBackground(Window scene){
+    scene.image(panel, centerX - MENU_BACKGROUND_X, centerY - MENU_BACKGROUND_Y, centerX - MENU_BACKGROUND_X2, centerY + MENU_BACKGROUND_Y2);
+  }
+
 
   /**
    * On menu clicked.
@@ -112,7 +141,7 @@ public class menuHUDState extends HUDState {
    */
   @Override
   public void draw(Window scene) {
-    scene.image(panel, centerX - 200, centerY - 300, centerX - 150, centerY + 200);
+    gameMenuBackground(scene);
     buttonManager.draw();
   }
 }

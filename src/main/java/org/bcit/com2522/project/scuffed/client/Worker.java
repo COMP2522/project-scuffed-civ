@@ -7,15 +7,32 @@ import java.awt.*;
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 /**
- *  Class representing a worker unit that can build buildings and harvest resources.
- *  Each player starts with one worker unit.
+ * Class representing a worker unit that can build buildings and harvest resources.
+ * Each player starts with one worker unit.
  */
 public class Worker extends Unit{
 
+    /**
+     * The constant cost.
+     */
     public static final int cost = 1;
+    /**
+     * The constant health.
+     */
     public static final int health = 100;
+    /**
+     * The constant speed.
+     */
     public static final int speed = 5;
 
+    /**
+     * Instantiates a new Worker.
+     *
+     * @param ownerID the owner id
+     * @param health  the health
+     * @param cost    the cost
+     * @param speed   the speed
+     */
     public Worker(int ownerID, int health, int cost, int speed) {
         super(ownerID, health, cost, speed);
         entityType = "worker";
@@ -28,6 +45,12 @@ public class Worker extends Unit{
         return workerObject;
     }
 
+    /**
+     * From json object worker.
+     *
+     * @param workerObject the worker object
+     * @return the worker
+     */
     public static Worker fromJSONObject(JSONObject workerObject) {
         if(workerObject == null) {
             return null;
@@ -41,7 +64,13 @@ public class Worker extends Unit{
         return worker;
     }
 
-        public Entity buildBuilding(Entity[][] entities) {
+    /**
+     * Build building entity.
+     *
+     * @param entities the entities
+     * @return the entity
+     */
+    public Entity buildBuilding(Entity[][] entities) {
         Building building = null;
         if (this instanceof Worker) {
             Position free = getFreePosition(entities);
@@ -55,6 +84,11 @@ public class Worker extends Unit{
         return building;
     }
 
+    /**
+     * Collect.
+     *
+     * @param tile the tile
+     */
     public void collect(Tile tile) {
         if (cannotAct()) {
             System.out.println("you do not have enough actions left");

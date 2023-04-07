@@ -1,7 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import processing.core.PVector;
-import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 /**
  * The HUD class is responsible for managing the display of
@@ -11,24 +10,24 @@ import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
  * @version 1.0
  */
 public class HUD {
-    /**
-     * The Current player.
-     */
-    public Player currentPlayer;
-    /**
-     * The Current state.
-     */
-    public HUDState currentState;
-    /**
-     * The Scene.
-     */
-    Window scene; // reference to the main window
+  /**
+   * The Current player.
+   */
+  public Player currentPlayer;
+  /**
+   * The Current state.
+   */
+  public HUDState currentState;
+  /**
+   * The Scene.
+   */
+  Window scene; // reference to the main window
 
-    /**
-     * Instantiates a new Hud.
-     *
-     * @param scene the scene
-     */
+  /**
+   * Instantiates a new Hud.
+   *
+   * @param scene the scene
+   */
 // constructor initializes the HUD object with a given Window object scene
     // and sets the initial state to the inGameStartHUD state
     public HUD(Window scene) {
@@ -36,35 +35,35 @@ public class HUD {
         this.currentState = new inGameHUD(this);
     }
 
-    /**
-     * Sets the current state of the HUD to a new HUDState object.
-     * and wipes the graphics from the previous state.
-     *
-     * @param newState the new state
-     */
-    public void setState(HUDState newState) {
+  /**
+   * Sets the current state of the HUD to a new HUDState object.
+   * and wipes the graphics from the previous state.
+   *
+   * @param newState the new state
+   */
+  public void setState(HUDState newState) {
         scene.wipeGraphics();
         this.currentState = newState;
     }
 
-    /**
-     * Calls the draw method of the current HUDState objec,
-     * passing the scene. Is responsible for drawing the current state.
-     *
-     * @param scene the scene
-     */
-    public void draw(Window scene) {
+  /**
+   * Calls the draw method of the current HUDState objec,
+   * passing the scene. Is responsible for drawing the current state.
+   *
+   * @param scene the scene
+   */
+  public void draw(Window scene) {
         currentState.draw(scene);
     }
 
-    /**
-     * Checks mouse position and calls the clicked method of the
-     * current HUDState object. Is responsible for handling mouse clicks.
-     *
-     * @param mousePos the mouse pos
-     * @return boolean
-     */
-    public boolean clicked(PVector mousePos) {
+  /**
+   * Checks mouse position and calls the clicked method of the
+   * current HUDState object. Is responsible for handling mouse clicks.
+   *
+   * @param mousePos the mouse pos
+   * @return boolean boolean
+   */
+  public boolean clicked(PVector mousePos) {
 
         return currentState.clicked((int)mousePos.x, (int)mousePos.y);
     }

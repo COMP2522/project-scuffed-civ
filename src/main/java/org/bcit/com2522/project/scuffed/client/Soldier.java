@@ -6,12 +6,34 @@ import java.awt.*;
 
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
+/**
+ * The type Soldier.
+ */
 public class Soldier extends Unit{
-    public static final int cost = 1;
-    int damage;
-    int range;
+  /**
+   * The constant cost.
+   */
+  public static final int cost = 1;
+  /**
+   * The Damage.
+   */
+  int damage;
+  /**
+   * The Range.
+   */
+  int range;
 
-    public Soldier(int ownerId, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
+  /**
+   * Instantiates a new Soldier.
+   *
+   * @param ownerId the owner id
+   * @param health  the health
+   * @param cost    the cost
+   * @param speed   the speed
+   * @param damage  the damage
+   * @param range   the range
+   */
+  public Soldier(int ownerId, int health, int cost, int speed, int damage, int range) { //TODO this is the only constructor
         super(ownerId, health, cost, speed);
         entityType = "soldier";
         texture = GameImages.get("soldier");
@@ -19,7 +41,13 @@ public class Soldier extends Unit{
         this.range = range;
     }
 
-    public void attack(Entity[][] entities, Entity target){
+  /**
+   * Attack.
+   *
+   * @param entities the entities
+   * @param target   the target
+   */
+  public void attack(Entity[][] entities, Entity target){
         if (!withinRange(target.getPosition(entities), entities)) {
             System.out.println("enemy is out of range");
             return;
@@ -45,13 +73,13 @@ public class Soldier extends Unit{
         return soldierObject;
     }
 
-    /**
-     * Creates a Soldier object from a JSONObject
-     *
-     * @param soldierObject
-     * @return
-     */
-    public static Soldier fromJSONObject(JSONObject soldierObject) {
+  /**
+   * Creates a Soldier object from a JSONObject
+   *
+   * @param soldierObject the soldier object
+   * @return soldier
+   */
+  public static Soldier fromJSONObject(JSONObject soldierObject) {
         if(soldierObject == null) {
             return null;
         }
@@ -68,7 +96,14 @@ public class Soldier extends Unit{
         return soldier;
     }
 
-    public boolean withinRange(Position position, Entity[][] entities) {
+  /**
+   * Within range boolean.
+   *
+   * @param position the position
+   * @param entities the entities
+   * @return the boolean
+   */
+  public boolean withinRange(Position position, Entity[][] entities) {
         if(Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= range) {
             return true;
         } else {
@@ -77,11 +112,21 @@ public class Soldier extends Unit{
         }
     }
 
-    public int getDamage() {
+  /**
+   * Gets damage.
+   *
+   * @return the damage
+   */
+  public int getDamage() {
         return damage;
     }
 
-    public int getRange() {
+  /**
+   * Gets range.
+   *
+   * @return the range
+   */
+  public int getRange() {
         return (range);
     }
 

@@ -1,13 +1,27 @@
 package org.bcit.com2522.project.scuffed.client;
 
+/**
+ * The type Debug menu.
+ */
 public class DebugMenu {
 
+  /**
+   * The Scene.
+   */
   Window scene;
 
+  /**
+   * Instantiates a new Debug menu.
+   *
+   * @param scene the scene
+   */
   public DebugMenu (Window scene) {
     this.scene = scene;
   }
 
+  /**
+   * Draw.
+   */
   public void draw() {
     scene.fill(255);
     scene.rect(0, 0, 150, 100);

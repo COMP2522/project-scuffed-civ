@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  * [CURRENTLY NON-FUNCTIONAL]
- *
+ * <p>
  * Coordinates the game state between multiple players using the ClientHandler inner class to designate a new
  * Thread for each new client. This version is meant to work for clients on the same wifi network as the host.
  *
@@ -28,7 +28,14 @@ public class GameServer implements Runnable {
      * The list of clients connected to the server.
      */
     private final List<ClientHandler> clients = Collections.synchronizedList(new LinkedList<>());
-    public GameServer(GameState gameState, int port) {
+
+  /**
+   * Instantiates a new Game server.
+   *
+   * @param gameState the game state
+   * @param port      the port
+   */
+  public GameServer(GameState gameState, int port) {
         this.gameState = gameState;
         this.port = port;
         this.hostIP = getLocalIpAddress();
@@ -57,13 +64,13 @@ public class GameServer implements Runnable {
         }
     }
 
-    /**
-     * Sends the updated game state to all clients except the current player.
-     *
-     * @param updatedGameState the updated game state
-     * @param currentPlayer the current player's client handler
-     */
-    public void broadcastGameState(GameState updatedGameState, ClientHandler currentPlayer) {
+  /**
+   * Sends the updated game state to all clients except the current player.
+   *
+   * @param updatedGameState the updated game state
+   * @param currentPlayer    the current player's client handler
+   */
+  public void broadcastGameState(GameState updatedGameState, ClientHandler currentPlayer) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
                 if (client != currentPlayer) {
@@ -73,22 +80,22 @@ public class GameServer implements Runnable {
         }
     }
 
-    /**
-     * Sends the initial game state to the client when they connect.
-     *
-     * @param client the client to send the initial game state to
-     */
-    public void sendInitialGameState(ClientHandler client) {
+  /**
+   * Sends the initial game state to the client when they connect.
+   *
+   * @param client the client to send the initial game state to
+   */
+  public void sendInitialGameState(ClientHandler client) {
         client.sendGameState(gameState);
     }
 
-    /**
-     * Finds the local IP address of the machine running the server. This is for playing
-     * multiplayer on the same wifi network.
-     *
-     * @return String representation of the local IP address (IPV4)
-     */
-    public static String getLocalIpAddress() {
+  /**
+   * Finds the local IP address of the machine running the server. This is for playing
+   * multiplayer on the same wifi network.
+   *
+   * @return String representation of the local IP address (IPV4)
+   */
+  public static String getLocalIpAddress() {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
             while (networkInterfaces.hasMoreElements()) {
@@ -109,7 +116,12 @@ public class GameServer implements Runnable {
         return null;
     }
 
-    public HashSet<String> getConnectedPlayers() {
+  /**
+   * Gets connected players.
+   *
+   * @return the connected players
+   */
+  public HashSet<String> getConnectedPlayers() {
         HashSet<String> connectedPlayers = new HashSet<>();
         for (ClientHandler client : clients) {
             connectedPlayers.add(client.clientSocket.getInetAddress().getHostAddress());
@@ -118,20 +130,28 @@ public class GameServer implements Runnable {
     }
 
 
-    /**
-     * Handles each new connection made to the GameServer.
-     *
-     * @author Cameron Walford
-     * @version 1.0
-     */
-    class ClientHandler extends Thread{
+  /**
+   * Handles each new connection made to the GameServer.
+   *
+   * @author Cameron Walford
+   * @version 1.0
+   */
+  class ClientHandler extends Thread{
         private final Socket clientSocket;
 
-        public String clientUsername;
+    /**
+     * The Client username.
+     */
+    public String clientUsername;
         private final ObjectOutputStream oos;
         private final ObjectInputStream ois;
 
-        public ClientHandler(Socket socket) {
+    /**
+     * Instantiates a new Client handler.
+     *
+     * @param socket the socket
+     */
+    public ClientHandler(Socket socket) {
             this.clientSocket = socket;
             try {
                 oos = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -167,12 +187,12 @@ public class GameServer implements Runnable {
 
         }
 
-        /**
-         * Sends the game state as a JSONObject to the client.
-         *
-         * @param gameState the game state to send
-         */
-        public void sendGameState(GameState gameState) {
+    /**
+     * Sends the game state as a JSONObject to the client.
+     *
+     * @param gameState the game state to send
+     */
+    public void sendGameState(GameState gameState) {
             try {
                 oos.writeObject(gameState.toJSONObject());
                 oos.flush();

@@ -81,16 +81,49 @@ public abstract class HUDState {
      * The Rusted metal.
      */
     public PImage rustedMetal;
+    /**
+     * The Icon b.
+     */
     public PImage iconB;
+    /**
+     * The Icon c.
+     */
     public PImage iconC;
+    /**
+     * The Icon f.
+     */
     public PImage iconF;
+    /**
+     * The Icon m.
+     */
     public PImage iconM;
+    /**
+     * The Icon x.
+     */
     public PImage iconX;
+    /**
+     * The Icon wasd.
+     */
     public PImage iconWASD;
+    /**
+     * The Arrow keys img.
+     */
     public PImage arrowKeysIMG;
+    /**
+     * The Panel.
+     */
     public PImage panel;
+    /**
+     * The Gun button icon.
+     */
     public PImage gunButtonIcon;
+    /**
+     * The Building button icon.
+     */
     public PImage buildingButtonIcon;
+    /**
+     * The Worker button icon.
+     */
     public PImage workerButtonIcon;
     /**
      * The Center x.
@@ -135,7 +168,7 @@ public abstract class HUDState {
      *
      * @param xpos the xpos
      * @param ypos the ypos
-     * @return boolean
+     * @return boolean boolean
      */
     public boolean clicked(int xpos, int ypos) {
         for (Button button : buttonManager.buttons) {

@@ -17,15 +17,42 @@ import java.util.HashSet;
  * @Version 0.5
  */
 public class Window extends PApplet {
+  /**
+   * The Game images.
+   */
   public static HashMap<String, PImage> GameImages;
+  /**
+   * The Ui images.
+   */
   public static HashMap<String, PImage> UIImages;
+  /**
+   * The In game.
+   */
   public boolean inGame = false;
 
+  /**
+   * The Menu.
+   */
   public Menu menu;
+  /**
+   * The Game instance.
+   */
   public GameInstance gameInstance;
+  /**
+   * The Debug mode.
+   */
   public Boolean debugMode = false;
+  /**
+   * The Debug menu.
+   */
   static DebugMenu debugMenu;
+  /**
+   * The Clickable manager.
+   */
   public ClickableManager clickableManager;
+  /**
+   * The Graphic manager.
+   */
   public GraphicManager graphicManager;
 
   /**
@@ -44,6 +71,9 @@ public class Window extends PApplet {
     this.init();
   }
 
+  /**
+   * Init.
+   */
   public void init() {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
@@ -104,6 +134,13 @@ public class Window extends PApplet {
 //    UIImages.put("rangeIMG", loadImage("sprites/range.png"));
   }
 
+  /**
+   * Init game.
+   *
+   * @param numplayers the numplayers
+   * @param mapwidth   the mapwidth
+   * @param mapheight  the mapheight
+   */
   public void initGame(int numplayers, int mapwidth, int mapheight) {
     gameInstance = new GameInstance(new HUD(this), new GameState(numplayers, mapwidth, mapheight));
     gameInstance.newGame();
@@ -168,22 +205,45 @@ public class Window extends PApplet {
   }
 
 
+  /**
+   * Add clickable.
+   *
+   * @param clickable the clickable
+   */
   public void addClickable(Clickable clickable) {
     clickableManager.add(clickable);
   }
 
+  /**
+   * Remove clickable.
+   *
+   * @param clickable the clickable
+   */
   public void removeClickable(Clickable clickable) {
     clickableManager.remove(clickable);
   }
 
+  /**
+   * Gets graphic manager.
+   *
+   * @return the graphic manager
+   */
   public GraphicManager getGraphicManager() {
     return graphicManager;
   }
 
+  /**
+   * Wipe graphics.
+   */
   public void wipeGraphics() {
     graphicManager.wipeGraphics();
   }
 
+  /**
+   * Gets current player.
+   *
+   * @return the current player
+   */
   public Player getCurrentPlayer() {
     if(gameInstance == null){
       return null;
@@ -191,10 +251,16 @@ public class Window extends PApplet {
     return gameInstance.getCurrentPlayer();
   }
 
+  /**
+   * Next turn.
+   */
   public void nextTurn() {
     gameInstance.nextTurn();
   }
 
+  /**
+   * Load game.
+   */
   public void loadGame() {
     gameInstance = new GameInstance(this);
     System.out.println("Loading game");
@@ -202,11 +268,21 @@ public class Window extends PApplet {
     inGame = true;
   }
 
+  /**
+   * Join game.
+   *
+   * @param hostIP         the host ip
+   * @param port           the port
+   * @param clientUsername the client username
+   */
   public void joinGame(String hostIP, int port, String clientUsername) {
     gameInstance = new GameInstance(this);
     gameInstance.joinGame(hostIP, port, clientUsername);
   }
 
+  /**
+   * Save game.
+   */
   public void saveGame() {
     try {
       gameInstance.saveGame();
@@ -215,7 +291,15 @@ public class Window extends PApplet {
     }
   }
 
-  //TODO: implement actual server
+  /**
+   * Init online game.
+   *
+   * @param numplayers the numplayers
+   * @param mapwidth   the mapwidth
+   * @param mapheight  the mapheight
+   * @param port       the port
+   */
+//TODO: implement actual server
   public void initOnlineGame(int numplayers, int mapwidth, int mapheight, int port) {
     gameInstance = new GameInstance(this);
     GameState gameState = new GameState(numplayers, mapwidth, mapheight);
@@ -224,7 +308,6 @@ public class Window extends PApplet {
     gameInstance.setGameServer(gameServer);
     gameInstance.startServer();
   }
-
 
 
   /**
@@ -239,6 +322,11 @@ public class Window extends PApplet {
     PApplet.runSketch(appletArgs, eatBubbles);
   }
 
+  /**
+   * Gets connected players.
+   *
+   * @return the connected players
+   */
   public HashSet<String> getConnectedPlayers() {
     return gameInstance.getConnectedPlayers();
   }

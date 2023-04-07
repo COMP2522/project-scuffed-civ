@@ -2,9 +2,18 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
+/**
+ * The type Online menu state.
+ */
 public class OnlineMenuState extends MenuState {
 
-    public OnlineMenuState(Window scene, Menu menu) {
+  /**
+   * Instantiates a new Online menu state.
+   *
+   * @param scene the scene
+   * @param menu  the menu
+   */
+  public OnlineMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -24,12 +33,18 @@ public class OnlineMenuState extends MenuState {
         menu.setState(new MainMenuMenuState(scene, menu));
     }
 
-    public void onHostClicked() {
+  /**
+   * On host clicked.
+   */
+  public void onHostClicked() {
         // Change the menu state to the New Game state
         menu.setState(new HostGameMenuState(scene, menu));
     }
 
-    public void onJoinClicked() {
+  /**
+   * On join clicked.
+   */
+  public void onJoinClicked() {
         // Change the menu state to the New Game state
         menu.setState(new JoinGameMenuState(scene, menu));
     }

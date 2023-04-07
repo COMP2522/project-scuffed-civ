@@ -3,6 +3,9 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
 
+/**
+ * The type New game menu state.
+ */
 public class NewGameMenuState extends MenuState {
     private InputBox mapWidthInput;
     private InputBox mapHeightInput;
@@ -18,7 +21,13 @@ public class NewGameMenuState extends MenuState {
 
     private boolean showError = false;
 
-    public NewGameMenuState(Window scene, Menu menu) {
+  /**
+   * Instantiates a new New game menu state.
+   *
+   * @param scene the scene
+   * @param menu  the menu
+   */
+  public NewGameMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -87,7 +96,12 @@ public class NewGameMenuState extends MenuState {
         return false;
     }
 
-    public void keyPressed(char key) {
+  /**
+   * Key pressed.
+   *
+   * @param key the key
+   */
+  public void keyPressed(char key) {
         if (key == PApplet.BACKSPACE) {
             if (mapWidthInput.isSelected()) {
                 mapWidthInput.removeCharacter();
@@ -107,7 +121,10 @@ public class NewGameMenuState extends MenuState {
         }
     }
 
-    public void onStartClicked() {
+  /**
+   * On start clicked.
+   */
+  public void onStartClicked() {
         int mapWidth = mapWidthInput.getIntValue();
         int mapHeight = mapHeightInput.getIntValue();
         int numPlayers = numPlayersInput.getIntValue();
@@ -121,7 +138,17 @@ public class NewGameMenuState extends MenuState {
         //}
     }
 
-    void drawHollowGrid(int rows, int cols, float x1, float y1, float x2, float y2) {
+  /**
+   * Draw hollow grid.
+   *
+   * @param rows the rows
+   * @param cols the cols
+   * @param x1   the x 1
+   * @param y1   the y 1
+   * @param x2   the x 2
+   * @param y2   the y 2
+   */
+  void drawHollowGrid(int rows, int cols, float x1, float y1, float x2, float y2) {
         float cellWidth = (x2 - x1) / cols;
         float cellHeight = (y2 - y1) / rows;
 

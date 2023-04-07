@@ -4,18 +4,29 @@ import org.bcit.com2522.project.scuffed.client.*;
 
 import java.util.ArrayList;
 
+/**
+ * The type Ai.
+ */
 public class AI {
     private int numWorkers;
     private int numBuildings;
     private int numSoldiers;
 
-    public AI() {
+  /**
+   * Instantiates a new Ai.
+   */
+  public AI() {
         numWorkers = 1;
         numBuildings = 0;
         numSoldiers = 0;
     }
 
-    public void start (GameState gameState) {
+  /**
+   * Start.
+   *
+   * @param gameState the game state
+   */
+  public void start (GameState gameState) {
 
         System.out.println("ai is in control");
         gameState.resetShift();
@@ -72,7 +83,13 @@ public class AI {
         System.out.println("ai turn over");
     }
 
-    public void moveTowards(Unit selected, Entity target) {
+  /**
+   * Move towards.
+   *
+   * @param selected the selected
+   * @param target   the target
+   */
+  public void moveTowards(Unit selected, Entity target) {
 
     }
 }
