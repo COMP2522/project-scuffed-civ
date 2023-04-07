@@ -3,18 +3,55 @@ package org.bcit.com2522.project.scuffed.client;
 import org.json.simple.JSONObject;
 import processing.core.PImage;
 
+/**
+ * The type Entity.
+ */
 public abstract class Entity {
-    protected int maxAction;
-    protected int remainAction;
-    protected int ownerID;
-    protected Player owner;
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int resourceCost;
-    protected PImage texture;
-    protected String entityType; //building, soldier, worker
+  /**
+   * The Max action.
+   */
+  protected int maxAction;
+  /**
+   * The Remain action.
+   */
+  protected int remainAction;
+  /**
+   * The Owner id.
+   */
+  protected int ownerID;
+  /**
+   * The Owner.
+   */
+  protected Player owner;
+  /**
+   * The Max health.
+   */
+  protected int maxHealth;
+  /**
+   * The Current health.
+   */
+  protected int currentHealth;
+  /**
+   * The Resource cost.
+   */
+  protected int resourceCost;
+  /**
+   * The Texture.
+   */
+  protected PImage texture;
+  /**
+   * The Entity type.
+   */
+  protected String entityType; //building, soldier, worker
 
-    public Entity(int ownerId, int health, int cost) {
+  /**
+   * Instantiates a new Entity.
+   *
+   * @param ownerId the owner id
+   * @param health  the health
+   * @param cost    the cost
+   */
+  public Entity(int ownerId, int health, int cost) {
         this.ownerID = ownerId;
         this.owner = GameState.getPlayer(ownerId);
         //this.color = pColor;
@@ -27,7 +64,13 @@ public abstract class Entity {
         resourceCost = cost;
     }
 
-    public Position getPosition(Entity[][] entities) {
+  /**
+   * Gets position.
+   *
+   * @param entities the entities
+   * @return the position
+   */
+  public Position getPosition(Entity[][] entities) {
         for (int i = 0; i < entities.length; i++) {
             for (int j = 0; j < entities[0].length; j++) {
                 if (entities[i][j] == this) {
@@ -38,12 +81,13 @@ public abstract class Entity {
         return null;
     }
 
-    /**
-     * finds the nearest non-filled position
-     *
-     * @param entities list of entities
-     */
-    public Position getFreePosition(Entity[][] entities) {
+  /**
+   * finds the nearest non-filled position
+   *
+   * @param entities list of entities
+   * @return the free position
+   */
+  public Position getFreePosition(Entity[][] entities) {
         //the position above the entity
         if (getPosition(entities).getY() != 0 && entities[getPosition(entities).getX()][getPosition(entities).getY() - 1] == null)
             return new Position(getPosition(entities).getX(), getPosition(entities).getY() - 1);
@@ -61,16 +105,29 @@ public abstract class Entity {
             return null;
     }
 
-    public void resetAction() {
+  /**
+   * Reset action.
+   */
+  public void resetAction() {
         remainAction = maxAction;
     }
 
-    public int getOwnerID () {
+  /**
+   * Gets owner id.
+   *
+   * @return the owner id
+   */
+  public int getOwnerID () {
         return ownerID;
     }
 
 
-    public JSONObject toJSONObject() {
+  /**
+   * To json object json object.
+   *
+   * @return the json object
+   */
+  public JSONObject toJSONObject() {
         JSONObject entityObject = new JSONObject();
         //entityObject.put("position", position.toJSONObject());
         entityObject.put("ownerId", ownerID);
@@ -84,7 +141,13 @@ public abstract class Entity {
     }
 
 
-    public static Entity fromJSONObject(JSONObject entityObject) {
+  /**
+   * From json object entity.
+   *
+   * @param entityObject the entity object
+   * @return the entity
+   */
+  public static Entity fromJSONObject(JSONObject entityObject) {
         if(entityObject == null || entityObject.isEmpty()) {
             return null;
         }
@@ -109,17 +172,34 @@ public abstract class Entity {
 
     }
 
-    public boolean cannotAct() {
+  /**
+   * Cannot act boolean.
+   *
+   * @return the boolean
+   */
+  public boolean cannotAct() {
         return remainAction < 1;
     }
 
     //public void act() {remainAction--;}
 
-    public void takeDamage(int damageDealt) { //returns true if dead
+  /**
+   * Take damage.
+   *
+   * @param damageDealt the damage dealt
+   */
+  public void takeDamage(int damageDealt) { //returns true if dead
         currentHealth -= damageDealt;
     }
 
-    public boolean canBuild(Position free, int resources) {
+  /**
+   * Can build boolean.
+   *
+   * @param free      the free
+   * @param resources the resources
+   * @return the boolean
+   */
+  public boolean canBuild(Position free, int resources) {
         if (free == null) {
             System.out.println("there are no available spaces to place a entity");
             return false;
@@ -136,20 +216,39 @@ public abstract class Entity {
     }
 
 
-
-    public int getHealth() {
+  /**
+   * Gets health.
+   *
+   * @return the health
+   */
+  public int getHealth() {
         return currentHealth;
     }
 
+  /**
+   * Gets cost.
+   *
+   * @return the cost
+   */
   public int getCost() {
         return resourceCost;
   }
 
-    public Player getOwner() {
+  /**
+   * Gets owner.
+   *
+   * @return the owner
+   */
+  public Player getOwner() {
         return owner;
     }
 
-    public int getRemainAction() {
+  /**
+   * Gets remain action.
+   *
+   * @return the remain action
+   */
+  public int getRemainAction() {
         return remainAction;
     }
 

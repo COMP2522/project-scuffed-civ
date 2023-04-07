@@ -7,11 +7,27 @@ import java.awt.*;
 
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
+/**
+ * The type Building.
+ */
 public class Building extends Entity{
-    public static final int health = 200;
-    public static final int cost = 2;
+  /**
+   * The constant health.
+   */
+  public static final int health = 200;
+  /**
+   * The constant cost.
+   */
+  public static final int cost = 2;
 
-    public Building(int ownerID, int health, int cost) {
+  /**
+   * Instantiates a new Building.
+   *
+   * @param ownerID the owner id
+   * @param health  the health
+   * @param cost    the cost
+   */
+  public Building(int ownerID, int health, int cost) {
         super(ownerID, health, cost);
         texture = GameImages.get("building");
         entityType = "building";
@@ -27,7 +43,13 @@ public class Building extends Entity{
         return buildingObject;
     }
 
-    public static Building fromJSONObject(JSONObject buildingObject) {
+  /**
+   * From json object building.
+   *
+   * @param buildingObject the building object
+   * @return the building
+   */
+  public static Building fromJSONObject(JSONObject buildingObject) {
         if(buildingObject == null) {
             return null;
         }
@@ -41,7 +63,12 @@ public class Building extends Entity{
         return building;
     }
 
-    public void buildWorker(Entity[][] entities) {
+  /**
+   * Build worker.
+   *
+   * @param entities the entities
+   */
+  public void buildWorker(Entity[][] entities) {
         Position free = getFreePosition(entities);
         if (canBuild(free, Worker.cost)) {
             entities[free.getX()][free.getY()] = new Worker(ownerID, Worker.health, Worker.cost, Worker.speed);
@@ -50,7 +77,16 @@ public class Building extends Entity{
         }
     }
 
-    public void buildSoldier(Entity[][] entities, int health, int damage, int speed, int range) {
+  /**
+   * Build soldier.
+   *
+   * @param entities the entities
+   * @param health   the health
+   * @param damage   the damage
+   * @param speed    the speed
+   * @param range    the range
+   */
+  public void buildSoldier(Entity[][] entities, int health, int damage, int speed, int range) {
         Position free = getFreePosition(entities);
         if (canBuild(free, Soldier.cost)) {
             entities[free.getX()][free.getY()] = new Soldier(ownerID, health, Soldier.cost, speed, damage, range);

@@ -20,26 +20,53 @@ import static processing.core.PConstants.*;
 
 import org.bcit.com2522.project.scuffed.ai.AI;
 
+/**
+ * The type Game state.
+ */
 public class GameState { //everything manager this is the player manager
     private String gameID;
+    /**
+     * The Map.
+     */
     Map map;
+    /**
+     * The Current player.
+     */
     public Player currentPlayer;
+    /**
+     * The Players.
+     */
     static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     private Entity[][] entities;
     private Entity selected;
+    /**
+     * The Zoom amount.
+     */
     int zoomAmount;
+    /**
+     * The X shift.
+     */
     int xShift; //only used to change where the map is drawn
+    /**
+     * The Y shift.
+     */
     int yShift; //only used to change where the map is drawn
 
+    /**
+     * The Select position.
+     */
     public Position selectPosition;
+    /**
+     * The Ai.
+     */
     public AI ai;
 
     /**
      * Constructor used for creating a new game.
      *
      * @param numplayers number of players in the game
-     * @param mapwidth width of the map
-     * @param mapheight height of the map
+     * @param mapwidth   width of the map
+     * @param mapheight  height of the map
      */
     public GameState(int numplayers, int mapwidth, int mapheight) {
         this.gameID = "Game" + new Random().nextInt(10000); //make a random gameId
@@ -64,6 +91,12 @@ public class GameState { //everything manager this is the player manager
         ai = new AI();
     };
 
+    /**
+     * Gets player.
+     *
+     * @param ownerId the owner id
+     * @return the player
+     */
     public static Player getPlayer(int ownerId) {
         for (Player player: players) {
             if (player.getID() == ownerId) {
@@ -137,6 +170,7 @@ public class GameState { //everything manager this is the player manager
      * Method called when the map is clicked.
      *
      * @param mousePos the position of the mouse in pixels
+     * @param scene    the scene
      */
     public void clicked(PVector mousePos, Window scene) {
         int x = (int) (mousePos.x / zoomAmount) - xShift;
@@ -168,6 +202,12 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
+    /**
+     * Key pressed.
+     *
+     * @param key   the key
+     * @param scene the scene
+     */
     public void keyPressed(char key, Window scene) {
         if(key == 'w') {
             shift(0, 1);
@@ -220,6 +260,16 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
+    /**
+     * Resize pixels int [ ].
+     *
+     * @param pixels the pixels
+     * @param w1     the w 1
+     * @param h1     the h 1
+     * @param w2     the w 2
+     * @param h2     the h 2
+     * @return the int [ ]
+     */
     public int[] resizePixels(int[] pixels,int w1,int h1,int w2,int h2) {
         int[] temp = new int[w2*h2] ;
         int x_ratio = (int)((w1<<16)/w2) +1;
@@ -235,6 +285,14 @@ public class GameState { //everything manager this is the player manager
         return temp;
     }
 
+    /**
+     * Nearest neighbor resize p image.
+     *
+     * @param image       the image
+     * @param amount      the amount
+     * @param currentSize the current size
+     * @return the p image
+     */
     public PImage nearestNeighborResize(PImage image, float amount, int currentSize) {
         int[] imagePixels = new int[1024];
         int scale = currentSize / 32;
@@ -254,6 +312,11 @@ public class GameState { //everything manager this is the player manager
         return image;
     }
 
+    /**
+     * Zoom.
+     *
+     * @param amount the amount
+     */
     public void zoom(float amount) {
         if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
             for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
@@ -269,12 +332,21 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    //moving around the map, does not take unit movement into account.
+    /**
+     * Shift.
+     *
+     * @param x the x
+     * @param y the y
+     */
+//moving around the map, does not take unit movement into account.
     public void shift(int x, int y) {
         xShift -= x;
         yShift -= y;
     }
 
+    /**
+     * Reset shift.
+     */
     public void resetShift() {
         xShift = (1080 / zoomAmount - map.width) / 2;
         yShift = (720 / zoomAmount - map.height) / 2;
@@ -377,6 +449,7 @@ public class GameState { //everything manager this is the player manager
 
     /**
      * Draws the map and all entities in the gamestate
+     *
      * @param scene the window to draw to
      */
     public void draw(Window scene) {
@@ -416,6 +489,8 @@ public class GameState { //everything manager this is the player manager
     /**
      * Saves the current gamestate to a json file in the "saves" folder
      * currently called at end of player turn
+     *
+     * @return the json object
      */
     public JSONObject toJSONObject() {
         JSONObject gameState = new JSONObject();
@@ -445,7 +520,9 @@ public class GameState { //everything manager this is the player manager
 
     /**
      * Reads JSON and creates a game state from it
+     *
      * @param gameStateJSON the json to read
+     * @return the game state
      */
     public static GameState fromJSONObject(JSONObject gameStateJSON) {
         GameState gameState = new GameState();
@@ -472,7 +549,7 @@ public class GameState { //everything manager this is the player manager
      * if there's an error, try adding a saves folder to the root directory
      *
      * @return the loaded gameState
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException the file not found exception
      */
     public static GameState load() throws FileNotFoundException {
         GameState loadedGameState = new GameState();
@@ -486,18 +563,38 @@ public class GameState { //everything manager this is the player manager
         return loadedGameState;
     }
 
+    /**
+     * Get entities entity [ ] [ ].
+     *
+     * @return the entity [ ] [ ]
+     */
     public Entity[][] getEntities() {
         return entities;
     }
 
+    /**
+     * Gets current player id.
+     *
+     * @return the current player id
+     */
     public int getCurrentPlayerID() {
         return currentPlayer.getID();
     }
 
+    /**
+     * Gets map.
+     *
+     * @return the map
+     */
     public Map getMap() {
         return map;
     }
 
+    /**
+     * Gets game id.
+     *
+     * @return the game id
+     */
     public String getGameID() {
         return gameID;
     }

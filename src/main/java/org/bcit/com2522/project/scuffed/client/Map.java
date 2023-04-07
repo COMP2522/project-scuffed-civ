@@ -7,20 +7,38 @@ import java.awt.*;
 
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
+/**
+ * The type Map.
+ */
 public class Map { //this is a tile manager
-    int width;
-    int height;
-    Tile[][] tiles;
+  /**
+   * The Width.
+   */
+  int width;
+  /**
+   * The Height.
+   */
+  int height;
+  /**
+   * The Tiles.
+   */
+  Tile[][] tiles;
     private Color color;
 
-    /**
-     * Constructor used in loading a map from JSON.
-     */
-    public Map(){
+  /**
+   * Constructor used in loading a map from JSON.
+   */
+  public Map(){
         this.color = (Color.red);
     }
 
-    public Map (int width, int height) {
+  /**
+   * Instantiates a new Map.
+   *
+   * @param width  the width
+   * @param height the height
+   */
+  public Map (int width, int height) {
         this.width = width;
         this.height = height;
         tiles = new Tile[width][height];
@@ -33,7 +51,15 @@ public class Map { //this is a tile manager
         this.color = (Color.red);
     }
 
-    public void draw(int zoomAmount, Window scene, int xShift, int yShift) {
+  /**
+   * Draw.
+   *
+   * @param zoomAmount the zoom amount
+   * @param scene      the scene
+   * @param xShift     the x shift
+   * @param yShift     the y shift
+   */
+  public void draw(int zoomAmount, Window scene, int xShift, int yShift) {
 
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
@@ -49,12 +75,12 @@ public class Map { //this is a tile manager
         }
     }
 
-    /**
-     * Converts the map to a JSONObject that stores a 2d JSONArray of tiles.
-     *
-     * @return JSONObject map
-     */
-    public JSONObject toJSONObject() {
+  /**
+   * Converts the map to a JSONObject that stores a 2d JSONArray of tiles.
+   *
+   * @return JSONObject map
+   */
+  public JSONObject toJSONObject() {
         JSONObject map = new JSONObject();
         JSONArray tilesArray = new JSONArray();
         for (Tile[] row: tiles) {
@@ -71,13 +97,13 @@ public class Map { //this is a tile manager
     }
 
 
-    /**
-     * Creates a map from a JSONObject.
-     *
-     * @param mapObject JSONObject map
-     * @return Map map
-     */
-    public static Map fromJSONObject(JSONObject mapObject) {
+  /**
+   * Creates a map from a JSONObject.
+   *
+   * @param mapObject JSONObject map
+   * @return Map map
+   */
+  public static Map fromJSONObject(JSONObject mapObject) {
         Map map = new Map();
         Object widthObject = mapObject.get("width");
         Object heightObject = mapObject.get("height");
@@ -92,15 +118,31 @@ public class Map { //this is a tile manager
         return map;
     }
 
-    public Tile get(int x, int y) {
+  /**
+   * Get tile.
+   *
+   * @param x the x
+   * @param y the y
+   * @return the tile
+   */
+  public Tile get(int x, int y) {
         return tiles[x][y];
     }
 
-    public Tile get(Position position) {
+  /**
+   * Get tile.
+   *
+   * @param position the position
+   * @return the tile
+   */
+  public Tile get(Position position) {
         return tiles[position.getX()][position.getY()];
     }
 
-    public void regenResources() {
+  /**
+   * Regen resources.
+   */
+  public void regenResources() {
         for (Tile[] row: tiles) {
             for (Tile tile: row) {
                 int regen = (int) (Math.random() * 100); // 0-9

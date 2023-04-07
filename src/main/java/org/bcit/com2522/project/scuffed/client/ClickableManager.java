@@ -2,23 +2,50 @@ package org.bcit.com2522.project.scuffed.client;
 
 import java.util.ArrayList;
 
+/**
+ * The type Clickable manager.
+ */
 public class ClickableManager {
-    ArrayList<Clickable> clickables = new ArrayList<Clickable>();
-    Window scene;
+  /**
+   * The Clickables.
+   */
+  ArrayList<Clickable> clickables = new ArrayList<Clickable>();
+  /**
+   * The Scene.
+   */
+  Window scene;
 
-    public ClickableManager(Window scene) {
+  /**
+   * Instantiates a new Clickable manager.
+   *
+   * @param scene the scene
+   */
+  public ClickableManager(Window scene) {
         this.scene = scene;
     }
 
-    public void add(Clickable clickable) {
+  /**
+   * Add.
+   *
+   * @param clickable the clickable
+   */
+  public void add(Clickable clickable) {
         clickables.add(clickable);
     }
 
-    public void remove(Clickable clickable) {
+  /**
+   * Remove.
+   *
+   * @param clickable the clickable
+   */
+  public void remove(Clickable clickable) {
         clickables.remove(clickable);
     }
 
-    public void checkClick() {
+  /**
+   * Check click.
+   */
+  public void checkClick() {
         for (Clickable clickable : clickables) {
             if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
                 clickable.click();
@@ -26,7 +53,10 @@ public class ClickableManager {
         }
     }
 
-    public void checkHover() {
+  /**
+   * Check hover.
+   */
+  public void checkHover() {
         for (Clickable clickable : clickables) {
             if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
                 clickable.hover();

@@ -5,17 +5,37 @@ import org.json.simple.JSONObject;
 
 import java.awt.*;
 
+/**
+ * The type Unit.
+ */
 public abstract class Unit extends Entity { //things that can move
-    int maxMove;
-    int remainMove;
+  /**
+   * The Max move.
+   */
+  int maxMove;
+  /**
+   * The Remain move.
+   */
+  int remainMove;
 
-    public Unit(int ownerId, int health, int cost, int speed) {
+  /**
+   * Instantiates a new Unit.
+   *
+   * @param ownerId the owner id
+   * @param health  the health
+   * @param cost    the cost
+   * @param speed   the speed
+   */
+  public Unit(int ownerId, int health, int cost, int speed) {
         super(ownerId, health, cost);
         this.maxMove = speed;
         this.remainMove = maxMove;
     }
 
-    public void resetMove() {
+  /**
+   * Reset move.
+   */
+  public void resetMove() {
         remainMove = maxMove;
     }
 
@@ -27,16 +47,24 @@ public abstract class Unit extends Entity { //things that can move
         return unitObject;
     }
 
-    public Boolean withinMoveRange(Position position, Entity[][] entities) {
+  /**
+   * Within move range boolean.
+   *
+   * @param position the position
+   * @param entities the entities
+   * @return the boolean
+   */
+  public Boolean withinMoveRange(Position position, Entity[][] entities) {
         return Math.abs(position.getX() - this.getPosition(entities).getX()) + Math.abs(position.getY() - this.getPosition(entities).getY()) <= remainMove;
     }
 
-    /**
-     *
-     * @param entities current list of entities on the map
-     * @param position the position to travel to
-     */
-    public void move(Entity[][] entities, Position position) {
+  /**
+   * Move.
+   *
+   * @param entities current list of entities on the map
+   * @param position the position to travel to
+   */
+  public void move(Entity[][] entities, Position position) {
         if (entities[position.getX()][position.getY()] != null) {
             System.out.println("that position is occupied");
         } else if (!withinMoveRange(position, entities)) {
@@ -49,7 +77,12 @@ public abstract class Unit extends Entity { //things that can move
         }
     }
 
-    public int getRemainMove() {
+  /**
+   * Gets remain move.
+   *
+   * @return the remain move
+   */
+  public int getRemainMove() {
         return remainMove;
     }
 }

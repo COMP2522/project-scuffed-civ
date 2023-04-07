@@ -2,13 +2,22 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
+/**
+ * The type Server lobby menu state.
+ */
 public class ServerLobbyMenuState extends MenuState {
     private Label titleLabel;
     private Label playersLabel;
     private Button backButton;
     private Button startButton;
 
-    public ServerLobbyMenuState(Window scene, Menu menu) {
+  /**
+   * Instantiates a new Server lobby menu state.
+   *
+   * @param scene the scene
+   * @param menu  the menu
+   */
+  public ServerLobbyMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -38,7 +47,10 @@ public class ServerLobbyMenuState extends MenuState {
         menu.setState(new HostGameMenuState(scene, menu));
     }
 
-    public void onStartClicked() {
+  /**
+   * On start clicked.
+   */
+  public void onStartClicked() {
         // Start the game
         scene.inGame = true;
     }
