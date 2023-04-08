@@ -182,6 +182,7 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition(entities));
             System.out.println("Selected entity health: " + selected.getHealth());
+            System.out.println("Selected enemy resources: " + selected.getOwner().getResources());
             selected = null;
         } else if (clicked != null && selected instanceof Soldier && clicked.getOwnerID() != currentPlayer.getID()) { //attack with soldier
             ((Soldier) selected).attack(entities, clicked);
@@ -537,9 +538,9 @@ public class GameState { //everything manager this is the player manager
      */
     public int compareTo(GameState gameState) {
         if (this.getValue() > gameState.getValue()) {
-            return 1;
-        } else if (this.getValue() < gameState.getValue()) {
             return -1;
+        } else if (this.getValue() < gameState.getValue()) {
+            return 1;
         } else {
             return 0;
         }
@@ -560,9 +561,6 @@ public class GameState { //everything manager this is the player manager
                         if (entity instanceof Soldier soldier) {
                             playerDMG += soldier.getDamage();
                         }
-                        if (entity.getPosition(entities).getX() == 5) {
-                            playerHP += 10000;
-                        }
                     } else {
                         enemyHP += entity.getHealth();
                         if (entity instanceof Soldier soldier) {
@@ -575,6 +573,14 @@ public class GameState { //everything manager this is the player manager
         //position of allies
         //position of enemies
 
-        return playerHP + playerDMG - enemyDMG - enemyHP;
+        return (playerHP + playerDMG - enemyDMG - enemyHP + currentPlayer.getResources());
+    }
+
+    public void setEntities(Entity[][] entities) {
+        this.entities = entities;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
     }
 }

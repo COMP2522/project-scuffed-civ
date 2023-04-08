@@ -33,7 +33,6 @@ public class AIManager {
         //generate GameStates using GSGenerator
         ArrayList<GameState> gameStates = new ArrayList<GameState>();
         for (int i = 0; i < allies.size(); i++) {
-            //GameState GS = GSGenerator.generateGameStateFromEntity(allies, gameState);
             gameStates.add(GSGenerator.generateGameStateFromEntity(allies, gameState));
 
             if (allies.size() > 0) {
@@ -53,9 +52,17 @@ public class AIManager {
                 bestGameTurn = gameState1;
             }
         }
+        System.out.println("bestGameTurn:");
+        bestGameTurn.printEntities();
 
         //set gameState to be the best turn.
-        gameState = bestGameTurn;
+        //gameState = bestGameTurn;
+        gameState.setEntities(bestGameTurn.getEntities());
+        gameState.setMap(bestGameTurn.getMap());
+
+        System.out.println("final gameState:");
+        gameState.printEntities();
+
 
         //set the current turn to next turn.
         gameState.nextTurn();

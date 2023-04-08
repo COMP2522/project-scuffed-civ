@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Player { //gamestate is the player manager
   private int resources;
-  private int playerNum;
+  private final int playerNum;
   boolean hasLost;
   private Color color;
   private boolean isAi;

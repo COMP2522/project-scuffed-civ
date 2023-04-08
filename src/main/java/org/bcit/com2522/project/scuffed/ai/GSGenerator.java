@@ -45,6 +45,7 @@ public class GSGenerator {
                     Position position = entity.getPosition(gs.get(gs.size() - 1).getEntities());
                     if (position != null && (soldier.withinRange(new Position(position.getX() + i, position.getY() + j), gs.get(gs.size() - 1).getEntities()))) {
                         GameState gs1 = new GameState(gs.get(gs.size() - 1));
+                        soldier = (Soldier)gs1.getEntities()[position.getX()][position.getY()];
                         soldier.attack(gs1.getEntities(), gs1.getEntities()[position.getX() + i][position.getY() + j]);
                         gs.add(gs1);
                     }
@@ -62,8 +63,10 @@ public class GSGenerator {
             GameState gs0 = gs.get(gs.size() - 1);
             GameState gs1 = new GameState(gs0);
             GameState gs2 = new GameState(gs0);
-            ((Building)gs1.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).buildSoldier(gs1.getEntities(), 1, 1, 1, 1);
-            ((Building)gs2.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).buildWorker(gs2.getEntities());
+            if (entity.getPosition(gs0.getEntities()) != null) {
+                ((Building) gs1.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).buildSoldier(gs1.getEntities(), 1, 1, 1, 1);
+                ((Building) gs2.getEntities()[entity.getPosition(gs0.getEntities()).getX()][entity.getPosition(gs0.getEntities()).getY()]).buildWorker(gs2.getEntities());
+            }
             gs.add(gs1);
             gs.add(gs2);
         }
@@ -86,7 +89,11 @@ public class GSGenerator {
         ArrayList<GameState> possibleMoves = generateMoves(entity);
         System.out.format("%d possible moves\n", possibleMoves.size());
 
-        state = determineBestMove(possibleMoves);
+        if (possibleMoves.size() > 0) {
+            state = determineBestMove(possibleMoves);
+            System.out.println("the move taken was move " + possibleMoves.indexOf(state));
+            System.out.println("the best move was move " + possibleMoves.indexOf(determineBestMove(possibleMoves)));
+        }
     }
 
 
@@ -96,13 +103,15 @@ public class GSGenerator {
         state = gameState;
 
         //generate best move for each entity, starting with entity 0 owned by currentPlayer.
-        // if that move involves making a new entity, add them to the arraylist.
-        while (entities.size() > 0) {
-            takeBestMove(entities.get(0));
-            entities.remove(0);
+        //TODO if that move involves making a new entity, add them to the arraylist.
+
+        int i = 0;
+        while (i < entities.size()) {
+            takeBestMove(entities.get(i));
+            i++;
         }
 
-
+        state.printEntities();
 
         return state;
     }
