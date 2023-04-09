@@ -26,6 +26,9 @@ import org.bcit.com2522.project.scuffed.server.SubscriberHelpers.PrintDocumentSu
 
 import static com.mongodb.client.model.Filters.eq;
 
+/**
+ * The type Mongo game server.
+ */
 public class MongoGameServer {
 
     private MongoDatabase database;
@@ -52,12 +55,12 @@ public class MongoGameServer {
         database = mongoClient.getDatabase("ScuffedCiv");
     }
 
-    /**
-     * Creates a new game by connecting to the database and creating a new collection.
-     *
-     * @param gameState the GameState initialized by the host
-     */
-    public void createNewGame(GameState gameState) {
+  /**
+   * Creates a new game by connecting to the database and creating a new collection.
+   *
+   * @param gameState the GameState initialized by the host
+   */
+  public void createNewGame(GameState gameState) {
         connectToDatabase(defaultUsername, defaultPassword);
         setServerID(gameState.getGameID());
         database.createCollection(serverID).subscribe(new SubscriberHelpers.PrintSubscriber<>("Collection created successfully"));
@@ -69,12 +72,13 @@ public class MongoGameServer {
         joinGame("host", serverID);
     }
 
-    /**
-     * Joins a game by connecting to the database and subscribing to the game's collection.
-     *
-     * @param serverID as a String
-     */
-    public void joinGame(String userID, String serverID) {
+  /**
+   * Joins a game by connecting to the database and subscribing to the game's collection.
+   *
+   * @param userID   the user id
+   * @param serverID as a String
+   */
+  public void joinGame(String userID, String serverID) {
         if (database == null) {
             connectToDatabase(defaultUsername, defaultPassword);
             setServerID(serverID);
@@ -118,12 +122,13 @@ public class MongoGameServer {
         serverID = gameID;
     }
 
-    /**
-     * Main function. for testing purposes.
-     *
-     * @param args arguments from command line
-     */
-    public static void main(String[] args) throws InterruptedException {
+  /**
+   * Main function. for testing purposes.
+   *
+   * @param args arguments from command line
+   * @throws InterruptedException the interrupted exception
+   */
+  public static void main(String[] args) throws InterruptedException {
         String userID = "bob";
         MongoGameServer server = new MongoGameServer();
         GameState gameState = new GameState(4, 20, 20);

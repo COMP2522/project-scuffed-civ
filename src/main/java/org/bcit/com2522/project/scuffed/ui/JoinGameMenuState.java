@@ -3,6 +3,9 @@ package org.bcit.com2522.project.scuffed.ui;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
 
+/**
+ * The type Join game menu state.
+ */
 public class JoinGameMenuState extends MenuState {
 
     private InputBox portInput;
@@ -14,7 +17,13 @@ public class JoinGameMenuState extends MenuState {
     private Label errorMessageLabel;
     private boolean showError = false;
 
-    public JoinGameMenuState(Window scene, Menu menu) {
+  /**
+   * Instantiates a new Join game menu state.
+   *
+   * @param scene the scene
+   * @param menu  the menu
+   */
+  public JoinGameMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -81,7 +90,12 @@ public class JoinGameMenuState extends MenuState {
         return false;
     }
 
-    public void keyPressed(char key) {
+  /**
+   * Key pressed.
+   *
+   * @param key the key
+   */
+  public void keyPressed(char key) {
         if (key == PApplet.BACKSPACE) {
             if (hostIPInput.isSelected()) {
                 hostIPInput.removeCharacter();
@@ -106,7 +120,10 @@ public class JoinGameMenuState extends MenuState {
         menu.setState(new OnlineMenuState(scene, menu));
     }
 
-    public void onJoinClicked() {
+  /**
+   * On join clicked.
+   */
+  public void onJoinClicked() {
         // Get the port, host IP, and username from the input boxes
         int port = portInput.getIntValue();
         String hostIP = hostIPInput.getStringValue();

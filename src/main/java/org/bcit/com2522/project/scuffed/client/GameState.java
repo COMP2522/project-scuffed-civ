@@ -19,32 +19,53 @@ import java.util.stream.Collectors;
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 import static processing.core.PConstants.*;
 
-public class GameState { //everything manager this is the player manager
+public class GameState { // everything manager this is the player manager
     private String gameID;
+    /**
+     * The Map.
+     */
     Map map;
+    /**
+     * The Current player.
+     */
     public Player currentPlayer;
+    /**
+     * The Players.
+     */
     static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     private Entity[][] entities;
     private Entity selected;
+    /**
+     * The Zoom amount.
+     */
     int zoomAmount;
-    int xShift; //only used to change where the map is drawn
-    int yShift; //only used to change where the map is drawn
+    /**
+     * The X shift.
+     */
+    int xShift; // only used to change where the map is drawn
+    /**
+     * The Y shift.
+     */
+    int yShift; // only used to change where the map is drawn
 
+    /**
+     * The Select position.
+     */
     public Position selectPosition;
 
     /**
      * Constructor used for creating a new game.
      *
      * @param numplayers number of players in the game
-     * @param mapwidth width of the map
-     * @param mapheight height of the map
+     * @param mapwidth   width of the map
+     * @param mapheight  height of the map
      */
     public GameState(int numplayers, int mapwidth, int mapheight) {
-        this.gameID = "Game" + new Random().nextInt(10000); //make a random gameId
+        this.gameID = "Game" + new Random().nextInt(10000); // make a random gameId
         players = new ArrayDeque<>(numplayers);
         entities = new Entity[mapwidth][mapheight];
         map = new Map(mapwidth, mapheight);
-        for(int i = 0; i < numplayers; i++) {
+        for (int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
         zoomAmount = 32;
@@ -52,19 +73,21 @@ public class GameState { //everything manager this is the player manager
         yShift = (720 / zoomAmount - mapwidth) / 2;
 
         for (Player player : players) {
-            player.setShift((1080 / zoomAmount - mapwidth) / 2, (720 / zoomAmount - mapwidth) / 2); //change to center on their worker
+            player.setShift((1080 / zoomAmount - mapwidth) / 2, (720 / zoomAmount - mapwidth) / 2); // change to center
+                                                                                                    // on their worker
         }
     }
 
     /**
      * Constructor used primarily when loading a game state from a JSON file.
      */
-    public GameState(){
+    public GameState() {
         zoomAmount = 32;
     };
 
     /**
      * this function is used by the AI to create a deep copy of the GameState
+     * 
      * @param state the state to make a copy of
      */
     public GameState(GameState state) {
@@ -78,11 +101,14 @@ public class GameState { //everything manager this is the player manager
                 Entity entity = state.entities[i][j];
                 if (entity != null) {
                     if (state.entities[i][j] instanceof Worker)
-                        this.entities[i][j] = new Worker(entity.getOwnerID(), entity.getHealth(), entity.getCost(), ((Unit) entity).getMaxMove());
+                        this.entities[i][j] = new Worker(entity.getOwnerID(), entity.getHealth(), entity.getCost(),
+                                ((Unit) entity).getMaxMove());
                     else if (state.entities[i][j] instanceof Building)
                         this.entities[i][j] = new Building(entity.getOwnerID(), entity.getHealth(), entity.getCost());
                     else
-                        this.entities[i][j] = new Soldier(entity.getOwnerID(), entity.getHealth(), entity.getCost(), ((Soldier) entity).getMaxMove(), ((Soldier) entity).getDamage(), ((Soldier) entity).getRange());
+                        this.entities[i][j] = new Soldier(entity.getOwnerID(), entity.getHealth(), entity.getCost(),
+                                ((Soldier) entity).getMaxMove(), ((Soldier) entity).getDamage(),
+                                ((Soldier) entity).getRange());
                 }
             }
         }
@@ -90,7 +116,7 @@ public class GameState { //everything manager this is the player manager
     }
 
     public static Player getPlayer(int ownerId) {
-        for (Player player: players) {
+        for (Player player : players) {
             if (player.getID() == ownerId) {
                 return player;
             }
@@ -99,7 +125,8 @@ public class GameState { //everything manager this is the player manager
     }
 
     /**
-     * Method called to initialize the game state that sets up a new worker entity for each player.
+     * Method called to initialize the game state that sets up a new worker entity
+     * for each player.
      */
     public void init() {
         // Initialize the currentPlayer as the first player in the queue
@@ -109,13 +136,13 @@ public class GameState { //everything manager this is the player manager
         int cols = entities[0].length;
 
         // Calculate the number of grid sections along the x and y axes
-        //System.out.println(players.size());
+        // System.out.println(players.size());
         ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);
-        //TODO same logic should be used for all numbers of players
+        // TODO same logic should be used for all numbers of players
         if (players.size() == 2) {
             Player player1 = playersQueueCopy.poll();
             Player player2 = playersQueueCopy.poll();
-            //TODO maybe an initWorkers function in player instead of in gamestate
+            // TODO maybe an initWorkers function in player instead of in gamestate
 
             entities[0][0] = new Worker(player1.getID(), 100, 1, 6);
             entities[rows - 1][cols - 1] = new Worker(player2.getID(), 100, 1, 6);
@@ -127,7 +154,8 @@ public class GameState { //everything manager this is the player manager
             int sectionWidth = rows / xSections;
             int sectionHeight = cols / ySections;
 
-            // Create a copy of the playersQueue to iterate over without affecting the original queue
+            // Create a copy of the playersQueue to iterate over without affecting the
+            // original queue
 
             for (int y = 0; y < ySections; y++) {
                 for (int x = 0; x < xSections; x++) {
@@ -137,8 +165,8 @@ public class GameState { //everything manager this is the player manager
                         // Calculate the position of the worker for the current player
                         int xPos;
                         int yPos;
-                            xPos = x * sectionWidth;
-                            yPos = y * sectionHeight;
+                        xPos = x * sectionWidth;
+                        yPos = y * sectionHeight;
                         entities[xPos][yPos] = new Worker(player.getID(), 100, 1, 6);
                     }
                 }
@@ -162,21 +190,23 @@ public class GameState { //everything manager this is the player manager
      * Method called when the map is clicked.
      *
      * @param mousePos the position of the mouse in pixels
+     * @param scene    the scene
      */
     public void clicked(PVector mousePos, Window scene) {
         int x = (int) (mousePos.x / zoomAmount) - xShift;
         int y = (int) (mousePos.y / zoomAmount) - yShift;
         Entity clicked = entities[x][y];
-        if (clicked == null && selected == null) { //select empty tile
+        if (clicked == null && selected == null) { // select empty tile
+
             System.out.println("Nothing Selected");
-        } else if (clicked != null && clicked.getOwnerID() == currentPlayer.getID()) { //select own entity
+        } else if (clicked != null && clicked.getOwnerID() == currentPlayer.getID()) { // select own entity
             selected = clicked;
-            ((inGameStartHUD)scene.gameInstance.hud.currentState).unitSelected(selected);
+            ((InGameHud) scene.gameInstance.hud.currentState).unitSelected(selected, entities);
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition(entities));
             System.out.println("Selected entity health: " + selected.getHealth());
-        } else if(clicked != null && selected == null) {
+        } else if (clicked != null && selected == null) {
             selected = clicked;
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
@@ -184,47 +214,55 @@ public class GameState { //everything manager this is the player manager
             System.out.println("Selected entity health: " + selected.getHealth());
             System.out.println("Selected enemy resources: " + selected.getOwner().getResources());
             selected = null;
-        } else if (clicked != null && selected instanceof Soldier && clicked.getOwnerID() != currentPlayer.getID()) { //attack with soldier
+        } else if (clicked != null && selected instanceof Soldier && clicked.getOwnerID() != currentPlayer.getID()) { // attack
+                                                                                                                      // with
+                                                                                                                      // soldier
             ((Soldier) selected).attack(entities, clicked);
-        } else if (clicked == null && selected instanceof Unit) { //move
+        } else if (clicked == null && selected instanceof Unit) { // move
             ((Unit) selected).move(entities, new Position(x, y));
         } else {
             System.out.println("Invalid selection");
         }
     }
 
+    /**
+     * Key pressed.
+     *
+     * @param key   the key
+     * @param scene the scene
+     */
     public void keyPressed(char key, Window scene) {
-        if(key == 'w') {
+        if (key == 'w') {
             shift(0, 1);
-        } else if(key == 'a') {
+        } else if (key == 'a') {
             shift(1, 0);
-        } else if(key == 's') {
+        } else if (key == 's') {
             shift(0, -1);
-        } else if(key == 'd') {
+        } else if (key == 'd') {
             shift(-1, 0);
         } else if (key == ' ') {
             resetShift();
         }
 
-        else if(key == 'b' && (selected instanceof Worker || selected instanceof Building)) { //creates a building
+        else if (key == 'b' && (selected instanceof Worker || selected instanceof Building)) { // creates a building
             ((Worker) selected).buildBuilding(entities);
-        } else if(key == 'm' && selected instanceof Building) { //creates a worker (maker)
+        } else if (key == 'm' && selected instanceof Building) { // creates a worker (maker)
             ((Building) selected).buildWorker(entities);
-        } else if(key == 'f' && selected instanceof Building) { //creates a soldier (fighter)
+        } else if (key == 'f' && selected instanceof Building) { // creates a soldier (fighter)
             ((Building) selected).buildSoldier(entities, 100, 50, 6, 6);
-        } else if(key == 'c' && selected instanceof Worker) { //collects
+        } else if (key == 'c' && selected instanceof Worker) { // collects
             ((Worker) selected).collect(map.get(selected.getPosition(entities)));
-        } else if (key == 'x') { //deselect any entity
+        } else if (key == 'x') { // deselect any entity
             selected = null;
         }
 
-        else if(key == 'u' && selected instanceof Building){ //fighter with more health
+        else if (key == 'u' && selected instanceof Building) { // fighter with more health
             ((Building) selected).buildSoldier(entities, 200, 50, 6, 6);
-        } else if(key == 'i' && selected instanceof Building){ //fighter with more damage
+        } else if (key == 'i' && selected instanceof Building) { // fighter with more damage
             ((Building) selected).buildSoldier(entities, 100, 100, 6, 6);
-        } else if(key == 'o' && selected instanceof Building){ //fighter with more speed
+        } else if (key == 'o' && selected instanceof Building) { // fighter with more speed
             ((Building) selected).buildSoldier(entities, 100, 50, 12, 6);
-        } else if(key == 'p' && selected instanceof Building){ //fighter with more range
+        } else if (key == 'p' && selected instanceof Building) { // fighter with more range
             ((Building) selected).buildSoldier(entities, 100, 50, 6, 12);
         }
 
@@ -245,66 +283,97 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-    public int[] resizePixels(int[] pixels,int w1,int h1,int w2,int h2) {
-        int[] temp = new int[w2*h2] ;
-        int x_ratio = (int)((w1<<16)/w2) +1;
-        int y_ratio = (int)((h1<<16)/h2) +1;
-        int x2, y2 ;
-        for (int i=0;i<h2;i++) {
-            for (int j=0;j<w2;j++) {
-                x2 = ((j*x_ratio)>>16);
-                y2 = ((i*y_ratio)>>16);
+    /**
+     * Resize pixels int [ ].
+     *
+     * @param pixels the pixels
+     * @param w1     the w 1
+     * @param h1     the h 1
+     * @param w2     the w 2
+     * @param h2     the h 2
+     * @return the int [ ]
+     */
+    public int[] resizePixels(int[] pixels, int w1, int h1, int w2, int h2) {
+        int[] temp = new int[w2 * h2];
+        int x_ratio = (int) ((w1 << 16) / w2) + 1;
+        int y_ratio = (int) ((h1 << 16) / h2) + 1;
+        int x2, y2;
+        for (int i = 0; i < h2; i++) {
+            for (int j = 0; j < w2; j++) {
+                x2 = ((j * x_ratio) >> 16);
+                y2 = ((i * y_ratio) >> 16);
                 temp[(i * w2) + j] = pixels[(y2 * w1) + x2];
             }
         }
         return temp;
     }
 
+    /**
+     * Nearest neighbor resize p image.
+     *
+     * @param image       the image
+     * @param amount      the amount
+     * @param currentSize the current size
+     * @return the p image
+     */
     public PImage nearestNeighborResize(PImage image, float amount, int currentSize) {
         int[] imagePixels = new int[1024];
         int scale = currentSize / 32;
 
         for (int x = 0; x < 32; x++) {
             for (int y = 0; y < 32; y++) {
-                imagePixels[32 * y + x] = image.get(x * scale,y * scale);
+                imagePixels[32 * y + x] = image.get(x * scale, y * scale);
             }
         }
-        if (amount > 1) { //zoom in
+        if (amount > 1) { // zoom in
             imagePixels = resizePixels(imagePixels, 32, 32, currentSize * 2, currentSize * 2);
             image = new PImage(currentSize * 2, currentSize * 2, imagePixels, true, new PApplet());
-        } else { //zoom out
+        } else { // zoom out
             imagePixels = resizePixels(imagePixels, 32, 32, currentSize / 2, currentSize / 2);
             image = new PImage(currentSize / 2, currentSize / 2, imagePixels, true, new PApplet());
         }
         return image;
     }
 
+    /**
+     * Zoom.
+     *
+     * @param amount the amount
+     */
     public void zoom(float amount) {
         if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
             for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
-                //mapElement.getValue().resize(zoomAmount, 0);
+                // mapElement.getValue().resize(zoomAmount, 0);
                 mapElement.setValue(nearestNeighborResize(mapElement.getValue(), amount, zoomAmount));
             }
 
-            zoomAmount = (int)(zoomAmount * amount);
+            zoomAmount = (int) (zoomAmount * amount);
             if (amount > 1)
-                shift((int)(1080 / zoomAmount / amount), (int)(720 / zoomAmount / amount));
+                shift((int) (1080 / zoomAmount / amount), (int) (720 / zoomAmount / amount));
             else
-                shift((int)(1080 / zoomAmount * -amount / 2), (int)(720 / zoomAmount * -amount / 2));
+                shift((int) (1080 / zoomAmount * -amount / 2), (int) (720 / zoomAmount * -amount / 2));
         }
     }
 
-    //moving around the map, does not take unit movement into account.
+    /**
+     * Shift.
+     *
+     * @param x the x
+     * @param y the y
+     */
+    // moving around the map, does not take unit movement into account.
     public void shift(int x, int y) {
         xShift -= x;
         yShift -= y;
     }
 
+    /**
+     * Reset shift.
+     */
     public void resetShift() {
         xShift = (1080 / zoomAmount - map.width) / 2;
         yShift = (720 / zoomAmount - map.height) / 2;
     }
-
 
     /**
      * Sets the current player to the next in the queue and checks win conditions
@@ -315,14 +384,14 @@ public class GameState { //everything manager this is the player manager
         checkPlayerLoss();
         checkVictoryCondition();
 
-        //randomly regenerates more resources for certain squares
+        // randomly regenerates more resources for certain squares
         map.regenResources();
 
         selected = null;
 
-         if (currentPlayer.isAI()) {
-             AIManager.start(this);
-         }
+        if (currentPlayer.isAI()) {
+            AIManager.start(this);
+        }
     }
 
     /**
@@ -349,7 +418,6 @@ public class GameState { //everything manager this is the player manager
 
         players.offer(players.poll());
         currentPlayer = players.peek();
-
 
         for (int i = 0; i < 2; i++) {
             zoom(0.5f);
@@ -391,7 +459,7 @@ public class GameState { //everything manager this is the player manager
             }
         }
         if (alivePlayers.size() == 1) {
-            System.out.print("Player " + (alivePlayers.get(0).getID()+1));
+            System.out.print("Player " + (alivePlayers.get(0).getID() + 1));
             if (alivePlayers.get(0).isAI())
                 System.out.print(" (AI)");
             System.out.println(" won");
@@ -399,29 +467,31 @@ public class GameState { //everything manager this is the player manager
         }
     }
 
-
     /**
      * Draws the map and all entities in the gamestate
+     *
      * @param scene the window to draw to
      */
     public void draw(Window scene) {
         map.draw(zoomAmount, scene, xShift, yShift);
 
-        for (int i = 0; i < entities.length; i++) { //prints the maps entities
+        for (int i = 0; i < entities.length; i++) { // prints the maps entities
             for (int j = 0; j < entities[0].length; j++) {
-                if(entities[i][j] != null) {
+                if (entities[i][j] != null) {
                     Entity entity = entities[i][j];
                     Color color = entity.getOwner().getColor();
                     scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-                    scene.image(GameImages.get(entity.entityType), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+                    scene.image(GameImages.get(entity.entityType), (i + xShift) * zoomAmount,
+                            (j + yShift) * zoomAmount);
                     scene.noTint();
                 }
             }
         }
 
-        if (selected != null) { //prints box around selected entity
+        if (selected != null) { // prints box around selected entity
             selectPosition = selected.getPosition(entities);
-            scene.image(GameImages.get("select"), (selectPosition.getX() + xShift) * zoomAmount, (selectPosition.getY() + yShift) * zoomAmount);
+            scene.image(GameImages.get("select"), (selectPosition.getX() + xShift) * zoomAmount,
+                    (selectPosition.getY() + yShift) * zoomAmount);
         }
     }
 
@@ -429,9 +499,9 @@ public class GameState { //everything manager this is the player manager
      * Prints all entities in the gamestate to the console for debugging purposes
      */
     public void printEntities() {
-        for (Entity[] row: entities) {
-            for (Entity element: row) {
-                if(element != null) {
+        for (Entity[] row : entities) {
+            for (Entity element : row) {
+                if (element != null) {
                     System.out.println(element);
                 }
             }
@@ -441,6 +511,8 @@ public class GameState { //everything manager this is the player manager
     /**
      * Saves the current gamestate to a json file in the "saves" folder
      * currently called at end of player turn
+     *
+     * @return the json object
      */
     public JSONObject toJSONObject() {
         JSONObject gameState = new JSONObject();
@@ -469,16 +541,19 @@ public class GameState { //everything manager this is the player manager
     }
 
     /**
-     * Reads JSON and creates a gamestate from it
+     * Reads JSON and creates a game state from it
+     *
      * @param gameStateJSON the json to read
+     * @return the game state
      */
     public static GameState fromJSONObject(JSONObject gameStateJSON) {
         GameState gameState = new GameState();
-        gameState.gameID = (String)(gameStateJSON.get("gameID"));
+        gameState.gameID = (String) (gameStateJSON.get("gameID"));
         gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
-        gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer")) ;
+        gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"));
         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-        gameState.players = (ArrayDeque<Player>) playersArray.stream().map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
+        gameState.players = (ArrayDeque<Player>) playersArray.stream()
+                .map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
                 .collect(Collectors.toCollection(ArrayDeque::new));
         JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
         Entity[][] entities = new Entity[gameState.map.width][gameState.map.width];
@@ -497,7 +572,7 @@ public class GameState { //everything manager this is the player manager
      * if there's an error, try adding a saves folder to the root directory
      *
      * @return the loaded gameState
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException the file not found exception
      */
     public static GameState load() throws FileNotFoundException {
         GameState loadedGameState = new GameState();
@@ -511,18 +586,38 @@ public class GameState { //everything manager this is the player manager
         return loadedGameState;
     }
 
+    /**
+     * Get entities entity [ ] [ ].
+     *
+     * @return the entity [ ] [ ]
+     */
     public Entity[][] getEntities() {
         return entities;
     }
 
+    /**
+     * Gets current player id.
+     *
+     * @return the current player id
+     */
     public int getCurrentPlayerID() {
         return currentPlayer.getID();
     }
 
+    /**
+     * Gets map.
+     *
+     * @return the map
+     */
     public Map getMap() {
         return map;
     }
 
+    /**
+     * Gets game id.
+     *
+     * @return the game id
+     */
     public String getGameID() {
         return gameID;
     }
@@ -533,6 +628,7 @@ public class GameState { //everything manager this is the player manager
      * returns 0 if the gameStates have equal value.
      * returns -1 if this has lower value than passed in gameState
      * returns 1 if this has higher value than passed in gameState
+     * 
      * @param gameState
      * @return
      */
@@ -555,7 +651,7 @@ public class GameState { //everything manager this is the player manager
         for (int i = 0; i < entities.length; i++) {
             for (int j = 0; j < entities[0].length; j++) {
                 Entity entity = entities[i][j];
-                if(entity != null) {
+                if (entity != null) {
                     if (entity.getOwner() == currentPlayer) {
                         playerHP += entity.getHealth();
                         if (entity instanceof Soldier soldier) {
@@ -570,8 +666,8 @@ public class GameState { //everything manager this is the player manager
                 }
             }
         }
-        //position of allies
-        //position of enemies
+        // position of allies
+        // position of enemies
 
         return (playerHP + playerDMG - enemyDMG - enemyHP + currentPlayer.getResources());
     }

@@ -17,15 +17,42 @@ import java.util.HashSet;
  * @Version 0.5
  */
 public class Window extends PApplet {
+  /**
+   * The Game images.
+   */
   public static HashMap<String, PImage> GameImages;
+  /**
+   * The Ui images.
+   */
   public static HashMap<String, PImage> UIImages;
+  /**
+   * The In game.
+   */
   public boolean inGame = false;
 
+  /**
+   * The Menu.
+   */
   public Menu menu;
+  /**
+   * The Game instance.
+   */
   public GameInstance gameInstance;
+  /**
+   * The Debug mode.
+   */
   public Boolean debugMode = false;
+  /**
+   * The Debug menu.
+   */
   static DebugMenu debugMenu;
+  /**
+   * The Clickable manager.
+   */
   public ClickableManager clickableManager;
+  /**
+   * The Graphic manager.
+   */
   public GraphicManager graphicManager;
 
   /**
@@ -44,6 +71,9 @@ public class Window extends PApplet {
     this.init();
   }
 
+  /**
+   * Init.
+   */
   public void init() {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
@@ -62,9 +92,9 @@ public class Window extends PApplet {
     GameImages.put("rockTile", loadImage("sprites/Menu/tile_rocks.png"));
     GameImages.put("waterTile", loadImage("sprites/Menu/tile_water.png"));
     GameImages.put("sandTile", loadImage("sprites/Menu/tile_sand.png"));
-    GameImages.put("soldier", loadImage( "sprites/soldier.png"));
-    GameImages.put("worker", loadImage("sprites/worker.png"));
-    GameImages.put("building", loadImage("sprites/building.png"));
+    GameImages.put("soldier", loadImage( "sprites/soldierUnit.png"));
+    GameImages.put("worker", loadImage("sprites/workerUnit.png"));
+    GameImages.put("building", loadImage("sprites/buildingUnit.png"));
     GameImages.put("select", loadImage("sprites/select.png"));
 
     //Images for the UI. Buttons, Menus, Backgrounds, etc.
@@ -87,13 +117,32 @@ public class Window extends PApplet {
     UIImages.put("buttonBackground", loadImage("sprites/Menu/background.png"));
     UIImages.put("buttonHoverBackground", loadImage("sprites/Menu/button_blank.png"));
     UIImages.put("buttonClickBackground", loadImage("sprites/Menu/button_blank_pressed.png"));
-    UIImages.put("background", loadImage("sprites/backgroundDirt.png"));
+    UIImages.put("background", loadImage("sprites/inGameBackgroundWoods.jpg"));
     UIImages.put("logo", loadImage("sprites/logo.png"));
     UIImages.put("backgroundMenu", loadImage("sprites/Menu/backgroundMenu.png"));
+    //cant figure out how to make use of these in the inGameHUD class...WIP
+//    UIImages.put("rivetPanel", loadImage("sprites/RivetPanel.png"));
+//    UIImages.put("soldierSelectedIMG", loadImage("sprites/highResSoldier.jpg"));
+//    UIImages.put("buildingSelectedIMG", loadImage("sprites/highResFactory.jpg"));
+//    UIImages.put("workerSelectedIMG", loadImage("sprites/highResWorker.jpg"));
+//    UIImages.put("rustedMetalIMG", loadImage("sprites/rustedMetalIMG.jpg"));
+//    UIImages.put("coinIMG", loadImage("sprites/coin.png"));
+//    UIImages.put("moveIMG", loadImage("sprites/movement.png"));
+//    UIImages.put("healthIMG", loadImage("sprites/Health.png"));
+//    UIImages.put("attackIMG", loadImage("sprites/damage.png"));
+//    UIImages.put("resourcesIMG", loadImage("sprites/resources.png"));
+//    UIImages.put("rangeIMG", loadImage("sprites/range.png"));
   }
 
+  /**
+   * Init game.
+   *
+   * @param numplayers the numplayers
+   * @param mapwidth   the mapwidth
+   * @param mapheight  the mapheight
+   */
   public void initGame(int numplayers, int mapwidth, int mapheight) {
-    gameInstance = new GameInstance(new HUD(this), new GameState(numplayers, mapwidth, mapheight));
+    gameInstance = new GameInstance(new Hud(this), new GameState(numplayers, mapwidth, mapheight));
     gameInstance.newGame();
   }
 
@@ -156,22 +205,45 @@ public class Window extends PApplet {
   }
 
 
+  /**
+   * Add clickable.
+   *
+   * @param clickable the clickable
+   */
   public void addClickable(Clickable clickable) {
     clickableManager.add(clickable);
   }
 
+  /**
+   * Remove clickable.
+   *
+   * @param clickable the clickable
+   */
   public void removeClickable(Clickable clickable) {
     clickableManager.remove(clickable);
   }
 
+  /**
+   * Gets graphic manager.
+   *
+   * @return the graphic manager
+   */
   public GraphicManager getGraphicManager() {
     return graphicManager;
   }
 
+  /**
+   * Wipe graphics.
+   */
   public void wipeGraphics() {
     graphicManager.wipeGraphics();
   }
 
+  /**
+   * Gets current player.
+   *
+   * @return the current player
+   */
   public Player getCurrentPlayer() {
     if(gameInstance == null){
       return null;
@@ -179,10 +251,16 @@ public class Window extends PApplet {
     return gameInstance.getCurrentPlayer();
   }
 
+  /**
+   * Next turn.
+   */
   public void nextTurn() {
     gameInstance.nextTurn();
   }
 
+  /**
+   * Load game.
+   */
   public void loadGame() {
     gameInstance = new GameInstance(this);
     System.out.println("Loading game");
@@ -190,11 +268,21 @@ public class Window extends PApplet {
     inGame = true;
   }
 
+  /**
+   * Join game.
+   *
+   * @param hostIP         the host ip
+   * @param port           the port
+   * @param clientUsername the client username
+   */
   public void joinGame(String hostIP, int port, String clientUsername) {
     gameInstance = new GameInstance(this);
     gameInstance.joinGame(hostIP, port, clientUsername);
   }
 
+  /**
+   * Save game.
+   */
   public void saveGame() {
     try {
       gameInstance.saveGame();
@@ -203,7 +291,15 @@ public class Window extends PApplet {
     }
   }
 
-  //TODO: implement actual server
+  /**
+   * Init online game.
+   *
+   * @param numplayers the numplayers
+   * @param mapwidth   the mapwidth
+   * @param mapheight  the mapheight
+   * @param port       the port
+   */
+//TODO: implement actual server
   public void initOnlineGame(int numplayers, int mapwidth, int mapheight, int port) {
     gameInstance = new GameInstance(this);
     GameState gameState = new GameState(numplayers, mapwidth, mapheight);
@@ -212,7 +308,6 @@ public class Window extends PApplet {
     gameInstance.setGameServer(gameServer);
     gameInstance.startServer();
   }
-
 
 
   /**
@@ -227,6 +322,11 @@ public class Window extends PApplet {
     PApplet.runSketch(appletArgs, eatBubbles);
   }
 
+  /**
+   * Gets connected players.
+   *
+   * @return the connected players
+   */
   public HashSet<String> getConnectedPlayers() {
     return gameInstance.getConnectedPlayers();
   }

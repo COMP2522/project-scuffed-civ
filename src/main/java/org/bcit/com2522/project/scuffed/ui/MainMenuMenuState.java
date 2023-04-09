@@ -7,12 +7,25 @@ import java.io.File;
 
 import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
+/**
+ * The type Main menu menu state.
+ */
 public class MainMenuMenuState extends MenuState implements PConstants {
 
-    GraphicManager graphicManager;
+  /**
+   * The Graphic manager.
+   */
+  GraphicManager graphicManager;
 
     private Label errorMessage;
-    public MainMenuMenuState(Window scene, Menu menu) {
+
+  /**
+   * Instantiates a new Main menu menu state.
+   *
+   * @param scene the scene
+   * @param menu  the menu
+   */
+  public MainMenuMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         graphicManager = scene.getGraphicManager();
 
@@ -64,12 +77,18 @@ public class MainMenuMenuState extends MenuState implements PConstants {
 
     }
 
-    public void onNewGameClicked() {
+  /**
+   * On new game clicked.
+   */
+  public void onNewGameClicked() {
         // Change the menu state to the New Game state
         menu.setState(new NewGameMenuState(scene, menu));
     }
 
-    public void onLoadGameClicked() {
+  /**
+   * On load game clicked.
+   */
+  public void onLoadGameClicked() {
         // Change the menu state to the Load Game state
         if (new File("saves/save.json").exists()) {
             menu.setState(new LoadingMenuState(scene, menu));
@@ -83,7 +102,10 @@ public class MainMenuMenuState extends MenuState implements PConstants {
         }
     }
 
-    public void onOnlineClicked() {
+  /**
+   * On online clicked.
+   */
+  public void onOnlineClicked() {
         // Change the menu state to the Online Multiplayer state
         menu.setState(new OnlineMenuState(scene, menu));
     }

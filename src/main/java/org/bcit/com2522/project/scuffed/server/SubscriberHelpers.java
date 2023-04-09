@@ -30,23 +30,26 @@ package org.bcit.com2522.project.scuffed.server;
         import static java.lang.String.format;
 
 /**
- *  Subscriber helper implementations for the Quick Tour.
+ * Subscriber helper implementations for the Quick Tour.
  */
 public final class SubscriberHelpers {
 
-    /**
-     * A Subscriber that stores the publishers results and provides a latch so can block on completion.
-     *
-     * @param <T> The publishers result type
-     */
-    public static class ObservableSubscriber<T> implements Subscriber<T> {
+  /**
+   * A Subscriber that stores the publishers results and provides a latch so can block on completion.
+   *
+   * @param <T> The publishers result type
+   */
+  public static class ObservableSubscriber<T> implements Subscriber<T> {
         private final List<T> received;
         private final List<Throwable> errors;
         private final CountDownLatch latch;
         private volatile Subscription subscription;
         private volatile boolean completed;
 
-        ObservableSubscriber() {
+    /**
+     * Instantiates a new Observable subscriber.
+     */
+    ObservableSubscriber() {
             this.received = new ArrayList<T>();
             this.errors = new ArrayList<Throwable>();
             this.latch = new CountDownLatch(1);
@@ -74,34 +77,76 @@ public final class SubscriberHelpers {
             latch.countDown();
         }
 
-        public Subscription getSubscription() {
+    /**
+     * Gets subscription.
+     *
+     * @return the subscription
+     */
+    public Subscription getSubscription() {
             return subscription;
         }
 
-        public List<T> getReceived() {
+    /**
+     * Gets received.
+     *
+     * @return the received
+     */
+    public List<T> getReceived() {
             return received;
         }
 
-        public Throwable getError() {
+    /**
+     * Gets error.
+     *
+     * @return the error
+     */
+    public Throwable getError() {
             if (errors.size() > 0) {
                 return errors.get(0);
             }
             return null;
         }
 
-        public boolean isCompleted() {
+    /**
+     * Is completed boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isCompleted() {
             return completed;
         }
 
-        public List<T> get(final long timeout, final TimeUnit unit) throws Throwable {
+    /**
+     * Get list.
+     *
+     * @param timeout the timeout
+     * @param unit    the unit
+     * @return the list
+     * @throws Throwable the throwable
+     */
+    public List<T> get(final long timeout, final TimeUnit unit) throws Throwable {
             return await(timeout, unit).getReceived();
         }
 
-        public ObservableSubscriber<T> await() throws Throwable {
+    /**
+     * Await observable subscriber.
+     *
+     * @return the observable subscriber
+     * @throws Throwable the throwable
+     */
+    public ObservableSubscriber<T> await() throws Throwable {
             return await(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
         }
 
-        public ObservableSubscriber<T> await(final long timeout, final TimeUnit unit) throws Throwable {
+    /**
+     * Await observable subscriber.
+     *
+     * @param timeout the timeout
+     * @param unit    the unit
+     * @return the observable subscriber
+     * @throws Throwable the throwable
+     */
+    public ObservableSubscriber<T> await(final long timeout, final TimeUnit unit) throws Throwable {
             subscription.request(Integer.MAX_VALUE);
             if (!latch.await(timeout, unit)) {
                 throw new MongoTimeoutException("Publisher onComplete timed out");
@@ -113,12 +158,12 @@ public final class SubscriberHelpers {
         }
     }
 
-    /**
-     * A Subscriber that immediately requests Integer.MAX_VALUE onSubscribe
-     *
-     * @param <T> The publishers result type
-     */
-    public static class OperationSubscriber<T> extends ObservableSubscriber<T> {
+  /**
+   * A Subscriber that immediately requests Integer.MAX_VALUE onSubscribe
+   *
+   * @param <T> The publishers result type
+   */
+  public static class OperationSubscriber<T> extends ObservableSubscriber<T> {
 
         @Override
         public void onSubscribe(final Subscription s) {
@@ -127,20 +172,20 @@ public final class SubscriberHelpers {
         }
     }
 
-    /**
-     * A Subscriber that prints a message including the received items on completion
-     *
-     * @param <T> The publishers result type
-     */
-    public static class PrintSubscriber<T> extends OperationSubscriber<T> {
+  /**
+   * A Subscriber that prints a message including the received items on completion
+   *
+   * @param <T> The publishers result type
+   */
+  public static class PrintSubscriber<T> extends OperationSubscriber<T> {
         private final String message;
 
-        /**
-         * A Subscriber that outputs a message onComplete.
-         *
-         * @param message the message to output onComplete
-         */
-        public PrintSubscriber(final String message) {
+    /**
+     * A Subscriber that outputs a message onComplete.
+     *
+     * @param message the message to output onComplete
+     */
+    public PrintSubscriber(final String message) {
             this.message = message;
         }
 
@@ -151,10 +196,10 @@ public final class SubscriberHelpers {
         }
     }
 
-    /**
-     * A Subscriber that prints the json version of each document
-     */
-    public static class PrintDocumentSubscriber extends OperationSubscriber<Document> {
+  /**
+   * A Subscriber that prints the json version of each document
+   */
+  public static class PrintDocumentSubscriber extends OperationSubscriber<Document> {
 
         @Override
         public void onNext(final Document document) {

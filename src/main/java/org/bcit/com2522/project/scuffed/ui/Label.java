@@ -2,46 +2,99 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
+/**
+ * The type Label.
+ */
 public class Label{
     private int x, y;
 
-    public int getX() {
+  /**
+   * Gets x.
+   *
+   * @return the x
+   */
+  public int getX() {
         return x;
     }
 
-    public void setX(int x) {
+  /**
+   * Sets x.
+   *
+   * @param x the x
+   */
+  public void setX(int x) {
         this.x = x;
     }
 
-    public int getY() {
+  /**
+   * Gets y.
+   *
+   * @return the y
+   */
+  public int getY() {
         return y;
     }
 
-    public void setY(int y) {
+  /**
+   * Sets y.
+   *
+   * @param y the y
+   */
+  public void setY(int y) {
         this.y = y;
     }
 
-    public String getText() {
+  /**
+   * Gets text.
+   *
+   * @return the text
+   */
+  public String getText() {
         return text;
     }
 
-    public void setText(String text) {
+  /**
+   * Sets text.
+   *
+   * @param text the text
+   */
+  public void setText(String text) {
         this.text = text;
     }
 
-    public int getTextSize() {
+  /**
+   * Gets text size.
+   *
+   * @return the text size
+   */
+  public int getTextSize() {
         return textSize;
     }
 
-    public void setTextSize(int textSize) {
+  /**
+   * Sets text size.
+   *
+   * @param textSize the text size
+   */
+  public void setTextSize(int textSize) {
         this.textSize = textSize;
     }
 
-    public Window getScene() {
+  /**
+   * Gets scene.
+   *
+   * @return the scene
+   */
+  public Window getScene() {
         return scene;
     }
 
-    public void setScene(Window scene) {
+  /**
+   * Sets scene.
+   *
+   * @param scene the scene
+   */
+  public void setScene(Window scene) {
         this.scene = scene;
     }
 
@@ -50,7 +103,16 @@ public class Label{
 
     private Window scene;
 
-    public Label(int x, int y, String text, int textSize, Window scene) {
+  /**
+   * Instantiates a new Label.
+   *
+   * @param x        the x
+   * @param y        the y
+   * @param text     the text
+   * @param textSize the text size
+   * @param scene    the scene
+   */
+  public Label(int x, int y, String text, int textSize, Window scene) {
         this.x = x;
         this.y = y;
         this.text = text;
@@ -58,9 +120,12 @@ public class Label{
         this.scene = scene;
     }
 
-    public void draw() {
+  /**
+   * Draw.
+   */
+  public void draw() {
         scene.pushStyle();
-        scene.fill(0);
+        scene.fill(255, 255, 255);
         scene.textSize(textSize);
         scene.text(text, x, y);
         scene.popStyle();

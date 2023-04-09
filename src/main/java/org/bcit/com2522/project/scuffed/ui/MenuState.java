@@ -2,22 +2,51 @@ package org.bcit.com2522.project.scuffed.ui;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
+/**
+ * The type Menu state.
+ */
 public abstract class MenuState {
-    protected ButtonManager buttonManager;
-    protected Window scene;
-    protected Menu menu;
+  /**
+   * The Button manager.
+   */
+  protected ButtonManager buttonManager;
+  /**
+   * The Scene.
+   */
+  protected Window scene;
+  /**
+   * The Menu.
+   */
+  protected Menu menu;
 
-    public MenuState(Window scene, Menu menu, ButtonManager buttonManager) {
+  /**
+   * Instantiates a new Menu state.
+   *
+   * @param scene         the scene
+   * @param menu          the menu
+   * @param buttonManager the button manager
+   */
+  public MenuState(Window scene, Menu menu, ButtonManager buttonManager) {
         this.scene = scene;
         this.buttonManager = buttonManager;
         this.menu = menu;
     }
 
-    public void draw() {
+  /**
+   * Draw.
+   */
+  public void draw() {
         buttonManager.draw();
     }
 
-    public boolean clicked(int xpos, int ypos) {
+  /**
+   * Clicked boolean.
+   *
+   * @param xpos the xpos
+   * @param ypos the ypos
+   * @return the boolean
+   */
+  public boolean clicked(int xpos, int ypos) {
         // Check if any buttons were clicked and perform actions
         for (Button button : buttonManager.buttons) {
             if (button.isClicked(xpos, ypos)) {
@@ -28,13 +57,13 @@ public abstract class MenuState {
         return false;
     }
 
-    /**
-     * SetUp the buttons and inputs for the menu state
-     */
-    public abstract void setup();
+  /**
+   * SetUp the buttons and inputs for the menu state
+   */
+  public abstract void setup();
 
-    /**
-     * Called when the back/exit button is clicked
-     */
-    public abstract void onBackClicked(); // go back to the previous menu state
+  /**
+   * Called when the back/exit button is clicked
+   */
+  public abstract void onBackClicked(); // go back to the previous menu state
 }

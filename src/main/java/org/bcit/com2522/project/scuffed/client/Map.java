@@ -7,24 +7,42 @@ import java.awt.*;
 
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
-public class Map { //this is a tile manager
+/**
+ * The type Map.
+ */
+public class Map { // this is a tile manager
+    /**
+     * The Width.
+     */
     int width;
+    /**
+     * The Height.
+     */
     int height;
+    /**
+     * The Tiles.
+     */
     Tile[][] tiles;
     private Color color;
 
     /**
      * Constructor used in loading a map from JSON.
      */
-    public Map(){
+    public Map() {
         this.color = (Color.red);
     }
 
-    public Map (int width, int height) {
+    /**
+     * Instantiates a new Map.
+     *
+     * @param width  the width
+     * @param height the height
+     */
+    public Map(int width, int height) {
         this.width = width;
         this.height = height;
         tiles = new Tile[width][height];
-        for(int i = 0; i < width; i++) {
+        for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 tiles[i][j] = new Tile();
             }
@@ -33,7 +51,7 @@ public class Map { //this is a tile manager
         this.color = (Color.red);
     }
 
-    public Map(Map map) {
+    public Map(Map map) { // creates a deep copy of map
         this.width = map.width;
         this.height = map.height;
         this.tiles = new Tile[map.tiles.length][map.tiles[0].length];
@@ -50,14 +68,14 @@ public class Map { //this is a tile manager
 
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
-                if(tiles[i][j].getType() == 0)
-                    scene.image(GameImages.get("grassTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
-                else if(tiles[i][j].getType() == 1)
-                    scene.image(GameImages.get("rockTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
-                else if(tiles[i][j].getType() == 2)
-                    scene.image(GameImages.get("waterTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
-                else if(tiles[i][j].getType() == 3)
-                    scene.image(GameImages.get("sandTile"), (i+xShift)*zoomAmount,(j+yShift)*zoomAmount);
+                if (tiles[i][j].getType() == 0)
+                    scene.image(GameImages.get("sandTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+                else if (tiles[i][j].getType() == 1)
+                    scene.image(GameImages.get("waterTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+                else if (tiles[i][j].getType() == 2)
+                    scene.image(GameImages.get("rockTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+                else if (tiles[i][j].getType() == 3)
+                    scene.image(GameImages.get("grassTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
             }
         }
     }
@@ -70,9 +88,9 @@ public class Map { //this is a tile manager
     public JSONObject toJSONObject() {
         JSONObject map = new JSONObject();
         JSONArray tilesArray = new JSONArray();
-        for (Tile[] row: tiles) {
+        for (Tile[] row : tiles) {
             JSONArray rowArray = new JSONArray();
-            for (Tile element: row) {
+            for (Tile element : row) {
                 rowArray.add(element.toJSONObject());
             }
             tilesArray.add(rowArray);
@@ -82,7 +100,6 @@ public class Map { //this is a tile manager
         map.put("height", height);
         return map;
     }
-
 
     /**
      * Creates a map from a JSONObject.
@@ -94,28 +111,45 @@ public class Map { //this is a tile manager
         Map map = new Map();
         Object widthObject = mapObject.get("width");
         Object heightObject = mapObject.get("height");
-        map.width = widthObject instanceof Long ? (int)(long)widthObject : (int)widthObject;
-        map.height = heightObject instanceof Long ? (int)(long)heightObject : (int)heightObject;
+        map.width = widthObject instanceof Long ? (int) (long) widthObject : (int) widthObject;
+        map.height = heightObject instanceof Long ? (int) (long) heightObject : (int) heightObject;
         map.tiles = new Tile[map.width][map.height];
         for (int i = 0; i < map.tiles.length; i++) {
             for (int j = 0; j < map.tiles[i].length; j++) {
-                map.tiles[i][j] = Tile.fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));
+                map.tiles[i][j] = Tile
+                        .fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));
             }
         }
         return map;
     }
 
+    /**
+     * Get tile.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the tile
+     */
     public Tile get(int x, int y) {
         return tiles[x][y];
     }
 
+    /**
+     * Get tile.
+     *
+     * @param position the position
+     * @return the tile
+     */
     public Tile get(Position position) {
         return tiles[position.getX()][position.getY()];
     }
 
+    /**
+     * Regen resources.
+     */
     public void regenResources() {
-        for (Tile[] row: tiles) {
-            for (Tile tile: row) {
+        for (Tile[] row : tiles) {
+            for (Tile tile : row) {
                 int regen = (int) (Math.random() * 100); // 0-9
                 if (regen == 99 && tile.getType() < 3) {
                     tile.increaseType();

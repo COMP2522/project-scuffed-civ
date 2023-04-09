@@ -10,9 +10,21 @@ import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * The type Game instance.
+ */
 public class GameInstance {
-    public HUD hud;
+    /**
+     * The Hud.
+     */
+    public Hud hud;
+    /**
+     * The Game state.
+     */
     public GameState gameState;
+    /**
+     * The Vs ai.
+     */
     boolean vsAI = false;
     /**server variables**/
     private Socket socket;
@@ -21,29 +33,60 @@ public class GameInstance {
     private int port;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+    /**
+     * The Game server.
+     */
     public GameServer gameServer;
 
+    /**
+     * The Is online.
+     */
     boolean isOnline = false;
 
+    /**
+     * The Scene.
+     */
     public Window scene;
 
 
+    /**
+     * Instantiates a new Game instance.
+     *
+     * @param scene the scene
+     */
     public GameInstance(Window scene) {
         this.scene = scene;
-        hud = new HUD(scene);
+        hud = new Hud(scene);
         gameState = new GameState();
     }
 
-    public GameInstance(HUD hud, GameState gameState) {
+    /**
+     * Instantiates a new Game instance.
+     *
+     * @param hud       the hud
+     * @param gameState the game state
+     */
+    public GameInstance(Hud hud, GameState gameState) {
         this.hud = hud;
         this.gameState = gameState;
     }
 
+    /**
+     * Draw.
+     *
+     * @param scene the scene
+     */
     public void draw(Window scene) {
         gameState.draw(scene);
         hud.draw(scene);
     }
 
+    /**
+     * Clicked.
+     *
+     * @param mousePos the mouse pos
+     * @param scene    the scene
+     */
     public void clicked(PVector mousePos, Window scene) {
         if (hud.clicked(mousePos)){
             hud.clicked(mousePos);
@@ -52,6 +95,12 @@ public class GameInstance {
         }
     }
 
+    /**
+     * Key pressed.
+     *
+     * @param key   the key
+     * @param scene the scene
+     */
     public void keyPressed(char key, Window scene) {
         gameState.keyPressed(key, scene);
     }
@@ -59,7 +108,8 @@ public class GameInstance {
     /**
      * Converts the game state to a JSON object and saves it to the save.json file.
      *
-     * @param client
+     * @param
+     * @throws IOException the io exception
      */
     public void saveGame() throws IOException {
         System.out.println("Saving game");
@@ -81,7 +131,7 @@ public class GameInstance {
     /**
      * Returns the current player of the game state.
      *
-     * @return
+     * @return current player
      */
     public Player getCurrentPlayer() {
         return gameState.currentPlayer;
@@ -117,6 +167,11 @@ public class GameInstance {
         hud.currentPlayer = gameState.currentPlayer;
     }
 
+    /**
+     * Send game state.
+     *
+     * @param gameState the game state
+     */
     public void sendGameState(GameState gameState) {
         try {
             oos.writeObject(gameState.toJSONObject());
@@ -126,6 +181,9 @@ public class GameInstance {
         }
     }
 
+    /**
+     * Receive game state.
+     */
     public void receiveGameState() {
         try {
             gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
@@ -137,8 +195,9 @@ public class GameInstance {
     /**
      * Starts a new game as a server.
      *
-     * @param hostIP
-     * @param port the port to host the server
+     * @param hostIP         the host ip
+     * @param port           the port to host the server
+     * @param clientUsername the client username
      */
     public void joinGame(String hostIP, int port, String clientUsername) {
         isOnline = true;
@@ -165,21 +224,36 @@ public class GameInstance {
     }
 
 
-
+    /**
+     * Sets game state.
+     *
+     * @param gameState the game state
+     */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
+    /**
+     * Sets game server.
+     *
+     * @param gameServer the game server
+     */
     public void setGameServer(GameServer gameServer) {
         this.gameServer = gameServer;
     }
 
+    /**
+     * Start server.
+     */
     public void startServer() {
         isOnline = true;
         Thread server= new Thread(gameServer);
         server.start();
     }
 
+    /**
+     * Start.
+     */
     public void start () {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -190,6 +264,11 @@ public class GameInstance {
         }, 0, 1000);
     }
 
+    /**
+     * Gets connected players.
+     *
+     * @return the connected players
+     */
     public HashSet<String> getConnectedPlayers() {
         return gameServer.getConnectedPlayers();
     }
