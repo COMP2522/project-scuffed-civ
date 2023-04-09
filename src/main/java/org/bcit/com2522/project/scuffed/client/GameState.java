@@ -510,8 +510,7 @@ public class GameState { // everything manager this is the player manager
     }
 
     /**
-     * Saves the current gamestate to a json file in the "saves" folder
-     * currently called at end of player turn
+     * Creates a JSONObject from the current gamestate
      *
      * @return the json object
      */

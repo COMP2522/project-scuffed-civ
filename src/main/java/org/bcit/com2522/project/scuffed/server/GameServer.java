@@ -29,13 +29,13 @@ public class GameServer implements Runnable {
      */
     private final List<ClientHandler> clients = Collections.synchronizedList(new LinkedList<>());
 
-  /**
-   * Instantiates a new Game server.
-   *
-   * @param gameState the game state
-   * @param port      the port
-   */
-  public GameServer(GameState gameState, int port) {
+    /**
+     * Instantiates a new Game server.
+     *
+     * @param gameState the game state
+     * @param port      the port
+     */
+    public GameServer(GameState gameState, int port) {
         this.gameState = gameState;
         this.port = port;
         this.hostIP = getLocalIpAddress();
@@ -71,6 +71,7 @@ public class GameServer implements Runnable {
 //    }
 
     public void run() {
+        gameState.init();
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("Server started on " + hostIP + ":" + port);
@@ -89,23 +90,19 @@ public class GameServer implements Runnable {
             }
         }
         System.out.println("All players connected! Press 'Start Game' to begin.");
-
-        for (ClientHandler client : clients) {
-            sendInitialGameState(client);
-        }
     }
 
     public boolean allPlayersConnected() {
         return clients.size() == gameState.players.size();
     }
 
-  /**
-   * Sends the updated game state to all clients except the current player.
-   *
-   * @param updatedGameState the updated game state
-   * @param currentPlayer    the current player's client handler
-   */
-  public void broadcastGameState(GameState updatedGameState, ClientHandler currentPlayer) {
+    /**
+     * Sends the updated game state to all clients except the current player.
+     *
+     * @param updatedGameState the updated game state
+     * @param currentPlayer    the current player's client handler
+     */
+    public void broadcastGameState(GameState updatedGameState, ClientHandler currentPlayer) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
                 if (client != currentPlayer) {
@@ -115,22 +112,23 @@ public class GameServer implements Runnable {
         }
     }
 
-  /**
-   * Sends the initial game state to the client when they connect.
-   *
-   * @param client the client to send the initial game state to
-   */
-  public void sendInitialGameState(ClientHandler client) {
+    /**
+     * Sends the initial game state to the client when they connect.
+     *
+     * @param client the client to send the initial game state to
+     */
+    public void sendInitialGameState(ClientHandler client) {
+        client.sendMessage("start");
         client.sendGameState(gameState);
     }
 
-  /**
-   * Finds the local IP address of the machine running the server. This is for playing
-   * multiplayer on the same wifi network.
-   *
-   * @return String representation of the local IP address (IPV4)
-   */
-  public static String getLocalIpAddress() {
+    /**
+     * Finds the local IP address of the machine running the server. This is for playing
+     * multiplayer on the same wifi network.
+     *
+     * @return String representation of the local IP address (IPV4)
+     */
+    public static String getLocalIpAddress() {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
             while (networkInterfaces.hasMoreElements()) {
@@ -151,12 +149,12 @@ public class GameServer implements Runnable {
         return null;
     }
 
-  /**
-   * Gets connected players.
-   *
-   * @return the connected players
-   */
-  public HashSet<String> getConnectedPlayers() {
+    /**
+     * Gets connected players.
+     *
+     * @return the connected players
+     */
+    public HashSet<String> getConnectedPlayers() {
         HashSet<String> connectedPlayers = new HashSet<>();
         for (ClientHandler client : clients) {
             connectedPlayers.add(client.clientSocket.getInetAddress().getHostAddress());
@@ -165,13 +163,13 @@ public class GameServer implements Runnable {
     }
 
 
-  /**
-   * Handles each new connection made to the GameServer.
-   *
-   * @author Cameron Walford
-   * @version 1.0
-   */
-  class ClientHandler extends Thread{
+    /**
+     * Handles each new connection made to the GameServer.
+     *
+     * @author Cameron Walford
+     * @version 1.0
+     */
+    class ClientHandler extends Thread{
         private final Socket clientSocket;
 
         /**
@@ -183,79 +181,96 @@ public class GameServer implements Runnable {
         private final ObjectOutputStream oos;
         private final ObjectInputStream ois;
 
-    /**
-     * Instantiates a new Client handler, associating the username with each particular client.
-     *
-     * @param socket   the socket
-     * @param playerID
-     */
-    public ClientHandler(Socket socket, int playerID) {
-        this.clientSocket = socket;
-        this.playerID = playerID;
-        try {
-            oos = new ObjectOutputStream(clientSocket.getOutputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            ois = new ObjectInputStream(clientSocket.getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
         /**
-         * Reads the client's game state and updates the server's game state. Then broadcasts the updated
-         * game state to all clients.
+         * Instantiates a new Client handler, associating the username with each particular client.
+         *
+         * @param socket   the socket
+         * @param playerID
          */
-//        public void run() {
-//            String clientIP = clientSocket.getInetAddress().getHostAddress();
-//            System.out.println("Client connected: " + clientIP);
-//            //System.out.println(gameState.currentPlayer.getPlayerNum() + " is the current player.");
-//
-//            try {
-//                while (true) {
-//                    GameState updatedGameState = GameState.fromJSONObject((JSONObject) ois.readObject());
-//                    gameState = updatedGameState;
-//                    broadcastGameState(gameState, this);
-//                    System.out.println("Received game state from client " + clientIP);
-//                }
-//            } catch (IOException | ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-        public void run() {
-            String clientIP = clientSocket.getInetAddress().getHostAddress();
-            System.out.println("Client connected: " + clientIP);
-
+        public ClientHandler(Socket socket, int playerID) {
+            this.clientSocket = socket;
+            this.playerID = playerID;
             try {
-                // Send hello message to the client
-                oos.writeObject("Hello from the server!");
-                oos.flush();
-
-                // Receive client's username and hello message
-                clientUsername = (String) ois.readObject();
-                String clientResponse = (String) ois.readObject();
-                System.out.println("Received message from client (" + clientIP + "): " + clientResponse);
-
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                oos = new ObjectOutputStream(clientSocket.getOutputStream());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                ois = new ObjectInputStream(clientSocket.getInputStream());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
 
-    /**
-     * Sends the game state as a JSONObject to the client.
-     *
-     * @param gameState the game state to send
-     */
-    public void sendGameState(GameState gameState) {
+        public void run() {
             try {
-                oos.writeObject(gameState.toJSONObject());
+                // Read the client's username
+                clientUsername = (String) ois.readObject();
+                System.out.println("Client connected from " + clientSocket.getInetAddress().getHostAddress() + " with username " + clientUsername + " ID: " + playerID);
+
+                // Send initial message
+                oos.writeObject("Hello, " + clientUsername + "! Please wait for all other clients to connect.");
+                oos.flush();
+
+                // Wait for all players to connect before sending the initial game state
+                while (!allPlayersConnected()) {
+                    Thread.sleep(1000);
+                }
+
+                // Send initial game state
+                sendInitialGameState(this);
+                String clientMessage = (String) ois.readObject();
+                if (clientMessage.equals("received")) {
+                    System.out.println("Client received initial game state.");
+                }
+
+                // Game loop
+                while (true) {
+                    if (gameState.currentPlayer.getPlayerNum() == playerID) {
+                        oos.writeObject("Your turn!");
+                        oos.flush();
+                        System.out.println("Sent message to client " + clientUsername + ": Your turn!");
+                        clientMessage = (String) ois.readObject();
+                        if (clientMessage.equals("received")) {
+                            System.out.println("Client received game state.");
+                        }
+                    }
+                }
+            } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    clientSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        /**
+         * Sends the game state as a JSONObject to the client.
+         *
+         * @param gameState the game state to send
+         */
+        public void sendGameState(GameState gameState) {
+            try {
+                JSONObject gameStateJSON = gameState.toJSONObject();
+                oos.writeObject(gameStateJSON.toJSONString());
                 oos.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        public void sendMessage(String message) {
+            try {
+                oos.writeObject(message);
+                oos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 }
