@@ -89,7 +89,6 @@ public class GameInstance {
      */
     public void clicked(PVector mousePos, Window scene) {
         if (hud.clicked(mousePos)){
-            hud.clicked(mousePos);
         } else if(gameState.clickedMap(mousePos)){
             gameState.clicked(mousePos, scene);
         }
