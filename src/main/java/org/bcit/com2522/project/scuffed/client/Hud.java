@@ -11,10 +11,6 @@ import processing.core.PVector;
  */
 public class Hud {
   /**
-   * The Current player.
-   */
-  public Player currentPlayer;
-  /**
    * The Current state.
    */
   public HudState currentState;

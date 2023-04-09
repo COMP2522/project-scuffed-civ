@@ -142,19 +142,9 @@ public class GameInstance {
     public void loadGame() {
         try {
             gameState = GameState.load();
-            hud.currentPlayer = gameState.currentPlayer;
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Ends the current player's turn and starts the next player's turn.
-     */
-    public void nextTurn() {
-        System.out.println("next turn in game instance was called");
-        gameState.nextTurn();
-        hud.currentPlayer = gameState.currentPlayer;
     }
 
     /**
@@ -163,7 +153,6 @@ public class GameInstance {
      */
     public void newGame() {
         gameState.init();
-        hud.currentPlayer = gameState.currentPlayer;
     }
 
     /**

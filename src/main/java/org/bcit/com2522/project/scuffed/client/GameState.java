@@ -379,6 +379,7 @@ public class GameState { // everything manager this is the player manager
      * Sets the current player to the next in the queue and checks win conditions
      */
     public void nextTurn() {
+        System.out.println("next turn");
         resetEntityActions();
         moveToNextPlayer();
         checkPlayerLoss();
