@@ -11,10 +11,6 @@ import processing.core.PVector;
  */
 public class Hud {
   /**
-   * The Current player.
-   */
-  public Player currentPlayer;
-  /**
    * The Current state.
    */
   public HudState currentState;
@@ -64,10 +60,6 @@ public class Hud {
   public boolean clicked(PVector mousePos) {
 
     return currentState.clicked((int) mousePos.x, (int) mousePos.y);
-  }
-
-  public void setCurrentPlayer(Player currentPlayer) {
-    this.currentPlayer = currentPlayer;
   }
 
 }
