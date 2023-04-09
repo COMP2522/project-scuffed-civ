@@ -88,7 +88,7 @@ public class Soldier extends Unit {
                 // (Color) soldierObject.get("color"),
                 (int) (long) soldierObject.get("maxHealth"),
                 Soldier.cost,
-                (int) (long) soldierObject.get("speed"),
+                (int) (long) soldierObject.get("maxMove"),
                 (int) (long) soldierObject.get("damage"),
                 (int) (long) soldierObject.get("range"));
         soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
