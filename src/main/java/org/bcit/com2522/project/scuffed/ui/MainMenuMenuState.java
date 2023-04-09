@@ -40,7 +40,7 @@ public class MainMenuMenuState extends MenuState implements PConstants {
 
         Button menuBackground = new Button(0, 0, scene.width, scene.height, scene, UIImages.get("backgroundMenu"));
 
-        File saveFile = new File("saves/save.json");
+        File saveFile = new File("library/saves.json");
         System.out.println(saveFile.isFile());
         Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
                 "", UIImages.get("menuLoad"), UIImages.get("menuLoadHov"), UIImages.get("menuLoadSel"), scene, UIImages.get("menuLoadGry"), false);
@@ -58,6 +58,9 @@ public class MainMenuMenuState extends MenuState implements PConstants {
 
         // Non functional button
         Button logo = new Button(500, height - 500, 500 + UIImages.get("logo").width, height - 500 + UIImages.get("logo").height, scene, UIImages.get("logo"));
+        if(saveFile.isFile()) {
+            loadGameButton.setClickable(true);
+        }
         System.out.println("Logo loaded");
         //Create error message label
         errorMessage = new Label(50, height - 200, "No save file found", 14, scene);
@@ -90,7 +93,7 @@ public class MainMenuMenuState extends MenuState implements PConstants {
    */
   public void onLoadGameClicked() {
         // Change the menu state to the Load Game state
-        if (new File("saves/save.json").exists()) {
+        if (new File("library/saves.json").exists()) {
             menu.setState(new LoadingMenuState(scene, menu));
 
             // Run the loading process in a separate thread

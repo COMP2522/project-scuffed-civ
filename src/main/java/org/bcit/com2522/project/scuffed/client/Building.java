@@ -57,7 +57,7 @@ public class Building extends Entity{
                 //Position.fromJSONObject((JSONObject) buildingObject.get("position")),
                 (int)(long) buildingObject.get("ownerId"),
                 //(Color) buildingObject.get("color"),
-                (int) buildingObject.get("maxHealth"),
+                (int)(long) buildingObject.get("maxHealth"),
                 Building.cost);
         building.currentHealth = (int) (long) buildingObject.get("currentHealth");
         return building;

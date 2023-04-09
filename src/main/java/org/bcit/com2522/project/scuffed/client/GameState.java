@@ -550,6 +550,8 @@ public class GameState { // everything manager this is the player manager
         GameState gameState = new GameState();
         gameState.gameID = (String) (gameStateJSON.get("gameID"));
         gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
+        gameState.xShift = (1080 / gameState.zoomAmount - gameState.map.width) / 2;
+        gameState.yShift = (720 / gameState.zoomAmount - gameState.map.width) / 2;
         gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"));
         JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
         gameState.players = (ArrayDeque<Player>) playersArray.stream()
@@ -577,7 +579,7 @@ public class GameState { // everything manager this is the player manager
     public static GameState load() throws FileNotFoundException {
         GameState loadedGameState = new GameState();
         JSONParser parser = new JSONParser();
-        File saveFile = new File("saves/save.json");
+        File saveFile = new File("library/saves.json");
         try (FileReader saveReader = new FileReader(saveFile)) {
             loadedGameState = fromJSONObject((JSONObject) parser.parse(saveReader));
         } catch (IOException | ParseException e) {
