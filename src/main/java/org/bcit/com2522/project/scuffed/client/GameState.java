@@ -32,7 +32,7 @@ public class GameState { // everything manager this is the player manager
     /**
      * The Players.
      */
-    static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
+    public static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     private Entity[][] entities;
     private Entity selected;
     /**

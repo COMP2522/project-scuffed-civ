@@ -18,6 +18,8 @@ public class Player { // gamestate is the player manager
   private int xShift;
   private int yShift;
 
+  private String username; //for use with the server
+
   /**
    * Instantiates a new Player.
    *
@@ -232,5 +234,13 @@ public class Player { // gamestate is the player manager
    */
   public int getXShift() {
     return xShift;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 }
