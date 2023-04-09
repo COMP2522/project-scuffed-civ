@@ -234,7 +234,8 @@ public class InGameHud extends HudState {
         centerX + MENU_BUTTON_X2, centerY - MENU_BUTTON_Y,
         centerX + MENU_BUTTON_X, centerY - MENU_BUTTON_Y2,
         () -> {
-          hud.scene.nextTurn();
+          //hud.scene.gameInstance.gameState.nextTurn();
+          System.out.println("ending turn - inGameHud");
         }, "End Turn", panel, panel, panel, hud.scene,
         rivetPanel, true, BUTTON_FONT_SIZE, END_BUTTON_FONT_X, BUTTON_FONT_Y);
   }

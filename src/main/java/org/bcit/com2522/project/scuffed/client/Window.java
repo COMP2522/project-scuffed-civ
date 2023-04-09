@@ -245,17 +245,10 @@ public class Window extends PApplet {
    * @return the current player
    */
   public Player getCurrentPlayer() {
-    if(gameInstance == null){
+    if (gameInstance == null) {
       return null;
     }
     return gameInstance.getCurrentPlayer();
-  }
-
-  /**
-   * Next turn.
-   */
-  public void nextTurn() {
-    gameInstance.nextTurn();
   }
 
   /**
