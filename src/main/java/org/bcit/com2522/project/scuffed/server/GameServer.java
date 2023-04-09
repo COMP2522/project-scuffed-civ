@@ -208,6 +208,10 @@ public class GameServer implements Runnable {
                 clientUsername = (String) ois.readObject();
                 System.out.println("Client connected from " + clientSocket.getInetAddress().getHostAddress() + " with username " + clientUsername + " ID: " + playerID);
 
+                // Send player ID
+                oos.writeObject(playerID);
+                oos.flush();
+
                 // Send initial message
                 oos.writeObject("Hello, " + clientUsername + "! Please wait for all other clients to connect.");
                 oos.flush();
@@ -234,6 +238,7 @@ public class GameServer implements Runnable {
                         if (clientMessage.equals("received")) {
                             System.out.println("Client received game state.");
                         }
+
                     }
                 }
             } catch (IOException | ClassNotFoundException | InterruptedException e) {

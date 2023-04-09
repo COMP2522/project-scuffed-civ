@@ -48,6 +48,7 @@ public class GameInstance {
      * The Scene.
      */
     public Window scene;
+    public int clientID;
 
 
     /**
@@ -89,10 +90,19 @@ public class GameInstance {
      * @param scene    the scene
      */
     public void clicked(PVector mousePos, Window scene) {
-        if (hud.clicked(mousePos)){
-            //hud.clicked(mousePos); <---- this line
-        } else if(gameState.clickedMap(mousePos)){
-            gameState.clicked(mousePos, scene);
+        if(isOnline){
+            if (hud.clicked(mousePos)){
+            } else if(gameState.clickedMap(mousePos) && clientID == gameState.getCurrentPlayerID()){
+                gameState.clicked(mousePos, scene);
+            } else if (gameState.clickedMap(mousePos) && clientID != gameState.getCurrentPlayerID()){
+                System.out.println("Not your turn!");
+            }
+        } else {
+            if (hud.clicked(mousePos)){
+
+            } else if(gameState.clickedMap(mousePos)){
+                gameState.clicked(mousePos, scene);
+            }
         }
     }
 
@@ -181,6 +191,7 @@ public class GameInstance {
             System.out.println("Received game state: " + jsonString);
             JSONObject gameStateJSON = (JSONObject) jsonParser.parse(jsonString);
             gameState = GameState.fromJSONObject(gameStateJSON);
+            scene.inGame = true;
         } catch (IOException | ClassNotFoundException | ParseException e) {
             e.printStackTrace();
         }
@@ -200,6 +211,9 @@ public class GameInstance {
             // Send the client's username
             oos.writeObject(clientUsername);
             oos.flush();
+
+            clientID = (int)ois.readObject();
+            System.out.println("Client ID: " + clientID);
 
             // Continuously send and receive messages
             while (true) {
