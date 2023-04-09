@@ -8,12 +8,9 @@ import java.util.Random;
 /**
  * The type Player.
  */
-public class Player { //gamestate is the player manager
+public class Player { // gamestate is the player manager
   private int resources;
-  private int playerNum;
-  /**
-   * The Has lost.
-   */
+  private final int playerNum;
   boolean hasLost;
   private Color color;
   private boolean isAi;
@@ -21,24 +18,21 @@ public class Player { //gamestate is the player manager
   private int xShift;
   private int yShift;
 
-
   /**
    * Instantiates a new Player.
    *
    * @param playerNum the player num
    */
-  public Player (int playerNum) {
+  public Player(int playerNum) {
     this.playerNum = playerNum;
     Random random = new Random();
-    color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255) );
+    color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
     hasLost = false;
     resources = 2;
 
-
-    if (playerNum == 1) {
+    if (playerNum == 1) { // TODO: change this logic later
       isAi = true;
-    }
-    else {
+    } else {
       isAi = false;
     }
   }
@@ -49,20 +43,23 @@ public class Player { //gamestate is the player manager
    * @param playerNum the player num
    * @param color     the color
    */
-  public Player (int playerNum, Color color) {
+  public Player(int playerNum, Color color) {
     this.playerNum = playerNum;
     this.color = color;
     resources = 1;
     hasLost = false;
   }
 
-  /**
-   * Add entity.
-   *
-   * @param position the position
-   */
+  public Player(Player player) { // creates a deep copy of player
+    this.resources = player.resources;
+    this.playerNum = player.playerNum;
+    this.hasLost = player.hasLost;
+    this.color = player.color;
+    this.isAi = player.isAi;
+  }
+
   public void addEntity(Position position) {
-    //entities.add(new Entity(scene, position, this));
+    // entities.add(new Entity(scene, position, this));
   }
 
   @Override
@@ -88,8 +85,8 @@ public class Player { //gamestate is the player manager
    *
    * @return the boolean
    */
-  public boolean hasLost(){
-    //return entities.size() == 0;
+  public boolean hasLost() {
+    // return entities.size() == 0;
     return false;
   }
 
@@ -100,8 +97,8 @@ public class Player { //gamestate is the player manager
    * @return Player object from the JSON
    */
   public static Player fromJSONObject(JSONObject playerObject) {
-    Player player = new Player((int)(long) playerObject.get("playerNum"));
-    player.resources = (int)(long) playerObject.get("resources");
+    Player player = new Player((int) (long) playerObject.get("playerNum"));
+    player.resources = (int) (long) playerObject.get("resources");
     player.color = Color.decode((String) playerObject.get("color"));
     player.isAi = (boolean) playerObject.get("isAi");
     return player;
@@ -124,9 +121,9 @@ public class Player { //gamestate is the player manager
   @Override
   public String toString() {
     return "Player{" +
-            "resources=" + resources +
-            ", playerNum=" + playerNum +
-            '}';
+        "resources=" + resources +
+        ", playerNum=" + playerNum +
+        '}';
   }
 
   /**
@@ -169,7 +166,7 @@ public class Player { //gamestate is the player manager
    * @return the id
    */
   public int getID() {
-    return playerNum; //TODO: change to unique int or string that represents the player
+    return playerNum; // TODO: change to unique int or string that represents the player
   }
 
   /**
@@ -178,8 +175,8 @@ public class Player { //gamestate is the player manager
    * @return the boolean
    */
   public boolean isAI() {
-      return isAi;
-    }
+    return isAi;
+  }
 
   /**
    * Increase resources.
@@ -225,8 +222,8 @@ public class Player { //gamestate is the player manager
    * @return the y shift
    */
   public int getYShift() {
-      return yShift;
-    }
+    return yShift;
+  }
 
   /**
    * Gets x shift.
@@ -234,6 +231,6 @@ public class Player { //gamestate is the player manager
    * @return the x shift
    */
   public int getXShift() {
-      return xShift;
-    }
+    return xShift;
+  }
 }
