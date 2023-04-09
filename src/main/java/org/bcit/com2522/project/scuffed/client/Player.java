@@ -31,12 +31,12 @@ public class Player { // gamestate is the player manager
     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
     hasLost = false;
     resources = 2;
-
-    if (playerNum == 1) { // TODO: change this logic later
-      isAi = true;
-    } else {
-      isAi = false;
-    }
+    isAi = false;
+//    if (playerNum == 1) { // TODO: change this logic later
+//      isAi = true;
+//    } else {
+//      isAi = false;
+//    }
   }
 
   /**
