@@ -99,7 +99,7 @@ public class InGameHud extends HudState {
   private static final int BUILD_WORKER_BUTTON_Y1 = 177;
   private static final int BUILD_WORKER_BUTTON_X2 = 530;
   private static final int BUILD_WORKER_BUTTON_Y2 = 249;
-  private static final int DEFAULT_STAT = 00;
+  private static final int DEFAULT_STAT = 0;
 
   /**
    * Whether the unit is selected.
@@ -303,7 +303,7 @@ public class InGameHud extends HudState {
    */
   private void drawPlayerNum(Window scene) {
     scene.textFont(fontMedium);
-    scene.text("Player " + (hud.currentPlayer.getPlayerNum() + 1),
+    scene.text("Player " + (scene.gameInstance.gameState.currentPlayer.getPlayerNum() + 1),
         centerX - PLAYER_NUM_X1, centerY - PLAYER_NUM_Y1);
   }
 
@@ -314,7 +314,7 @@ public class InGameHud extends HudState {
    */
   private void drawPlayerResources(Window scene) {
     scene.textFont(fontMedium);
-    scene.text(": " + (hud.currentPlayer.getResources()), centerX - PLAYER_RESOURCES_X1,
+    scene.text(": " + (scene.gameInstance.gameState.currentPlayer.getResources()), centerX - PLAYER_RESOURCES_X1,
         centerY - PLAYER_RESOURCES_Y1); //print player resources
     scene.text(": "
         + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity)

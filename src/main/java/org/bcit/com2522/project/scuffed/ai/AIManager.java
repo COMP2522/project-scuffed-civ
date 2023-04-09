@@ -65,7 +65,7 @@ public class AIManager {
 
 
         //set the current turn to next turn.
-        gameState.nextTurn();
+        //gameState.nextTurn();
         System.out.println("ai turn over");
     }
 }

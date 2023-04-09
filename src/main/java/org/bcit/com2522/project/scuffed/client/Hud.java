@@ -66,4 +66,8 @@ public class Hud {
     return currentState.clicked((int) mousePos.x, (int) mousePos.y);
   }
 
+  public void setCurrentPlayer(Player currentPlayer) {
+    this.currentPlayer = currentPlayer;
+  }
+
 }
