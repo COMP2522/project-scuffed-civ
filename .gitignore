@@ -12,6 +12,7 @@
 
 # Game
 saves/*.json
+library/saves.json
 
 # Package Files #
 
