@@ -28,7 +28,6 @@ public class GameInstance {
     boolean vsAI = false;
     /**server variables**/
     private Socket socket;
-    private int clientId;
     private String hostIP;
     private int port;
     private ObjectInputStream ois;
@@ -199,26 +198,54 @@ public class GameInstance {
      * @param port           the port to host the server
      * @param clientUsername the client username
      */
+//    public void joinGame(String hostIP, int port, String clientUsername) {
+//        isOnline = true;
+//        System.out.println("Joining game at " + hostIP + ":" + port);
+//        this.hostIP = hostIP;
+//        this.port = port;
+//        try {
+//            socket = new Socket(hostIP, port);
+//            oos = new ObjectOutputStream(socket.getOutputStream());
+//            ois = new ObjectInputStream(socket.getInputStream());
+//
+//            System.out.println("ois" + ois.readObject());
+//            this.gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
+//        } catch (Exception e) {
+//            System.out.println("Error connecting to server at " + hostIP + ":" + port);
+//            e.printStackTrace();
+//            //briefly display error message in center of screen
+//        }
+//        try {
+//            oos.writeObject(clientUsername);
+//            oos.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     public void joinGame(String hostIP, int port, String clientUsername) {
         isOnline = true;
         System.out.println("Joining game at " + hostIP + ":" + port);
         this.hostIP = hostIP;
         this.port = port;
+
         try {
             socket = new Socket(hostIP, port);
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
-            System.out.println("ois" + ois.readObject());
-            this.gameState = GameState.fromJSONObject((JSONObject) ois.readObject());
-        } catch (Exception e) {
-            System.out.println("Error connecting to server at " + hostIP + ":" + port);
-            e.printStackTrace();
-            //briefly display error message in center of screen
-        }
-        try {
+
+            // Receive hello message from the server
+            String serverMessage = (String) ois.readObject();
+            System.out.println("Received message from server: " + serverMessage);
+
+            // Send client username and hello message
             oos.writeObject(clientUsername);
             oos.flush();
-        } catch (IOException e) {
+            oos.writeObject("Hello from the client (" + clientUsername + ")!");
+            oos.flush();
+
+        } catch (Exception e) {
+            System.out.println("Error connecting to server at " + hostIP + ":" + port);
             e.printStackTrace();
         }
     }
@@ -247,7 +274,7 @@ public class GameInstance {
      */
     public void startServer() {
         isOnline = true;
-        Thread server= new Thread(gameServer);
+        Thread server = new Thread(gameServer);
         server.start();
     }
 
