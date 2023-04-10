@@ -1,6 +1,7 @@
 package org.bcit.com2522.project.scuffed.hud;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.menu.MainMenuMenuState;
 import org.bcit.com2522.project.scuffed.uicomponents.Button;
 import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
 
@@ -174,6 +175,7 @@ public class Menuhudstate extends HudState {
    * Responsible for changing the game state when a menu button is clicked.
    */
   public void onMenuClicked() {
+    hud.scene.menu.setState(new MainMenuMenuState(hud.scene.menu));
     hud.scene.inGame = false;
   }
 
