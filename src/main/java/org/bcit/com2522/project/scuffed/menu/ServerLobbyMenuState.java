@@ -36,6 +36,7 @@ public class ServerLobbyMenuState extends MenuState {
 
         backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back",menu.scene);
         startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start",menu.scene);
+        startButton.setClickable(false);
 
         buttonManager.add(backButton);
         buttonManager.add(startButton);
