@@ -1,62 +1,70 @@
-package org.bcit.com2522.project.scuffed.ui;
+package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.InputBox;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
- * The type Host game menu state.
+ * The type New game menu state.
  */
-public class HostGameMenuState extends MenuState {
+public class NewGameMenuState extends MenuState {
     private InputBox mapWidthInput;
     private InputBox mapHeightInput;
     private InputBox numPlayersInput;
-    private InputBox portInput;
-    private Label portInputLabel;
+
     private Label mapWidthLabel;
+
     private Label mapHeightLabel;
+
     private Label numPlayersLabel;
+
     private Label errorMessageLabel;
+
     private boolean showError = false;
 
   /**
-   * Instantiates a new Host game menu state.
+   * Instantiates a new New game menu state.
    *
    * @param scene the scene
    * @param menu  the menu
    */
-  public HostGameMenuState(Window scene, Menu menu) {
+  public NewGameMenuState(Window scene, Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
+
     @Override
     public void setup() {
-        portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, "8080");
-        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 100, "16");
-        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 100, "16");
-        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10, "2");
+        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 10000, "16");
+        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 10000, "16");
+        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10000, "2");
 
-        portInputLabel = new Label(50, 45, "Port:", 14, scene);
         mapWidthLabel = new Label(50, 95, "Map Width:", 14, scene);
         mapHeightLabel = new Label(50, 145, "Map Height:", 14, scene);
         numPlayersLabel = new Label(50, 195, "Number of Players:", 14, scene);
         errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14, scene);
 
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
-        Button startButton = new Button(50, 600, 250, 650, () -> onStartServerClicked(), "Start Server", scene);
+        Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", scene);
 
         buttonManager.add(backButton);
         buttonManager.add(startButton);
+    }
 
+    public void onBackClicked() {
+        // Change the menu state to the New Game state
+        menu.setState(new MainMenuMenuState(scene, menu));
     }
 
     @Override
     public void draw() {
         super.draw();
-        portInput.draw();
         mapWidthInput.draw();
         mapHeightInput.draw();
         numPlayersInput.draw();
-        portInputLabel.draw();
         mapWidthLabel.draw();
         mapHeightLabel.draw();
         numPlayersLabel.draw();
@@ -64,6 +72,7 @@ public class HostGameMenuState extends MenuState {
         if(showError) {
             errorMessageLabel.draw();
         }
+        drawHollowGrid(mapWidthInput.getIntValue(), mapHeightInput.getIntValue(), 400, 100, 800, 500);
     }
 
     @Override
@@ -87,12 +96,6 @@ public class HostGameMenuState extends MenuState {
             mapHeightInput.setSelected(false);
             numPlayersInput.setSelected(true);
             return true;
-        } else if( portInput.isClicked(xpos, ypos) ) {
-            portInput.setSelected(true);
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(false);
-            return true;
         }
         return false;
     }
@@ -110,8 +113,6 @@ public class HostGameMenuState extends MenuState {
                 mapHeightInput.removeCharacter();
             } else if (numPlayersInput.isSelected()) {
                 numPlayersInput.removeCharacter();
-            } else if( portInput.isSelected() ) {
-                portInput.removeCharacter();
             }
         } else {
             if (mapWidthInput.isSelected()) {
@@ -120,37 +121,55 @@ public class HostGameMenuState extends MenuState {
                 mapHeightInput.addCharacter(key);
             } else if (numPlayersInput.isSelected()) {
                 numPlayersInput.addCharacter(key);
-            } else if( portInput.isSelected() ) {
-                portInput.addCharacter(key);
             }
-
         }
     }
 
   /**
-   * On start server clicked.
+   * On start clicked.
    */
-// ...
-    public void onStartServerClicked() {
-        int port = portInput.getIntValue();
+  public void onStartClicked() {
         int mapWidth = mapWidthInput.getIntValue();
         int mapHeight = mapHeightInput.getIntValue();
         int numPlayers = numPlayersInput.getIntValue();
-        if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
-            menu.scene.initOnlineGame(numPlayers, mapWidth, mapHeight, port);
-            menu.setState(new ServerLobbyMenuState(scene, menu));
-
+        //if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 100) {
+            scene.initGame(numPlayers, mapWidth, mapHeight);
+            menu.setState(new MainMenuMenuState(scene, menu));
+            scene.inGame = true;
             showError = false;
-        } else {
+        //} else {
             showError = true;
-        }
+        //}
     }
 
-    @Override
-    public void onBackClicked() {
-        // Change the menu state to the New Game state
-        menu.setState(new OnlineMenuState(scene, menu));
+  /**
+   * Draw hollow grid.
+   *
+   * @param rows the rows
+   * @param cols the cols
+   * @param x1   the x 1
+   * @param y1   the y 1
+   * @param x2   the x 2
+   * @param y2   the y 2
+   */
+  void drawHollowGrid(int rows, int cols, float x1, float y1, float x2, float y2) {
+        float cellWidth = (x2 - x1) / cols;
+        float cellHeight = (y2 - y1) / rows;
+
+        float strokeWidth = (float) (Math.min(cellWidth, cellHeight) / 10.0);
+        scene.strokeWeight(strokeWidth);
+        scene.stroke(0);
+        scene.noFill();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                float xPos = x1 + (j * cellWidth);
+                float yPos = y1 + (i * cellHeight);
+                scene.rect(xPos, yPos, cellWidth, cellHeight);
+            }
+        }
     }
 
 
 }
+

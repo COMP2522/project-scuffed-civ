@@ -18,6 +18,8 @@ public class Player { // gamestate is the player manager
   private int xShift;
   private int yShift;
 
+  private String username; //for use with the server
+
   /**
    * Instantiates a new Player.
    *
@@ -29,12 +31,12 @@ public class Player { // gamestate is the player manager
     color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
     hasLost = false;
     resources = 2;
-
-    if (playerNum == 1) { // TODO: change this logic later
-      isAi = true;
-    } else {
-      isAi = false;
-    }
+    isAi = false;
+//    if (playerNum == 1) { // TODO: change this logic later
+//      isAi = true;
+//    } else {
+//      isAi = false;
+//    }
   }
 
   /**
@@ -232,5 +234,13 @@ public class Player { // gamestate is the player manager
    */
   public int getXShift() {
     return xShift;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 }

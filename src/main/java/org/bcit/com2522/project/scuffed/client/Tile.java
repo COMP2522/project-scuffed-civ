@@ -38,7 +38,7 @@ public class Tile{
     }
 
   /**
-   * To json object json object.
+   * Creates a JSON object from the tile.
    *
    * @return the json object
    */
@@ -56,7 +56,7 @@ public class Tile{
    * @return the tile
    */
   public static Tile fromJSONObject(JSONObject tiles) {
-        Tile tile = new Tile((int)(long) tiles.get("type"));
+        Tile tile = new Tile(((Number) tiles.get("type")).intValue());
         return tile;
     }
 

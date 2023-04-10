@@ -1,6 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import org.bcit.com2522.project.scuffed.ai.AIManager;
+import org.bcit.com2522.project.scuffed.hud.InGameHud;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,7 +33,7 @@ public class GameState { // everything manager this is the player manager
     /**
      * The Players.
      */
-    static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
+    public static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     private Entity[][] entities;
     private Entity selected;
     /**
@@ -510,8 +511,7 @@ public class GameState { // everything manager this is the player manager
     }
 
     /**
-     * Saves the current gamestate to a json file in the "saves" folder
-     * currently called at end of player turn
+     * Creates a JSONObject from the current gamestate
      *
      * @return the json object
      */
