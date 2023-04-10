@@ -31,7 +31,6 @@ public class Menu {
    * @param newState the new state
    */
   public void setState(MenuState newState) {
-    scene.wipeGraphics();
     this.currentState = newState;
   }
 
