@@ -701,43 +701,29 @@ public class GameState { // everything manager this is the player manager
    * @return the value of the current gameState depending on the currentPlayer
    */
   public int getValue() {
-    // int playerHP = 0;
-    // int playerDMG = 0;
-    // int enemyHP = 0;
-    // int enemyDMG = 0;
-    //
-    // for (int i = 0; i < entities.length; i++) {
-    // for (int j = 0; j < entities[0].length; j++) {
-    // Entity entity = entities[i][j];
-    // if (entity != null) {
-    // if (entity.getOwner().equals(currentPlayer)) {
-    // playerHP += entity.getHealth();
-    // if (entity instanceof Soldier soldier) {
-    // playerDMG += soldier.getDamage() + 151;
-    // }
-    // } else {
-    // enemyHP += entity.getHealth();
-    // if (entity instanceof Soldier soldier) {
-    // enemyDMG -= soldier.getDamage();
-    // }
-    // }
-    // }
-    // }
-    // }
-    // // position of allies
-    // // position of enemies
-    //
-    // return ((playerHP + playerDMG) - (enemyDMG + enemyHP) +
-    // currentPlayer.getResources());
-    return currentPlayer.getResources();
-  }
+    int playerHP = 0;
+    int playerDMG = 0;
+    int enemyHP = 0;
+    int enemyDMG = 0;
 
-  /**
-   * Gets players.
-   *
-   * @return the players
-   */
-  public ArrayDeque<Player> getPlayers() {
-    return players;
+    for (int i = 0; i < entities.length; i++)
+      for (int j = 0; j < entities[0].length; j++) {
+        Entity entity = entities[i][j];
+        if (entity != null) {
+          if (entity.getOwner().equals(currentPlayer)) {
+            playerHP += entity.getHealth();
+            if (entity instanceof Soldier soldier) {
+              playerDMG += soldier.getDamage() + 151;
+            }
+          } else {
+            enemyHP += entity.getHealth();
+            if (entity instanceof Soldier soldier) {
+              enemyDMG += soldier.getDamage();
+            }
+          }
+        }
+      }
+    return ((playerHP + playerDMG) - (enemyDMG + enemyHP) +
+            currentPlayer.getResources());
   }
 }
