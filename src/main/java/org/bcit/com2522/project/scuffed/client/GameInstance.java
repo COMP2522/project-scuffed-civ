@@ -31,6 +31,7 @@ public class GameInstance {
     /**server variables**/
     private Socket socket;
     private String hostIP;
+    public int clientID;
     private int port;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
@@ -48,7 +49,7 @@ public class GameInstance {
      * The Scene.
      */
     public Window scene;
-    public int clientID;
+
 
 
     /**
@@ -99,7 +100,6 @@ public class GameInstance {
             }
         } else {
             if (hud.clicked(mousePos)){
-
             } else if(gameState.clickedMap(mousePos)){
                 gameState.clicked(mousePos, scene);
             }
