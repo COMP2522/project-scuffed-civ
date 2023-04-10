@@ -25,7 +25,7 @@ public class GSGenerator {
   /**
    * Generate game state from entity game state.
    *
-   * @param myEntities the my entities
+   * @param myEntities my entities
    * @param gameState  the game state
    * @return the game state
    */
