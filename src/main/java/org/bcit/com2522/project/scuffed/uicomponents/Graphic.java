@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
@@ -7,10 +7,14 @@ import processing.core.PImage;
  * The type Graphic.
  */
 /* Manages Non-Functional UI Elements
-*
-*
-*/
+ *
+ *
+ */
 public class Graphic {
+  /**
+   * The Texture.
+   */
+  protected PImage texture;
   /**
    * The X.
    */
@@ -19,10 +23,6 @@ public class Graphic {
    * The Y.
    */
   float y;
-  /**
-   * The Texture.
-   */
-  protected PImage texture;
   /**
    * The Scene.
    */
@@ -45,6 +45,8 @@ public class Graphic {
 
   /**
    * Draw.
+   *
+   * @param scene the scene
    */
   public void draw(Window scene) {
     scene.image(texture, x, y);

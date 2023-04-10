@@ -1,17 +1,19 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.json.simple.JSONObject;
-
 import java.awt.*;
 import java.util.Random;
+import org.json.simple.JSONObject;
 
 /**
  * The type Player.
  */
 public class Player { // gamestate is the player manager
-  private int resources;
   private final int playerNum;
+  /**
+   * The Has lost.
+   */
   boolean hasLost;
+  private int resources;
   private Color color;
   private boolean isAi;
 
@@ -52,6 +54,11 @@ public class Player { // gamestate is the player manager
     hasLost = false;
   }
 
+  /**
+   * Instantiates a new Player.
+   *
+   * @param player the player
+   */
   public Player(Player player) { // creates a deep copy of player
     this.resources = player.resources;
     this.playerNum = player.playerNum;
@@ -60,14 +67,32 @@ public class Player { // gamestate is the player manager
     this.isAi = player.isAi;
   }
 
+  /**
+   * Creates a player from a JSONObject
+   *
+   * @param playerObject the player object
+   * @return Player object from the JSON
+   */
+  public static Player fromJSONObject(JSONObject playerObject) {
+    Player player = new Player((int) (long) playerObject.get("playerNum"));
+    player.resources = (int) (long) playerObject.get("resources");
+    player.color = Color.decode((String) playerObject.get("color"));
+    player.isAi = (boolean) playerObject.get("isAi");
+    return player;
+  }
+
+  /**
+   * Add entity.
+   *
+   * @param position the position
+   */
   public void addEntity(Position position) {
     // entities.add(new Entity(scene, position, this));
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof Player) {
-      Player temp = (Player) obj;
+    if (obj instanceof Player temp) {
       return temp.getPlayerNum() == this.getPlayerNum();
     }
     return false;
@@ -93,20 +118,6 @@ public class Player { // gamestate is the player manager
   }
 
   /**
-   * Creates a player from a JSONObject
-   *
-   * @param playerObject the player object
-   * @return Player object from the JSON
-   */
-  public static Player fromJSONObject(JSONObject playerObject) {
-    Player player = new Player((int) (long) playerObject.get("playerNum"));
-    player.resources = (int) (long) playerObject.get("resources");
-    player.color = Color.decode((String) playerObject.get("color"));
-    player.isAi = (boolean) playerObject.get("isAi");
-    return player;
-  }
-
-  /**
    * To json object json object.
    *
    * @return the json object
@@ -123,9 +134,9 @@ public class Player { // gamestate is the player manager
   @Override
   public String toString() {
     return "Player{" +
-        "resources=" + resources +
-        ", playerNum=" + playerNum +
-        '}';
+            "resources=" + resources +
+            ", playerNum=" + playerNum +
+            '}';
   }
 
   /**
@@ -178,6 +189,15 @@ public class Player { // gamestate is the player manager
    */
   public boolean isAI() {
     return isAi;
+  }
+
+  /**
+   * Sets ai.
+   *
+   * @param b the b
+   */
+  public void setAI(boolean b) {
+    isAi = b;
   }
 
   /**
@@ -236,15 +256,21 @@ public class Player { // gamestate is the player manager
     return xShift;
   }
 
+  /**
+   * Gets username.
+   *
+   * @return the username
+   */
   public String getUsername() {
     return username;
   }
 
+  /**
+   * Sets username.
+   *
+   * @param username the username
+   */
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  public void setAI(boolean b) {
-    isAi = b;
   }
 }

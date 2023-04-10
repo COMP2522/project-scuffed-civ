@@ -1,159 +1,120 @@
 package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import org.bcit.com2522.project.scuffed.uiComponents.Button;
-import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
-import org.bcit.com2522.project.scuffed.uiComponents.InputBox;
-import org.bcit.com2522.project.scuffed.uiComponents.Label;
+import org.bcit.com2522.project.scuffed.uicomponents.Button;
+import org.bcit.com2522.project.scuffed.uicomponents.InputBox;
+import org.bcit.com2522.project.scuffed.uicomponents.Label;
 import processing.core.PApplet;
 
 /**
- * The host game menu state. This is the menu that allows the user to host a game.
+ * The HostGameMenuState class, which extends the NewGameMenuState class, represents
+ * the menu state for hosting an online game.
  */
-public class HostGameMenuState extends MenuState {
-    private InputBox mapWidthInput;
-    private InputBox mapHeightInput;
-    private InputBox numPlayersInput;
-    private InputBox portInput;
-    private Label portInputLabel;
-    private Label mapWidthLabel;
-    private Label mapHeightLabel;
-    private Label numPlayersLabel;
-    private Label errorMessageLabel;
-    private boolean showError = false;
+public class HostGameMenuState extends NewGameMenuState {
+  private final InputBox portInput;
+  private final Label portInputLabel;
+  private final Label errorMessageLabel;
 
   /**
-   * Instantiates a new Host game menu state.
+   * Constructs a new HostGameMenuState with the specified menu.
    *
-   * @param menu  the menu
+   * @param menu the menu associated with this menu state
    */
   public HostGameMenuState(Menu menu) {
-        super( menu, new ButtonManager(menu.scene));
-        setup();
-    }
-    @Override
-    public void setup() {
-        portInput = new InputBox(50, 50, 200, 30,  1, 60000, "8080");
-        mapWidthInput = new InputBox(50, 100, 200, 30,  10, 100, "16");
-        mapHeightInput = new InputBox(50, 150, 200, 30,  10, 100, "16");
-        numPlayersInput = new InputBox(50, 200, 200, 30,  1, 10, "2");
+    super(menu);
 
-        portInputLabel = new Label(50, 45, "Port:", 14);
-        mapWidthLabel = new Label(50, 95, "Map Width:", 14);
-        mapHeightLabel = new Label(50, 145, "Map Height:", 14);
-        numPlayersLabel = new Label(50, 195, "Number of Players:", 14);
-        errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14);
+    portInput = new InputBox(50, 50, 200, 30, 1, 60000, "8080");
+    portInputLabel = new Label(50, 45, "Port:", 14);
+    errorMessageLabel = new Label(50, 250,
+            "Invalid input! Please enter values within the specified range.", 14);
 
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.scene);
-        Button startButton = new Button(50, 600, 250, 650, () -> onStartServerClicked(), "Start Server", menu.scene);
-
-        buttonManager.add(backButton);
-        buttonManager.add(startButton);
-
-    }
-
-    @Override
-    public void draw(Window scene) {
-        super.draw(scene);
-        portInput.draw(scene);
-        mapWidthInput.draw(scene);
-        mapHeightInput.draw(scene);
-        numPlayersInput.draw(scene);
-        portInputLabel.draw(scene);
-        mapWidthLabel.draw(scene);
-        mapHeightLabel.draw(scene);
-        numPlayersLabel.draw(scene);
-
-        if(showError) {
-            errorMessageLabel.draw(scene);
-        }
-    }
-
-    @Override
-    public boolean clicked(int xpos, int ypos) {
-        // Check if any buttons or inputs were clicked and perform actions
-        if(super.clicked(xpos, ypos)) {
-            return true;
-        }
-        if(mapWidthInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(true);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(false);
-            return true;
-        }else if(mapHeightInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(true);
-            numPlayersInput.setSelected(false);
-            return true;
-        }else if(numPlayersInput.isClicked(xpos, ypos)){
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(true);
-            return true;
-        } else if( portInput.isClicked(xpos, ypos) ) {
-            portInput.setSelected(true);
-            mapWidthInput.setSelected(false);
-            mapHeightInput.setSelected(false);
-            numPlayersInput.setSelected(false);
-            return true;
-        }
-        return false;
-    }
+    setupHostMenu();
+  }
 
   /**
-   * Key pressed.
+   * Sets up the host game menu by adding the back button and start server button.
+   */
+  private void setupHostMenu() {
+    buttonManager.wipe();
+    Button backButton = new Button(50, 500, 250, 550,
+            this::onBackClicked, "back", menu.scene);
+    Button startServerButton = new Button(50, 600, 250, 650,
+            this::onStartServerClicked, "Start Server", menu.scene);
+
+    buttonManager.add(backButton);
+    buttonManager.add(startServerButton);
+  }
+
+  /**
+   * Draws the host game menu state on the given scene.
    *
-   * @param key the key
+   * @param scene the scene to draw on
    */
-  public void keyPressed(char key) {
-        if (key == PApplet.BACKSPACE) {
-            if (mapWidthInput.isSelected()) {
-                mapWidthInput.removeCharacter();
-            } else if (mapHeightInput.isSelected()) {
-                mapHeightInput.removeCharacter();
-            } else if (numPlayersInput.isSelected()) {
-                numPlayersInput.removeCharacter();
-            } else if( portInput.isSelected() ) {
-                portInput.removeCharacter();
-            }
-        } else {
-            if (mapWidthInput.isSelected()) {
-                mapWidthInput.addCharacter(key);
-            } else if (mapHeightInput.isSelected()) {
-                mapHeightInput.addCharacter(key);
-            } else if (numPlayersInput.isSelected()) {
-                numPlayersInput.addCharacter(key);
-            } else if( portInput.isSelected() ) {
-                portInput.addCharacter(key);
-            }
+  @Override
+  public void draw(Window scene) {
+    super.draw(scene);
+    portInput.draw(scene);
+    portInputLabel.draw(scene);
 
-        }
+    if (showError) {
+      errorMessageLabel.draw(scene);
     }
+  }
 
   /**
-   * On start server clicked.
+   * Handles mouse clicks on this menu state.
+   *
+   * @param xpos the x position of the mouse click
+   * @param ypos the y position of the mouse click
+   * @return true if a component is clicked, false otherwise
    */
-// ...
-    public void onStartServerClicked() {
-        int port = portInput.getIntValue();
-        int mapWidth = mapWidthInput.getIntValue();
-        int mapHeight = mapHeightInput.getIntValue();
-        int numPlayers = numPlayersInput.getIntValue();
-        if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 10) {
-            menu.scene.initOnlineGame(numPlayers, mapWidth, mapHeight, port);
-            menu.setState(new ServerLobbyMenuState( menu));
-
-            showError = false;
-        } else {
-            showError = true;
-        }
+  @Override
+  public boolean clicked(int xpos, int ypos) {
+    if (super.clicked(xpos, ypos)) {
+      return true;
     }
-
-    @Override
-    public void onBackClicked() {
-        // Change the menu state to the New Game state
-        menu.setState(new OnlineMenuState( menu));
+    if (portInput.isClicked(xpos, ypos)) {
+      setSelectedInput(portInput);
+      return true;
     }
+    return false;
+  }
 
+  /**
+   * Handles key presses for the input boxes.
+   *
+   * @param key the key pressed
+   */
+  @Override
+  public void keyPressed(char key) {
+    super.keyPressed(key);
+    if (key == PApplet.BACKSPACE) {
+      if (portInput.isSelected()) {
+        portInput.removeCharacter();
+      }
+    } else {
+      if (portInput.isSelected()) {
+        portInput.addCharacter(key);
+      }
+    }
+  }
 
+  /**
+   * Handles the start server button click and initiates the online game.
+   */
+  public void onStartServerClicked() {
+    System.out.println("Starting server...");
+    int port = portInput.getIntValue();
+    int mapWidth = mapWidthInput.getIntValue();
+    int mapHeight = mapHeightInput.getIntValue();
+    int numPlayers = numPlayersInput.getIntValue();
+    if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100
+            && numPlayers >= 1 && numPlayers <= 10) {
+      menu.scene.initOnlineGame(numPlayers, mapWidth, mapHeight, port);
+      menu.setState(new ServerLobbyMenuState(menu));
+      showError = false;
+    } else {
+      showError = true;
+    }
+  }
 }

@@ -1,10 +1,10 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
+
+import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PFont;
 import processing.core.PImage;
-
-import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 /**
  * The type Button.
@@ -580,6 +580,11 @@ public class Button {
     scene.removeClickable(clickable);
   }
 
+  /**
+   * Sets active.
+   *
+   * @param toggle the toggle
+   */
   public void setActive(boolean toggle) {
   }
 }

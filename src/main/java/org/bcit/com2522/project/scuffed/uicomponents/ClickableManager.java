@@ -1,8 +1,7 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
-
-import org.bcit.com2522.project.scuffed.client.Window;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 import java.util.ArrayList;
+import org.bcit.com2522.project.scuffed.client.Window;
 
 /**
  * The type Clickable manager.
@@ -23,8 +22,8 @@ public class ClickableManager {
    * @param scene the scene
    */
   public ClickableManager(Window scene) {
-        this.scene = scene;
-    }
+    this.scene = scene;
+  }
 
   /**
    * Add.
@@ -32,8 +31,8 @@ public class ClickableManager {
    * @param clickable the clickable
    */
   public void add(Clickable clickable) {
-        clickables.add(clickable);
-    }
+    clickables.add(clickable);
+  }
 
   /**
    * Remove.
@@ -41,28 +40,28 @@ public class ClickableManager {
    * @param clickable the clickable
    */
   public void remove(Clickable clickable) {
-        clickables.remove(clickable);
-    }
+    clickables.remove(clickable);
+  }
 
   /**
    * Check click.
    */
   public void checkClick() {
-        for (Clickable clickable : clickables) {
-            if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
-                clickable.click();
-            }
-        }
+    for (Clickable clickable : clickables) {
+      if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
+        clickable.click();
+      }
     }
+  }
 
   /**
    * Check hover.
    */
   public void checkHover() {
-        for (Clickable clickable : clickables) {
-            if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
-                clickable.hover();
-            }
-        }
+    for (Clickable clickable : clickables) {
+      if (clickable.isHovered(scene.mouseX, scene.mouseY)) {
+        clickable.hover();
+      }
     }
+  }
 }

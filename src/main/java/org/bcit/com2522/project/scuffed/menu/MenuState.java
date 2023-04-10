@@ -1,8 +1,8 @@
 package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import org.bcit.com2522.project.scuffed.uiComponents.Button;
-import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uicomponents.Button;
+import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
 
 /**
  * The Menu state. This class is the superclass for all menu states. It contains a button manager a reference to the scene and menu.
@@ -25,17 +25,19 @@ public abstract class MenuState {
    * @param menu          the menu
    * @param buttonManager the button manager
    */
-  public MenuState( Menu menu, ButtonManager buttonManager) {
-        this.buttonManager = buttonManager;
-        this.menu = menu;
-    }
+  public MenuState(Menu menu, ButtonManager buttonManager) {
+    this.buttonManager = buttonManager;
+    this.menu = menu;
+  }
 
   /**
    * Draw.
+   *
+   * @param scene the scene
    */
   public void draw(Window scene) {
-        buttonManager.draw(scene);
-    }
+    buttonManager.draw(scene);
+  }
 
   /**
    * Clicked boolean.
@@ -45,15 +47,15 @@ public abstract class MenuState {
    * @return the boolean
    */
   public boolean clicked(int xpos, int ypos) {
-        // Check if any buttons were clicked and perform actions
-        for (Button button : buttonManager.buttons) {
-            if (button.isClicked(xpos, ypos)) {
-                button.click();
-                return true;
-            }
-        }
-        return false;
+    // Check if any buttons were clicked and perform actions
+    for (Button button : buttonManager.buttons) {
+      if (button.isClicked(xpos, ypos)) {
+        button.click();
+        return true;
+      }
     }
+    return false;
+  }
 
   /**
    * SetUp the buttons and inputs for the menu state

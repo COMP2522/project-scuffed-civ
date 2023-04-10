@@ -15,12 +15,14 @@ public class DebugMenu {
    *
    * @param scene the scene
    */
-  public DebugMenu (Window scene) {
+  public DebugMenu(Window scene) {
     this.scene = scene;
   }
 
   /**
    * Draw.
+   *
+   * @param scene the scene
    */
   public void draw(Window scene) {
     scene.fill(255);
