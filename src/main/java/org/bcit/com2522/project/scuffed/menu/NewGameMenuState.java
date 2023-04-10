@@ -28,27 +28,26 @@ public class NewGameMenuState extends MenuState {
   /**
    * Instantiates a new New game menu state.
    *
-   * @param scene the scene
    * @param menu  the menu
    */
-  public NewGameMenuState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+  public NewGameMenuState( Menu menu) {
+        super( menu, new ButtonManager(menu.scene));
         setup();
     }
 
     @Override
     public void setup() {
-        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 10000, "16");
-        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 10000, "16");
-        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10000, "2");
+        mapWidthInput = new InputBox(50, 100, 200, 30,  10, 10000, "16");
+        mapHeightInput = new InputBox(50, 150, 200, 30,  10, 10000, "16");
+        numPlayersInput = new InputBox(50, 200, 200, 30,  1, 10000, "2");
 
-        mapWidthLabel = new Label(50, 95, "Map Width:", 14, scene);
-        mapHeightLabel = new Label(50, 145, "Map Height:", 14, scene);
-        numPlayersLabel = new Label(50, 195, "Number of Players:", 14, scene);
-        errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14, scene);
+        mapWidthLabel = new Label(50, 95, "Map Width:", 14);
+        mapHeightLabel = new Label(50, 145, "Map Height:", 14);
+        numPlayersLabel = new Label(50, 195, "Number of Players:", 14);
+        errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14);
 
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
-        Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.scene);
+        Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", menu.scene);
 
         buttonManager.add(backButton);
         buttonManager.add(startButton);
@@ -56,7 +55,7 @@ public class NewGameMenuState extends MenuState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new MainMenuMenuState(scene, menu));
+        menu.setState(new MainMenuMenuState( menu));
     }
 
     @Override
@@ -133,9 +132,9 @@ public class NewGameMenuState extends MenuState {
         int mapHeight = mapHeightInput.getIntValue();
         int numPlayers = numPlayersInput.getIntValue();
         //if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 100) {
-            scene.initGame(numPlayers, mapWidth, mapHeight);
-            menu.setState(new MainMenuMenuState(scene, menu));
-            scene.inGame = true;
+            menu.scene.initGame(numPlayers, mapWidth, mapHeight);
+            menu.setState(new MainMenuMenuState( menu));
+            menu.scene.inGame = true;
             showError = false;
         //} else {
             showError = true;
@@ -157,15 +156,15 @@ public class NewGameMenuState extends MenuState {
         float cellHeight = (y2 - y1) / rows;
 
         float strokeWidth = (float) (Math.min(cellWidth, cellHeight) / 10.0);
-        scene.strokeWeight(strokeWidth);
-        scene.stroke(0);
-        scene.noFill();
+        menu.scene.strokeWeight(strokeWidth);
+        menu.scene.stroke(0);
+        menu.scene.noFill();
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 float xPos = x1 + (j * cellWidth);
                 float yPos = y1 + (i * cellHeight);
-                scene.rect(xPos, yPos, cellWidth, cellHeight);
+                menu.scene.rect(xPos, yPos, cellWidth, cellHeight);
             }
         }
     }

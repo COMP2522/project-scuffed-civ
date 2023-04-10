@@ -13,11 +13,10 @@ public class LoadingMenuState extends MenuState {
   /**
    * Instantiates a new Loading menu state.
    *
-   * @param scene the scene
    * @param menu  the menu
    */
-  public LoadingMenuState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+  public LoadingMenuState( Menu menu) {
+        super( menu, new ButtonManager(menu.scene));
         loadingText = "Loading...";
     }
 

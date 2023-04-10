@@ -13,10 +13,7 @@ public abstract class MenuState {
    * The Button manager.
    */
   protected ButtonManager buttonManager;
-  /**
-   * The Scene.
-   */
-  protected Window scene;
+
   /**
    * The Menu.
    */
@@ -25,12 +22,10 @@ public abstract class MenuState {
   /**
    * Instantiates a new Menu state.
    *
-   * @param scene         the scene
    * @param menu          the menu
    * @param buttonManager the button manager
    */
-  public MenuState(Window scene, Menu menu, ButtonManager buttonManager) {
-        this.scene = scene;
+  public MenuState( Menu menu, ButtonManager buttonManager) {
         this.buttonManager = buttonManager;
         this.menu = menu;
     }

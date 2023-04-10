@@ -25,13 +25,12 @@ public class InputBox {
    * @param minValue the min value
    * @param maxValue the max value
    */
-  public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue) {
+  public InputBox(int x, int y, int width, int height, int minValue, int maxValue) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = "";
-        this.scene = scene;
         this.selected = false;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -45,18 +44,16 @@ public class InputBox {
    * @param y           the y
    * @param width       the width
    * @param height      the height
-   * @param scene       the scene
    * @param minValue    the min value
    * @param maxValue    the max value
    * @param defaultText the default text
    */
-  public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue, String defaultText) {
+  public InputBox(int x, int y, int width, int height, int minValue, int maxValue, String defaultText) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -70,16 +67,14 @@ public class InputBox {
    * @param y           the y
    * @param width       the width
    * @param height      the height
-   * @param scene       the scene
    * @param defaultText the default text
    */
-  public InputBox(int x, int y, int width, int height, Window scene, String defaultText) {
+  public InputBox(int x, int y, int width, int height, String defaultText) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = Integer.MIN_VALUE;
         this.maxValue = Integer.MAX_VALUE;
@@ -92,17 +87,15 @@ public class InputBox {
    * @param y           the y
    * @param width       the width
    * @param height      the height
-   * @param scene       the scene
    * @param defaultText the default text
    * @param type        the type
    */
-  public InputBox(int x, int y, int width, int height, Window scene, String defaultText, String type) {
+  public InputBox(int x, int y, int width, int height, String defaultText, String type) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = Integer.MIN_VALUE;
         this.maxValue = Integer.MAX_VALUE;

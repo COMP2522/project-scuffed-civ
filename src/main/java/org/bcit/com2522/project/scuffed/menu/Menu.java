@@ -22,7 +22,7 @@ public class Menu {
    */
   public Menu(Window scene) {
         this.scene = scene;
-        this.currentState = new MainMenuMenuState(scene, this);
+        this.currentState = new MainMenuMenuState( this);
     }
 
   /**
