@@ -104,7 +104,7 @@ public class GameState { // everything manager this is the player manager
    * @param state the state to make a copy of
    */
   public GameState(GameState state) {
-    this.gameID = "Game" + (Integer.parseInt(state.gameID.substring(4)) + 1);
+    this.gameID = state.gameID;
     this.map = new Map(state.map);
     this.players = new ArrayDeque<>(state.players.size());
 
@@ -115,8 +115,6 @@ public class GameState { // everything manager this is the player manager
         this.currentPlayer = players.getLast();
       }
     }
-
-    //this.currentPlayer = new Player(state.currentPlayer);
 
     this.entities = new Entity[state.entities.length][state.entities[0].length];
 

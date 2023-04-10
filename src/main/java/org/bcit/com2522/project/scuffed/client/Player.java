@@ -34,11 +34,6 @@ public class Player { // gamestate is the player manager
     hasLost = false;
     resources = 2;
     isAi = false;
-//    if (playerNum == 1) { // TODO: change this logic later
-//      isAi = true;
-//    } else {
-//      isAi = false;
-//    }
   }
 
   /**
