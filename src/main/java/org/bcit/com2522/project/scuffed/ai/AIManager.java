@@ -46,8 +46,6 @@ public class AIManager {
       }
     }
 
-    System.out.format("%d possible turns \n", gameStates.size());
-
     // pick best turn
     GameState bestGameTurn = gameStates.get(0);
     for (GameState gameState1 : gameStates) {
@@ -56,14 +54,23 @@ public class AIManager {
         bestGameTurn = gameState1;
       }
     }
-    System.out.println("bestGameTurn:");
-    bestGameTurn.printEntities();
 
     // set gameState to be the best turn.
     gameState.setEntities(bestGameTurn.getEntities());
     gameState.setMap(bestGameTurn.getMap());
-    gameState.currentPlayer = new Player(bestGameTurn.currentPlayer);
+    //gameState.currentPlayer = new Player(bestGameTurn.currentPlayer);
 
+    for (Player value : gameState.players) {
+      gameState.players.remove(value);
+    }
+
+    for (Player value : bestGameTurn.players) {
+      gameState.players.add(new Player(value));
+
+      if (bestGameTurn.currentPlayer.equals(value)) {
+        gameState.currentPlayer = gameState.players.getLast();
+      }
+    }
     gameState.nextTurn();
   }
 }

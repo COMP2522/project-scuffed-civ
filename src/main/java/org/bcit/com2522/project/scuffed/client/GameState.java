@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.stream.Collectors;
 import org.bcit.com2522.project.scuffed.ai.AIManager;
@@ -30,7 +31,7 @@ public class GameState { // everything manager this is the player manager
   /**
    * The Players.
    */
-  public static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
+  public ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
   /**
    * The Current player.
    */
@@ -105,9 +106,18 @@ public class GameState { // everything manager this is the player manager
   public GameState(GameState state) {
     this.gameID = "Game" + (Integer.parseInt(state.gameID.substring(4)) + 1);
     this.map = new Map(state.map);
-    players = new ArrayDeque<>(state.players); //problem code
+    this.players = new ArrayDeque<>(state.players.size());
 
-    this.currentPlayer = new Player(state.currentPlayer);
+    for (Player value : state.players) {
+      this.players.add(new Player(value));
+
+      if (state.currentPlayer.equals(value)) {
+        this.currentPlayer = players.getLast();
+      }
+    }
+
+    //this.currentPlayer = new Player(state.currentPlayer);
+
     this.entities = new Entity[state.entities.length][state.entities[0].length];
 
     for (int i = 0; i < entities.length; i++) {
@@ -115,12 +125,12 @@ public class GameState { // everything manager this is the player manager
         Entity entity = state.entities[i][j];
         if (entity != null) {
           if (state.entities[i][j] instanceof Worker)
-            this.entities[i][j] = new Worker(entity.getOwnerID(), entity.getHealth(), entity.getCost(),
+            this.entities[i][j] = new Worker(entity.getOwnerID(), this, entity.getHealth(), entity.getCost(),
                 ((Unit) entity).getMaxMove());
           else if (state.entities[i][j] instanceof Building)
-            this.entities[i][j] = new Building(entity.getOwnerID(), entity.getHealth(), entity.getCost());
+            this.entities[i][j] = new Building(entity.getOwnerID(), this, entity.getHealth(), entity.getCost());
           else
-            this.entities[i][j] = new Soldier(entity.getOwnerID(), entity.getHealth(), entity.getCost(),
+            this.entities[i][j] = new Soldier(entity.getOwnerID(), this, entity.getHealth(), entity.getCost(),
                 ((Soldier) entity).getMaxMove(), ((Soldier) entity).getDamage(),
                 ((Soldier) entity).getRange());
         }
@@ -146,7 +156,7 @@ public class GameState { // everything manager this is the player manager
    * @param ownerId the owner id
    * @return the player
    */
-  public static Player getPlayer(int ownerId) {
+  public Player getPlayer(int ownerId) {
     for (Player player : players) {
       if (player.getID() == ownerId) {
         return player;
@@ -169,7 +179,7 @@ public class GameState { // everything manager this is the player manager
     gameState.yShift = (720 / gameState.zoomAmount - gameState.map.width) / 2;
     gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"));
     JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
-    players = (ArrayDeque<Player>) playersArray.stream()
+    gameState.players = (ArrayDeque<Player>) playersArray.stream()
         .map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
         .collect(Collectors.toCollection(ArrayDeque::new));
     JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
@@ -177,7 +187,7 @@ public class GameState { // everything manager this is the player manager
     for (int i = 0; i < entitiesArray.size(); i++) {
       JSONArray row = (JSONArray) entitiesArray.get(i);
       for (int j = 0; j < row.size(); j++) {
-        entities[i][j] = Entity.fromJSONObject((JSONObject) row.get(j));
+        entities[i][j] = Entity.fromJSONObject((JSONObject) row.get(j), gameState);
       }
     }
     gameState.entities = entities;
@@ -217,14 +227,12 @@ public class GameState { // everything manager this is the player manager
     // Calculate the number of grid sections along the x and y axes
     // System.out.println(players.size());
     ArrayDeque<Player> playersQueueCopy = new ArrayDeque<>(players);
-    // TODO same logic should be used for all numbers of players
     if (players.size() == 2) {
       Player player1 = playersQueueCopy.poll();
       Player player2 = playersQueueCopy.poll();
-      // TODO maybe an initWorkers function in player instead of in gamestate
 
-      entities[0][0] = new Worker(player1.getID(), 100, 1, 6);
-      entities[rows - 1][cols - 1] = new Worker(player2.getID(), 100, 1, 6);
+      entities[0][0] = new Worker(player1.getID(), this, 100, 1, 6);
+      entities[rows - 1][cols - 1] = new Worker(player2.getID(), this, 100, 1, 6);
     } else {
       int xSections = (int) Math.ceil(Math.sqrt(players.size()));
       int ySections = (int) Math.ceil((double) players.size() / xSections);
@@ -246,7 +254,7 @@ public class GameState { // everything manager this is the player manager
             int yPos;
             xPos = x * sectionWidth;
             yPos = y * sectionHeight;
-            entities[xPos][yPos] = new Worker(player.getID(), 100, 1, 6);
+            entities[xPos][yPos] = new Worker(player.getID(), this, 100, 1, 6);
           }
         }
       }
@@ -725,5 +733,28 @@ public class GameState { // everything manager this is the player manager
       }
     return ((playerHP + playerDMG) - (enemyDMG + enemyHP) +
             currentPlayer.getResources());
+
+    //return currentPlayer.getResources();
+  }
+
+  public static void main (String [] args) {
+    GameState gameState = new GameState(1, 16, 16, 1);
+
+    gameState.init();
+
+    GameState gameState1 = new GameState(gameState);
+
+    gameState.currentPlayer.spendResources(2);
+
+    GameState gameState2 = new GameState(gameState);
+
+    System.out.println(gameState.currentPlayer.getResources());
+    System.out.println(gameState1.currentPlayer.getResources());
+
+    System.out.println(gameState.players);
+
+    System.out.println(gameState1.players);
+
+    System.out.println(gameState2.players);
   }
 }

@@ -18,13 +18,13 @@ public abstract class Unit extends Entity { // things that can move
   /**
    * Instantiates a new Unit.
    *
-   * @param ownerId the owner id
+   * @param owner the owner Player
    * @param health  the health
    * @param cost    the cost
    * @param speed   the speed
    */
-  public Unit(int ownerId, int health, int cost, int speed) {
-    super(ownerId, health, cost);
+  public Unit(Player owner, int health, int cost, int speed) {
+    super(owner, health, cost);
     this.maxMove = speed;
     this.remainMove = maxMove;
   }

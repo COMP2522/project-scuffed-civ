@@ -25,8 +25,21 @@ public class Building extends Entity {
    * @param health  the health
    * @param cost    the cost
    */
-  public Building(int ownerID, int health, int cost) {
-    super(ownerID, health, cost);
+  public Building(int ownerID, GameState gameState, int health, int cost) {
+    super(ownerID, gameState, health, cost);
+    texture = GameImages.get("building");
+    entityType = "building";
+  }
+
+  /**
+   * Overloaded Constructor
+   *
+   * @param owner the owner Player
+   * @param health  the health
+   * @param cost    the cost
+   */
+  public Building(Player owner, int health, int cost) {
+    super(owner, health, cost);
     texture = GameImages.get("building");
     entityType = "building";
   }
@@ -37,13 +50,14 @@ public class Building extends Entity {
    * @param buildingObject the building object
    * @return the building
    */
-  public static Building fromJSONObject(JSONObject buildingObject) {
+  public static Building fromJSONObject(JSONObject buildingObject, GameState gameState) {
     if (buildingObject == null) {
       return null;
     }
     Building building = new Building(
             //Position.fromJSONObject((JSONObject) buildingObject.get("position")),
             (int) (long) buildingObject.get("ownerId"),
+            gameState,
             //(Color) buildingObject.get("color"),
             (int) (long) buildingObject.get("maxHealth"),
             Building.cost);
@@ -70,7 +84,7 @@ public class Building extends Entity {
   public Entity buildWorker(Entity[][] entities) {
     Position free = getFreePosition(entities);
     if (canBuild(free, Worker.cost)) {
-      Worker worker = new Worker(ownerID, Worker.health, Worker.cost, Worker.speed);
+      Worker worker = new Worker(owner, Worker.health, Worker.cost, Worker.speed);
       entities[free.getX()][free.getY()] = worker;
       remainAction--;
       owner.spendResources(1);
@@ -91,7 +105,7 @@ public class Building extends Entity {
   public void buildSoldier(Entity[][] entities, int health, int damage, int speed, int range) {
     Position free = getFreePosition(entities);
     if (canBuild(free, Soldier.cost)) {
-      entities[free.getX()][free.getY()] = new Soldier(ownerID, health, Soldier.cost, speed, damage, range);
+      entities[free.getX()][free.getY()] = new Soldier(owner, health, Soldier.cost, speed, damage, range);
       remainAction--;
       owner.spendResources(Soldier.cost);
     }
@@ -106,7 +120,7 @@ public class Building extends Entity {
   public Entity buildSoldier(Entity[][] entities) {
     Position free = getFreePosition(entities);
     if (canBuild(free, Soldier.cost)) {
-      Soldier soldier = new Soldier(ownerID, Soldier.health, Soldier.cost, Soldier.speed, Soldier.damage, Soldier.range);
+      Soldier soldier = new Soldier(owner, Soldier.health, Soldier.cost, Soldier.speed, Soldier.damage, Soldier.range);
 
       entities[free.getX()][free.getY()] = soldier;
       remainAction--;

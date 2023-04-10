@@ -33,8 +33,6 @@ public class GSGenerator {
       i++;
     }
 
-    state.printEntities();
-
     return state;
   }
 
@@ -84,6 +82,7 @@ public class GSGenerator {
       GameState gs = new GameState(state);
       possibleMoves.add(gs);
       generateActions(building, possibleMoves);
+      System.out.println("calling generateActions");
     }
     return possibleMoves;
   }
@@ -115,7 +114,8 @@ public class GSGenerator {
       GameState gs0 = gs.get(gs.size() - 1);
       GameState gs1 = new GameState(gs0);
       GameState gs2 = new GameState(gs0);
-      if (entity.getPosition(gs0.getEntities()) != null) {
+      if (position != null) {
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + gs2.currentPlayer.getResources());
         ((Building) gs1.getEntities()[position.getX()][position.getY()]).buildSoldier(gs1.getEntities());
         ((Building) gs2.getEntities()[position.getX()][position.getY()]).buildWorker(gs2.getEntities());
       }
