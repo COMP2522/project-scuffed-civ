@@ -27,7 +27,7 @@ import org.bcit.com2522.project.scuffed.server.SubscriberHelpers.PrintDocumentSu
 import static com.mongodb.client.model.Filters.eq;
 
 /**
- * The type Mongo game server.
+ * INITIAL CODE FOR SETTING UP THE SERVER ON MONGODB NON-FUNCTIONAL
  */
 public class MongoGameServer {
 

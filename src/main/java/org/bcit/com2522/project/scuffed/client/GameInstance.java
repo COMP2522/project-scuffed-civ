@@ -1,5 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.hud.Hud;
+import org.bcit.com2522.project.scuffed.hud.InGameHud;
 import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,11 +11,9 @@ import processing.core.PVector;
 import java.io.*;
 import java.net.Socket;
 import java.util.HashSet;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
- * The type Game instance.
+ * The Instance of the game that is running. This class is responsible for holding the game state, hud, and server variables.
  */
 public class GameInstance {
     /**
@@ -43,7 +43,7 @@ public class GameInstance {
     /**
      * The Is online.
      */
-    boolean isOnline = false;
+    public boolean isOnline = false;
 
     /**
      * The Scene.
@@ -167,6 +167,9 @@ public class GameInstance {
         gameState.init();
     }
 
+    /**
+     * Advances the game state to the next turn and sends the updated game state to the server.
+     */
     public void nextTurn(){
         gameState.nextTurn();
         if(isOnline){
@@ -175,9 +178,9 @@ public class GameInstance {
     }
 
     /**
-     * Send game state.
+     * Sends the updated game state to the server.
      *
-     * @param gameState the game state
+     * @param gameState the game state to send
      */
     public void sendGameState(GameState gameState) {
         try {
@@ -194,9 +197,8 @@ public class GameInstance {
         }
     }
 
-
     /**
-     * Receive game state.
+     * Receives the game state from the server and updates the client-side game state.
      */
     public void receiveGameState() {
         try {
@@ -211,7 +213,13 @@ public class GameInstance {
         }
     }
 
-
+    /**
+     * Connects the client to the server and establishes communication between them.
+     *
+     * @param hostIP          the IP address of the host
+     * @param port            the port on which the server is running
+     * @param clientUsername  the username of the client
+     */
     public void joinGame(String hostIP, int port, String clientUsername) {
         isOnline = true;
         System.out.println("Joining game at " + hostIP + ":" + port);
@@ -252,7 +260,7 @@ public class GameInstance {
                     // Continuously receive game state updates from server
                     while (true) {
                         String serverMessage = (String) ois.readObject();
-                        if (serverMessage.equals("Your turn!")) {
+                        if (serverMessage.equals("your turn")) {
                             System.out.println("It's my turn!");
                             // Handle the turn on the client-side
                         } else if (serverMessage.equals("Waiting for other players...")) {
@@ -269,35 +277,32 @@ public class GameInstance {
             });
             serverListener.start();
 
-        } catch (Exception e) {
+        } catch (        Exception e) {
             System.out.println("Error connecting to server at " + hostIP + ":" + port);
             e.printStackTrace();
         }
     }
 
-
-
-
     /**
-     * Sets game state.
+     * Sets the game state.
      *
-     * @param gameState the game state
+     * @param gameState the game state to set
      */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
     /**
-     * Sets game server.
+     * Sets the game server.
      *
-     * @param gameServer the game server
+     * @param gameServer the game server to set
      */
     public void setGameServer(GameServer gameServer) {
         this.gameServer = gameServer;
     }
 
     /**
-     * Start server.
+     * Starts the game server in a new thread.
      */
     public void startServer() {
         isOnline = true;
@@ -305,13 +310,13 @@ public class GameInstance {
         server.start();
     }
 
-
     /**
-     * Gets connected players.
+     * Gets the set of connected players' usernames.
      *
-     * @return the connected players
+     * @return the set of connected players' usernames
      */
     public HashSet<String> getConnectedPlayers() {
         return gameServer.getConnectedPlayers();
     }
 }
+

@@ -1,6 +1,8 @@
-package org.bcit.com2522.project.scuffed.ui;
+package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
  * The type Online menu state.

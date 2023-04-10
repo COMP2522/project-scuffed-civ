@@ -1,6 +1,10 @@
-package org.bcit.com2522.project.scuffed.ui;
+package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.InputBox;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
@@ -130,9 +134,10 @@ public class JoinGameMenuState extends MenuState {
         String username = usernameInput.getStringValue();
         // Check if the port, host IP, and username are valid
         if (port >= 1 && port <= 60000 && hostIP != null && username != null && !username.equals("")) {
-            // Join the game
+
             scene.joinGame(hostIP, port, username);
             showError = false;
+
         } else {
             showError = true;
         }

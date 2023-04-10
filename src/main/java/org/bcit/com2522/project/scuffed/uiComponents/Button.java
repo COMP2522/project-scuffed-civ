@@ -1,6 +1,5 @@
-package org.bcit.com2522.project.scuffed.ui;
+package org.bcit.com2522.project.scuffed.uiComponents;
 
-import org.bcit.com2522.project.scuffed.client.Clickable;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -91,7 +90,7 @@ public class Button {
   /**
    * The Is clickable.
    */
-  boolean isClickable = true;
+  private boolean isClickable = true;
   private boolean active;
 
   /**
@@ -579,5 +578,8 @@ public class Button {
     this.hoverBackground = null;
     this.clickBackground = null;
     scene.removeClickable(clickable);
+  }
+
+  public void setActive(boolean toggle) {
   }
 }

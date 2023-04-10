@@ -1,7 +1,12 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import org.bcit.com2522.project.scuffed.hud.Hud;
+import org.bcit.com2522.project.scuffed.menu.HostGameMenuState;
+import org.bcit.com2522.project.scuffed.menu.JoinGameMenuState;
+import org.bcit.com2522.project.scuffed.menu.Menu;
+import org.bcit.com2522.project.scuffed.menu.NewGameMenuState;
 import org.bcit.com2522.project.scuffed.server.GameServer;
-import org.bcit.com2522.project.scuffed.ui.*;
+import org.bcit.com2522.project.scuffed.uiComponents.*;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -300,6 +305,7 @@ public class Window extends PApplet {
     gameInstance.setGameState(gameState);
     gameInstance.setGameServer(gameServer);
     gameInstance.startServer();
+    //TODO: make host join server as well
   }
 
 
