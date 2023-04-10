@@ -33,7 +33,7 @@ public class GameState { // everything manager this is the player manager
     /**
      * The Players.
      */
-    public static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
+    public ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
     private Entity[][] entities;
     private Entity selected;
     /**
@@ -61,7 +61,7 @@ public class GameState { // everything manager this is the player manager
      * @param mapwidth   width of the map
      * @param mapheight  height of the map
      */
-    public GameState(int numplayers, int mapwidth, int mapheight) {
+    public GameState(int numplayers, int mapwidth, int mapheight, int numAI) {
         this.gameID = "Game" + new Random().nextInt(10000); // make a random gameId
         players = new ArrayDeque<>(numplayers);
         entities = new Entity[mapwidth][mapheight];
@@ -69,6 +69,11 @@ public class GameState { // everything manager this is the player manager
         for (int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
+        for (int i = 0; i < numAI; i++) {
+            players.add(new Player(i));
+            players.getLast().setAI(true);
+        }
+
         zoomAmount = 32;
         xShift = (1080 / zoomAmount - mapwidth) / 2;
         yShift = (720 / zoomAmount - mapwidth) / 2;
@@ -92,11 +97,14 @@ public class GameState { // everything manager this is the player manager
      * @param state the state to make a copy of
      */
     public GameState(GameState state) {
-        this.gameID = state.gameID;
+        this.gameID = "Game" + (Integer.parseInt(state.gameID.substring(4)) + 1);
         this.map = new Map(state.map);
+        players = state.getPlayers().clone();
+
         this.currentPlayer = new Player(state.currentPlayer);
-        this.players = new ArrayDeque<Player>(state.players);
         this.entities = new Entity[state.entities.length][state.entities[0].length];
+
+
         for (int i = 0; i < entities.length; i++) {
             for (int j = 0; j < entities[0].length; j++) {
                 Entity entity = state.entities[i][j];
@@ -114,6 +122,17 @@ public class GameState { // everything manager this is the player manager
             }
         }
         this.selected = null;
+
+        zoomAmount = 32;
+        xShift = (1080 / zoomAmount - map.width) / 2;
+        yShift = (720 / zoomAmount - map.width) / 2;
+
+        for (Player player : players) {
+            player.setShift((1080 / zoomAmount - map.width) / 2, (720 / zoomAmount - map.width) / 2); // change to center
+            // on their worker
+        }
+
+        selectPosition = null;
     }
 
     public static Player getPlayer(int ownerId) {
@@ -250,22 +269,22 @@ public class GameState { // everything manager this is the player manager
         } else if (key == 'm' && selected instanceof Building) { // creates a worker (maker)
             ((Building) selected).buildWorker(entities);
         } else if (key == 'f' && selected instanceof Building) { // creates a soldier (fighter)
-            ((Building) selected).buildSoldier(entities, 100, 50, 6, 6);
+            ((Building) selected).buildSoldier(entities);
         } else if (key == 'c' && selected instanceof Worker) { // collects
             ((Worker) selected).collect(map.get(selected.getPosition(entities)));
         } else if (key == 'x') { // deselect any entity
             selected = null;
         }
 
-        else if (key == 'u' && selected instanceof Building) { // fighter with more health
-            ((Building) selected).buildSoldier(entities, 200, 50, 6, 6);
-        } else if (key == 'i' && selected instanceof Building) { // fighter with more damage
-            ((Building) selected).buildSoldier(entities, 100, 100, 6, 6);
-        } else if (key == 'o' && selected instanceof Building) { // fighter with more speed
-            ((Building) selected).buildSoldier(entities, 100, 50, 12, 6);
-        } else if (key == 'p' && selected instanceof Building) { // fighter with more range
-            ((Building) selected).buildSoldier(entities, 100, 50, 6, 12);
-        }
+//        else if (key == 'u' && selected instanceof Building) { // fighter with more health
+//            ((Building) selected).buildSoldier(entities, 200, 50, 6, 6);
+//        } else if (key == 'i' && selected instanceof Building) { // fighter with more damage
+//            ((Building) selected).buildSoldier(entities, 100, 100, 6, 6);
+//        } else if (key == 'o' && selected instanceof Building) { // fighter with more speed
+//            ((Building) selected).buildSoldier(entities, 100, 50, 12, 6);
+//        } else if (key == 'p' && selected instanceof Building) { // fighter with more range
+//            ((Building) selected).buildSoldier(entities, 100, 50, 6, 12);
+//        }
 
         else if (key == '\n' || key == '\r') {
             nextTurn();
@@ -637,42 +656,43 @@ public class GameState { // everything manager this is the player manager
      */
     public int compareTo(GameState gameState) {
         if (this.getValue() > gameState.getValue()) {
-            return -1;
-        } else if (this.getValue() < gameState.getValue()) {
             return 1;
+        } else if (this.getValue() < gameState.getValue()) {
+            return -1;
         } else {
             return 0;
         }
     }
 
-    private int getValue() {
-        int playerHP = 0;
-        int playerDMG = 0;
-        int enemyHP = 0;
-        int enemyDMG = 0;
-
-        for (int i = 0; i < entities.length; i++) {
-            for (int j = 0; j < entities[0].length; j++) {
-                Entity entity = entities[i][j];
-                if (entity != null) {
-                    if (entity.getOwner() == currentPlayer) {
-                        playerHP += entity.getHealth();
-                        if (entity instanceof Soldier soldier) {
-                            playerDMG += soldier.getDamage();
-                        }
-                    } else {
-                        enemyHP += entity.getHealth();
-                        if (entity instanceof Soldier soldier) {
-                            enemyDMG += soldier.getDamage();
-                        }
-                    }
-                }
-            }
-        }
-        // position of allies
-        // position of enemies
-
-        return (playerHP + playerDMG - enemyDMG - enemyHP + currentPlayer.getResources());
+    public int getValue() {
+//        int playerHP = 0;
+//        int playerDMG = 0;
+//        int enemyHP = 0;
+//        int enemyDMG = 0;
+//
+//        for (int i = 0; i < entities.length; i++) {
+//            for (int j = 0; j < entities[0].length; j++) {
+//                Entity entity = entities[i][j];
+//                if (entity != null) {
+//                    if (entity.getOwner().equals(currentPlayer)) {
+//                        playerHP += entity.getHealth();
+//                        if (entity instanceof Soldier soldier) {
+//                            playerDMG += soldier.getDamage() + 151;
+//                        }
+//                    } else {
+//                        enemyHP += entity.getHealth();
+//                        if (entity instanceof Soldier soldier) {
+//                            enemyDMG -= soldier.getDamage();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        // position of allies
+//        // position of enemies
+//
+//        return ((playerHP + playerDMG) - (enemyDMG + enemyHP) + currentPlayer.getResources());
+        return currentPlayer.getResources();
     }
 
     public void setEntities(Entity[][] entities) {
@@ -681,5 +701,27 @@ public class GameState { // everything manager this is the player manager
 
     public void setMap(Map map) {
         this.map = map;
+    }
+
+    public ArrayDeque<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(ArrayDeque<Player> players) {
+        this.players = new ArrayDeque<>(players);
+    }
+
+
+    public static void main (String [] args) {
+        GameState gameState = new GameState(2, 16, 16, 2);
+        gameState.init();
+
+        GameState gameState1 = new GameState(gameState);
+
+        System.out.println(gameState1.currentPlayer.getResources());
+
+        gameState.currentPlayer.spendResources(2);
+
+        System.out.println(gameState1.currentPlayer.getResources());
     }
 }

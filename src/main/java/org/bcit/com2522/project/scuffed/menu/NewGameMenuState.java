@@ -15,11 +15,15 @@ public class NewGameMenuState extends MenuState {
     private InputBox mapHeightInput;
     private InputBox numPlayersInput;
 
+    private InputBox numAIInput;
+
     private Label mapWidthLabel;
 
     private Label mapHeightLabel;
 
     private Label numPlayersLabel;
+
+    private Label numAILabel;
 
     private Label errorMessageLabel;
 
@@ -40,11 +44,14 @@ public class NewGameMenuState extends MenuState {
     public void setup() {
         mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 10000, "16");
         mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 10000, "16");
-        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10000, "2");
+        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10000, "1");
+        numAIInput = new InputBox(50, 250, 200, 30, scene, 0, 10000, "1");
 
         mapWidthLabel = new Label(50, 95, "Map Width:", 14, scene);
         mapHeightLabel = new Label(50, 145, "Map Height:", 14, scene);
         numPlayersLabel = new Label(50, 195, "Number of Players:", 14, scene);
+        numAILabel = new Label(50, 245, "Number of AI Players:", 14, scene);
+
         errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14, scene);
 
         Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
@@ -68,6 +75,8 @@ public class NewGameMenuState extends MenuState {
         mapWidthLabel.draw();
         mapHeightLabel.draw();
         numPlayersLabel.draw();
+        numAIInput.draw();
+        numAILabel.draw();
 
         if(showError) {
             errorMessageLabel.draw();
@@ -85,16 +94,25 @@ public class NewGameMenuState extends MenuState {
             mapWidthInput.setSelected(true);
             mapHeightInput.setSelected(false);
             numPlayersInput.setSelected(false);
+            numAIInput.setSelected(false);
             return true;
         }else if(mapHeightInput.isClicked(xpos, ypos)){
             mapWidthInput.setSelected(false);
             mapHeightInput.setSelected(true);
             numPlayersInput.setSelected(false);
+            numAIInput.setSelected(false);
             return true;
         }else if(numPlayersInput.isClicked(xpos, ypos)){
             mapWidthInput.setSelected(false);
             mapHeightInput.setSelected(false);
             numPlayersInput.setSelected(true);
+            numAIInput.setSelected(false);
+            return true;
+        }else if(numAIInput.isClicked(xpos, ypos)){
+            mapWidthInput.setSelected(false);
+            mapHeightInput.setSelected(false);
+            numPlayersInput.setSelected(false);
+            numAIInput.setSelected(true);
             return true;
         }
         return false;
@@ -113,6 +131,8 @@ public class NewGameMenuState extends MenuState {
                 mapHeightInput.removeCharacter();
             } else if (numPlayersInput.isSelected()) {
                 numPlayersInput.removeCharacter();
+            } else if (numAIInput.isSelected()) {
+                numAIInput.removeCharacter();
             }
         } else {
             if (mapWidthInput.isSelected()) {
@@ -121,6 +141,8 @@ public class NewGameMenuState extends MenuState {
                 mapHeightInput.addCharacter(key);
             } else if (numPlayersInput.isSelected()) {
                 numPlayersInput.addCharacter(key);
+            } else if (numAIInput.isSelected()) {
+                numAIInput.addCharacter(key);
             }
         }
     }
@@ -132,8 +154,9 @@ public class NewGameMenuState extends MenuState {
         int mapWidth = mapWidthInput.getIntValue();
         int mapHeight = mapHeightInput.getIntValue();
         int numPlayers = numPlayersInput.getIntValue();
+        int numAI = numAIInput.getIntValue();
         //if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 100) {
-            scene.initGame(numPlayers, mapWidth, mapHeight);
+            scene.initGame(numPlayers, mapWidth, mapHeight, numAI);
             menu.setState(new MainMenuMenuState(scene, menu));
             scene.inGame = true;
             showError = false;

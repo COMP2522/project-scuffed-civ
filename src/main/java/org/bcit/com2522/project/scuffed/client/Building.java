@@ -3,8 +3,6 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-import java.awt.*;
-
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 /**
@@ -67,15 +65,19 @@ public class Building extends Entity{
    * Build worker.
    *
    * @param entities the entities
+   * @return
    */
-  public void buildWorker(Entity[][] entities) {
+  public Entity buildWorker(Entity[][] entities) {
         Position free = getFreePosition(entities);
         if (canBuild(free, Worker.cost)) {
-            entities[free.getX()][free.getY()] = new Worker(ownerID, Worker.health, Worker.cost, Worker.speed);
+            Worker worker = new Worker(ownerID, Worker.health, Worker.cost, Worker.speed);
+            entities[free.getX()][free.getY()] = worker;
             remainAction--;
             owner.spendResources(1);
+            return worker;
         }
-    }
+      return null;
+  }
 
   /**
    * Build soldier.
@@ -95,4 +97,16 @@ public class Building extends Entity{
         }
     }
 
+    public Entity buildSoldier(Entity[][] entities) {
+        Position free = getFreePosition(entities);
+        if (canBuild(free, Soldier.cost)) {
+            Soldier soldier = new Soldier(ownerID, Soldier.health, Soldier.cost, Soldier.speed, Soldier.damage, Soldier.range);
+
+            entities[free.getX()][free.getY()] = soldier;
+            remainAction--;
+            owner.spendResources(Soldier.cost);
+            return soldier;
+        }
+        return null;
+    }
 }

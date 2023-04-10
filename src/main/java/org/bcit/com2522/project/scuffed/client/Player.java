@@ -243,4 +243,8 @@ public class Player { // gamestate is the player manager
   public void setUsername(String username) {
     this.username = username;
   }
+
+  public void setAI(boolean b) {
+    isAi = b;
+  }
 }
