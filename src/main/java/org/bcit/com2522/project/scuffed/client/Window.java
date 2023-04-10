@@ -145,9 +145,10 @@ public class Window extends PApplet {
    * @param numplayers the numplayers
    * @param mapwidth   the mapwidth
    * @param mapheight  the mapheight
+   * @param numAI
    */
-  public void initGame(int numplayers, int mapwidth, int mapheight) {
-    gameInstance = new GameInstance(new Hud(this), new GameState(numplayers, mapwidth, mapheight));
+  public void initGame(int numplayers, int mapwidth, int mapheight, int numAI) {
+    gameInstance = new GameInstance(new Hud(this), new GameState(numplayers, mapwidth, mapheight, numAI));
     gameInstance.newGame();
   }
 
@@ -300,7 +301,7 @@ public class Window extends PApplet {
 //TODO: implement actual server
   public void initOnlineGame(int numplayers, int mapwidth, int mapheight, int port) {
     gameInstance = new GameInstance(this);
-    GameState gameState = new GameState(numplayers, mapwidth, mapheight);
+    GameState gameState = new GameState(numplayers, mapwidth, mapheight, 0);
     GameServer gameServer = new GameServer(gameState, port);
     gameInstance.setGameState(gameState);
     gameInstance.setGameServer(gameServer);

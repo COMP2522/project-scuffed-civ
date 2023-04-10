@@ -61,7 +61,7 @@ public class GameState { // everything manager this is the player manager
      * @param mapwidth   width of the map
      * @param mapheight  height of the map
      */
-    public GameState(int numplayers, int mapwidth, int mapheight) {
+    public GameState(int numplayers, int mapwidth, int mapheight, int numAI) {
         this.gameID = "Game" + new Random().nextInt(10000); // make a random gameId
         players = new ArrayDeque<>(numplayers);
         entities = new Entity[mapwidth][mapheight];
@@ -69,6 +69,11 @@ public class GameState { // everything manager this is the player manager
         for (int i = 0; i < numplayers; i++) {
             players.add(new Player(i));
         }
+        for (int i = 0; i < numAI; i++) {
+            players.add(new Player(i));
+            players.getLast().setAI(true);
+        }
+
         zoomAmount = 32;
         xShift = (1080 / zoomAmount - mapwidth) / 2;
         yShift = (720 / zoomAmount - mapwidth) / 2;
@@ -216,7 +221,7 @@ public class GameState { // everything manager this is the player manager
             System.out.println("Nothing Selected");
         } else if (clicked != null && clicked.getOwnerID() == currentPlayer.getID()) { // select own entity
             selected = clicked;
-            ((InGameHud) scene.gameInstance.hud.currentState).unitSelected(selected);
+            ((InGameHud) scene.gameInstance.hud.currentState).unitSelected(selected, entities);
             System.out.println("Selected entity class: " + selected.getClass().getName());
             System.out.println("Selected entity ownerID: " + selected.getOwnerID());
             System.out.println("Selected entity position: " + selected.getPosition(entities));
@@ -708,7 +713,7 @@ public class GameState { // everything manager this is the player manager
 
 
     public static void main (String [] args) {
-        GameState gameState = new GameState(2, 16, 16);
+        GameState gameState = new GameState(2, 16, 16, 2);
         gameState.init();
 
         GameState gameState1 = new GameState(gameState);
