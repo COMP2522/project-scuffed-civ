@@ -714,6 +714,33 @@ public class GameState { // everything manager this is the player manager
     int enemyHP = 0;
     int enemyDMG = 0;
 
+    int totalEnemies = 0;
+    Position avgEnemyPos = new Position(0, 0);
+
+
+    for (int i = 0; i < entities.length; i++)
+      for (int j = 0; j < entities[0].length; j++) {
+        Entity entity = entities[i][j];
+        if (entity != null) {
+          if (!entity.getOwner().equals(currentPlayer)) {
+            totalEnemies++;
+
+            enemyHP += entity.getHealth();
+
+            avgEnemyPos.setX(avgEnemyPos.getX() + entity.getPosition(entities).getX());
+            avgEnemyPos.setY(avgEnemyPos.getY() + entity.getPosition(entities).getY());
+
+            if (entity instanceof Soldier soldier) {
+              enemyDMG += soldier.getDamage();
+            }
+          }
+        }
+      }
+    if (totalEnemies > 0) {
+      avgEnemyPos.setX(avgEnemyPos.getX() / totalEnemies);
+      avgEnemyPos.setY(avgEnemyPos.getY() / totalEnemies);
+    }
+
     for (int i = 0; i < entities.length; i++)
       for (int j = 0; j < entities[0].length; j++) {
         Entity entity = entities[i][j];
@@ -722,15 +749,14 @@ public class GameState { // everything manager this is the player manager
             playerHP += entity.getHealth();
             if (entity instanceof Soldier soldier) {
               playerDMG += soldier.getDamage() + 151;
-            }
-          } else {
-            enemyHP += entity.getHealth();
-            if (entity instanceof Soldier soldier) {
-              enemyDMG += soldier.getDamage();
+              enemyDMG += Math.abs(avgEnemyPos.getX() - entity.getPosition(entities).getX());
+              enemyDMG += Math.abs(avgEnemyPos.getY() - entity.getPosition(entities).getY());
             }
           }
         }
       }
+
+
     return ((playerHP + playerDMG) - (enemyDMG + enemyHP) +
             currentPlayer.getResources());
 
