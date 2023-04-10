@@ -66,6 +66,6 @@ public class AIManager {
         //gameState.setPlayers(bestGameTurn.getPlayers());
         gameState.currentPlayer = new Player(bestGameTurn.currentPlayer);
 
-        gameState.nextTurn();
+        //gameState.nextTurn();
     }
 }
