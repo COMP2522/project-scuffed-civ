@@ -69,13 +69,13 @@ public class GameState { // everything manager this is the player manager
    */
   public GameState(int numplayers, int mapwidth, int mapheight, int numAI) {
     this.gameID = "Game" + new Random().nextInt(10000); // make a random gameId
-    players = new ArrayDeque<>(numplayers);
+    players = new ArrayDeque<>(numplayers + numAI);
     entities = new Entity[mapwidth][mapheight];
     map = new Map(mapwidth, mapheight);
     for (int i = 0; i < numplayers; i++) {
       players.add(new Player(i));
     }
-    for (int i = 0; i < numAI; i++) {
+    for (int i = numplayers; i < numplayers + numAI; i++) {
       players.add(new Player(i));
       players.getLast().setAI(true);
     }
@@ -105,7 +105,7 @@ public class GameState { // everything manager this is the player manager
   public GameState(GameState state) {
     this.gameID = "Game" + (Integer.parseInt(state.gameID.substring(4)) + 1);
     this.map = new Map(state.map);
-    players = state.getPlayers().clone();
+    players = new ArrayDeque<>(state.players); //problem code
 
     this.currentPlayer = new Player(state.currentPlayer);
     this.entities = new Entity[state.entities.length][state.entities[0].length];
@@ -698,7 +698,7 @@ public class GameState { // everything manager this is the player manager
   /**
    * Gets value.
    *
-   * @return the value
+   * @return the value of the current gameState depending on the currentPlayer
    */
   public int getValue() {
     // int playerHP = 0;
@@ -739,14 +739,5 @@ public class GameState { // everything manager this is the player manager
    */
   public ArrayDeque<Player> getPlayers() {
     return players;
-  }
-
-  /**
-   * Sets players.
-   *
-   * @param players the players
-   */
-  public void setPlayers(ArrayDeque<Player> players) {
-    GameState.players = new ArrayDeque<>(players);
   }
 }

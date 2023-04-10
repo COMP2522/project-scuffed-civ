@@ -10,8 +10,6 @@ import org.bcit.com2522.project.scuffed.client.Player;
  */
 public class AIManager {
 
-  // for each entity on the board, create a gamestate that starts with that entity
-
   /**
    * Start.
    *
@@ -61,16 +59,11 @@ public class AIManager {
     System.out.println("bestGameTurn:");
     bestGameTurn.printEntities();
 
-    // GameState bestGameTurn = GSGenerator.generateGameStateFromEntity(allies,
-    // gameState);
-
     // set gameState to be the best turn.
-    gameState = bestGameTurn;
     gameState.setEntities(bestGameTurn.getEntities());
     gameState.setMap(bestGameTurn.getMap());
-    // gameState.setPlayers(bestGameTurn.getPlayers());
     gameState.currentPlayer = new Player(bestGameTurn.currentPlayer);
 
-    // gameState.nextTurn();
+    gameState.nextTurn();
   }
 }
