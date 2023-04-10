@@ -8,7 +8,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
- * The type New game menu state.
+ * The new game menu state, where the user can create a new game.
  */
 public class NewGameMenuState extends MenuState {
     private InputBox mapWidthInput;
@@ -32,30 +32,28 @@ public class NewGameMenuState extends MenuState {
   /**
    * Instantiates a new New game menu state.
    *
-   * @param scene the scene
    * @param menu  the menu
    */
-  public NewGameMenuState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+  public NewGameMenuState( Menu menu) {
+        super( menu, new ButtonManager(menu.scene));
         setup();
     }
 
     @Override
     public void setup() {
-        mapWidthInput = new InputBox(50, 100, 200, 30, scene, 10, 10000, "16");
-        mapHeightInput = new InputBox(50, 150, 200, 30, scene, 10, 10000, "16");
-        numPlayersInput = new InputBox(50, 200, 200, 30, scene, 1, 10000, "2");
-        numAIInput = new InputBox(50, 250, 200, 30, scene, 0, 10000, "0");
+        mapWidthInput = new InputBox(50, 100, 200, 30,  10, 10000, "16");
+        mapHeightInput = new InputBox(50, 150, 200, 30,  10, 10000, "16");
+        numPlayersInput = new InputBox(50, 200, 200, 30,  1, 10000, "2");
+        numAIInput = new InputBox(50, 250, 200, 30,  0, 10000, "0");
 
-        mapWidthLabel = new Label(50, 95, "Map Width:", 14, scene);
-        mapHeightLabel = new Label(50, 145, "Map Height:", 14, scene);
-        numPlayersLabel = new Label(50, 195, "Number of Players:", 14, scene);
-        numAILabel = new Label(50, 245, "Number of AI Players:", 14, scene);
+        mapWidthLabel = new Label(50, 95, "Map Width:", 14);
+        mapHeightLabel = new Label(50, 145, "Map Height:", 14);
+        numPlayersLabel = new Label(50, 195, "Number of Players:", 14);
+        numAILabel = new Label(50, 245, "Number of AI Players:", 14);
+        errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14);
 
-        errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14, scene);
-
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
-        Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.scene);
+        Button startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", menu.scene);
 
         buttonManager.add(backButton);
         buttonManager.add(startButton);
@@ -63,23 +61,23 @@ public class NewGameMenuState extends MenuState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new MainMenuMenuState(scene, menu));
+        menu.setState(new MainMenuMenuState( menu));
     }
 
     @Override
-    public void draw() {
-        super.draw();
-        mapWidthInput.draw();
-        mapHeightInput.draw();
-        numPlayersInput.draw();
-        mapWidthLabel.draw();
-        mapHeightLabel.draw();
-        numPlayersLabel.draw();
-        numAIInput.draw();
-        numAILabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        mapWidthInput.draw(scene);
+        mapHeightInput.draw(scene);
+        numPlayersInput.draw(scene);
+        mapWidthLabel.draw(scene);
+        mapHeightLabel.draw(scene);
+        numPlayersLabel.draw(scene);
+        numAIInput.draw(scene);
+        numAIInput.draw(scene);
 
         if(showError) {
-            errorMessageLabel.draw();
+            errorMessageLabel.draw(scene);
         }
         drawHollowGrid(mapWidthInput.getIntValue(), mapHeightInput.getIntValue(), 400, 100, 800, 500);
     }
@@ -156,9 +154,9 @@ public class NewGameMenuState extends MenuState {
         int numPlayers = numPlayersInput.getIntValue();
         int numAI = numAIInput.getIntValue();
         //if (mapWidth >= 10 && mapWidth <= 100 && mapHeight >= 10 && mapHeight <= 100 && numPlayers >= 1 && numPlayers <= 100) {
-            scene.initGame(numPlayers, mapWidth, mapHeight, numAI);
-            menu.setState(new MainMenuMenuState(scene, menu));
-            scene.inGame = true;
+            menu.scene.initGame(numPlayers, mapWidth, mapHeight, numAI);
+            menu.setState(new MainMenuMenuState( menu));
+            menu.scene.inGame = true;
             showError = false;
         //} else {
             showError = true;
@@ -180,15 +178,15 @@ public class NewGameMenuState extends MenuState {
         float cellHeight = (y2 - y1) / rows;
 
         float strokeWidth = (float) (Math.min(cellWidth, cellHeight) / 10.0);
-        scene.strokeWeight(strokeWidth);
-        scene.stroke(0);
-        scene.noFill();
+        menu.scene.strokeWeight(strokeWidth);
+        menu.scene.stroke(0);
+        menu.scene.noFill();
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 float xPos = x1 + (j * cellWidth);
                 float yPos = y1 + (i * cellHeight);
-                scene.rect(xPos, yPos, cellWidth, cellHeight);
+                menu.scene.rect(xPos, yPos, cellWidth, cellHeight);
             }
         }
     }

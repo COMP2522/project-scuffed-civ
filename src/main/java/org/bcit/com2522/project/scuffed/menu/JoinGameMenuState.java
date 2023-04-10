@@ -8,7 +8,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
- * The type Join game menu state.
+ * The Join game menu state. This is the menu that the user sees when they want to join a game.
  */
 public class JoinGameMenuState extends MenuState {
 
@@ -24,29 +24,28 @@ public class JoinGameMenuState extends MenuState {
   /**
    * Instantiates a new Join game menu state.
    *
-   * @param scene the scene
    * @param menu  the menu
    */
-  public JoinGameMenuState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+  public JoinGameMenuState( Menu menu) {
+        super(menu, new ButtonManager(menu.scene));
         setup();
     }
 
     @Override
     public void setup() {
         // Create buttons
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
-        Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join", scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.scene);
+        Button joinButton = new Button(50, 600, 250, 650, () -> onJoinClicked(), "Join", menu.scene);
         // Create input box for host IP, port, and username
-        portInput = new InputBox(50, 50, 200, 30, scene, 1, 60000, "8080");
-        hostIPInput = new InputBox(50, 100, 250, 30, scene, "", "string");
-        usernameInput = new InputBox(50, 150, 250, 30, scene, "", "string");
+        portInput = new InputBox(50, 50, 200, 30,  1, 60000, "8080");
+        hostIPInput = new InputBox(50, 100, 250, 30,  "", "string");
+        usernameInput = new InputBox(50, 150, 250, 30,  "", "string");
 
         // Add labels for the input boxes
-        portInputLabel = new Label(50, 45, "Port:", 14, scene);
-        hostIPInputLabel = new Label(50, 95, "Host IP:", 14, scene);
-        usernameInputLabel = new Label(50, 145, "Username:", 14, scene);
-        errorMessageLabel = new Label(50, 250, "Invalid input!", 14, scene);
+        portInputLabel = new Label(50, 45, "Port:", 14);
+        hostIPInputLabel = new Label(50, 95, "Host IP:", 14);
+        usernameInputLabel = new Label(50, 145, "Username:", 14);
+        errorMessageLabel = new Label(50, 250, "Invalid input!", 14);
 
         // Add the buttons to the button manager
         buttonManager.add(backButton);
@@ -55,17 +54,17 @@ public class JoinGameMenuState extends MenuState {
 
 
     @Override
-    public void draw() {
-        super.draw();
-        portInput.draw();
-        portInputLabel.draw();
-        hostIPInput.draw();
-        hostIPInputLabel.draw();
-        usernameInput.draw();
-        usernameInputLabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        portInput.draw(scene);
+        portInputLabel.draw(scene);
+        hostIPInput.draw(scene);
+        hostIPInputLabel.draw(scene);
+        usernameInput.draw(scene);
+        usernameInputLabel.draw(scene);
 
         if (showError) {
-            errorMessageLabel.draw();
+            errorMessageLabel.draw(scene);
         }
     }
 
@@ -121,7 +120,7 @@ public class JoinGameMenuState extends MenuState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new OnlineMenuState(scene, menu));
+        menu.setState(new OnlineMenuState( menu));
     }
 
   /**
@@ -135,7 +134,7 @@ public class JoinGameMenuState extends MenuState {
         // Check if the port, host IP, and username are valid
         if (port >= 1 && port <= 60000 && hostIP != null && username != null && !username.equals("")) {
 
-            scene.joinGame(hostIP, port, username);
+            menu.scene.joinGame(hostIP, port, username);
             showError = false;
 
         } else {

@@ -261,7 +261,7 @@ public class InGameHud extends HudState {
     drawControls(scene);
     drawPlayerNum(scene);
     drawPlayerResources(scene);
-    buttonManager.draw();
+    buttonManager.draw(scene);
   }
 
   /**

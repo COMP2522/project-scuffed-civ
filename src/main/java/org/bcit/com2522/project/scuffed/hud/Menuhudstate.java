@@ -185,6 +185,6 @@ public class Menuhudstate extends HudState {
   @Override
   public void draw(Window scene) {
     gameMenuBackground(scene);
-    buttonManager.draw();
+    buttonManager.draw(scene);
   }
 }

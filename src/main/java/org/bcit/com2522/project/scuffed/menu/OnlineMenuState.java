@@ -5,25 +5,24 @@ import org.bcit.com2522.project.scuffed.uiComponents.Button;
 import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
- * The type Online menu state.
+ * The Online menu state where a player chooses to host or join a game.
  */
 public class OnlineMenuState extends MenuState {
 
   /**
    * Instantiates a new Online menu state.
    *
-   * @param scene the scene
    * @param menu  the menu
    */
-  public OnlineMenuState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+  public OnlineMenuState( Menu menu) {
+        super( menu, new ButtonManager(menu.scene));
         setup();
     }
     @Override
     public void setup() {
-        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
-        Button hostButton = new Button(50, 200, 250, 250, () -> onHostClicked(), "Host Game", scene);
-        Button joinButton = new Button(50, 300, 250, 350, () -> onJoinClicked(), "Join Game", scene);
+        Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.scene);
+        Button hostButton = new Button(50, 200, 250, 250, () -> onHostClicked(), "Host Game", menu.scene);
+        Button joinButton = new Button(50, 300, 250, 350, () -> onJoinClicked(), "Join Game", menu.scene);
 
         buttonManager.add(backButton);
         buttonManager.add(hostButton);
@@ -32,7 +31,7 @@ public class OnlineMenuState extends MenuState {
 
     public void onBackClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new MainMenuMenuState(scene, menu));
+        menu.setState(new MainMenuMenuState( menu));
     }
 
   /**
@@ -40,7 +39,7 @@ public class OnlineMenuState extends MenuState {
    */
   public void onHostClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new HostGameMenuState(scene, menu));
+        menu.setState(new HostGameMenuState( menu));
     }
 
   /**
@@ -48,6 +47,6 @@ public class OnlineMenuState extends MenuState {
    */
   public void onJoinClicked() {
         // Change the menu state to the New Game state
-        menu.setState(new JoinGameMenuState(scene, menu));
+        menu.setState(new JoinGameMenuState( menu));
     }
 }

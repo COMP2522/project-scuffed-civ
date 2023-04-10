@@ -4,7 +4,7 @@ import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
 
 /**
- * The type Input box.
+ * An input box that can be drawn on the screen.
  */
 public class InputBox {
     private int x, y, width, height;
@@ -21,22 +21,10 @@ public class InputBox {
    * @param y        the y
    * @param width    the width
    * @param height   the height
-   * @param scene    the scene
    * @param minValue the min value
    * @param maxValue the max value
    */
-  public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.text = "";
-        this.scene = scene;
-        this.selected = false;
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        this.type = "int";
-    }
+
 
   /**
    * Instantiates a new Input box.
@@ -45,18 +33,16 @@ public class InputBox {
    * @param y           the y
    * @param width       the width
    * @param height      the height
-   * @param scene       the scene
    * @param minValue    the min value
    * @param maxValue    the max value
    * @param defaultText the default text
    */
-  public InputBox(int x, int y, int width, int height, Window scene, int minValue, int maxValue, String defaultText) {
+  public InputBox(int x, int y, int width, int height, int minValue, int maxValue, String defaultText) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -70,39 +56,15 @@ public class InputBox {
    * @param y           the y
    * @param width       the width
    * @param height      the height
-   * @param scene       the scene
-   * @param defaultText the default text
-   */
-  public InputBox(int x, int y, int width, int height, Window scene, String defaultText) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.text = defaultText;
-        this.scene = scene;
-        this.selected = false;
-        this.minValue = Integer.MIN_VALUE;
-        this.maxValue = Integer.MAX_VALUE;
-    }
-
-  /**
-   * Instantiates a new Input box.
-   *
-   * @param x           the x
-   * @param y           the y
-   * @param width       the width
-   * @param height      the height
-   * @param scene       the scene
    * @param defaultText the default text
    * @param type        the type
    */
-  public InputBox(int x, int y, int width, int height, Window scene, String defaultText, String type) {
+  public InputBox(int x, int y, int width, int height, String defaultText, String type) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.text = defaultText;
-        this.scene = scene;
         this.selected = false;
         this.minValue = Integer.MIN_VALUE;
         this.maxValue = Integer.MAX_VALUE;
@@ -112,7 +74,7 @@ public class InputBox {
   /**
    * Draw.
    */
-  public void draw() {
+  public void draw(Window scene) {
 
         scene.pushStyle();
         scene.stroke(0);

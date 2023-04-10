@@ -22,36 +22,36 @@ public class ServerLobbyMenuState extends MenuState {
   /**
    * Instantiates a new Server lobby menu state.
    *
-   * @param scene the scene
    * @param menu  the menu
    */
-  public ServerLobbyMenuState(Window scene, Menu menu) {
-        super(scene, menu, new ButtonManager(scene));
+  public ServerLobbyMenuState( Menu menu) {
+        super( menu, new ButtonManager(menu.scene));
         setup();
     }
 
     @Override
     public void setup() {
-        titleLabel = new Label(50, 50, "Server Lobby", 20, scene);
-        playersLabel = new Label(50, 100, "Players Connected: ", 16, scene);
+        titleLabel = new Label(50, 50, "Server Lobby", 20);
+        playersLabel = new Label(50, 100, "Players Connected: ", 16);
 
-        backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", scene);
-        startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start", scene);
+        backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back",menu.scene);
+        startButton = new Button(50, 600, 250, 650, () -> onStartClicked(), "start",menu.scene);
+        startButton.setClickable(false);
 
         buttonManager.add(backButton);
         buttonManager.add(startButton);
     }
 
     @Override
-    public void draw() {
-        super.draw();
-        titleLabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        titleLabel.draw(scene);
         playersLabel.setText("Players Currently Connected: " + scene.getConnectedPlayers().size());
-        playersLabel.draw();
+        playersLabel.draw(scene);
     }
 
     public void onBackClicked() {
-        menu.setState(new HostGameMenuState(scene, menu));
+        menu.setState(new HostGameMenuState( menu));
     }
 
   /**
@@ -59,6 +59,6 @@ public class ServerLobbyMenuState extends MenuState {
    */
   public void onStartClicked() {
         // Start the game
-        scene.inGame = true;
+        menu.scene.inGame = true;
     }
 }

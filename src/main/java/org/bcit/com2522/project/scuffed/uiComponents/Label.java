@@ -3,7 +3,7 @@ package org.bcit.com2522.project.scuffed.uiComponents;
 import org.bcit.com2522.project.scuffed.client.Window;
 
 /**
- * The type Label.
+ * A label that can be drawn on the screen.
  */
 public class Label{
     private int x, y;
@@ -80,28 +80,9 @@ public class Label{
         this.textSize = textSize;
     }
 
-  /**
-   * Gets scene.
-   *
-   * @return the scene
-   */
-  public Window getScene() {
-        return scene;
-    }
-
-  /**
-   * Sets scene.
-   *
-   * @param scene the scene
-   */
-  public void setScene(Window scene) {
-        this.scene = scene;
-    }
-
     private String text;
     private int textSize;
 
-    private Window scene;
 
   /**
    * Instantiates a new Label.
@@ -110,20 +91,18 @@ public class Label{
    * @param y        the y
    * @param text     the text
    * @param textSize the text size
-   * @param scene    the scene
    */
-  public Label(int x, int y, String text, int textSize, Window scene) {
+  public Label(int x, int y, String text, int textSize) {
         this.x = x;
         this.y = y;
         this.text = text;
         this.textSize = textSize;
-        this.scene = scene;
     }
 
   /**
    * Draw.
    */
-  public void draw() {
+  public void draw(Window scene) {
         scene.pushStyle();
         scene.fill(255, 255, 255);
         scene.textSize(textSize);

@@ -5,7 +5,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Button;
 import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
- * The type Menu state. This class is the base class for all menu states. It contains a button manager a reference to the scene and menu.
+ * The Menu state. This class is the superclass for all menu states. It contains a button manager a reference to the scene and menu.
  * TODO: Remove the scene reference from this and all subclasses.
  */
 public abstract class MenuState {
@@ -13,10 +13,7 @@ public abstract class MenuState {
    * The Button manager.
    */
   protected ButtonManager buttonManager;
-  /**
-   * The Scene.
-   */
-  protected Window scene;
+
   /**
    * The Menu.
    */
@@ -25,12 +22,10 @@ public abstract class MenuState {
   /**
    * Instantiates a new Menu state.
    *
-   * @param scene         the scene
    * @param menu          the menu
    * @param buttonManager the button manager
    */
-  public MenuState(Window scene, Menu menu, ButtonManager buttonManager) {
-        this.scene = scene;
+  public MenuState( Menu menu, ButtonManager buttonManager) {
         this.buttonManager = buttonManager;
         this.menu = menu;
     }
@@ -38,8 +33,8 @@ public abstract class MenuState {
   /**
    * Draw.
    */
-  public void draw() {
-        buttonManager.draw();
+  public void draw(Window scene) {
+        buttonManager.draw(scene);
     }
 
   /**

@@ -22,7 +22,7 @@ public class DebugMenu {
   /**
    * Draw.
    */
-  public void draw() {
+  public void draw(Window scene) {
     scene.fill(255);
     scene.rect(0, 0, 150, 100);
     scene.fill(0);
