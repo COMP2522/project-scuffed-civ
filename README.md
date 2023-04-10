@@ -179,7 +179,20 @@ You can quit the game by clicking on the "Exit" button in the menu screen.
 
 # Contributors
 ### 1. Cameron Walford
+I worked on the saving/loading of the game, the menu and all of the menu states, and the game server, along
+with other miscellaneous code throughout the project.
 
+Saving/Loading: I made functions toJSONObject and fromJSONObject in all of the relevant GameState classes,
+and these are all called in GameState's own respective JSONObject functions. This provided a convenient way
+to serialize the entire gamestate so it could be saved to a .json file or sent back and forth from client
+and server.
+
+Menu: I worked on a series of MenuStates that the Menu object held by Window could be set to. This was meant to be
+a fairly modular way to work with the menu, so that it would be easy to add new states as time went on.
+
+Game Server: This is a server that works only if you're on the same wifi network as the host. It uses multithreading
+to handle each client connected. When a the current player ends their turn, the server updates its own gameState and 
+broadcasts the updated gameState to all other clients.
 
 ### 2. Keagan Purtell
 
