@@ -189,7 +189,14 @@ of the project was creating an enemy AI that could play against the player. Unfo
 this code fully work.
 
 ### 3. Emma Merideth-Black
-
+I worked on the logic for the User Interface, as well as designing the main menu. I created a clickable
+class that runs when clicked, and from there developed easy to use methods that allowed for easy
+creation of UI elements that are fully interactive, as well as being easily customizable, in order to
+make development of the UI as easy as possible. I also designed the main menu, creating logic for
+the buttons, and creating the images and text that are displayed on the screen, as well as previewing
+map creation. The particular classes I worked in were Clickable, ClickableManager, Button, ButtonManager, 
+Various Menu state classes, and the Window Class. Also, please note, due to weird git issues, my commits
+are spread across the Testsnake and emmamb accounts.
 
 ### 4. Brendan Doyle
 I worked on the UI that you see while playing the game. Gathering the spites and images needed for

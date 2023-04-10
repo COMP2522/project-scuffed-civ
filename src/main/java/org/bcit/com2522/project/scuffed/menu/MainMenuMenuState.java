@@ -5,7 +5,6 @@ import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 import java.io.File;
 import org.bcit.com2522.project.scuffed.uicomponents.Button;
 import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
-import org.bcit.com2522.project.scuffed.uicomponents.GraphicManager;
 import org.bcit.com2522.project.scuffed.uicomponents.Label;
 import processing.core.PConstants;
 
@@ -14,10 +13,7 @@ import processing.core.PConstants;
  */
 public class MainMenuMenuState extends MenuState implements PConstants {
 
-  /**
-   * The Graphic manager.
-   */
-  GraphicManager graphicManager;
+
 
   private Label errorMessage;
 
@@ -28,7 +24,6 @@ public class MainMenuMenuState extends MenuState implements PConstants {
    */
   public MainMenuMenuState(Menu menu) {
     super(menu, new ButtonManager(menu.scene));
-    graphicManager = menu.scene.getGraphicManager();
 
     setup();
   }

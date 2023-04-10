@@ -11,7 +11,6 @@ import org.bcit.com2522.project.scuffed.menu.NewGameMenuState;
 import org.bcit.com2522.project.scuffed.server.GameServer;
 import org.bcit.com2522.project.scuffed.uicomponents.Clickable;
 import org.bcit.com2522.project.scuffed.uicomponents.ClickableManager;
-import org.bcit.com2522.project.scuffed.uicomponents.GraphicManager;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -55,10 +54,6 @@ public class Window extends PApplet {
    * The Clickable manager.
    */
   public ClickableManager clickableManager;
-  /**
-   * The Graphic manager.
-   */
-  public GraphicManager graphicManager;
 
   /**
    * Main function.
@@ -94,7 +89,6 @@ public class Window extends PApplet {
   public void init() {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
-    graphicManager = new GraphicManager(this);
     surface.setTitle("Scuffed - Main Menu");
     menu = new Menu(this);
   }
@@ -216,7 +210,6 @@ public class Window extends PApplet {
     if (debugMode) {
       debugMenu.draw(this);
     }
-    graphicManager.drawGraphics();
   }
 
   /**
@@ -237,21 +230,7 @@ public class Window extends PApplet {
     clickableManager.remove(clickable);
   }
 
-  /**
-   * Gets graphic manager.
-   *
-   * @return the graphic manager
-   */
-  public GraphicManager getGraphicManager() {
-    return graphicManager;
-  }
 
-  /**
-   * Wipe graphics.
-   */
-  public void wipeGraphics() {
-    graphicManager.wipeGraphics();
-  }
 
   /**
    * Gets current player.

@@ -4,49 +4,51 @@ import java.util.ArrayList;
 import org.bcit.com2522.project.scuffed.client.Window;
 
 /**
- * The type Button manager.
+ * Represents a ButtonManager that handles the addition, removal, drawing, and
+ * management of multiple Button objects.
  */
 public class ButtonManager {
   /**
-   * The Buttons.
+   * The collection of Button objects.
    */
   public ArrayList<Button> buttons = new ArrayList<Button>();
+
   /**
-   * The Scene.
+   * The Window scene where the buttons are displayed.
    */
   Window scene;
 
   /**
-   * Instantiates a new Button manager.
+   * Constructs a new ButtonManager associated with the given Window scene.
    *
-   * @param scene the scene
+   * @param scene the Window scene where the buttons will be displayed
    */
   public ButtonManager(Window scene) {
     this.scene = scene;
   }
 
   /**
-   * Add.
+   * Adds a new Button to the ButtonManager.
    *
-   * @param button the button
+   * @param button the Button to add
    */
   public void add(Button button) {
     buttons.add(button);
   }
 
   /**
-   * Remove.
+   * Removes a specific Button from the ButtonManager.
    *
-   * @param button the button
+   * @param button the Button to remove
    */
   public void remove(Button button) {
     buttons.remove(button);
   }
 
   /**
-   * Draw.
+   * Draws all buttons managed by the ButtonManager on the specified Window scene.
    *
-   * @param scene the scene
+   * @param scene the Window scene where the buttons will be drawn
    */
   public void draw(Window scene) {
     for (Button button : buttons) {
@@ -55,7 +57,7 @@ public class ButtonManager {
   }
 
   /**
-   * Wipe.
+   * Deletes all buttons managed by the ButtonManager.
    */
   public void wipe() {
     buttons.clear();
