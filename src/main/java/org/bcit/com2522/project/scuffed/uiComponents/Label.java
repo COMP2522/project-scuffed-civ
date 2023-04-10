@@ -3,7 +3,7 @@ package org.bcit.com2522.project.scuffed.uiComponents;
 import org.bcit.com2522.project.scuffed.client.Window;
 
 /**
- * The type Label.
+ * A label that can be drawn on the screen.
  */
 public class Label{
     private int x, y;

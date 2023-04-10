@@ -8,7 +8,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
- * The type Join game menu state.
+ * The Join game menu state. This is the menu that the user sees when they want to join a game.
  */
 public class JoinGameMenuState extends MenuState {
 

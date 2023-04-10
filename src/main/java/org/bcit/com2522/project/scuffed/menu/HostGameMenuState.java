@@ -8,7 +8,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
- * The type Host game menu state.
+ * The host game menu state. This is the menu that allows the user to host a game.
  */
 public class HostGameMenuState extends MenuState {
     private InputBox mapWidthInput;

@@ -12,7 +12,7 @@ import java.io.File;
 import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 /**
- * The type Main menu menu state.
+ * The main menu menu state. This is the first menu that the player sees when they start the game.
  */
 public class MainMenuMenuState extends MenuState implements PConstants {
 

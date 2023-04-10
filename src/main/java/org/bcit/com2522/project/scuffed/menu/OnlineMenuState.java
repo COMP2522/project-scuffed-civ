@@ -5,7 +5,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Button;
 import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
- * The type Online menu state.
+ * The Online menu state where a player chooses to host or join a game.
  */
 public class OnlineMenuState extends MenuState {
 

@@ -4,7 +4,7 @@ import org.bcit.com2522.project.scuffed.client.Window;
 import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
- * The type Loading menu state.
+ * The Loading menu state. This is a menu state that is used to display a loading screen.
  */
 public class LoadingMenuState extends MenuState {
 

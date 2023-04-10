@@ -8,7 +8,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
- * The type New game menu state.
+ * The new game menu state, where the user can create a new game.
  */
 public class NewGameMenuState extends MenuState {
     private InputBox mapWidthInput;
