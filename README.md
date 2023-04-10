@@ -182,7 +182,11 @@ You can quit the game by clicking on the "Exit" button in the menu screen.
 
 
 ### 2. Keagan Purtell
-
+I worked on most of the core gameplay for our. This includes creating the logic behind each type of entity.
+I worked on the ability to create new Entities, select them, move them, build other entities with them, collect 
+resources with them and attack with Soldiers. I also created the logic behind the map generation. My personal part
+of the project was creating an enemy AI that could play against the player. Unfortunately, I have been unable to make
+this code fully work.
 
 ### 3. Emma Merideth-Black
 
