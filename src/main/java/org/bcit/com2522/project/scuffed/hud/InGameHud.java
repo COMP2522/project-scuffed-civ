@@ -1,8 +1,13 @@
 package org.bcit.com2522.project.scuffed.hud;
 
-import org.bcit.com2522.project.scuffed.client.*;
-import org.bcit.com2522.project.scuffed.uicomponents.Button;
-import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.client.Building;
+import org.bcit.com2522.project.scuffed.client.Entity;
+import org.bcit.com2522.project.scuffed.client.Soldier;
+import org.bcit.com2522.project.scuffed.client.Unit;
+import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.client.Worker;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 import processing.core.PImage;
 
 /**
@@ -221,12 +226,12 @@ public class InGameHud extends HudState {
    */
   private Button createMenuButton() {
     return new Button(
-            centerX - MENU_BUTTON_X, centerY - MENU_BUTTON_Y,
-            centerX - MENU_BUTTON_X2, centerY - MENU_BUTTON_Y2,
-            () -> {
-              hud.setState(new Menuhudstate(hud));
-            }, "Menu", panel, panel, panel, hud.scene,
-            rivetPanel, true, BUTTON_FONT_SIZE, BUTTON_FONT_X, BUTTON_FONT_Y);
+        centerX - MENU_BUTTON_X, centerY - MENU_BUTTON_Y,
+        centerX - MENU_BUTTON_X2, centerY - MENU_BUTTON_Y2,
+        () -> {
+          hud.setState(new Menuhudstate(hud));
+        }, "Menu", panel, panel, panel, hud.scene,
+        rivetPanel, true, BUTTON_FONT_SIZE, BUTTON_FONT_X, BUTTON_FONT_Y);
   }
 
   /**
@@ -236,17 +241,18 @@ public class InGameHud extends HudState {
    */
   private Button createEndTurnButton() {
     return new Button(
-            centerX + MENU_BUTTON_X2, centerY - MENU_BUTTON_Y,
-            centerX + MENU_BUTTON_X, centerY - MENU_BUTTON_Y2,
-            () -> {
-              if (hud.scene.gameInstance.isOnline && hud.scene.gameInstance.clientID != hud.scene.getCurrentPlayer().getPlayerNum()) {
-                System.out.println("Not your turn");
-              } else {
-                hud.scene.gameInstance.nextTurn();
-                //System.out.println("ending turn - inGameHud");
-              }
-            }, "End Turn", panel, panel, panel, hud.scene,
-            rivetPanel, true, BUTTON_FONT_SIZE, END_BUTTON_FONT_X, BUTTON_FONT_Y);
+        centerX + MENU_BUTTON_X2, centerY - MENU_BUTTON_Y,
+        centerX + MENU_BUTTON_X, centerY - MENU_BUTTON_Y2,
+        () -> {
+          if (hud.scene.gameInstance.isOnline
+              && hud.scene.gameInstance.clientID != hud.scene.getCurrentPlayer().getPlayerNum()) {
+            System.out.println("Not your turn");
+          } else {
+            hud.scene.gameInstance.nextTurn();
+            //System.out.println("ending turn - inGameHud");
+          }
+        }, "End Turn", panel, panel, panel, hud.scene,
+        rivetPanel, true, BUTTON_FONT_SIZE, END_BUTTON_FONT_X, BUTTON_FONT_Y);
   }
 
   /**
@@ -274,15 +280,15 @@ public class InGameHud extends HudState {
    */
   private void drawUiPanels(Window scene) {
     scene.image(panel, centerX - PLAYER_PANEL_X1, centerY - PLAYER_PANEL_Y1,
-            PLAYER_PANEL_X2, PLAYER_PANEL_Y2);  // Player selected name box, top middle
+        PLAYER_PANEL_X2, PLAYER_PANEL_Y2);  // Player selected name box, top middle
     scene.image(panel, centerX - SELECTED_PANEL_X1, centerY + SELECTED_PANEL_Y1,
-            BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT); //  selected char box, bottom left
+        BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT); //  selected char box, bottom left
     scene.image(panel, centerX + SELECTED_BUTTONS_PANEL_X1, // player buttons bottom right
-            centerY + SELECTED_BUTTONS_PANEL_Y1, BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT);
+        centerY + SELECTED_BUTTONS_PANEL_Y1, BOTTOM_PANEL_WIDTH, BOTTOM_PANEL_HEIGHT);
     scene.image(panel, centerX - RESOURCE_PANEL_X1, centerY - RESOURCE_PANEL_Y1,
-            RESOURCE_PANEL_WIDTH, RESOURCE_PANEL_HEIGHT); // player resources middle left
+        RESOURCE_PANEL_WIDTH, RESOURCE_PANEL_HEIGHT); // player resources middle left
     scene.image(panel, centerX + KEYBINDS_PANEL_X1, centerY - KEYBINDS_PANEL_Y1,
-            KEYBINDS_PANEL_WIDTH, KEYBINDS_PANEL_HEIGHT); // player stats middle right
+        KEYBINDS_PANEL_WIDTH, KEYBINDS_PANEL_HEIGHT); // player stats middle right
   }
 
   /**
@@ -292,19 +298,19 @@ public class InGameHud extends HudState {
    */
   private void drawIcons(Window scene) {
     scene.image(arrowKeysImg, centerX + STAT_ICON_X1, centerY - ZOOM_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // arrow keys icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // arrow keys icon
     scene.image(iconWasd, centerX + STAT_ICON_X1, centerY - WASD_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // WASD icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // WASD icon
     scene.image(iconB, centerX + STAT_ICON_X1, centerY - B_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // B icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // B icon
     scene.image(iconC, centerX + STAT_ICON_X1, centerY - C_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // C icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // C icon
     scene.image(iconF, centerX + STAT_ICON_X1, centerY - F_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // F icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // F icon
     scene.image(iconM, centerX + STAT_ICON_X1, centerY - M_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // M icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // M icon
     scene.image(iconX, centerX + STAT_ICON_X1, centerY + X_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // X icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // X icon
   }
 
   /**
@@ -315,7 +321,7 @@ public class InGameHud extends HudState {
   private void drawPlayerNum(Window scene) {
     scene.textFont(fontMedium);
     scene.text("Player " + (scene.gameInstance.gameState.currentPlayer.getPlayerNum() + 1),
-            centerX - PLAYER_NUM_X1, centerY - PLAYER_NUM_Y1);
+        centerX - PLAYER_NUM_X1, centerY - PLAYER_NUM_Y1);
   }
 
   /**
@@ -325,12 +331,15 @@ public class InGameHud extends HudState {
    */
   private void drawPlayerResources(Window scene) {
     scene.textFont(fontMedium);
+
     scene.fill(255, 255, 255);
-    scene.text(": " + (scene.gameInstance.gameState.currentPlayer.getResources()), centerX - PLAYER_RESOURCES_X1,
-            centerY - PLAYER_RESOURCES_Y1); //print player resources
+    scene.text(": " + (scene.gameInstance.gameState.currentPlayer.getResources()),
+        centerX - PLAYER_RESOURCES_X1,
+        centerY - PLAYER_RESOURCES_Y1); //print player resources
+
     scene.text(": "
-            + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity)
-            .getRemainMove() : 0), centerX - PLAYER_RESOURCES_X1, centerY + PLAYER_MOVE_Y1);
+        + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity)
+        .getRemainMove() : 0), centerX - PLAYER_RESOURCES_X1, centerY + PLAYER_MOVE_Y1);
   }
 
   /**
@@ -340,17 +349,17 @@ public class InGameHud extends HudState {
    */
   private void drawPlayerInfo(Window scene) {
     scene.image(resourcesImg, centerX - INFO_ICON_X1, centerY - COLLECTED_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // resources icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // resources icon
     scene.image(healthImg, centerX - INFO_ICON_X1, centerY - HEALTH_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // health icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // health icon
     scene.image(attackImg, centerX - INFO_ICON_X1, centerY - DAMAGE_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // attack icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // attack icon
     scene.image(rangeImg, centerX - INFO_ICON_X1, centerY - RANGE_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // range icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // range icon
     scene.image(moveImg, centerX - INFO_ICON_X1, centerY + MOVEMENT_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // move icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // move icon
     scene.image(coinImg, centerX - INFO_ICON_X1, centerY + COST_ICON_Y1,
-            ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // coin icon
+        ICON_WIDTHHEIGHT, ICON_WIDTHHEIGHT);  // coin icon
 
 
   }
@@ -363,7 +372,7 @@ public class InGameHud extends HudState {
   private void drawSelectedInfo(Window scene) {
     if (selected) {
       hud.scene.image(selectedHighRes, centerX - SELECTED_IMG_X1,
-              centerY + SELECTED_IMG_Y1, SELECTED_IMG_WIDTH, SELECTED_IMG_HEIGHT);
+          centerY + SELECTED_IMG_Y1, SELECTED_IMG_WIDTH, SELECTED_IMG_HEIGHT);
       scene.textFont(fontSmall);
       scene.text(selectedName, centerX - SELECTED_NAME_X, centerY + SELECTED_NAME_Y);
       scene.textFont(fontMedium);
@@ -492,14 +501,14 @@ public class InGameHud extends HudState {
    */
   private Button createBuildBuildingButton(Entity[][] entities) {
     return new Button(
-            centerX + BUILD_BUILDING_BUTTON_X1, centerY + BUILD_BUILDING_BUTTON_Y1,
-            centerX + BUILD_BUILDING_BUTTON_X2, centerY + BUILD_BUILDING_BUTTON_Y2,
-            () -> {
-              if (selectedEntity instanceof Worker) {
-                ((Worker) selectedEntity).buildBuilding(entities);
-              }
-            },
-            " ", buildingButtonIcon, buildingButtonIcon, buildingButtonIcon, hud.scene);
+        centerX + BUILD_BUILDING_BUTTON_X1, centerY + BUILD_BUILDING_BUTTON_Y1,
+        centerX + BUILD_BUILDING_BUTTON_X2, centerY + BUILD_BUILDING_BUTTON_Y2,
+        () -> {
+          if (selectedEntity instanceof Worker) {
+            ((Worker) selectedEntity).buildBuilding(entities);
+          }
+        },
+        " ", buildingButtonIcon, buildingButtonIcon, buildingButtonIcon, hud.scene);
   }
 
   /**
@@ -510,14 +519,14 @@ public class InGameHud extends HudState {
    */
   private Button createBuildSoldierButton(Entity[][] entities) {
     return new Button(
-            centerX + BUILD_SOLDIER_BUTTON_X1, centerY + BUILD_SOLDIER_BUTTON_Y1,
-            centerX + BUILD_SOLDIER_BUTTON_X2, centerY + BUILD_SOLDIER_BUTTON_Y2,
-            () -> {
-              if (selectedEntity instanceof Building) {
-                ((Building) selectedEntity).buildSoldier(entities, 1, 1, 1, 1);
-              }
-            },
-            " ", gunButtonIcon, gunButtonIcon, gunButtonIcon, hud.scene);
+        centerX + BUILD_SOLDIER_BUTTON_X1, centerY + BUILD_SOLDIER_BUTTON_Y1,
+        centerX + BUILD_SOLDIER_BUTTON_X2, centerY + BUILD_SOLDIER_BUTTON_Y2,
+        () -> {
+          if (selectedEntity instanceof Building) {
+            ((Building) selectedEntity).buildSoldier(entities, 1, 1, 1, 1);
+          }
+        },
+        " ", gunButtonIcon, gunButtonIcon, gunButtonIcon, hud.scene);
   }
 
   /**
@@ -528,14 +537,14 @@ public class InGameHud extends HudState {
    */
   private Button createBuildWorkerButton(Entity[][] entities) {
     return new Button(
-            centerX + BUILD_WORKER_BUTTON_X1, centerY + BUILD_WORKER_BUTTON_Y1,
-            centerX + BUILD_WORKER_BUTTON_X2, centerY + BUILD_WORKER_BUTTON_Y2,
-            () -> {
-              if (selectedEntity instanceof Building) {
-                ((Building) selectedEntity).buildWorker(entities);
-              }
-            },
-            " ", workerButtonIcon, workerButtonIcon, workerButtonIcon, hud.scene);
+        centerX + BUILD_WORKER_BUTTON_X1, centerY + BUILD_WORKER_BUTTON_Y1,
+        centerX + BUILD_WORKER_BUTTON_X2, centerY + BUILD_WORKER_BUTTON_Y2,
+        () -> {
+          if (selectedEntity instanceof Building) {
+            ((Building) selectedEntity).buildWorker(entities);
+          }
+        },
+        " ", workerButtonIcon, workerButtonIcon, workerButtonIcon, hud.scene);
   }
 
 

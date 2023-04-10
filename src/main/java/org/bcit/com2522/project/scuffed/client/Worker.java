@@ -46,10 +46,10 @@ public class Worker extends Unit {
       return null;
     }
     Worker worker = new Worker(
-            (int) (long) workerObject.get("ownerId"),
-            (int) (long) workerObject.get("maxHealth"),
-            Worker.cost,
-            (int) (long) workerObject.get("speed"));
+        (int) (long) workerObject.get("ownerId"),
+        (int) (long) workerObject.get("maxHealth"),
+        Worker.cost,
+        (int) (long) workerObject.get("speed"));
     worker.currentHealth = (int) (long) workerObject.get("currentHealth");
     return worker;
   }

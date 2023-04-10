@@ -42,11 +42,11 @@ public class Building extends Entity {
       return null;
     }
     Building building = new Building(
-            //Position.fromJSONObject((JSONObject) buildingObject.get("position")),
-            (int) (long) buildingObject.get("ownerId"),
-            //(Color) buildingObject.get("color"),
-            (int) (long) buildingObject.get("maxHealth"),
-            Building.cost);
+        //Position.fromJSONObject((JSONObject) buildingObject.get("position")),
+        (int) (long) buildingObject.get("ownerId"),
+        //(Color) buildingObject.get("color"),
+        (int) (long) buildingObject.get("maxHealth"),
+        Building.cost);
     building.currentHealth = (int) (long) buildingObject.get("currentHealth");
     return building;
   }
@@ -91,7 +91,8 @@ public class Building extends Entity {
   public void buildSoldier(Entity[][] entities, int health, int damage, int speed, int range) {
     Position free = getFreePosition(entities);
     if (canBuild(free, Soldier.cost)) {
-      entities[free.getX()][free.getY()] = new Soldier(ownerID, health, Soldier.cost, speed, damage, range);
+      entities[free.getX()][free.getY()] =
+          new Soldier(ownerID, health, Soldier.cost, speed, damage, range);
       remainAction--;
       owner.spendResources(Soldier.cost);
     }
@@ -106,7 +107,9 @@ public class Building extends Entity {
   public Entity buildSoldier(Entity[][] entities) {
     Position free = getFreePosition(entities);
     if (canBuild(free, Soldier.cost)) {
-      Soldier soldier = new Soldier(ownerID, Soldier.health, Soldier.cost, Soldier.speed, Soldier.damage, Soldier.range);
+      Soldier soldier =
+          new Soldier(ownerID, Soldier.health, Soldier.cost, Soldier.speed, Soldier.damage,
+              Soldier.range);
 
       entities[free.getX()][free.getY()] = soldier;
       remainAction--;

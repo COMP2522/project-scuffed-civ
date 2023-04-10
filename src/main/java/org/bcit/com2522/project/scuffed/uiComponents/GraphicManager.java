@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uicomponents;
+package org.bcit.com2522.project.scuffed.uiComponents;
 
 import java.util.ArrayList;
 import org.bcit.com2522.project.scuffed.client.Window;

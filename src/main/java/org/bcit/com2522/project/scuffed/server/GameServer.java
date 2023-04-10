@@ -3,8 +3,16 @@ package org.bcit.com2522.project.scuffed.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.*;
-import java.util.*;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import org.bcit.com2522.project.scuffed.client.GameState;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,7 +21,7 @@ import org.json.simple.parser.ParseException;
 /**
  * The GameServer class is responsible for coordinating the game state between multiple players.
  * It creates a new thread for each connected client using the ClientHandler inner class.
- * The current version is designed to work with clients connected to the same Wi-Fi network as the host.
+ * The current version is designed to work with clients on the same Wi-Fi network as the host.
  *
  * @author Cameron Walford
  * @version 1.0
@@ -209,14 +217,17 @@ public class GameServer implements Runnable {
       try {
         // Read the client's username
         clientUsername = (String) ois.readObject();
-        System.out.println("Client connected from " + clientSocket.getInetAddress().getHostAddress() + " with username " + clientUsername + " ID: " + playerID);
+        System.out.println(
+            "Client connected from " + clientSocket.getInetAddress().getHostAddress()
+                + " with username " + clientUsername + " ID: " + playerID);
 
         // Send player ID
         oos.writeObject(playerID);
         oos.flush();
 
         // Send initial message
-        oos.writeObject("Hello, " + clientUsername + "! Please wait for all other clients to connect.");
+        oos.writeObject(
+            "Hello, " + clientUsername + "! Please wait for all other clients to connect.");
         oos.flush();
 
         // Wait for all players to connect before sending the initial game state

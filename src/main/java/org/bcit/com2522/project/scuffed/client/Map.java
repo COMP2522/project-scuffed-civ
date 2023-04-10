@@ -2,7 +2,7 @@ package org.bcit.com2522.project.scuffed.client;
 
 import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
-import java.awt.*;
+import java.awt.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -84,7 +84,8 @@ public class Map { // this is a tile manager
     for (int i = 0; i < map.tiles.length; i++) {
       for (int j = 0; j < map.tiles[i].length; j++) {
         map.tiles[i][j] = Tile
-                .fromJSONObject((JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));
+            .fromJSONObject(
+                (JSONObject) ((JSONArray) ((JSONArray) mapObject.get("tiles")).get(i)).get(j));
       }
     }
     return map;
@@ -102,14 +103,19 @@ public class Map { // this is a tile manager
 
     for (int i = 0; i < tiles.length; i++) {
       for (int j = 0; j < tiles[0].length; j++) {
-        if (tiles[i][j].getType() == 0)
-          scene.image(GameImages.get("sandTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
-        else if (tiles[i][j].getType() == 1)
-          scene.image(GameImages.get("waterTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
-        else if (tiles[i][j].getType() == 2)
-          scene.image(GameImages.get("rockTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
-        else if (tiles[i][j].getType() == 3)
-          scene.image(GameImages.get("grassTile"), (i + xShift) * zoomAmount, (j + yShift) * zoomAmount);
+        if (tiles[i][j].getType() == 0) {
+          scene.image(GameImages.get("sandTile"), (i + xShift) * zoomAmount,
+                  (j + yShift) * zoomAmount);
+        } else if (tiles[i][j].getType() == 1) {
+          scene.image(GameImages.get("waterTile"), (i + xShift) * zoomAmount,
+                  (j + yShift) * zoomAmount);
+        } else if (tiles[i][j].getType() == 2) {
+          scene.image(GameImages.get("rockTile"), (i + xShift) * zoomAmount,
+                  (j + yShift) * zoomAmount);
+        } else if (tiles[i][j].getType() == 3) {
+          scene.image(GameImages.get("grassTile"), (i + xShift) * zoomAmount,
+                  (j + yShift) * zoomAmount);
+        }
       }
     }
   }

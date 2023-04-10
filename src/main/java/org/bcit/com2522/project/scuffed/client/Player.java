@@ -1,6 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Random;
 import org.json.simple.JSONObject;
 
@@ -134,9 +134,9 @@ public class Player { // gamestate is the player manager
   @Override
   public String toString() {
     return "Player{" +
-            "resources=" + resources +
-            ", playerNum=" + playerNum +
-            '}';
+        "resources=" + resources +
+        ", playerNum=" + playerNum +
+        '}';
   }
 
   /**

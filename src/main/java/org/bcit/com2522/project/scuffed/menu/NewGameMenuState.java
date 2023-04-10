@@ -1,10 +1,10 @@
 package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import org.bcit.com2522.project.scuffed.uicomponents.Button;
-import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
-import org.bcit.com2522.project.scuffed.uicomponents.InputBox;
-import org.bcit.com2522.project.scuffed.uicomponents.Label;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.InputBox;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
@@ -39,6 +39,9 @@ public class NewGameMenuState extends MenuState {
     setup();
   }
 
+  /**
+   * Sets up the menu state.
+   */
   @Override
   public void setup() {
     mapWidthInput = new InputBox(50, 100, 200, 30, 10, 10000, "16");
@@ -50,7 +53,8 @@ public class NewGameMenuState extends MenuState {
     mapHeightLabel = new Label(50, 145, "Map Height:", 14);
     numPlayersLabel = new Label(50, 195, "Number of Players:", 14);
     numAILabel = new Label(50, 245, "Number of AI Players:", 14);
-    errorMessageLabel = new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14);
+    errorMessageLabel =
+        new Label(50, 250, "Invalid input! Please enter values within the specified range.", 14);
 
     Button backButton = new Button(50, 500, 250, 550, this::onBackClicked, "back", menu.scene);
     Button startButton = new Button(50, 600, 250, 650, this::onStartClicked, "start", menu.scene);
@@ -59,6 +63,11 @@ public class NewGameMenuState extends MenuState {
     buttonManager.add(startButton);
   }
 
+  /**
+   * Sets the selected input.
+   *
+   * @param selectedInput
+   */
   protected void setSelectedInput(InputBox selectedInput) {
     mapWidthInput.setSelected(false);
     mapHeightInput.setSelected(false);
