@@ -5,7 +5,7 @@ import org.bcit.com2522.project.scuffed.uiComponents.Button;
 import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
- * The type Menu state. This class is the base class for all menu states. It contains a button manager a reference to the scene and menu.
+ * The Menu state. This class is the superclass for all menu states. It contains a button manager a reference to the scene and menu.
  * TODO: Remove the scene reference from this and all subclasses.
  */
 public abstract class MenuState {

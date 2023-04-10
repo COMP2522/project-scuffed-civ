@@ -101,7 +101,7 @@ public class MainMenuMenuState extends MenuState implements PConstants {
 
             // Run the loading process in a separate thread
            menu.scene.loadGame();
-            menu.setState(new MainMenuMenuState( menu));
+           menu.setState(new MainMenuMenuState( menu));
 
         } else {
             errorMessage.draw(menu.scene);

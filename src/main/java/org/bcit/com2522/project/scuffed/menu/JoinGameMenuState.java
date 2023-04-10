@@ -27,7 +27,7 @@ public class JoinGameMenuState extends MenuState {
    * @param menu  the menu
    */
   public JoinGameMenuState( Menu menu) {
-        super( menu, new ButtonManager(menu.scene));
+        super(menu, new ButtonManager(menu.scene));
         setup();
     }
 
