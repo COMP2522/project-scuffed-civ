@@ -96,7 +96,7 @@ I worked on the ability to create new Entities, select them, move them, build ot
 resources with them and attack with Soldiers. I also created the logic behind the map generation. My personal part
 of the project was creating an enemy AI that could play against the player. The AI is able to move around the map 
 and build entities of both types. However, I was unable to create the value logic for the AI to move towards and attack
-the enemy.
+the enemy. I also implemented moving and scaling the map. I implemented scaling to use a direct nearest neighbor equivalent as without this, we lost quality with each zoom.
 
 ### 3. Emma Merideth-Black
 I worked on the logic for the User Interface, as well as designing the main menu. I created a clickable
