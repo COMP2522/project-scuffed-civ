@@ -24,15 +24,28 @@ public class Worker extends Unit {
   /**
    * Instantiates a new Worker.
    *
+   * @param owner the owner Player
+   * @param health  the health
+   * @param cost    the cost
+   * @param speed   the speed
+   */
+  public Worker(Player owner, int health, int cost, int speed) {
+    super(owner, health, cost, speed);
+    entityType = "worker";
+  }
+
+  /**
+   * Instantiates a new Worker.
+   *
    * @param ownerID the owner id
    * @param health  the health
    * @param cost    the cost
    * @param speed   the speed
    */
-  public Worker(int ownerID, int health, int cost, int speed) {
-    super(ownerID, health, cost, speed);
+  public Worker(int ownerID, GameState gameState, int health, int cost, int speed) {
+    super(gameState.getPlayer(ownerID), health, cost, speed);
+    owner = gameState.getPlayer(ownerID);
     entityType = "worker";
-//        texture = GameImages.get(entityType);
   }
 
   /**
@@ -41,12 +54,13 @@ public class Worker extends Unit {
    * @param workerObject the worker object
    * @return the worker
    */
-  public static Worker fromJSONObject(JSONObject workerObject) {
+  public static Worker fromJSONObject(JSONObject workerObject, GameState gameState) {
     if (workerObject == null) {
       return null;
     }
     Worker worker = new Worker(
             (int) (long) workerObject.get("ownerId"),
+            gameState,
             (int) (long) workerObject.get("maxHealth"),
             Worker.cost,
             (int) (long) workerObject.get("speed"));
@@ -71,7 +85,7 @@ public class Worker extends Unit {
     if (this instanceof Worker) {
       Position free = getFreePosition(entities);
       if (canBuild(free, Building.cost)) {
-        building = new Building(ownerID, Building.health, Building.cost);
+        building = new Building(owner, Building.health, Building.cost);
         entities[free.getX()][free.getY()] = building;
         remainAction--;
         owner.spendResources(Building.cost);

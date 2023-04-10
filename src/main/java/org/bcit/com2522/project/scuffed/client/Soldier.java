@@ -39,8 +39,26 @@ public class Soldier extends Unit {
    * @param damage  the damage
    * @param range   the range
    */
-  public Soldier(int ownerId, int health, int cost, int speed, int damage, int range) {
-    super(ownerId, health, cost, speed);
+  public Soldier(int ownerId, GameState gameState, int health, int cost, int speed, int damage, int range) {
+    super(gameState.getPlayer(ownerId), health, cost, speed);
+    entityType = "soldier";
+    texture = GameImages.get("soldier");
+    Soldier.damage = damage;
+    Soldier.range = range;
+  }
+
+  /**
+   * Instantiates a new Soldier from owner.
+   *
+   * @param owner the owner Player
+   * @param health  the health
+   * @param cost    the cost
+   * @param speed   the speed
+   * @param damage  the damage
+   * @param range   the range
+   */
+  public Soldier(Player owner, int health, int cost, int speed, int damage, int range) {
+    super(owner, health, cost, speed);
     entityType = "soldier";
     texture = GameImages.get("soldier");
     Soldier.damage = damage;
@@ -53,14 +71,14 @@ public class Soldier extends Unit {
    * @param soldierObject the soldier object
    * @return soldier soldier
    */
-  public static Soldier fromJSONObject(JSONObject soldierObject) {
+  public static Soldier fromJSONObject(JSONObject soldierObject, GameState gameState) {
     if (soldierObject == null) {
       return null;
     }
     Soldier soldier = new Soldier(
             // Position.fromJSONObject((JSONObject) soldierObject.get("position")),
             (int) (long) soldierObject.get("ownerId"),
-            // (Color) soldierObject.get("color"),
+            gameState,
             (int) (long) soldierObject.get("maxHealth"),
             Soldier.cost,
             (int) (long) soldierObject.get("maxMove"),

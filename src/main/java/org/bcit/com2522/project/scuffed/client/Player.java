@@ -65,6 +65,8 @@ public class Player { // gamestate is the player manager
     this.hasLost = player.hasLost;
     this.color = player.color;
     this.isAi = player.isAi;
+    this.xShift = player.xShift;
+    this.yShift = player.yShift;
   }
 
   /**
@@ -136,7 +138,8 @@ public class Player { // gamestate is the player manager
     return "Player{" +
             "resources=" + resources +
             ", playerNum=" + playerNum +
-            '}';
+
+            "}";
   }
 
   /**

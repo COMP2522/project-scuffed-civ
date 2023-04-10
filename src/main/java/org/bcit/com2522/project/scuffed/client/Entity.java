@@ -51,9 +51,23 @@ public abstract class Entity {
    * @param health  the health
    * @param cost    the cost
    */
-  public Entity(int ownerId, int health, int cost) {
+  public Entity(int ownerId, GameState gameState, int health, int cost) {
     this.ownerID = ownerId;
-    this.owner = GameState.getPlayer(ownerId);
+    this.owner = gameState.getPlayer(ownerId);
+
+    //this.color = pColor;
+    maxAction = 1;
+    remainAction = 1;
+
+    maxHealth = health;
+    currentHealth = maxHealth;
+
+    resourceCost = cost;
+  }
+
+  public Entity(Player owner, int health, int cost) {
+    this.owner = owner;
+    this.ownerID = this.owner.getID();
     //this.color = pColor;
     maxAction = 1;
     remainAction = 1;
@@ -70,7 +84,7 @@ public abstract class Entity {
    * @param entityObject the entity object
    * @return the entity
    */
-  public static Entity fromJSONObject(JSONObject entityObject) {
+  public static Entity fromJSONObject(JSONObject entityObject, GameState gameState) {
     if (entityObject == null || entityObject.isEmpty()) {
       return null;
     }
@@ -78,15 +92,15 @@ public abstract class Entity {
     System.out.println(entityType);
     switch (entityType) {
       case "building":
-        Building building = Building.fromJSONObject(entityObject);
+        Building building = Building.fromJSONObject(entityObject, gameState);
         //building.color = Color.decode((String) entityObject.get("color"));
         return building;
       case "soldier":
-        Soldier soldier = Soldier.fromJSONObject(entityObject);
+        Soldier soldier = Soldier.fromJSONObject(entityObject, gameState);
         //soldier.color = Color.decode((String) entityObject.get("color"));
         return soldier;
       case "worker":
-        Worker worker = Worker.fromJSONObject(entityObject);
+        Worker worker = Worker.fromJSONObject(entityObject, gameState);
         //worker.color = Color.decode((String) entityObject.get("color"));
         return worker;
       default:

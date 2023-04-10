@@ -27,27 +27,31 @@ public class GSGenerator {
     entities = myEntities;
     state = gameState;
 
-    int i = 0;
-    while (i < entities.size()) {
-      takeBestMove(entities.get(i));
-      i++;
+    for (Entity entity : entities) {
+      takeBestMove(entity);
     }
-
-    state.printEntities();
 
     return state;
   }
 
+
+  /**
+   * takes the best move for a specific entity
+   * @param entity the entity to take the move
+   */
   private static void takeBestMove(Entity entity) {
     ArrayList<GameState> possibleMoves = generateMoves(entity);
-    System.out.format("%d possible moves\n", possibleMoves.size());
 
     if (possibleMoves.size() > 0) {
       state = determineBestMove(possibleMoves);
     }
   }
 
-  //finds the best move of the list and sets the gamestate to the result of that move.
+  /**
+   * takes a list of moves and chooses the best one
+   * @param possibleMoves list of moves
+   * @return best move
+   */
   private static GameState determineBestMove(ArrayList<GameState> possibleMoves) {
     GameState bestGameState = possibleMoves.get(0);
     for (GameState gameState : possibleMoves) {
@@ -59,15 +63,18 @@ public class GSGenerator {
     return bestGameState;
   }
 
-  //generate moves
-  //generates every possible move an entity could make.
+  /**
+   * generates all possible moves for a specific entity
+   * @param entity entity
+   * @return all moves
+   */
   private static ArrayList<GameState> generateMoves(Entity entity) {
     ArrayList<GameState> possibleMoves = new ArrayList<>();
+    Position position = entity.getPosition(state.getEntities());
 
     if (entity instanceof Unit unit) {
       for (int i = -unit.getMaxMove(); i <= unit.getMaxMove(); i++) { //every possible move
         for (int j = -unit.getMaxMove(); j <= unit.getMaxMove(); j++) {
-          Position position = unit.getPosition(state.getEntities());
           if (position != null && (unit.withinMoveRange(new Position(position.getX() + i, position.getY() + j), state.getEntities()))) {
             GameState gs = new GameState(state); //creates a deep copy of state
             Unit unit2 = ((Unit) gs.getEntities()[position.getX()][position.getY()]);
@@ -80,14 +87,22 @@ public class GSGenerator {
         }
       }
     } else {
-      Building building = ((Building) entity);
-      GameState gs = new GameState(state);
-      possibleMoves.add(gs);
-      generateActions(building, possibleMoves);
+      if (position != null) {
+        GameState gs = new GameState(state);
+        Building building = ((Building) gs.getEntities()[position.getX()][position.getY()]);
+
+        possibleMoves.add(gs);
+        generateActions(building, possibleMoves);
+      }
     }
     return possibleMoves;
   }
 
+  /**
+   * generates all possible actions for a specific entity
+   * @param entity entity
+   * @param gs list of moves
+   */
   private static void generateActions(Entity entity, ArrayList<GameState> gs) {
     Position position = entity.getPosition(gs.get(gs.size() - 1).getEntities());
     if (entity instanceof Soldier soldier) {
@@ -111,7 +126,8 @@ public class GSGenerator {
       }
       gs.add(gs1);
       gs.add(gs2);
-    } else if (entity instanceof Building) {
+    }
+    if (entity instanceof Building) {
       GameState gs0 = gs.get(gs.size() - 1);
       GameState gs1 = new GameState(gs0);
       GameState gs2 = new GameState(gs0);

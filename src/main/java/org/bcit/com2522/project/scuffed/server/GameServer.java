@@ -99,7 +99,7 @@ public class GameServer implements Runnable {
    * @return true if all players are connected, false otherwise
    */
   public boolean allPlayersConnected() {
-    return clients.size() == GameState.players.size();
+    return clients.size() == gameState.players.size();
   }
 
   /**
