@@ -331,9 +331,12 @@ public class InGameHud extends HudState {
    */
   private void drawPlayerResources(Window scene) {
     scene.textFont(fontMedium);
+
+    scene.fill(255, 255, 255);
     scene.text(": " + (scene.gameInstance.gameState.currentPlayer.getResources()),
         centerX - PLAYER_RESOURCES_X1,
         centerY - PLAYER_RESOURCES_Y1); //print player resources
+
     scene.text(": "
         + (selectedEntity != null && selectedEntity instanceof Unit ? ((Unit) selectedEntity)
         .getRemainMove() : 0), centerX - PLAYER_RESOURCES_X1, centerY + PLAYER_MOVE_Y1);
