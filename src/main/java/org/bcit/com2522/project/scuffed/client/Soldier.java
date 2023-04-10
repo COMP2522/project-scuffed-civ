@@ -14,14 +14,16 @@ public class Soldier extends Unit {
      * The constant cost.
      */
     public static final int cost = 1;
+    public static int speed = 4;
+    public static int health = 50;
     /**
      * The Damage.
      */
-    int damage;
+    static int damage = 50;
     /**
      * The Range.
      */
-    int range;
+    static int range = 6;
 
     /**
      * Instantiates a new Soldier.
@@ -33,8 +35,7 @@ public class Soldier extends Unit {
      * @param damage  the damage
      * @param range   the range
      */
-    public Soldier(int ownerId, int health, int cost, int speed, int damage, int range) { // TODO this is the only
-                                                                                          // constructor
+    public Soldier(int ownerId, int health, int cost, int speed, int damage, int range) {
         super(ownerId, health, cost, speed);
         entityType = "soldier";
         texture = GameImages.get("soldier");
