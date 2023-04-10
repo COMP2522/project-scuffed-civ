@@ -58,7 +58,7 @@ public class GameState { // everything manager this is the player manager
   int yShift; // only used to change where the map is drawn
   private String gameID;
   private Entity[][] entities;
-  private Entity selected;
+  public Entity selected;
 
   /**
    * Constructor used for creating a new game.
@@ -291,6 +291,7 @@ public class GameState { // everything manager this is the player manager
       System.out.println("Selected entity ownerID: " + selected.getOwnerID());
       System.out.println("Selected entity position: " + selected.getPosition(entities));
       System.out.println("Selected entity health: " + selected.getHealth());
+
     } else if (clicked != null && selected == null) {
       selected = clicked;
       System.out.println("Selected entity class: " + selected.getClass().getName());
