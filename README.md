@@ -123,18 +123,26 @@ The main menu screen will appear. Click on the "New Game" button to start the ga
 
 If you have played the game before, you can click on the "Continue" button to load your previous game.
 
-Online button to play the game online with other players.
+Online button to play the game online with other players. This currently only works with players on the same Wifi network.
 
 Settings button to change the game settings.
 
 Exit button to close the game.
 
-### 3. Choose the game settings
+### 2.5. Online menu
+If you chose online in the main menu, you are prompted to either Host Game or Join Game.
+
+### 3a. Choose the game settings (new game or host game)
 Choose the size of the board. Each number represents a single tile increasing the board size.
 
 Choose the number of players. The maximum number of players is 4.
 
-Once the settings are chosen, click on the "Start" button to start the game.
+Once the settings are chosen, click on the "Start" button to start the game (or server if hosting).
+
+### 3b. Join a game (online clicked in main menu)
+Input the IP of the server host, and a username.
+
+You must then wait until all other players have connected before the game will start.
 
 ### 4. Game Screen Hub
 **Top Left**: Menu button giving options.
@@ -191,14 +199,25 @@ Menu: I worked on a series of MenuStates that the Menu object held by Window cou
 a fairly modular way to work with the menu, so that it would be easy to add new states as time went on.
 
 Game Server: This is a server that works only if you're on the same wifi network as the host. It uses multithreading
-to handle each client connected. When a the current player ends their turn, the server updates its own gameState and 
+to handle each client connected. When a the current player ends their turn, the server updates its own gameState and
 broadcasts the updated gameState to all other clients.
 
 ### 2. Keagan Purtell
-
+I worked on most of the core gameplay for our. This includes creating the logic behind each type of entity.
+I worked on the ability to create new Entities, select them, move them, build other entities with them, collect 
+resources with them and attack with Soldiers. I also created the logic behind the map generation. My personal part
+of the project was creating an enemy AI that could play against the player. Unfortunately, I have been unable to make
+this code fully work.
 
 ### 3. Emma Merideth-Black
-
+I worked on the logic for the User Interface, as well as designing the main menu. I created a clickable
+class that runs when clicked, and from there developed easy to use methods that allowed for easy
+creation of UI elements that are fully interactive, as well as being easily customizable, in order to
+make development of the UI as easy as possible. I also designed the main menu, creating logic for
+the buttons, and creating the images and text that are displayed on the screen, as well as previewing
+map creation. The particular classes I worked in were Clickable, ClickableManager, Button, ButtonManager, 
+Various Menu state classes, and the Window Class. Also, please note, due to weird git issues, my commits
+are spread across the Testsnake and emmamb accounts.
 
 ### 4. Brendan Doyle
 I worked on the UI that you see while playing the game. Gathering the spites and images needed for

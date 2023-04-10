@@ -58,14 +58,14 @@ public class Soldier extends Unit {
       return null;
     }
     Soldier soldier = new Soldier(
-        // Position.fromJSONObject((JSONObject) soldierObject.get("position")),
-        (int) (long) soldierObject.get("ownerId"),
-        // (Color) soldierObject.get("color"),
-        (int) (long) soldierObject.get("maxHealth"),
-        Soldier.cost,
-        (int) (long) soldierObject.get("maxMove"),
-        (int) (long) soldierObject.get("damage"),
-        (int) (long) soldierObject.get("range"));
+            // Position.fromJSONObject((JSONObject) soldierObject.get("position")),
+            (int) (long) soldierObject.get("ownerId"),
+            // (Color) soldierObject.get("color"),
+            (int) (long) soldierObject.get("maxHealth"),
+            Soldier.cost,
+            (int) (long) soldierObject.get("maxMove"),
+            (int) (long) soldierObject.get("damage"),
+            (int) (long) soldierObject.get("range"));
     soldier.currentHealth = (int) (long) soldierObject.get("currentHealth");
     return soldier;
   }
@@ -115,9 +115,9 @@ public class Soldier extends Unit {
    */
   public boolean withinRange(Position position, Entity[][] entities) {
     if (Math.abs(position.getX() - this.getPosition(entities).getX())
-        + Math.abs(position.getY() - this.getPosition(entities).getY()) <= range &&
-        position.getX() >= 0 && position.getX() < entities.length && position.getY() >= 0
-        && position.getY() < entities[0].length) {
+            + Math.abs(position.getY() - this.getPosition(entities).getY()) <= range &&
+            position.getX() >= 0 && position.getX() < entities.length && position.getY() >= 0
+            && position.getY() < entities[0].length) {
       return true;
     } else {
       System.out.println("that position is out of range");

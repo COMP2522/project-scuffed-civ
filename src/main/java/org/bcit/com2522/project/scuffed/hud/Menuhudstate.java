@@ -1,8 +1,8 @@
 package org.bcit.com2522.project.scuffed.hud;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import org.bcit.com2522.project.scuffed.uiComponents.Button;
-import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uicomponents.Button;
+import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
 
 /**
  * The Menuhudstate class is an implementation of the HudState abstract class and represents
@@ -109,11 +109,11 @@ public class Menuhudstate extends HudState {
    */
   private Button createReturnToMainMenuButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY - MAIN_MENU_BUTTON_Y,
-        centerX + MENU_BUTTON_X, centerY - MAIN_MENU_BUTTON_Y2,
-        () -> {
-          onMenuClicked();
-        }, "Main Menu", panel, panel, panel, hud.scene, panel,
-        true, BUTTON_FONT_SIZE, MAIN_MENU_TEXT_X, BUTTON_TEXT_Y);
+            centerX + MENU_BUTTON_X, centerY - MAIN_MENU_BUTTON_Y2,
+            () -> {
+              onMenuClicked();
+            }, "Main Menu", panel, panel, panel, hud.scene, panel,
+            true, BUTTON_FONT_SIZE, MAIN_MENU_TEXT_X, BUTTON_TEXT_Y);
   }
 
   /**
@@ -121,10 +121,10 @@ public class Menuhudstate extends HudState {
    */
   private Button createSaveButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY - SAVE_BUTTON_Y1,
-        centerX + MENU_BUTTON_X, centerY - SAVE_BUTTON_Y2, () -> {
+            centerX + MENU_BUTTON_X, centerY - SAVE_BUTTON_Y2, () -> {
       hud.scene.saveGame();
     }, "Save", panel, panel, panel, hud.scene, panel,
-        true, BUTTON_FONT_SIZE, SAVE_TEXT_X, BUTTON_TEXT_Y);
+            true, BUTTON_FONT_SIZE, SAVE_TEXT_X, BUTTON_TEXT_Y);
   }
 
   /**
@@ -132,10 +132,10 @@ public class Menuhudstate extends HudState {
    */
   private Button createSettingsButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY - SETTING_BUTTON_Y1,
-        centerX + MENU_BUTTON_X, centerY - SETTING_BUTTON_Y2, () -> {
+            centerX + MENU_BUTTON_X, centerY - SETTING_BUTTON_Y2, () -> {
       onMenuClicked();
     }, "Settings", panel, panel, panel, hud.scene, panel,
-        true, BUTTON_FONT_SIZE, SETTING_TEXT_X, BUTTON_TEXT_Y);
+            true, BUTTON_FONT_SIZE, SETTING_TEXT_X, BUTTON_TEXT_Y);
   }
 
   /**
@@ -143,10 +143,10 @@ public class Menuhudstate extends HudState {
    */
   private Button createExitButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY + EXIT_BUTTON_Y1,
-        centerX + MENU_BUTTON_X, centerY + EXIT_BUTTON_Y2, () -> {
+            centerX + MENU_BUTTON_X, centerY + EXIT_BUTTON_Y2, () -> {
       hud.scene.exit();
     }, "Exit", panel, panel, panel, hud.scene, rivetPanel,
-        true, BUTTON_FONT_SIZE, EXIT_TEXT_X, BUTTON_TEXT_Y);
+            true, BUTTON_FONT_SIZE, EXIT_TEXT_X, BUTTON_TEXT_Y);
   }
 
   /**
@@ -154,10 +154,10 @@ public class Menuhudstate extends HudState {
    */
   private Button createResumeGameButton() {
     return new Button(centerX - MENU_BUTTON_X, centerY + RESUME_BUTTON_Y1,
-        centerX + MENU_BUTTON_X, centerY + RESUME_BUTTON_Y2, () -> {
+            centerX + MENU_BUTTON_X, centerY + RESUME_BUTTON_Y2, () -> {
       hud.setState(new InGameHud(hud));
     }, "Resume Game", panel, panel, panel, hud.scene, panel,
-        true, BUTTON_FONT_SIZE, RESUME_TEXT_X, BUTTON_TEXT_Y);
+            true, BUTTON_FONT_SIZE, RESUME_TEXT_X, BUTTON_TEXT_Y);
   }
 
   /**
@@ -167,7 +167,7 @@ public class Menuhudstate extends HudState {
    */
   private void gameMenuBackground(Window scene) {
     scene.image(panel, centerX - MENU_BACKGROUND_X, centerY - MENU_BACKGROUND_Y,
-        centerX - MENU_BACKGROUND_X2, centerY + MENU_BACKGROUND_Y2);
+            centerX - MENU_BACKGROUND_X2, centerY + MENU_BACKGROUND_Y2);
   }
 
   /**

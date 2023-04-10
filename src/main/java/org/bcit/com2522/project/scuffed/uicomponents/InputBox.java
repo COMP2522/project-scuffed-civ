@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
@@ -18,6 +18,17 @@ public class InputBox {
   private Window scene;
   private boolean selected;
 
+  /**
+   * Instantiates a new Input box.
+   *
+   * @param x        the x
+   * @param y        the y
+   * @param width    the width
+   * @param height   the height
+   * @param minValue the min value
+   * @param maxValue the max value
+   */
+
 
   /**
    * Instantiates a new Input box.
@@ -30,8 +41,7 @@ public class InputBox {
    * @param maxValue    the max value
    * @param defaultText the default text
    */
-  public InputBox(int x, int y, int width, int height, int minValue, int maxValue,
-                  String defaultText) {
+  public InputBox(int x, int y, int width, int height, int minValue, int maxValue, String defaultText) {
     this.x = x;
     this.y = y;
     this.width = width;

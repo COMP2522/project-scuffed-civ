@@ -9,9 +9,8 @@ import org.bcit.com2522.project.scuffed.menu.JoinGameMenuState;
 import org.bcit.com2522.project.scuffed.menu.Menu;
 import org.bcit.com2522.project.scuffed.menu.NewGameMenuState;
 import org.bcit.com2522.project.scuffed.server.GameServer;
-import org.bcit.com2522.project.scuffed.uiComponents.Clickable;
-import org.bcit.com2522.project.scuffed.uiComponents.ClickableManager;
-import org.bcit.com2522.project.scuffed.uiComponents.GraphicManager;
+import org.bcit.com2522.project.scuffed.uicomponents.Clickable;
+import org.bcit.com2522.project.scuffed.uicomponents.ClickableManager;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -55,10 +54,6 @@ public class Window extends PApplet {
    * The Clickable manager.
    */
   public ClickableManager clickableManager;
-  /**
-   * The Graphic manager.
-   */
-  public GraphicManager graphicManager;
 
   /**
    * Main function.
@@ -66,7 +61,7 @@ public class Window extends PApplet {
    * @param passedArgs arguments from command line
    */
   public static void main(String[] passedArgs) {
-    String[] appletArgs = new String[] {"eatBubbles"};
+    String[] appletArgs = new String[]{"eatBubbles"};
     Window eatBubbles = new Window();
     debugMenu = new DebugMenu(eatBubbles);
     PApplet.runSketch(appletArgs, eatBubbles);
@@ -94,7 +89,6 @@ public class Window extends PApplet {
   public void init() {
     //map = new Map(this, 20, 20);
     clickableManager = new ClickableManager(this);
-    graphicManager = new GraphicManager(this);
     surface.setTitle("Scuffed - Main Menu");
     menu = new Menu(this);
   }
@@ -160,8 +154,7 @@ public class Window extends PApplet {
    * @param numAI      the num ai
    */
   public void initGame(int numplayers, int mapwidth, int mapheight, int numAI) {
-    gameInstance =
-        new GameInstance(new Hud(this), new GameState(numplayers, mapwidth, mapheight, numAI));
+    gameInstance = new GameInstance(new Hud(this), new GameState(numplayers, mapwidth, mapheight, numAI));
     gameInstance.newGame();
   }
 
@@ -217,7 +210,6 @@ public class Window extends PApplet {
     if (debugMode) {
       debugMenu.draw(this);
     }
-    graphicManager.drawGraphics();
   }
 
   /**
@@ -238,21 +230,7 @@ public class Window extends PApplet {
     clickableManager.remove(clickable);
   }
 
-  /**
-   * Gets graphic manager.
-   *
-   * @return the graphic manager
-   */
-  public GraphicManager getGraphicManager() {
-    return graphicManager;
-  }
 
-  /**
-   * Wipe graphics.
-   */
-  public void wipeGraphics() {
-    graphicManager.wipeGraphics();
-  }
 
   /**
    * Gets current player.

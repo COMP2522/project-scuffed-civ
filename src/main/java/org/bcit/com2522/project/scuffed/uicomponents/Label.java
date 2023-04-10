@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 

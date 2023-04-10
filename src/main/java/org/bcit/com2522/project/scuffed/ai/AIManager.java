@@ -16,12 +16,12 @@ public class AIManager {
    * @param gameState the game state
    */
   public static void start(GameState gameState) {
-    //if this function is called on a non-AI player return
+    // if this function is called on a non-AI player return
     if (!gameState.currentPlayer.isAI()) {
       return;
     }
 
-    //generate allies arraylist
+    // generate allies arraylist
     ArrayList<Entity> allies = new ArrayList<Entity>();
     for (Entity[] row : gameState.getEntities()) {
       for (Entity entity : row) {
@@ -35,8 +35,7 @@ public class AIManager {
 
     System.out.format("%d allies \n", allies.size());
 
-
-    //generate GameStates using GSGenerator
+    // generate GameStates using GSGenerator
     ArrayList<GameState> gameStates = new ArrayList<GameState>();
     for (int i = 0; i < allies.size(); i++) {
       gameStates.add(GSGenerator.generateGameStateFromEntity(allies, gameState));
@@ -47,10 +46,9 @@ public class AIManager {
       }
     }
 
-
     System.out.format("%d possible turns \n", gameStates.size());
 
-    //pick best turn
+    // pick best turn
     GameState bestGameTurn = gameStates.get(0);
     for (GameState gameState1 : gameStates) {
 
@@ -61,8 +59,7 @@ public class AIManager {
     System.out.println("bestGameTurn:");
     bestGameTurn.printEntities();
 
-
-    //set gameState to be the best turn.
+    // set gameState to be the best turn.
     gameState.setEntities(bestGameTurn.getEntities());
     gameState.setMap(bestGameTurn.getMap());
     gameState.currentPlayer = new Player(bestGameTurn.currentPlayer);

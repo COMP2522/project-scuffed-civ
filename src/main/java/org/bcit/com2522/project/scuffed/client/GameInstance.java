@@ -1,10 +1,6 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.HashSet;
 import org.bcit.com2522.project.scuffed.hud.Hud;
@@ -16,8 +12,7 @@ import org.json.simple.parser.ParseException;
 import processing.core.PVector;
 
 /**
- * The Instance of the game that is running.
- * This class is responsible for holding the game state, hud, and server variables.
+ * The Instance of the game that is running. This class is responsible for holding the game state, hud, and server variables.
  */
 public class GameInstance {
   /**
@@ -125,6 +120,7 @@ public class GameInstance {
   /**
    * Converts the game state to a JSON object and saves it to the save.json file.
    *
+   * @param
    * @throws IOException the io exception
    */
   public void saveGame() throws IOException {
