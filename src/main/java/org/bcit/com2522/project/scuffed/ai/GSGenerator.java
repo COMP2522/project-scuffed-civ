@@ -61,11 +61,11 @@ public class GSGenerator {
   //generates every possible move an entity could make.
   private static ArrayList<GameState> generateMoves(Entity entity) {
     ArrayList<GameState> possibleMoves = new ArrayList<>();
+    Position position = entity.getPosition(state.getEntities());
 
     if (entity instanceof Unit unit) {
       for (int i = -unit.getMaxMove(); i <= unit.getMaxMove(); i++) { //every possible move
         for (int j = -unit.getMaxMove(); j <= unit.getMaxMove(); j++) {
-          Position position = unit.getPosition(state.getEntities());
           if (position != null && (unit.withinMoveRange(new Position(position.getX() + i, position.getY() + j), state.getEntities()))) {
             GameState gs = new GameState(state); //creates a deep copy of state
             Unit unit2 = ((Unit) gs.getEntities()[position.getX()][position.getY()]);
@@ -78,11 +78,13 @@ public class GSGenerator {
         }
       }
     } else {
-      Building building = ((Building) entity);
-      GameState gs = new GameState(state);
-      possibleMoves.add(gs);
-      generateActions(building, possibleMoves);
-      System.out.println("calling generateActions");
+      if (position != null) {
+        GameState gs = new GameState(state);
+        Building building = ((Building) gs.getEntities()[position.getX()][position.getY()]);
+
+        possibleMoves.add(gs);
+        generateActions(building, possibleMoves);
+      }
     }
     return possibleMoves;
   }
@@ -110,11 +112,13 @@ public class GSGenerator {
       }
       gs.add(gs1);
       gs.add(gs2);
-    } else if (entity instanceof Building) {
+    }
+    if (entity instanceof Building) {
+      System.out.println("entity is a building :wow:");
       GameState gs0 = gs.get(gs.size() - 1);
       GameState gs1 = new GameState(gs0);
       GameState gs2 = new GameState(gs0);
-      if (position != null) {
+      if (entity.getPosition(gs0.getEntities()) != null) {
         System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + gs2.currentPlayer.getResources());
         ((Building) gs1.getEntities()[position.getX()][position.getY()]).buildSoldier(gs1.getEntities());
         ((Building) gs2.getEntities()[position.getX()][position.getY()]).buildWorker(gs2.getEntities());
