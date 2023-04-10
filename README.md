@@ -94,8 +94,8 @@ broadcasts the updated gameState to all other clients.
 I worked on most of the core gameplay for our. This includes creating the logic behind each type of entity.
 I worked on the ability to create new Entities, select them, move them, build other entities with them, collect 
 resources with them and attack with Soldiers. I also created the logic behind the map generation. My personal part
-of the project was creating an enemy AI that could play against the player. The ai is able to move around the map 
-and build entities of both types. However I was unable to create the value logic for the AI to move towards and attack
+of the project was creating an enemy AI that could play against the player. The AI is able to move around the map 
+and build entities of both types. However, I was unable to create the value logic for the AI to move towards and attack
 the enemy.
 
 ### 3. Emma Merideth-Black
