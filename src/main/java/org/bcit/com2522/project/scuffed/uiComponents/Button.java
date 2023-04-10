@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uicomponents;
+package org.bcit.com2522.project.scuffed.uiComponents;
 
 import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
@@ -13,16 +13,22 @@ public class Button {
   /**
    * The X 1.
    */
-  int x1, /**
+  int x1;
+  /**
    * The Y 1.
    */
-  y1, /**
+  int y1;
+
+  /**
    * The X 2.
    */
-  x2, /**
+  int x2;
+
+  /**
    * The Y 2.
    */
-  y2;
+  int y2;
+
   /**
    * The Callback.
    */
@@ -94,7 +100,7 @@ public class Button {
   private boolean active;
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button has text and cannot be disabled.
    *
    * @param x1              the x 1
    * @param y1              the y 1
@@ -107,8 +113,8 @@ public class Button {
    * @param clickBackground the click background
    * @param scene           the scene
    */
-// Standard Button, has text and can not be disabled
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -124,7 +130,7 @@ public class Button {
   }
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button with no text.
    *
    * @param x1              the x 1
    * @param y1              the y 1
@@ -136,8 +142,8 @@ public class Button {
    * @param clickBackground the click background
    * @param scene           the scene
    */
-// Button with no text
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, PImage background, PImage hoverBackground, PImage clickBackground, Window scene) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -154,7 +160,7 @@ public class Button {
   }
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button that can be disabled.
    *
    * @param x1                 the x 1
    * @param y1                 the y 1
@@ -169,8 +175,9 @@ public class Button {
    * @param disabledBackground the disabled background
    * @param isClickable        the is clickable
    */
-// Button that can be disabled
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene,
+                PImage disabledBackground, boolean isClickable) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -187,7 +194,7 @@ public class Button {
   }
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button that can be disabled and has no text.
    *
    * @param x1                 the x 1
    * @param y1                 the y 1
@@ -201,8 +208,9 @@ public class Button {
    * @param disabledBackground the disabled background
    * @param isClickable        the is clickable
    */
-// Button that can be disabled and has no text
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene,
+                PImage disabledBackground, boolean isClickable) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -219,7 +227,7 @@ public class Button {
   }
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button that uses default images.
    *
    * @param x1       the x 1
    * @param y1       the y 1
@@ -229,7 +237,6 @@ public class Button {
    * @param text     the text
    * @param scene    the scene
    */
-// Button that uses default images
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, Window scene) {
     this.x1 = x1;
     this.y1 = y1;
@@ -245,7 +252,7 @@ public class Button {
   }
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button with text size added.
    *
    * @param x1                 the x 1
    * @param y1                 the y 1
@@ -263,7 +270,6 @@ public class Button {
    * @param offsetX            the offset x
    * @param offsetY            the offset y
    */
-// Versions of button but with text size added
   public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
                 PImage hoverBackground, PImage clickBackground, Window scene,
                 PImage disabledBackground, boolean isClickable, int textSize,
@@ -287,7 +293,7 @@ public class Button {
   }
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button with different font.
    *
    * @param x1                 the x 1
    * @param y1                 the y 1
@@ -306,8 +312,10 @@ public class Button {
    * @param offsetY            the offset y
    * @param font               the font
    */
-// Button but like you can change the font lol
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable, int textSize, int offsetX, int offsetY, PFont font) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene,
+                PImage disabledBackground, boolean isClickable, int textSize, int offsetX,
+                int offsetY, PFont font) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -344,7 +352,9 @@ public class Button {
    * @param isClickable        the is clickable
    * @param textSize           the text size
    */
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable, int textSize) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene,
+                PImage disabledBackground, boolean isClickable, int textSize) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -362,7 +372,7 @@ public class Button {
   }
 
   /**
-   * Instantiates a new Button.
+   * Instantiates a new Button that's non-functional.
    *
    * @param x1                 the x 1
    * @param y1                 the y 1
@@ -371,7 +381,6 @@ public class Button {
    * @param scene              the scene
    * @param disabledBackground the disabled background
    */
-// Non Functional Button
   public Button(int x1, int y1, int x2, int y2, Window scene, PImage disabledBackground) {
     this.x1 = x1;
     this.y1 = y1;
@@ -400,7 +409,9 @@ public class Button {
    * @param textSize           the text size
    * @param tooltip            the tooltip
    */
-  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background, PImage hoverBackground, PImage clickBackground, Window scene, PImage disabledBackground, boolean isClickable, int textSize, String tooltip) {
+  public Button(int x1, int y1, int x2, int y2, Runnable callback, String text, PImage background,
+                PImage hoverBackground, PImage clickBackground, Window scene,
+                PImage disabledBackground, boolean isClickable, int textSize, String tooltip) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
@@ -445,14 +456,17 @@ public class Button {
     if ((!isClickable && disabledBackground != null) || this.clickable == null) {
       scene.image(disabledBackground, x1, y1, x2 - x1, y2 - y1);
 
-    } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && scene.mousePressed && isClickable) {
+    } else if (clickable.isHovered(scene.mouseX, scene.mouseY)
+        && scene.mousePressed
+        && isClickable) {
       scene.image(clickBackground, x1, y1, x2 - x1, y2 - y1);
     } else if (clickable.isHovered(scene.mouseX, scene.mouseY) && isClickable) {
       scene.image(hoverBackground, x1, y1, x2 - x1, y2 - y1);
       if (tooltip != null) {
         scene.textSize(tooltipSize);
         float tooltipWidth = scene.textWidth(tooltip);
-        float tooltipX = scene.mouseX + tooltipWidth > scene.width ? scene.mouseX - tooltipWidth : scene.mouseX;
+        float tooltipX =
+            scene.mouseX + tooltipWidth > scene.width ? scene.mouseX - tooltipWidth : scene.mouseX;
         scene.text(tooltip, tooltipX, scene.mouseY);
         scene.textSize(32);
       }

@@ -1,9 +1,9 @@
 package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import org.bcit.com2522.project.scuffed.uicomponents.Button;
-import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
-import org.bcit.com2522.project.scuffed.uicomponents.Label;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 
 /**
  * The server lobby. This is where the host can see the players connected and start the game.

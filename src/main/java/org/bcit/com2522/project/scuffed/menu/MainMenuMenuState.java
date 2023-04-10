@@ -3,10 +3,10 @@ package org.bcit.com2522.project.scuffed.menu;
 import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 import java.io.File;
-import org.bcit.com2522.project.scuffed.uicomponents.Button;
-import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
-import org.bcit.com2522.project.scuffed.uicomponents.GraphicManager;
-import org.bcit.com2522.project.scuffed.uicomponents.Label;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.GraphicManager;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PConstants;
 
 /**
@@ -33,33 +33,40 @@ public class MainMenuMenuState extends MenuState implements PConstants {
     setup();
   }
 
+  /**
+   * Setup the menuState.
+   */
   @Override
   public void setup() {
-    // Load images
-
-
     int height = menu.scene.height;
 
-    Button menuBackground = new Button(0, 0, menu.scene.width, menu.scene.height, menu.scene, UIImages.get("backgroundMenu"));
+    Button menuBackground = new Button(0, 0, menu.scene.width, menu.scene.height, menu.scene,
+        UIImages.get("backgroundMenu"));
 
     File saveFile = new File("library/saves.json");
     System.out.println(saveFile.isFile());
-    Button loadGameButton = new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
-            "", UIImages.get("menuLoad"), UIImages.get("menuLoadHov"), UIImages.get("menuLoadSel"), menu.scene, UIImages.get("menuLoadGry"), false);
+    Button loadGameButton =
+        new Button(50, height - 450, 250, height - 400, () -> onLoadGameClicked(),
+            "", UIImages.get("menuLoad"), UIImages.get("menuLoadHov"), UIImages.get("menuLoadSel"),
+            menu.scene, UIImages.get("menuLoadGry"), false);
     loadGameButton.setClickable(saveFile.isFile());
 
     // Create buttons
     Button newGameButton = new Button(50, height - 350, 250, height - 300, () -> onNewGameClicked(),
-            "", UIImages.get("menuNew"), UIImages.get("menuNewHov"), UIImages.get("menuNewSel"), menu.scene);
+        "", UIImages.get("menuNew"), UIImages.get("menuNewHov"), UIImages.get("menuNewSel"),
+        menu.scene);
 
     Button onlineButton = new Button(50, height - 250, 250, height - 200, () -> onOnlineClicked(),
-            "", UIImages.get("menuOnline"), UIImages.get("menuOnlineHov"), UIImages.get("menuOnlineSel"), menu.scene);
-    Button exitButton = new Button(50, height - 100, 250, height - 50, () -> onBackClicked(),
-            "", UIImages.get("menuExit"), UIImages.get("menuExitHov"), UIImages.get("menuExitSel"), menu.scene);
+        "", UIImages.get("menuOnline"), UIImages.get("menuOnlineHov"),
+        UIImages.get("menuOnlineSel"), menu.scene);
 
+    Button exitButton = new Button(50, height - 100, 250, height - 50, () -> onBackClicked(),
+        "", UIImages.get("menuExit"), UIImages.get("menuExitHov"), UIImages.get("menuExitSel"),
+        menu.scene);
 
     // Non functional button
-    Button logo = new Button(500, height - 500, 500 + UIImages.get("logo").width, height - 500 + UIImages.get("logo").height, menu.scene, UIImages.get("logo"));
+    Button logo = new Button(500, height - 500, 500 + UIImages.get("logo").width,
+        height - 500 + UIImages.get("logo").height, menu.scene, UIImages.get("logo"));
     if (saveFile.isFile()) {
       loadGameButton.setClickable(true);
     }
@@ -77,9 +84,6 @@ public class MainMenuMenuState extends MenuState implements PConstants {
     buttonManager.add(exitButton);
     buttonManager.add(logo);
 
-    // TODO: Add settings button
-//        buttonManager.add(settingsButton);
-
   }
 
   /**
@@ -91,7 +95,7 @@ public class MainMenuMenuState extends MenuState implements PConstants {
   }
 
   /**
-   * On load game clicked.
+   * On load game clicked load the game if present, if not display an error message.
    */
   public void onLoadGameClicked() {
     // Change the menu state to the Load Game state
@@ -108,13 +112,16 @@ public class MainMenuMenuState extends MenuState implements PConstants {
   }
 
   /**
-   * On online clicked.
+   * On online clicked set menu to online state.
    */
   public void onOnlineClicked() {
     // Change the menu state to the Online Multiplayer state
     menu.setState(new OnlineMenuState(menu));
   }
 
+  /**
+   * On back clicked exit the game.
+   */
   public void onBackClicked() {
     // exit the game
     menu.scene.exit();

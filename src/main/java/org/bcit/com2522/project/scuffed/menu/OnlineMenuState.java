@@ -1,7 +1,7 @@
 package org.bcit.com2522.project.scuffed.menu;
 
-import org.bcit.com2522.project.scuffed.uicomponents.Button;
-import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
  * The Online menu state where a player chooses to host or join a game.
@@ -21,8 +21,10 @@ public class OnlineMenuState extends MenuState {
   @Override
   public void setup() {
     Button backButton = new Button(50, 500, 250, 550, () -> onBackClicked(), "back", menu.scene);
-    Button hostButton = new Button(50, 200, 250, 250, () -> onHostClicked(), "Host Game", menu.scene);
-    Button joinButton = new Button(50, 300, 250, 350, () -> onJoinClicked(), "Join Game", menu.scene);
+    Button hostButton =
+        new Button(50, 200, 250, 250, () -> onHostClicked(), "Host Game", menu.scene);
+    Button joinButton =
+        new Button(50, 300, 250, 350, () -> onJoinClicked(), "Join Game", menu.scene);
 
     buttonManager.add(backButton);
     buttonManager.add(hostButton);

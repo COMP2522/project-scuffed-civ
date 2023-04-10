@@ -1,10 +1,10 @@
 package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import org.bcit.com2522.project.scuffed.uicomponents.Button;
-import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
-import org.bcit.com2522.project.scuffed.uicomponents.InputBox;
-import org.bcit.com2522.project.scuffed.uicomponents.Label;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.InputBox;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PApplet;
 
 /**
@@ -94,7 +94,7 @@ public class JoinGameMenuState extends MenuState {
   }
 
   /**
-   * Key pressed.
+   * When a key is pressed, add it to the input box if it is selected.
    *
    * @param key the key
    */
@@ -127,7 +127,7 @@ public class JoinGameMenuState extends MenuState {
   }
 
   /**
-   * On join clicked attempt to.
+   * Attempts to join the game if the input is valid.
    */
   public void onJoinClicked() {
     // Get the port, host IP, and username from the input boxes

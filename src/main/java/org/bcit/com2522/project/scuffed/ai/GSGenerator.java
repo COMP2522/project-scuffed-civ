@@ -1,7 +1,13 @@
 package org.bcit.com2522.project.scuffed.ai;
 
 import java.util.ArrayList;
-import org.bcit.com2522.project.scuffed.client.*;
+import org.bcit.com2522.project.scuffed.client.Building;
+import org.bcit.com2522.project.scuffed.client.Entity;
+import org.bcit.com2522.project.scuffed.client.GameState;
+import org.bcit.com2522.project.scuffed.client.Position;
+import org.bcit.com2522.project.scuffed.client.Soldier;
+import org.bcit.com2522.project.scuffed.client.Unit;
+import org.bcit.com2522.project.scuffed.client.Worker;
 
 /**
  * The type Gs generator.
@@ -23,7 +29,8 @@ public class GSGenerator {
    * @param gameState  the game state
    * @return the game state
    */
-  public static GameState generateGameStateFromEntity(ArrayList<Entity> myEntities, GameState gameState) {
+  public static GameState generateGameStateFromEntity(ArrayList<Entity> myEntities,
+                                                      GameState gameState) {
     entities = myEntities;
     state = gameState;
 
@@ -68,10 +75,11 @@ public class GSGenerator {
       for (int i = -unit.getMaxMove(); i <= unit.getMaxMove(); i++) { //every possible move
         for (int j = -unit.getMaxMove(); j <= unit.getMaxMove(); j++) {
           Position position = unit.getPosition(state.getEntities());
-          if (position != null && (unit.withinMoveRange(new Position(position.getX() + i, position.getY() + j), state.getEntities()))) {
+          if (position != null
+              && (unit.withinMoveRange(new Position(position.getX() + i, position.getY() + j),
+                  state.getEntities()))) {
             GameState gs = new GameState(state); //creates a deep copy of state
             Unit unit2 = ((Unit) gs.getEntities()[position.getX()][position.getY()]);
-
 
             unit2.move(gs.getEntities(), new Position(position.getX() + i, position.getY() + j));
             possibleMoves.add(gs);
@@ -91,12 +99,16 @@ public class GSGenerator {
   private static void generateActions(Entity entity, ArrayList<GameState> gs) {
     Position position = entity.getPosition(gs.get(gs.size() - 1).getEntities());
     if (entity instanceof Soldier soldier) {
-      for (int i = -soldier.getRange(); i <= soldier.getRange(); i++) { //every possible position to shoot
+      for (int i = -soldier.getRange(); i <= soldier.getRange();
+           i++) { //every possible position to shoot
         for (int j = -soldier.getRange(); j <= soldier.getRange(); j++) {
-          if (position != null && (soldier.withinRange(new Position(position.getX() + i, position.getY() + j), gs.get(gs.size() - 1).getEntities()))) {
+          if (position != null
+              && (soldier.withinRange(new Position(position.getX() + i, position.getY() + j),
+                  gs.get(gs.size() - 1).getEntities()))) {
             GameState gs1 = new GameState(gs.get(gs.size() - 1));
             soldier = (Soldier) gs1.getEntities()[position.getX()][position.getY()];
-            soldier.attack(gs1.getEntities(), gs1.getEntities()[position.getX() + i][position.getY() + j]);
+            soldier.attack(gs1.getEntities(),
+                gs1.getEntities()[position.getX() + i][position.getY() + j]);
             gs.add(gs1);
           }
         }
@@ -106,8 +118,10 @@ public class GSGenerator {
       GameState gs1 = new GameState(gs0);
       GameState gs2 = new GameState(gs0);
       if (entity.getPosition(gs0.getEntities()) != null) {
-        ((Worker) gs1.getEntities()[position.getX()][position.getY()]).buildBuilding(gs1.getEntities());
-        ((Worker) gs2.getEntities()[position.getX()][position.getY()]).collect(gs2.getMap().get(entity.getPosition(gs0.getEntities())));
+        ((Worker) gs1.getEntities()[position.getX()][position.getY()]).buildBuilding(
+            gs1.getEntities());
+        ((Worker) gs2.getEntities()[position.getX()][position.getY()]).collect(
+            gs2.getMap().get(entity.getPosition(gs0.getEntities())));
       }
       gs.add(gs1);
       gs.add(gs2);
@@ -116,8 +130,10 @@ public class GSGenerator {
       GameState gs1 = new GameState(gs0);
       GameState gs2 = new GameState(gs0);
       if (entity.getPosition(gs0.getEntities()) != null) {
-        ((Building) gs1.getEntities()[position.getX()][position.getY()]).buildSoldier(gs1.getEntities());
-        ((Building) gs2.getEntities()[position.getX()][position.getY()]).buildWorker(gs2.getEntities());
+        ((Building) gs1.getEntities()[position.getX()][position.getY()]).buildSoldier(
+            gs1.getEntities());
+        ((Building) gs2.getEntities()[position.getX()][position.getY()]).buildWorker(
+            gs2.getEntities());
       }
       gs.add(gs1);
       gs.add(gs2);
