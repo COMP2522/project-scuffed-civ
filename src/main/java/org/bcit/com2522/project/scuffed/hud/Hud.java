@@ -37,7 +37,6 @@ public class Hud {
    * @param newState the new state
    */
   public void setState(HudState newState) {
-    scene.wipeGraphics();
     this.currentState = newState;
   }
 
