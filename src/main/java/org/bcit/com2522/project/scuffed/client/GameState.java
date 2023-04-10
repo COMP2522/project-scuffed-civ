@@ -116,13 +116,13 @@ public class GameState { // everything manager this is the player manager
         if (entity != null) {
           if (state.entities[i][j] instanceof Worker)
             this.entities[i][j] = new Worker(entity.getOwnerID(), entity.getHealth(), entity.getCost(),
-                    ((Unit) entity).getMaxMove());
+                ((Unit) entity).getMaxMove());
           else if (state.entities[i][j] instanceof Building)
             this.entities[i][j] = new Building(entity.getOwnerID(), entity.getHealth(), entity.getCost());
           else
             this.entities[i][j] = new Soldier(entity.getOwnerID(), entity.getHealth(), entity.getCost(),
-                    ((Soldier) entity).getMaxMove(), ((Soldier) entity).getDamage(),
-                    ((Soldier) entity).getRange());
+                ((Soldier) entity).getMaxMove(), ((Soldier) entity).getDamage(),
+                ((Soldier) entity).getRange());
         }
       }
     }
@@ -170,8 +170,8 @@ public class GameState { // everything manager this is the player manager
     gameState.currentPlayer = Player.fromJSONObject((JSONObject) gameStateJSON.get("currentPlayer"));
     JSONArray playersArray = (JSONArray) gameStateJSON.get("players");
     players = (ArrayDeque<Player>) playersArray.stream()
-            .map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
-            .collect(Collectors.toCollection(ArrayDeque::new));
+        .map(playerObject -> Player.fromJSONObject((JSONObject) playerObject))
+        .collect(Collectors.toCollection(ArrayDeque::new));
     JSONArray entitiesArray = (JSONArray) gameStateJSON.get("entities");
     Entity[][] entities = new Entity[gameState.map.width][gameState.map.width];
     for (int i = 0; i < entitiesArray.size(); i++) {
@@ -333,15 +333,19 @@ public class GameState { // everything manager this is the player manager
       selected = null;
     }
 
-//        else if (key == 'u' && selected instanceof Building) { // fighter with more health
-//            ((Building) selected).buildSoldier(entities, 200, 50, 6, 6);
-//        } else if (key == 'i' && selected instanceof Building) { // fighter with more damage
-//            ((Building) selected).buildSoldier(entities, 100, 100, 6, 6);
-//        } else if (key == 'o' && selected instanceof Building) { // fighter with more speed
-//            ((Building) selected).buildSoldier(entities, 100, 50, 12, 6);
-//        } else if (key == 'p' && selected instanceof Building) { // fighter with more range
-//            ((Building) selected).buildSoldier(entities, 100, 50, 6, 12);
-//        }
+    // else if (key == 'u' && selected instanceof Building) { // fighter with more
+    // health
+    // ((Building) selected).buildSoldier(entities, 200, 50, 6, 6);
+    // } else if (key == 'i' && selected instanceof Building) { // fighter with more
+    // damage
+    // ((Building) selected).buildSoldier(entities, 100, 100, 6, 6);
+    // } else if (key == 'o' && selected instanceof Building) { // fighter with more
+    // speed
+    // ((Building) selected).buildSoldier(entities, 100, 50, 12, 6);
+    // } else if (key == 'p' && selected instanceof Building) { // fighter with more
+    // range
+    // ((Building) selected).buildSoldier(entities, 100, 50, 6, 12);
+    // }
 
     else if (key == '\n' || key == '\r') {
       nextTurn();
@@ -438,7 +442,7 @@ public class GameState { // everything manager this is the player manager
    * @param x the x
    * @param y the y
    */
-// moving around the map, does not take unit movement into account.
+  // moving around the map, does not take unit movement into account.
   public void shift(int x, int y) {
     xShift -= x;
     yShift -= y;
@@ -560,7 +564,7 @@ public class GameState { // everything manager this is the player manager
           Color color = entity.getOwner().getColor();
           scene.tint(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
           scene.image(GameImages.get(entity.entityType), (i + xShift) * zoomAmount,
-                  (j + yShift) * zoomAmount);
+              (j + yShift) * zoomAmount);
           scene.noTint();
         }
       }
@@ -569,7 +573,7 @@ public class GameState { // everything manager this is the player manager
     if (selected != null) { // prints box around selected entity
       selectPosition = selected.getPosition(entities);
       scene.image(GameImages.get("select"), (selectPosition.getX() + xShift) * zoomAmount,
-              (selectPosition.getY() + yShift) * zoomAmount);
+          (selectPosition.getY() + yShift) * zoomAmount);
     }
   }
 
@@ -697,33 +701,34 @@ public class GameState { // everything manager this is the player manager
    * @return the value
    */
   public int getValue() {
-//        int playerHP = 0;
-//        int playerDMG = 0;
-//        int enemyHP = 0;
-//        int enemyDMG = 0;
-//
-//        for (int i = 0; i < entities.length; i++) {
-//            for (int j = 0; j < entities[0].length; j++) {
-//                Entity entity = entities[i][j];
-//                if (entity != null) {
-//                    if (entity.getOwner().equals(currentPlayer)) {
-//                        playerHP += entity.getHealth();
-//                        if (entity instanceof Soldier soldier) {
-//                            playerDMG += soldier.getDamage() + 151;
-//                        }
-//                    } else {
-//                        enemyHP += entity.getHealth();
-//                        if (entity instanceof Soldier soldier) {
-//                            enemyDMG -= soldier.getDamage();
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        // position of allies
-//        // position of enemies
-//
-//        return ((playerHP + playerDMG) - (enemyDMG + enemyHP) + currentPlayer.getResources());
+    // int playerHP = 0;
+    // int playerDMG = 0;
+    // int enemyHP = 0;
+    // int enemyDMG = 0;
+    //
+    // for (int i = 0; i < entities.length; i++) {
+    // for (int j = 0; j < entities[0].length; j++) {
+    // Entity entity = entities[i][j];
+    // if (entity != null) {
+    // if (entity.getOwner().equals(currentPlayer)) {
+    // playerHP += entity.getHealth();
+    // if (entity instanceof Soldier soldier) {
+    // playerDMG += soldier.getDamage() + 151;
+    // }
+    // } else {
+    // enemyHP += entity.getHealth();
+    // if (entity instanceof Soldier soldier) {
+    // enemyDMG -= soldier.getDamage();
+    // }
+    // }
+    // }
+    // }
+    // }
+    // // position of allies
+    // // position of enemies
+    //
+    // return ((playerHP + playerDMG) - (enemyDMG + enemyHP) +
+    // currentPlayer.getResources());
     return currentPlayer.getResources();
   }
 
