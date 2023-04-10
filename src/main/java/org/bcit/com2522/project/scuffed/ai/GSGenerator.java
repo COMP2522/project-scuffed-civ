@@ -27,25 +27,31 @@ public class GSGenerator {
     entities = myEntities;
     state = gameState;
 
-    int i = 0;
-    while (i < entities.size()) {
-      takeBestMove(entities.get(i));
-      i++;
+    for (Entity entity : entities) {
+      takeBestMove(entity);
     }
 
     return state;
   }
 
+
+  /**
+   * takes the best move for a specific entity
+   * @param entity the entity to take the move
+   */
   private static void takeBestMove(Entity entity) {
     ArrayList<GameState> possibleMoves = generateMoves(entity);
-    System.out.format("%d possible moves\n", possibleMoves.size());
 
     if (possibleMoves.size() > 0) {
       state = determineBestMove(possibleMoves);
     }
   }
 
-  //finds the best move of the list and sets the gamestate to the result of that move.
+  /**
+   * takes a list of moves and chooses the best one
+   * @param possibleMoves list of moves
+   * @return best move
+   */
   private static GameState determineBestMove(ArrayList<GameState> possibleMoves) {
     GameState bestGameState = possibleMoves.get(0);
     for (GameState gameState : possibleMoves) {
@@ -57,8 +63,11 @@ public class GSGenerator {
     return bestGameState;
   }
 
-  //generate moves
-  //generates every possible move an entity could make.
+  /**
+   * generates all possible moves for a specific entity
+   * @param entity entity
+   * @return all moves
+   */
   private static ArrayList<GameState> generateMoves(Entity entity) {
     ArrayList<GameState> possibleMoves = new ArrayList<>();
     Position position = entity.getPosition(state.getEntities());
@@ -89,6 +98,11 @@ public class GSGenerator {
     return possibleMoves;
   }
 
+  /**
+   * generates all possible actions for a specific entity
+   * @param entity entity
+   * @param gs list of moves
+   */
   private static void generateActions(Entity entity, ArrayList<GameState> gs) {
     Position position = entity.getPosition(gs.get(gs.size() - 1).getEntities());
     if (entity instanceof Soldier soldier) {
@@ -114,12 +128,10 @@ public class GSGenerator {
       gs.add(gs2);
     }
     if (entity instanceof Building) {
-      System.out.println("entity is a building :wow:");
       GameState gs0 = gs.get(gs.size() - 1);
       GameState gs1 = new GameState(gs0);
       GameState gs2 = new GameState(gs0);
       if (entity.getPosition(gs0.getEntities()) != null) {
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + gs2.currentPlayer.getResources());
         ((Building) gs1.getEntities()[position.getX()][position.getY()]).buildSoldier(gs1.getEntities());
         ((Building) gs2.getEntities()[position.getX()][position.getY()]).buildWorker(gs2.getEntities());
       }
