@@ -123,18 +123,26 @@ The main menu screen will appear. Click on the "New Game" button to start the ga
 
 If you have played the game before, you can click on the "Continue" button to load your previous game.
 
-Online button to play the game online with other players.
+Online button to play the game online with other players. This currently only works with players on the same Wifi network.
 
 Settings button to change the game settings.
 
 Exit button to close the game.
 
-### 3. Choose the game settings
+### 2.5. Online menu
+If you chose online in the main menu, you are prompted to either Host Game or Join Game.
+
+### 3a. Choose the game settings (new game or host game)
 Choose the size of the board. Each number represents a single tile increasing the board size.
 
 Choose the number of players. The maximum number of players is 4.
 
-Once the settings are chosen, click on the "Start" button to start the game.
+Once the settings are chosen, click on the "Start" button to start the game (or server if hosting).
+
+### 3b. Join a game (online clicked in main menu)
+Input the IP of the server host, and a username.
+
+You must then wait until all other players have connected before the game will start.
 
 ### 4. Game Screen Hub
 **Top Left**: Menu button giving options.
@@ -179,7 +187,20 @@ You can quit the game by clicking on the "Exit" button in the menu screen.
 
 # Contributors
 ### 1. Cameron Walford
+I worked on the saving/loading of the game, the menu and all of the menu states, and the game server, along
+with other miscellaneous code throughout the project.
 
+Saving/Loading: I made functions toJSONObject and fromJSONObject in all of the relevant GameState classes,
+and these are all called in GameState's own respective JSONObject functions. This provided a convenient way
+to serialize the entire gamestate so it could be saved to a .json file or sent back and forth from client
+and server.
+
+Menu: I worked on a series of MenuStates that the Menu object held by Window could be set to. This was meant to be
+a fairly modular way to work with the menu, so that it would be easy to add new states as time went on.
+
+Game Server: This is a server that works only if you're on the same wifi network as the host. It uses multithreading
+to handle each client connected. When a the current player ends their turn, the server updates its own gameState and
+broadcasts the updated gameState to all other clients.
 
 ### 2. Keagan Purtell
 I worked on most of the core gameplay for our. This includes creating the logic behind each type of entity.
