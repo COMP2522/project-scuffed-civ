@@ -1,5 +1,8 @@
 package org.bcit.com2522.project.scuffed.client;
 
+import java.io.*;
+import java.net.Socket;
+import java.util.HashSet;
 import org.bcit.com2522.project.scuffed.hud.Hud;
 import org.bcit.com2522.project.scuffed.hud.InGameHud;
 import org.bcit.com2522.project.scuffed.server.GameServer;
@@ -8,42 +11,38 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import processing.core.PVector;
 
-import java.io.*;
-import java.net.Socket;
-import java.util.HashSet;
-
 /**
  * The Instance of the game that is running. This class is responsible for holding the game state, hud, and server variables.
  */
 public class GameInstance {
-    /**
-     * The Hud.
-     */
-    public Hud hud;
-    /**
-     * The Game state.
-     */
-    public GameState gameState;
-    /**
-     * The Client id.
-     */
-    public int clientID;
-    /**
-     * The Game server.
-     */
-    public GameServer gameServer;
-    /**
-     * The Is online.
-     */
-    public boolean isOnline = false;
-    /**
-     * The Scene.
-     */
-    public Window scene;
-    /**
-     * The Vs ai.
-     */
-    boolean vsAI = false;
+  /**
+   * The Hud.
+   */
+  public Hud hud;
+  /**
+   * The Game state.
+   */
+  public GameState gameState;
+  /**
+   * The Client id.
+   */
+  public int clientID;
+  /**
+   * The Game server.
+   */
+  public GameServer gameServer;
+  /**
+   * The Is online.
+   */
+  public boolean isOnline = false;
+  /**
+   * The Scene.
+   */
+  public Window scene;
+  /**
+   * The Vs ai.
+   */
+  boolean vsAI = false;
   /**
    * server variables
    **/
@@ -54,45 +53,45 @@ public class GameInstance {
   private ObjectOutputStream oos;
 
 
-    /**
-     * Instantiates a new Game instance.
-     *
-     * @param scene the scene
-     */
-    public GameInstance(Window scene) {
+  /**
+   * Instantiates a new Game instance.
+   *
+   * @param scene the scene
+   */
+  public GameInstance(Window scene) {
     this.scene = scene;
     hud = new Hud(scene);
     gameState = new GameState();
   }
 
-    /**
-     * Instantiates a new Game instance.
-     *
-     * @param hud       the hud
-     * @param gameState the game state
-     */
-    public GameInstance(Hud hud, GameState gameState) {
+  /**
+   * Instantiates a new Game instance.
+   *
+   * @param hud       the hud
+   * @param gameState the game state
+   */
+  public GameInstance(Hud hud, GameState gameState) {
     this.hud = hud;
     this.gameState = gameState;
   }
 
-    /**
-     * Draw.
-     *
-     * @param scene the scene
-     */
-    public void draw(Window scene) {
+  /**
+   * Draw.
+   *
+   * @param scene the scene
+   */
+  public void draw(Window scene) {
     gameState.draw(scene);
     hud.draw(scene);
   }
 
-    /**
-     * Clicked.
-     *
-     * @param mousePos the mouse pos
-     * @param scene    the scene
-     */
-    public void clicked(PVector mousePos, Window scene) {
+  /**
+   * Clicked.
+   *
+   * @param mousePos the mouse pos
+   * @param scene    the scene
+   */
+  public void clicked(PVector mousePos, Window scene) {
     if (isOnline) {
       if (hud.clicked(mousePos)) {
       } else if (gameState.clickedMap(mousePos) && clientID == gameState.getCurrentPlayerID()) {
@@ -108,23 +107,23 @@ public class GameInstance {
     }
   }
 
-    /**
-     * Key pressed.
-     *
-     * @param key   the key
-     * @param scene the scene
-     */
-    public void keyPressed(char key, Window scene) {
+  /**
+   * Key pressed.
+   *
+   * @param key   the key
+   * @param scene the scene
+   */
+  public void keyPressed(char key, Window scene) {
     gameState.keyPressed(key, scene);
   }
 
-    /**
-     * Converts the game state to a JSON object and saves it to the save.json file.
-     *
-     * @param
-     * @throws IOException the io exception
-     */
-    public void saveGame() throws IOException {
+  /**
+   * Converts the game state to a JSON object and saves it to the save.json file.
+   *
+   * @param
+   * @throws IOException the io exception
+   */
+  public void saveGame() throws IOException {
     System.out.println("Saving game");
     JSONObject gameStateJSON = gameState.toJSONObject();
     File saveFile = new File("library/saves.json");
@@ -141,19 +140,19 @@ public class GameInstance {
     }
   }
 
-    /**
-     * Returns the current player of the game state.
-     *
-     * @return current player
-     */
-    public Player getCurrentPlayer() {
+  /**
+   * Returns the current player of the game state.
+   *
+   * @return current player
+   */
+  public Player getCurrentPlayer() {
     return gameState.currentPlayer;
   }
 
-    /**
-     * Loads a game from the save.json file.
-     */
-    public void loadGame() {
+  /**
+   * Loads a game from the save.json file.
+   */
+  public void loadGame() {
     try {
       gameState = GameState.load();
     } catch (Exception e) {
@@ -161,30 +160,30 @@ public class GameInstance {
     }
   }
 
-    /**
-     * Starts a new game by initializing the game state and setting the current player of the
-     * hud to the current player of the game state.
-     */
-    public void newGame() {
+  /**
+   * Starts a new game by initializing the game state and setting the current player of the
+   * hud to the current player of the game state.
+   */
+  public void newGame() {
     gameState.init();
   }
 
-    /**
-     * Advances the game state to the next turn and sends the updated game state to the server.
-     */
-    public void nextTurn() {
+  /**
+   * Advances the game state to the next turn and sends the updated game state to the server.
+   */
+  public void nextTurn() {
     gameState.nextTurn();
     if (isOnline) {
       sendGameState(gameState);
     }
   }
 
-    /**
-     * Sends the updated game state to the server.
-     *
-     * @param gameState the game state to send
-     */
-    public void sendGameState(GameState gameState) {
+  /**
+   * Sends the updated game state to the server.
+   *
+   * @param gameState the game state to send
+   */
+  public void sendGameState(GameState gameState) {
     try {
       // Send endturn message
       oos.writeObject("nextTurn");
@@ -199,10 +198,10 @@ public class GameInstance {
     }
   }
 
-    /**
-     * Receives the game state from the server and updates the client-side game state.
-     */
-    public void receiveGameState() {
+  /**
+   * Receives the game state from the server and updates the client-side game state.
+   */
+  public void receiveGameState() {
     try {
       JSONParser jsonParser = new JSONParser();
       String jsonString = (String) ois.readObject();
@@ -215,14 +214,14 @@ public class GameInstance {
     }
   }
 
-    /**
-     * Connects the client to the server and establishes communication between them.
-     *
-     * @param hostIP         the IP address of the host
-     * @param port           the port on which the server is running
-     * @param clientUsername the username of the client
-     */
-    public void joinGame(String hostIP, int port, String clientUsername) {
+  /**
+   * Connects the client to the server and establishes communication between them.
+   *
+   * @param hostIP         the IP address of the host
+   * @param port           the port on which the server is running
+   * @param clientUsername the username of the client
+   */
+  public void joinGame(String hostIP, int port, String clientUsername) {
     isOnline = true;
     System.out.println("Joining game at " + hostIP + ":" + port);
     this.hostIP = hostIP;
@@ -285,39 +284,39 @@ public class GameInstance {
     }
   }
 
-    /**
-     * Sets the game state.
-     *
-     * @param gameState the game state to set
-     */
-    public void setGameState(GameState gameState) {
+  /**
+   * Sets the game state.
+   *
+   * @param gameState the game state to set
+   */
+  public void setGameState(GameState gameState) {
     this.gameState = gameState;
   }
 
-    /**
-     * Sets the game server.
-     *
-     * @param gameServer the game server to set
-     */
-    public void setGameServer(GameServer gameServer) {
+  /**
+   * Sets the game server.
+   *
+   * @param gameServer the game server to set
+   */
+  public void setGameServer(GameServer gameServer) {
     this.gameServer = gameServer;
   }
 
-    /**
-     * Starts the game server in a new thread.
-     */
-    public void startServer() {
+  /**
+   * Starts the game server in a new thread.
+   */
+  public void startServer() {
     isOnline = true;
     Thread server = new Thread(gameServer);
     server.start();
   }
 
-    /**
-     * Gets the set of connected players' usernames.
-     *
-     * @return the set of connected players' usernames
-     */
-    public HashSet<String> getConnectedPlayers() {
+  /**
+   * Gets the set of connected players' usernames.
+   *
+   * @return the set of connected players' usernames
+   */
+  public HashSet<String> getConnectedPlayers() {
     return gameServer.getConnectedPlayers();
   }
 }

@@ -1,9 +1,8 @@
 package org.bcit.com2522.project.scuffed.uicomponents;
 
+import java.util.ArrayList;
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PImage;
-
-import java.util.ArrayList;
 
 /**
  * Manages Graphic Class

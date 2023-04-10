@@ -1,8 +1,7 @@
 package org.bcit.com2522.project.scuffed.ai;
 
-import org.bcit.com2522.project.scuffed.client.*;
-
 import java.util.ArrayList;
+import org.bcit.com2522.project.scuffed.client.*;
 
 /**
  * The type Gs generator.

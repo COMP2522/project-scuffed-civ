@@ -1,14 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.bcit.com2522.project.scuffed.ai.AIManager;
-import org.bcit.com2522.project.scuffed.hud.InGameHud;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import processing.core.PApplet;
-import processing.core.PImage;
-import processing.core.PVector;
+import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
+import static processing.core.PConstants.*;
 
 import java.awt.*;
 import java.io.File;
@@ -19,56 +12,62 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
-import static processing.core.PConstants.*;
+import org.bcit.com2522.project.scuffed.ai.AIManager;
+import org.bcit.com2522.project.scuffed.hud.InGameHud;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PVector;
 
 /**
  * The type Game state.
  */
 public class GameState { // everything manager this is the player manager
 
-    /**
-     * The Players.
-     */
-    public static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
-    /**
-     * The Current player.
-     */
-    public Player currentPlayer;
-    /**
-     * The Select position.
-     */
-    public Position selectPosition;
-    /**
-     * The Map.
-     */
-    Map map;
-    /**
-     * The Zoom amount.
-     */
-    int zoomAmount;
-    /**
-     * The X shift.
-     */
-    int xShift; // only used to change where the map is drawn
-    /**
-     * The Y shift.
-     */
-    int yShift; // only used to change where the map is drawn
+  /**
+   * The Players.
+   */
+  public static ArrayDeque<Player> players; // made this a doubly ended queue so we can easily cycle through players
+  /**
+   * The Current player.
+   */
+  public Player currentPlayer;
+  /**
+   * The Select position.
+   */
+  public Position selectPosition;
+  /**
+   * The Map.
+   */
+  Map map;
+  /**
+   * The Zoom amount.
+   */
+  int zoomAmount;
+  /**
+   * The X shift.
+   */
+  int xShift; // only used to change where the map is drawn
+  /**
+   * The Y shift.
+   */
+  int yShift; // only used to change where the map is drawn
   private String gameID;
   private Entity[][] entities;
   private Entity selected;
 
-    /**
-     * Constructor used for creating a new game.
-     *
-     * @param numplayers number of players in the game
-     * @param mapwidth   width of the map
-     * @param mapheight  height of the map
-     * @param numAI      the num ai
-     */
-    public GameState(int numplayers, int mapwidth, int mapheight, int numAI) {
+  /**
+   * Constructor used for creating a new game.
+   *
+   * @param numplayers number of players in the game
+   * @param mapwidth   width of the map
+   * @param mapheight  height of the map
+   * @param numAI      the num ai
+   */
+  public GameState(int numplayers, int mapwidth, int mapheight, int numAI) {
     this.gameID = "Game" + new Random().nextInt(10000); // make a random gameId
     players = new ArrayDeque<>(numplayers);
     entities = new Entity[mapwidth][mapheight];
@@ -91,19 +90,19 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Constructor used primarily when loading a game state from a JSON file.
-     */
-    public GameState() {
+  /**
+   * Constructor used primarily when loading a game state from a JSON file.
+   */
+  public GameState() {
     zoomAmount = 32;
   }
 
-    /**
-     * this function is used by the AI to create a deep copy of the GameState
-     *
-     * @param state the state to make a copy of
-     */
-    public GameState(GameState state) {
+  /**
+   * this function is used by the AI to create a deep copy of the GameState
+   *
+   * @param state the state to make a copy of
+   */
+  public GameState(GameState state) {
     this.gameID = "Game" + (Integer.parseInt(state.gameID.substring(4)) + 1);
     this.map = new Map(state.map);
     players = state.getPlayers().clone();
@@ -141,13 +140,13 @@ public class GameState { // everything manager this is the player manager
     selectPosition = null;
   }
 
-    /**
-     * Gets player.
-     *
-     * @param ownerId the owner id
-     * @return the player
-     */
-    public static Player getPlayer(int ownerId) {
+  /**
+   * Gets player.
+   *
+   * @param ownerId the owner id
+   * @return the player
+   */
+  public static Player getPlayer(int ownerId) {
     for (Player player : players) {
       if (player.getID() == ownerId) {
         return player;
@@ -156,13 +155,13 @@ public class GameState { // everything manager this is the player manager
     return null;
   }
 
-    /**
-     * Reads JSON and creates a game state from it
-     *
-     * @param gameStateJSON the json to read
-     * @return the game state
-     */
-    public static GameState fromJSONObject(JSONObject gameStateJSON) {
+  /**
+   * Reads JSON and creates a game state from it
+   *
+   * @param gameStateJSON the json to read
+   * @return the game state
+   */
+  public static GameState fromJSONObject(JSONObject gameStateJSON) {
     GameState gameState = new GameState();
     gameState.gameID = (String) (gameStateJSON.get("gameID"));
     gameState.map = Map.fromJSONObject((JSONObject) gameStateJSON.get("map"));
@@ -185,14 +184,14 @@ public class GameState { // everything manager this is the player manager
     return gameState;
   }
 
-    /**
-     * Loads a gameState from a json file in the "saves" folder
-     * if there's an error, try adding a saves folder to the root directory
-     *
-     * @return the loaded gameState
-     * @throws FileNotFoundException the file not found exception
-     */
-    public static GameState load() throws FileNotFoundException {
+  /**
+   * Loads a gameState from a json file in the "saves" folder
+   * if there's an error, try adding a saves folder to the root directory
+   *
+   * @return the loaded gameState
+   * @throws FileNotFoundException the file not found exception
+   */
+  public static GameState load() throws FileNotFoundException {
     GameState loadedGameState = new GameState();
     JSONParser parser = new JSONParser();
     File saveFile = new File("library/saves.json");
@@ -204,11 +203,11 @@ public class GameState { // everything manager this is the player manager
     return loadedGameState;
   }
 
-    /**
-     * Method called to initialize the game state that sets up a new worker entity
-     * for each player.
-     */
-    public void init() {
+  /**
+   * Method called to initialize the game state that sets up a new worker entity
+   * for each player.
+   */
+  public void init() {
     // Initialize the currentPlayer as the first player in the queue
     currentPlayer = players.peek();
 
@@ -254,25 +253,25 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Checks whether a click was on the map.
-     *
-     * @param mousePos the position of the mouse
-     * @return true if the click was on the map, false otherwise
-     */
-    public boolean clickedMap(PVector mousePos) {
+  /**
+   * Checks whether a click was on the map.
+   *
+   * @param mousePos the position of the mouse
+   * @return true if the click was on the map, false otherwise
+   */
+  public boolean clickedMap(PVector mousePos) {
     int x = (int) (mousePos.x / zoomAmount) - xShift;
     int y = (int) (mousePos.y / zoomAmount) - yShift;
     return x >= 0 && x < entities.length && y >= 0 && y < entities[0].length;
   }
 
-    /**
-     * Method called when the map is clicked.
-     *
-     * @param mousePos the position of the mouse in pixels
-     * @param scene    the scene
-     */
-    public void clicked(PVector mousePos, Window scene) {
+  /**
+   * Method called when the map is clicked.
+   *
+   * @param mousePos the position of the mouse in pixels
+   * @param scene    the scene
+   */
+  public void clicked(PVector mousePos, Window scene) {
     int x = (int) (mousePos.x / zoomAmount) - xShift;
     int y = (int) (mousePos.y / zoomAmount) - yShift;
     Entity clicked = entities[x][y];
@@ -305,13 +304,13 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Key pressed.
-     *
-     * @param key   the key
-     * @param scene the scene
-     */
-    public void keyPressed(char key, Window scene) {
+  /**
+   * Key pressed.
+   *
+   * @param key   the key
+   * @param scene the scene
+   */
+  public void keyPressed(char key, Window scene) {
     if (key == 'w') {
       shift(0, 1);
     } else if (key == 'a') {
@@ -361,17 +360,17 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Resize pixels int [ ].
-     *
-     * @param pixels the pixels
-     * @param w1     the w 1
-     * @param h1     the h 1
-     * @param w2     the w 2
-     * @param h2     the h 2
-     * @return the int [ ]
-     */
-    public int[] resizePixels(int[] pixels, int w1, int h1, int w2, int h2) {
+  /**
+   * Resize pixels int [ ].
+   *
+   * @param pixels the pixels
+   * @param w1     the w 1
+   * @param h1     the h 1
+   * @param w2     the w 2
+   * @param h2     the h 2
+   * @return the int [ ]
+   */
+  public int[] resizePixels(int[] pixels, int w1, int h1, int w2, int h2) {
     int[] temp = new int[w2 * h2];
     int x_ratio = ((w1 << 16) / w2) + 1;
     int y_ratio = ((h1 << 16) / h2) + 1;
@@ -386,15 +385,15 @@ public class GameState { // everything manager this is the player manager
     return temp;
   }
 
-    /**
-     * Nearest neighbor resize p image.
-     *
-     * @param image       the image
-     * @param amount      the amount
-     * @param currentSize the current size
-     * @return the p image
-     */
-    public PImage nearestNeighborResize(PImage image, float amount, int currentSize) {
+  /**
+   * Nearest neighbor resize p image.
+   *
+   * @param image       the image
+   * @param amount      the amount
+   * @param currentSize the current size
+   * @return the p image
+   */
+  public PImage nearestNeighborResize(PImage image, float amount, int currentSize) {
     int[] imagePixels = new int[1024];
     int scale = currentSize / 32;
 
@@ -413,12 +412,12 @@ public class GameState { // everything manager this is the player manager
     return image;
   }
 
-    /**
-     * Zoom.
-     *
-     * @param amount the amount
-     */
-    public void zoom(float amount) {
+  /**
+   * Zoom.
+   *
+   * @param amount the amount
+   */
+  public void zoom(float amount) {
     if (!(zoomAmount <= 32 && amount < 1) && !(zoomAmount >= 512 && amount > 1)) {
       for (java.util.Map.Entry<String, PImage> mapElement : GameImages.entrySet()) {
         // mapElement.getValue().resize(zoomAmount, 0);
@@ -433,30 +432,30 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Shift.
-     *
-     * @param x the x
-     * @param y the y
-     */
+  /**
+   * Shift.
+   *
+   * @param x the x
+   * @param y the y
+   */
 // moving around the map, does not take unit movement into account.
   public void shift(int x, int y) {
     xShift -= x;
     yShift -= y;
   }
 
-    /**
-     * Reset shift.
-     */
-    public void resetShift() {
+  /**
+   * Reset shift.
+   */
+  public void resetShift() {
     xShift = (1080 / zoomAmount - map.width) / 2;
     yShift = (720 / zoomAmount - map.height) / 2;
   }
 
-    /**
-     * Sets the current player to the next in the queue and checks win conditions
-     */
-    public void nextTurn() {
+  /**
+   * Sets the current player to the next in the queue and checks win conditions
+   */
+  public void nextTurn() {
     System.out.println("next turn");
     resetEntityActions();
     moveToNextPlayer();
@@ -546,12 +545,12 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Draws the map and all entities in the gamestate
-     *
-     * @param scene the window to draw to
-     */
-    public void draw(Window scene) {
+  /**
+   * Draws the map and all entities in the gamestate
+   *
+   * @param scene the window to draw to
+   */
+  public void draw(Window scene) {
     map.draw(zoomAmount, scene, xShift, yShift);
 
     for (int i = 0; i < entities.length; i++) { // prints the maps entities
@@ -574,10 +573,10 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Prints all entities in the gamestate to the console for debugging purposes
-     */
-    public void printEntities() {
+  /**
+   * Prints all entities in the gamestate to the console for debugging purposes
+   */
+  public void printEntities() {
     for (Entity[] row : entities) {
       for (Entity element : row) {
         if (element != null) {
@@ -587,12 +586,12 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Creates a JSONObject from the current gamestate
-     *
-     * @return the json object
-     */
-    public JSONObject toJSONObject() {
+  /**
+   * Creates a JSONObject from the current gamestate
+   *
+   * @return the json object
+   */
+  public JSONObject toJSONObject() {
     JSONObject gameState = new JSONObject();
     gameState.put("gameID", this.gameID);
     gameState.put("map", map.toJSONObject());
@@ -618,71 +617,71 @@ public class GameState { // everything manager this is the player manager
     return gameState;
   }
 
-    /**
-     * Get entities entity [ ] [ ].
-     *
-     * @return the entity [ ] [ ]
-     */
-    public Entity[][] getEntities() {
+  /**
+   * Get entities entity [ ] [ ].
+   *
+   * @return the entity [ ] [ ]
+   */
+  public Entity[][] getEntities() {
     return entities;
   }
 
-    /**
-     * Sets entities.
-     *
-     * @param entities the entities
-     */
-    public void setEntities(Entity[][] entities) {
+  /**
+   * Sets entities.
+   *
+   * @param entities the entities
+   */
+  public void setEntities(Entity[][] entities) {
     this.entities = entities;
   }
 
-    /**
-     * Gets current player id.
-     *
-     * @return the current player id
-     */
-    public int getCurrentPlayerID() {
+  /**
+   * Gets current player id.
+   *
+   * @return the current player id
+   */
+  public int getCurrentPlayerID() {
     return currentPlayer.getID();
   }
 
-    /**
-     * Gets map.
-     *
-     * @return the map
-     */
-    public Map getMap() {
+  /**
+   * Gets map.
+   *
+   * @return the map
+   */
+  public Map getMap() {
     return map;
   }
 
-    /**
-     * Sets map.
-     *
-     * @param map the map
-     */
-    public void setMap(Map map) {
+  /**
+   * Sets map.
+   *
+   * @param map the map
+   */
+  public void setMap(Map map) {
     this.map = map;
   }
 
-    /**
-     * Gets game id.
-     *
-     * @return the game id
-     */
-    public String getGameID() {
+  /**
+   * Gets game id.
+   *
+   * @return the game id
+   */
+  public String getGameID() {
     return gameID;
   }
 
-    /**
-     * assumes quality is for currentPlayer.
-     * <p>
-     * returns 0 if the gameStates have equal value.
-     * returns -1 if this has lower value than passed in gameState
-     * returns 1 if this has higher value than passed in gameState
-     *
-     * @param gameState the game state
-     * @return int
-     */
-    public int compareTo(GameState gameState) {
+  /**
+   * assumes quality is for currentPlayer.
+   * <p>
+   * returns 0 if the gameStates have equal value.
+   * returns -1 if this has lower value than passed in gameState
+   * returns 1 if this has higher value than passed in gameState
+   *
+   * @param gameState the game state
+   * @return int
+   */
+  public int compareTo(GameState gameState) {
     if (this.getValue() > gameState.getValue()) {
       return 1;
     } else if (this.getValue() < gameState.getValue()) {
@@ -692,12 +691,12 @@ public class GameState { // everything manager this is the player manager
     }
   }
 
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
-    public int getValue() {
+  /**
+   * Gets value.
+   *
+   * @return the value
+   */
+  public int getValue() {
 //        int playerHP = 0;
 //        int playerDMG = 0;
 //        int enemyHP = 0;
@@ -728,21 +727,21 @@ public class GameState { // everything manager this is the player manager
     return currentPlayer.getResources();
   }
 
-    /**
-     * Gets players.
-     *
-     * @return the players
-     */
-    public ArrayDeque<Player> getPlayers() {
+  /**
+   * Gets players.
+   *
+   * @return the players
+   */
+  public ArrayDeque<Player> getPlayers() {
     return players;
   }
 
-    /**
-     * Sets players.
-     *
-     * @param players the players
-     */
-    public void setPlayers(ArrayDeque<Player> players) {
+  /**
+   * Sets players.
+   *
+   * @param players the players
+   */
+  public void setPlayers(ArrayDeque<Player> players) {
     GameState.players = new ArrayDeque<>(players);
   }
 }

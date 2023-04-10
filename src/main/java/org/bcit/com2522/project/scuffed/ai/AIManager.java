@@ -1,10 +1,9 @@
 package org.bcit.com2522.project.scuffed.ai;
 
+import java.util.ArrayList;
 import org.bcit.com2522.project.scuffed.client.Entity;
 import org.bcit.com2522.project.scuffed.client.GameState;
 import org.bcit.com2522.project.scuffed.client.Player;
-
-import java.util.ArrayList;
 
 /**
  * The type Ai manager.

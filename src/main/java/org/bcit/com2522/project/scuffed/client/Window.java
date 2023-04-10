@@ -1,4 +1,8 @@
 package org.bcit.com2522.project.scuffed.client;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import org.bcit.com2522.project.scuffed.hud.Hud;
 import org.bcit.com2522.project.scuffed.menu.HostGameMenuState;
 import org.bcit.com2522.project.scuffed.menu.JoinGameMenuState;
@@ -11,10 +15,6 @@ import org.bcit.com2522.project.scuffed.uicomponents.GraphicManager;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Window class that holds the main method and initializes the game. It provides

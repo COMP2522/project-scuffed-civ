@@ -1,15 +1,14 @@
 package org.bcit.com2522.project.scuffed.server;
 
-import org.bcit.com2522.project.scuffed.client.GameState;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.*;
+import org.bcit.com2522.project.scuffed.client.GameState;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * The GameServer class is responsible for coordinating the game state between multiple players.
@@ -29,25 +28,25 @@ public class GameServer implements Runnable {
   private ServerSocket serverSocket;
   private GameState gameState;
 
-    /**
-     * Constructs a new GameServer with the specified game state and port number.
-     *
-     * @param gameState the game state
-     * @param port      the port number
-     */
-    public GameServer(GameState gameState, int port) {
+  /**
+   * Constructs a new GameServer with the specified game state and port number.
+   *
+   * @param gameState the game state
+   * @param port      the port number
+   */
+  public GameServer(GameState gameState, int port) {
     this.gameState = gameState;
     this.port = port;
     this.hostIP = getLocalIpAddress();
   }
 
-    /**
-     * Retrieves the local IP address (IPv4) of the machine running the server.
-     * This is for playing multiplayer games on the same Wi-Fi network.
-     *
-     * @return String representation of the local IP address (IPv4)
-     */
-    public static String getLocalIpAddress() {
+  /**
+   * Retrieves the local IP address (IPv4) of the machine running the server.
+   * This is for playing multiplayer games on the same Wi-Fi network.
+   *
+   * @return String representation of the local IP address (IPv4)
+   */
+  public static String getLocalIpAddress() {
     try {
       Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
       while (networkInterfaces.hasMoreElements()) {
@@ -94,22 +93,22 @@ public class GameServer implements Runnable {
     System.out.println("All players connected! Press 'Start Game' to begin.");
   }
 
-    /**
-     * Checks if all players are connected to the server.
-     *
-     * @return true if all players are connected, false otherwise
-     */
-    public boolean allPlayersConnected() {
+  /**
+   * Checks if all players are connected to the server.
+   *
+   * @return true if all players are connected, false otherwise
+   */
+  public boolean allPlayersConnected() {
     return clients.size() == GameState.players.size();
   }
 
-    /**
-     * Sends the updated game state to all clients except the current player.
-     *
-     * @param updatedGameState the updated game state
-     * @param currentPlayer    the current player's client handler
-     */
-    public void broadcastGameState(GameState updatedGameState, ClientHandler currentPlayer) {
+  /**
+   * Sends the updated game state to all clients except the current player.
+   *
+   * @param updatedGameState the updated game state
+   * @param currentPlayer    the current player's client handler
+   */
+  public void broadcastGameState(GameState updatedGameState, ClientHandler currentPlayer) {
     synchronized (clients) {
       for (ClientHandler client : clients) {
         if (client != currentPlayer) {
@@ -123,22 +122,22 @@ public class GameServer implements Runnable {
     }
   }
 
-    /**
-     * Sends the initial game state to the client when they connect.
-     *
-     * @param client the client to send the initial game state to
-     */
-    public void sendInitialGameState(ClientHandler client) {
+  /**
+   * Sends the initial game state to the client when they connect.
+   *
+   * @param client the client to send the initial game state to
+   */
+  public void sendInitialGameState(ClientHandler client) {
     client.sendMessage("start");
     client.sendGameState(gameState);
   }
 
-    /**
-     * Gets the set of connected player's names.
-     *
-     * @return the connected players' IP addresses as a HashSet of Strings
-     */
-    public HashSet<String> getConnectedPlayers() {
+  /**
+   * Gets the set of connected player's names.
+   *
+   * @return the connected players' IP addresses as a HashSet of Strings
+   */
+  public HashSet<String> getConnectedPlayers() {
     HashSet<String> connectedPlayers = new HashSet<>();
     for (ClientHandler client : clients) {
       connectedPlayers.add(client.clientUsername);
@@ -146,48 +145,48 @@ public class GameServer implements Runnable {
     return connectedPlayers;
   }
 
-    /**
-     * Gets ip.
-     *
-     * @return the ip
-     */
-    public String getIP() {
+  /**
+   * Gets ip.
+   *
+   * @return the ip
+   */
+  public String getIP() {
     return hostIP;
   }
 
-    /**
-     * Gets port.
-     *
-     * @return the port
-     */
-    public int getPort() {
+  /**
+   * Gets port.
+   *
+   * @return the port
+   */
+  public int getPort() {
     return port;
   }
 
-    /**
-     * The ClientHandler class is responsible for handling each new connection made to the GameServer.
-     * It associates a username with each particular client and manages the communication with the client.
-     *
-     * @author Cameron Walford
-     * @version 1.0
-     */
-    class ClientHandler extends Thread {
+  /**
+   * The ClientHandler class is responsible for handling each new connection made to the GameServer.
+   * It associates a username with each particular client and manages the communication with the client.
+   *
+   * @author Cameron Walford
+   * @version 1.0
+   */
+  class ClientHandler extends Thread {
     private final Socket clientSocket;
     private final int playerID;
     private final ObjectOutputStream oos;
     private final ObjectInputStream ois;
-        /**
-         * The Client username.
-         */
-        public String clientUsername;
+    /**
+     * The Client username.
+     */
+    public String clientUsername;
 
-        /**
-         * Constructs a new ClientHandler with the specified socket and player ID.
-         *
-         * @param socket   the client socket
-         * @param playerID the player ID
-         */
-        public ClientHandler(Socket socket, int playerID) {
+    /**
+     * Constructs a new ClientHandler with the specified socket and player ID.
+     *
+     * @param socket   the client socket
+     * @param playerID the player ID
+     */
+    public ClientHandler(Socket socket, int playerID) {
       this.clientSocket = socket;
       this.playerID = playerID;
       try {
@@ -254,12 +253,12 @@ public class GameServer implements Runnable {
       }
     }
 
-        /**
-         * Receives the updated game state from the client.
-         *
-         * @return the updated GameState object, or null if an error occurs
-         */
-        public GameState receiveUpdatedGameState() {
+    /**
+     * Receives the updated game state from the client.
+     *
+     * @return the updated GameState object, or null if an error occurs
+     */
+    public GameState receiveUpdatedGameState() {
       try {
         String gameStateString = (String) ois.readObject();
         JSONObject gameStateJSON = (JSONObject) new JSONParser().parse(gameStateString);
@@ -271,12 +270,12 @@ public class GameServer implements Runnable {
       return null;
     }
 
-        /**
-         * Sends the game state as a JSONObject to the client.
-         *
-         * @param gameState the game state to send
-         */
-        public void sendGameState(GameState gameState) {
+    /**
+     * Sends the game state as a JSONObject to the client.
+     *
+     * @param gameState the game state to send
+     */
+    public void sendGameState(GameState gameState) {
       try {
         JSONObject gameStateJSON = gameState.toJSONObject();
         oos.writeObject(gameStateJSON.toJSONString());
@@ -286,12 +285,12 @@ public class GameServer implements Runnable {
       }
     }
 
-        /**
-         * Sends a message to the client.
-         *
-         * @param message the message to send
-         */
-        public void sendMessage(String message) {
+    /**
+     * Sends a message to the client.
+     *
+     * @param message the message to send
+     */
+    public void sendMessage(String message) {
       try {
         oos.writeObject(message);
         oos.flush();

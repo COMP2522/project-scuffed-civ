@@ -118,13 +118,16 @@ public class JoinGameMenuState extends MenuState {
     }
   }
 
+  /**
+   * When back button is click set the menustate back to the previous.
+   */
   public void onBackClicked() {
     // Change the menu state to the New Game state
     menu.setState(new OnlineMenuState(menu));
   }
 
   /**
-   * On join clicked.
+   * On join clicked attempt to.
    */
   public void onJoinClicked() {
     // Get the port, host IP, and username from the input boxes

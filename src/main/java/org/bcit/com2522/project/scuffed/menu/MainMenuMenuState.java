@@ -1,14 +1,13 @@
 package org.bcit.com2522.project.scuffed.menu;
 
+import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
+
+import java.io.File;
 import org.bcit.com2522.project.scuffed.uicomponents.Button;
 import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
 import org.bcit.com2522.project.scuffed.uicomponents.GraphicManager;
 import org.bcit.com2522.project.scuffed.uicomponents.Label;
 import processing.core.PConstants;
-
-import java.io.File;
-
-import static org.bcit.com2522.project.scuffed.client.Window.UIImages;
 
 /**
  * The main menu menu state. This is the first menu that the player sees when they start the game.

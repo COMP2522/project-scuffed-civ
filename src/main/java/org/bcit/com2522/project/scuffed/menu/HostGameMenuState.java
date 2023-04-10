@@ -6,11 +6,20 @@ import org.bcit.com2522.project.scuffed.uicomponents.InputBox;
 import org.bcit.com2522.project.scuffed.uicomponents.Label;
 import processing.core.PApplet;
 
+/**
+ * The HostGameMenuState class, which extends the NewGameMenuState class, represents
+ * the menu state for hosting an online game.
+ */
 public class HostGameMenuState extends NewGameMenuState {
   private final InputBox portInput;
   private final Label portInputLabel;
   private final Label errorMessageLabel;
 
+  /**
+   * Constructs a new HostGameMenuState with the specified menu.
+   *
+   * @param menu the menu associated with this menu state
+   */
   public HostGameMenuState(Menu menu) {
     super(menu);
 
@@ -22,6 +31,9 @@ public class HostGameMenuState extends NewGameMenuState {
     setupHostMenu();
   }
 
+  /**
+   * Sets up the host game menu by adding the back button and start server button.
+   */
   private void setupHostMenu() {
     buttonManager.wipe();
     Button backButton = new Button(50, 500, 250, 550,
@@ -33,6 +45,11 @@ public class HostGameMenuState extends NewGameMenuState {
     buttonManager.add(startServerButton);
   }
 
+  /**
+   * Draws the host game menu state on the given scene.
+   *
+   * @param scene the scene to draw on
+   */
   @Override
   public void draw(Window scene) {
     super.draw(scene);
@@ -44,6 +61,13 @@ public class HostGameMenuState extends NewGameMenuState {
     }
   }
 
+  /**
+   * Handles mouse clicks on this menu state.
+   *
+   * @param xpos the x position of the mouse click
+   * @param ypos the y position of the mouse click
+   * @return true if a component is clicked, false otherwise
+   */
   @Override
   public boolean clicked(int xpos, int ypos) {
     if (super.clicked(xpos, ypos)) {
@@ -56,6 +80,11 @@ public class HostGameMenuState extends NewGameMenuState {
     return false;
   }
 
+  /**
+   * Handles key presses for the input boxes.
+   *
+   * @param key the key pressed
+   */
   @Override
   public void keyPressed(char key) {
     super.keyPressed(key);
@@ -70,6 +99,9 @@ public class HostGameMenuState extends NewGameMenuState {
     }
   }
 
+  /**
+   * Handles the start server button click and initiates the online game.
+   */
   public void onStartServerClicked() {
     System.out.println("Starting server...");
     int port = portInput.getIntValue();
@@ -80,7 +112,6 @@ public class HostGameMenuState extends NewGameMenuState {
             && numPlayers >= 1 && numPlayers <= 10) {
       menu.scene.initOnlineGame(numPlayers, mapWidth, mapHeight, port);
       menu.setState(new ServerLobbyMenuState(menu));
-
       showError = false;
     } else {
       showError = true;

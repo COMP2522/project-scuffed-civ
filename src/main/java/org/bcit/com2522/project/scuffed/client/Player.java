@@ -1,9 +1,8 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.json.simple.JSONObject;
-
 import java.awt.*;
 import java.util.Random;
+import org.json.simple.JSONObject;
 
 /**
  * The type Player.

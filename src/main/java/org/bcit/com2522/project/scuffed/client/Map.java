@@ -1,11 +1,10 @@
 package org.bcit.com2522.project.scuffed.client;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
 
 import java.awt.*;
-
-import static org.bcit.com2522.project.scuffed.client.Window.GameImages;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * The type Map.
