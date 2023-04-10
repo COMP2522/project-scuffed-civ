@@ -12,7 +12,7 @@ public class ButtonManager {
    */
   public ArrayList<Button> buttons = new ArrayList<Button>();
   /**
-   * The Scene.
+   *  The scene.
    */
   Window scene;
 
@@ -26,7 +26,7 @@ public class ButtonManager {
   }
 
   /**
-   * Add.
+   * Adds a button.
    *
    * @param button the button
    */
@@ -35,7 +35,7 @@ public class ButtonManager {
   }
 
   /**
-   * Remove.
+   * Removes a specific button.
    *
    * @param button the button
    */
@@ -44,7 +44,7 @@ public class ButtonManager {
   }
 
   /**
-   * Draw.
+   * Draws all buttons.
    *
    * @param scene the scene
    */
@@ -55,7 +55,7 @@ public class ButtonManager {
   }
 
   /**
-   * Wipe.
+   * Deletes all buttons.
    */
   public void wipe() {
     buttons.clear();
