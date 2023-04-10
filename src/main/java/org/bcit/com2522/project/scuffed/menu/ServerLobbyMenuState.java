@@ -1,9 +1,17 @@
-package org.bcit.com2522.project.scuffed.ui;
+package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 
 /**
- * The type Server lobby menu state.
+ * The server lobby. This is where the host can see the players connected and start the game.
+ * --> as of this version only the host is shown the lobby
+ * --> The game currently starts as soon as all players connect, so the start button is not used
+ *
+ * @author Cameron Walford
+ * @version 1.0
  */
 public class ServerLobbyMenuState extends MenuState {
     private Label titleLabel;
@@ -38,12 +46,11 @@ public class ServerLobbyMenuState extends MenuState {
     public void draw() {
         super.draw();
         titleLabel.draw();
-        playersLabel.setText("Players Connected: " + scene.getConnectedPlayers().size());
+        playersLabel.setText("Players Currently Connected: " + scene.getConnectedPlayers().size());
         playersLabel.draw();
     }
 
     public void onBackClicked() {
-        // Change the menu state to the New Game state
         menu.setState(new HostGameMenuState(scene, menu));
     }
 

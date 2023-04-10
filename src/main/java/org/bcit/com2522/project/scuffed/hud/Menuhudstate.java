@@ -1,7 +1,8 @@
-package org.bcit.com2522.project.scuffed.client;
+package org.bcit.com2522.project.scuffed.hud;
 
-import org.bcit.com2522.project.scuffed.ui.Button;
-import org.bcit.com2522.project.scuffed.ui.ButtonManager;
+import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
  * The Menuhudstate class is an implementation of the HudState abstract class and represents

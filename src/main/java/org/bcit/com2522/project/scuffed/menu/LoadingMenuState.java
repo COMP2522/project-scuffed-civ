@@ -1,6 +1,7 @@
-package org.bcit.com2522.project.scuffed.ui;
+package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 
 /**
  * The type Loading menu state.
@@ -35,7 +36,5 @@ public class LoadingMenuState extends MenuState {
     }
 
     @Override
-    public void onBackClicked() {
-
-    }
+    public void onBackClicked() {}
 }

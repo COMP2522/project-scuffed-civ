@@ -1,6 +1,10 @@
-package org.bcit.com2522.project.scuffed.ui;
+package org.bcit.com2522.project.scuffed.menu;
 
 import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uiComponents.GraphicManager;
+import org.bcit.com2522.project.scuffed.uiComponents.Label;
 import processing.core.PConstants;
 
 import java.io.File;
@@ -112,11 +116,6 @@ public class MainMenuMenuState extends MenuState implements PConstants {
         // Change the menu state to the Online Multiplayer state
         menu.setState(new OnlineMenuState(scene, menu));
     }
-
-//    public void onSettingsClicked() {
-//        // Change the menu state to the Settings state
-//        menu.setState(new SettingsMenuState(scene, menu));
-//    }
 
     public void onBackClicked() {
         // exit the game

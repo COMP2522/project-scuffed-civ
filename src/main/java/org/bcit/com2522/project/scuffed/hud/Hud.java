@@ -1,5 +1,6 @@
-package org.bcit.com2522.project.scuffed.client;
+package org.bcit.com2522.project.scuffed.hud;
 
+import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PVector;
 
 /**

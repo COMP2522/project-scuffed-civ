@@ -1,7 +1,8 @@
-package org.bcit.com2522.project.scuffed.client;
+package org.bcit.com2522.project.scuffed.hud;
 
-import org.bcit.com2522.project.scuffed.ui.Button;
-import org.bcit.com2522.project.scuffed.ui.ButtonManager;
+import org.bcit.com2522.project.scuffed.client.*;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 import processing.core.PImage;
 
 /**
@@ -100,6 +101,7 @@ public class InGameHud extends HudState {
   private static final int BUILD_WORKER_BUTTON_X2 = 530;
   private static final int BUILD_WORKER_BUTTON_Y2 = 249;
   private static final int DEFAULT_STAT = 0;
+  public Button hudEndTurnButton;
 
   /**
    * Whether the unit is selected.
@@ -159,7 +161,7 @@ public class InGameHud extends HudState {
     createButtonManager();
 
     Button hudMenuButton = createMenuButton();
-    Button hudEndTurnButton = createEndTurnButton();
+    hudEndTurnButton = createEndTurnButton();
 
     buttonManager.add(hudMenuButton);
     buttonManager.add(hudEndTurnButton);
@@ -531,6 +533,7 @@ public class InGameHud extends HudState {
         },
         " ", workerButtonIcon, workerButtonIcon, workerButtonIcon, hud.scene);
   }
+
 
 }
 

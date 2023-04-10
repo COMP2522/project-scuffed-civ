@@ -12,10 +12,9 @@ import java.net.*;
 import java.util.*;
 
 /**
- * [CURRENTLY NON-FUNCTIONAL]
- * <p>
- * Coordinates the game state between multiple players using the ClientHandler inner class to designate a new
- * Thread for each new client. This version is meant to work for clients on the same wifi network as the host.
+ * The GameServer class is responsible for coordinating the game state between multiple players.
+ * It creates a new thread for each connected client using the ClientHandler inner class.
+ * The current version is designed to work with clients connected to the same Wi-Fi network as the host.
  *
  * @author Cameron Walford
  * @version 1.0
@@ -32,10 +31,10 @@ public class GameServer implements Runnable {
     private final List<ClientHandler> clients = Collections.synchronizedList(new LinkedList<>());
 
     /**
-     * Instantiates a new Game server.
+     * Constructs a new GameServer with the specified game state and port number.
      *
      * @param gameState the game state
-     * @param port      the port
+     * @param port      the port number
      */
     public GameServer(GameState gameState, int port) {
         this.gameState = gameState;
@@ -43,6 +42,10 @@ public class GameServer implements Runnable {
         this.hostIP = getLocalIpAddress();
     }
 
+    /**
+     * Runs the game server, initializing the game state, creating a server socket, and waiting for clients to connect.
+     */
+    @Override
     public void run() {
         gameState.init();
         try {
@@ -65,6 +68,11 @@ public class GameServer implements Runnable {
         System.out.println("All players connected! Press 'Start Game' to begin.");
     }
 
+    /**
+     * Checks if all players are connected to the server.
+     *
+     * @return true if all players are connected, false otherwise
+     */
     public boolean allPlayersConnected() {
         return clients.size() == gameState.players.size();
     }
@@ -81,8 +89,9 @@ public class GameServer implements Runnable {
                 if (client != currentPlayer) {
                     client.sendMessage("update");
                     client.sendGameState(updatedGameState);
-                } else {
-                    client.sendMessage("Your turn!");
+                }
+                if (client.playerID == gameState.getCurrentPlayerID()) {
+                    client.sendMessage("your turn");
                 }
             }
         }
@@ -99,10 +108,11 @@ public class GameServer implements Runnable {
     }
 
     /**
-     * Finds the local IP address of the machine running the server. This is for playing
-     * multiplayer on the same wifi network.
+     * Retrieves the local IP address (IPv4) of the machine running the server.
+     * This is for playing multiplayer games on the same Wi-Fi network.
      *
-     * @return String representation of the local IP address (IPV4)
+     * @return String representation of the local IP
+     * address (IPv4)
      */
     public static String getLocalIpAddress() {
         try {
@@ -126,42 +136,45 @@ public class GameServer implements Runnable {
     }
 
     /**
-     * Gets connected players.
+     * Gets the set of connected player's names.
      *
-     * @return the connected players
+     * @return the connected players' IP addresses as a HashSet of Strings
      */
     public HashSet<String> getConnectedPlayers() {
         HashSet<String> connectedPlayers = new HashSet<>();
         for (ClientHandler client : clients) {
-            connectedPlayers.add(client.clientSocket.getInetAddress().getHostAddress());
+            connectedPlayers.add(client.clientUsername);
         }
         return connectedPlayers;
     }
 
+    public String getIP() {
+        return hostIP;
+    }
+
+    public int getPort() {
+        return port;
+    }
 
     /**
-     * Handles each new connection made to the GameServer.
+     * The ClientHandler class is responsible for handling each new connection made to the GameServer.
+     * It associates a username with each particular client and manages the communication with the client.
      *
      * @author Cameron Walford
      * @version 1.0
      */
-    class ClientHandler extends Thread{
+    class ClientHandler extends Thread {
         private final Socket clientSocket;
-
-        /**
-         * The Client username.
-         */
         public String clientUsername;
-
         private final int playerID;
         private final ObjectOutputStream oos;
         private final ObjectInputStream ois;
 
         /**
-         * Instantiates a new Client handler, associating the username with each particular client.
+         * Constructs a new ClientHandler with the specified socket and player ID.
          *
-         * @param socket   the socket
-         * @param playerID
+         * @param socket   the client socket
+         * @param playerID the player ID
          */
         public ClientHandler(Socket socket, int playerID) {
             this.clientSocket = socket;
@@ -178,6 +191,10 @@ public class GameServer implements Runnable {
             }
         }
 
+        /**
+         * Runs the client handler, reading the client's username, sending the player ID, and managing the game loop.
+         */
+        @Override
         public void run() {
             try {
                 // Read the client's username
@@ -226,6 +243,11 @@ public class GameServer implements Runnable {
             }
         }
 
+        /**
+         * Receives the updated game state from the client.
+         *
+         * @return the updated GameState object, or null if an error occurs
+         */
         public GameState receiveUpdatedGameState() {
             try {
                 String gameStateString = (String) ois.readObject();
@@ -253,6 +275,11 @@ public class GameServer implements Runnable {
             }
         }
 
+        /**
+         * Sends a message to the client.
+         *
+         * @param message the message to send
+         */
         public void sendMessage(String message) {
             try {
                 oos.writeObject(message);
@@ -261,7 +288,5 @@ public class GameServer implements Runnable {
                 e.printStackTrace();
             }
         }
-
-
     }
 }

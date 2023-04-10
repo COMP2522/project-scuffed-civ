@@ -1,6 +1,7 @@
 package org.bcit.com2522.project.scuffed.client;
 
 import org.bcit.com2522.project.scuffed.ai.AIManager;
+import org.bcit.com2522.project.scuffed.hud.InGameHud;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

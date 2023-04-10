@@ -1,7 +1,8 @@
-package org.bcit.com2522.project.scuffed.client;
+package org.bcit.com2522.project.scuffed.hud;
 
-import org.bcit.com2522.project.scuffed.ui.Button;
-import org.bcit.com2522.project.scuffed.ui.ButtonManager;
+import org.bcit.com2522.project.scuffed.client.Window;
+import org.bcit.com2522.project.scuffed.uiComponents.Button;
+import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
 import processing.core.PFont;
 import processing.core.PImage;
 
