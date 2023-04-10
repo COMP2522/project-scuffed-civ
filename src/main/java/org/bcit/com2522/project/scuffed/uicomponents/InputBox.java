@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PApplet;
@@ -7,12 +7,16 @@ import processing.core.PApplet;
  * An input box that can be drawn on the screen.
  */
 public class InputBox {
-    private int x, y, width, height;
-    private String text;
-    private String type;
-    private Window scene;
-    private boolean selected;
-    private int minValue, maxValue;
+  private final int x;
+  private final int y;
+  private final int width;
+  private final int height;
+  private final String type;
+  private final int minValue;
+  private final int maxValue;
+  private String text;
+  private Window scene;
+  private boolean selected;
 
   /**
    * Instantiates a new Input box.
@@ -38,16 +42,16 @@ public class InputBox {
    * @param defaultText the default text
    */
   public InputBox(int x, int y, int width, int height, int minValue, int maxValue, String defaultText) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.text = defaultText;
-        this.selected = false;
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        this.type = "int";
-    }
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.text = defaultText;
+    this.selected = false;
+    this.minValue = minValue;
+    this.maxValue = maxValue;
+    this.type = "int";
+  }
 
   /**
    * Instantiates a new Input box.
@@ -60,36 +64,38 @@ public class InputBox {
    * @param type        the type
    */
   public InputBox(int x, int y, int width, int height, String defaultText, String type) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.text = defaultText;
-        this.selected = false;
-        this.minValue = Integer.MIN_VALUE;
-        this.maxValue = Integer.MAX_VALUE;
-        this.type = type;
-    }
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.text = defaultText;
+    this.selected = false;
+    this.minValue = Integer.MIN_VALUE;
+    this.maxValue = Integer.MAX_VALUE;
+    this.type = type;
+  }
 
   /**
    * Draw.
+   *
+   * @param scene the scene
    */
   public void draw(Window scene) {
 
-        scene.pushStyle();
-        scene.stroke(0);
-        if(selected) {
-            scene.fill(220);
-        } else {
-            scene.fill(255);
-        }
-        scene.rect(x, y, width, height);
-        scene.textSize(16);
-        scene.fill(0);
-        scene.text(text, x + 10, y + height - 10);
-
-        scene.popStyle();
+    scene.pushStyle();
+    scene.stroke(0);
+    if (selected) {
+      scene.fill(220);
+    } else {
+      scene.fill(255);
     }
+    scene.rect(x, y, width, height);
+    scene.textSize(16);
+    scene.fill(0);
+    scene.text(text, x + 10, y + height - 10);
+
+    scene.popStyle();
+  }
 
   /**
    * Is selected boolean.
@@ -97,8 +103,8 @@ public class InputBox {
    * @return the boolean
    */
   public boolean isSelected() {
-        return selected;
-    }
+    return selected;
+  }
 
   /**
    * Sets selected.
@@ -106,8 +112,8 @@ public class InputBox {
    * @param selected the selected
    */
   public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
+    this.selected = selected;
+  }
 
   /**
    * Add character.
@@ -115,23 +121,23 @@ public class InputBox {
    * @param c the c
    */
   public void addCharacter(char c) {
-        if(type.equalsIgnoreCase("string")) {
-            text += c;
-            return;
-        }
-        if (Character.isDigit(c)) {
-            text += c;
-        }
+    if (type.equalsIgnoreCase("string")) {
+      text += c;
+      return;
     }
+    if (Character.isDigit(c)) {
+      text += c;
+    }
+  }
 
   /**
    * Remove character.
    */
   public void removeCharacter() {
-        if (text.length() > 0) {
-            text = text.substring(0, text.length() - 1);
-        }
+    if (text.length() > 0) {
+      text = text.substring(0, text.length() - 1);
     }
+  }
 
   /**
    * Gets int value.
@@ -139,12 +145,12 @@ public class InputBox {
    * @return the int value
    */
   public int getIntValue() {
-        if(text.equals("")) {
-            return 0;
-        }
-        int value = Integer.parseInt(text);
-        return PApplet.constrain(value, minValue, maxValue);
+    if (text.equals("")) {
+      return 0;
     }
+    int value = Integer.parseInt(text);
+    return PApplet.constrain(value, minValue, maxValue);
+  }
 
   /**
    * Gets string value.
@@ -152,8 +158,8 @@ public class InputBox {
    * @return the string value
    */
   public String getStringValue() {
-        return text;
-    }
+    return text;
+  }
 
   /**
    * Is clicked boolean.
@@ -163,6 +169,6 @@ public class InputBox {
    * @return the boolean
    */
   public boolean isClicked(int mouseX, int mouseY) {
-        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
-    }
+    return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+  }
 }

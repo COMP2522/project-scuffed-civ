@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 import processing.core.PFont;
@@ -580,6 +580,11 @@ public class Button {
     scene.removeClickable(clickable);
   }
 
+  /**
+   * Sets active.
+   *
+   * @param toggle the toggle
+   */
   public void setActive(boolean toggle) {
   }
 }

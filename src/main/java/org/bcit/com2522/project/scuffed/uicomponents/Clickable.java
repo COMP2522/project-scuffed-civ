@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 /**
  * The type Clickable.
@@ -7,13 +7,16 @@ public class Clickable {
   /**
    * The X 1.
    */
-  int x1, /**
+  int x1,
+  /**
    * The Y 1.
    */
-  y1, /**
+  y1,
+  /**
    * The X 2.
    */
-  x2, /**
+  x2,
+  /**
    * The Y 2.
    */
   y2;

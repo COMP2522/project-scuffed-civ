@@ -1,4 +1,4 @@
-package org.bcit.com2522.project.scuffed.uiComponents;
+package org.bcit.com2522.project.scuffed.uicomponents;
 
 import org.bcit.com2522.project.scuffed.client.Window;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * The type Button manager.
  */
-public class ButtonManager{
+public class ButtonManager {
   /**
    * The Buttons.
    */
@@ -46,6 +46,8 @@ public class ButtonManager{
 
   /**
    * Draw.
+   *
+   * @param scene the scene
    */
   public void draw(Window scene) {
     for (Button button : buttons) {

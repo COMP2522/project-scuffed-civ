@@ -1,8 +1,8 @@
 package org.bcit.com2522.project.scuffed.hud;
 
 import org.bcit.com2522.project.scuffed.client.Window;
-import org.bcit.com2522.project.scuffed.uiComponents.Button;
-import org.bcit.com2522.project.scuffed.uiComponents.ButtonManager;
+import org.bcit.com2522.project.scuffed.uicomponents.Button;
+import org.bcit.com2522.project.scuffed.uicomponents.ButtonManager;
 import processing.core.PFont;
 import processing.core.PImage;
 
@@ -126,7 +126,7 @@ public abstract class HudState {
   /**
    * The Center x.
    */
-  // center of the screen
+// center of the screen
   int centerX;
   /**
    * The Center y.
@@ -165,7 +165,7 @@ public abstract class HudState {
    *
    * @param xpos the xpos
    * @param ypos the ypos
-   * @return boolean
+   * @return boolean boolean
    */
   public boolean clicked(int xpos, int ypos) {
     for (Button button : buttonManager.buttons) {

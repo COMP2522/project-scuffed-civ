@@ -1,12 +1,13 @@
 package org.bcit.com2522.project.scuffed.client;
-
 import org.bcit.com2522.project.scuffed.hud.Hud;
 import org.bcit.com2522.project.scuffed.menu.HostGameMenuState;
 import org.bcit.com2522.project.scuffed.menu.JoinGameMenuState;
 import org.bcit.com2522.project.scuffed.menu.Menu;
 import org.bcit.com2522.project.scuffed.menu.NewGameMenuState;
 import org.bcit.com2522.project.scuffed.server.GameServer;
-import org.bcit.com2522.project.scuffed.uiComponents.*;
+import org.bcit.com2522.project.scuffed.uicomponents.Clickable;
+import org.bcit.com2522.project.scuffed.uicomponents.ClickableManager;
+import org.bcit.com2522.project.scuffed.uicomponents.GraphicManager;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -31,10 +32,13 @@ public class Window extends PApplet {
    */
   public static HashMap<String, PImage> UIImages;
   /**
+   * The Debug menu.
+   */
+  static DebugMenu debugMenu;
+  /**
    * The In game.
    */
   public boolean inGame = false;
-
   /**
    * The Menu.
    */
@@ -48,10 +52,6 @@ public class Window extends PApplet {
    */
   public Boolean debugMode = false;
   /**
-   * The Debug menu.
-   */
-  static DebugMenu debugMenu;
-  /**
    * The Clickable manager.
    */
   public ClickableManager clickableManager;
@@ -59,6 +59,18 @@ public class Window extends PApplet {
    * The Graphic manager.
    */
   public GraphicManager graphicManager;
+
+  /**
+   * Main function.
+   *
+   * @param passedArgs arguments from command line
+   */
+  public static void main(String[] passedArgs) {
+    String[] appletArgs = new String[]{"eatBubbles"};
+    Window eatBubbles = new Window();
+    debugMenu = new DebugMenu(eatBubbles);
+    PApplet.runSketch(appletArgs, eatBubbles);
+  }
 
   /**
    * Called once at the beginning of the program.
@@ -90,14 +102,14 @@ public class Window extends PApplet {
   /**
    * This initializes one HashMap to hold the PImages for all classes
    */
-  public void initPImages(){
+  public void initPImages() {
     //Images for the GameBoard. Tiles, Units, Buildings, etc.
     GameImages = new HashMap<String, PImage>();
     GameImages.put("grassTile", loadImage("sprites/Menu/tile_grass.png"));
     GameImages.put("rockTile", loadImage("sprites/Menu/tile_rocks.png"));
     GameImages.put("waterTile", loadImage("sprites/Menu/tile_water.png"));
     GameImages.put("sandTile", loadImage("sprites/Menu/tile_sand.png"));
-    GameImages.put("soldier", loadImage( "sprites/soldierUnit.png"));
+    GameImages.put("soldier", loadImage("sprites/soldierUnit.png"));
     GameImages.put("worker", loadImage("sprites/workerUnit.png"));
     GameImages.put("building", loadImage("sprites/buildingUnit.png"));
     GameImages.put("select", loadImage("sprites/select.png"));
@@ -145,7 +157,7 @@ public class Window extends PApplet {
    * @param numplayers the numplayers
    * @param mapwidth   the mapwidth
    * @param mapheight  the mapheight
-   * @param numAI
+   * @param numAI      the num ai
    */
   public void initGame(int numplayers, int mapwidth, int mapheight, int numAI) {
     gameInstance = new GameInstance(new Hud(this), new GameState(numplayers, mapwidth, mapheight, numAI));
@@ -154,7 +166,7 @@ public class Window extends PApplet {
 
   @Override
   public void keyPressed() {
-    if(inGame) {
+    if (inGame) {
       gameInstance.keyPressed(key, this);
     }
     if (keyCode == 114) {
@@ -163,24 +175,21 @@ public class Window extends PApplet {
     if (keyCode == ESC) {
       key = 0;
     }
-    if(menu.currentState instanceof NewGameMenuState){
-        NewGameMenuState newGameMenuState = (NewGameMenuState) menu.currentState;
-        newGameMenuState.keyPressed(key);
+    if (menu.currentState instanceof NewGameMenuState newGameMenuState) {
+      newGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof HostGameMenuState){
-        HostGameMenuState hostGameMenuState = (HostGameMenuState) menu.currentState;
-        hostGameMenuState.keyPressed(key);
+    if (menu.currentState instanceof HostGameMenuState hostGameMenuState) {
+      hostGameMenuState.keyPressed(key);
     }
-    if(menu.currentState instanceof JoinGameMenuState){
-        JoinGameMenuState joinGameMenuState = (JoinGameMenuState) menu.currentState;
-        joinGameMenuState.keyPressed(key);
+    if (menu.currentState instanceof JoinGameMenuState joinGameMenuState) {
+      joinGameMenuState.keyPressed(key);
     }
   }
 
   @Override
   public void mouseClicked() {
     PVector mousePos = new PVector(mouseX, mouseY);
-    if(inGame) {
+    if (inGame) {
       gameInstance.clicked(mousePos, this);
       surface.setTitle("Scuffed Civ");
     } else {
@@ -196,7 +205,7 @@ public class Window extends PApplet {
    */
   public void draw() {
     background(222);
-    if(inGame){
+    if (inGame) {
       background(UIImages.get("background"));
       gameInstance.draw(this);
     } else {
@@ -204,12 +213,11 @@ public class Window extends PApplet {
       menu.draw(this);
     }
     // Debug Info - Can be added to
-    if(debugMode) {
+    if (debugMode) {
       debugMenu.draw(this);
     }
     graphicManager.drawGraphics();
   }
-
 
   /**
    * Add clickable.
@@ -307,19 +315,6 @@ public class Window extends PApplet {
     gameInstance.setGameServer(gameServer);
     gameInstance.startServer();
     //TODO: make host join server as well
-  }
-
-
-  /**
-   * Main function.
-   *
-   * @param passedArgs arguments from command line
-   */
-  public static void main(String[] passedArgs) {
-    String[] appletArgs = new String[]{"eatBubbles"};
-    Window eatBubbles = new Window();
-    debugMenu = new DebugMenu(eatBubbles);
-    PApplet.runSketch(appletArgs, eatBubbles);
   }
 
   /**

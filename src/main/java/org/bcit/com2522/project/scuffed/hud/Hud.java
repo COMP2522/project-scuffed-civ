@@ -56,7 +56,7 @@ public class Hud {
    * current HUDState object. Is responsible for handling mouse clicks.
    *
    * @param mousePos the mouse pos
-   * @return boolean
+   * @return boolean boolean
    */
   public boolean clicked(PVector mousePos) {
 

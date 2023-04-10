@@ -2,14 +2,12 @@ package org.bcit.com2522.project.scuffed.client;
 
 import org.json.simple.JSONObject;
 
-import java.io.Serializable;
-
 /**
  * Represents the position on the map, this should only be used to reference location relative to the map, not relative to the screen >:(
  */
-public class Position{
-    private int x;
-    private int y;
+public class Position {
+  private int x;
+  private int y;
 
   /**
    * Instantiates a new Position.
@@ -18,19 +16,9 @@ public class Position{
    * @param y the y
    */
   public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-  /**
-   * Equals boolean.
-   *
-   * @param other the other
-   * @return the boolean
-   */
-  public boolean equals(Position other) {
-        return x == other.x && y == other.y;
-    }
+    this.x = x;
+    this.y = y;
+  }
 
   /**
    * From json object position.
@@ -39,10 +27,20 @@ public class Position{
    * @return the position
    */
   public static Position fromJSONObject(JSONObject positionObject) {
-        int x = ((Number) positionObject.get("x")).intValue();
-        int y = ((Number) positionObject.get("y")).intValue();
-        return new Position(x, y);
-    }
+    int x = ((Number) positionObject.get("x")).intValue();
+    int y = ((Number) positionObject.get("y")).intValue();
+    return new Position(x, y);
+  }
+
+  /**
+   * Equals boolean.
+   *
+   * @param other the other
+   * @return the boolean
+   */
+  public boolean equals(Position other) {
+    return x == other.x && y == other.y;
+  }
 
   /**
    * Gets x.
@@ -50,17 +48,8 @@ public class Position{
    * @return the x
    */
   public int getX() {
-        return x;
-    }
-
-  /**
-   * Gets y.
-   *
-   * @return the y
-   */
-  public int getY() {
-        return y;
-    }
+    return x;
+  }
 
   /**
    * Sets x.
@@ -68,8 +57,17 @@ public class Position{
    * @param x the x
    */
   public void setX(int x) {
-        this.x = x;
-    }
+    this.x = x;
+  }
+
+  /**
+   * Gets y.
+   *
+   * @return the y
+   */
+  public int getY() {
+    return y;
+  }
 
   /**
    * Sets y.
@@ -77,8 +75,8 @@ public class Position{
    * @param y the y
    */
   public void setY(int y) {
-        this.y = y;
-    }
+    this.y = y;
+  }
 
   /**
    * To json object json object.
@@ -86,17 +84,17 @@ public class Position{
    * @return the json object
    */
   public JSONObject toJSONObject() {
-        JSONObject obj = new JSONObject();
-        obj.put("x", x);
-        obj.put("y", y);
-        return obj;
-    }
+    JSONObject obj = new JSONObject();
+    obj.put("x", x);
+    obj.put("y", y);
+    return obj;
+  }
 
-    @Override
-    public String toString() {
-        return "Position{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Position{" +
+            "x=" + x +
+            ", y=" + y +
+            '}';
+  }
 }

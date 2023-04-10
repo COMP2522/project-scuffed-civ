@@ -21,9 +21,9 @@ public class Menu {
    * @param scene the scene
    */
   public Menu(Window scene) {
-        this.scene = scene;
-        this.currentState = new MainMenuMenuState( this);
-    }
+    this.scene = scene;
+    this.currentState = new MainMenuMenuState(this);
+  }
 
   /**
    * Sets state.
@@ -31,16 +31,18 @@ public class Menu {
    * @param newState the new state
    */
   public void setState(MenuState newState) {
-        scene.wipeGraphics();
-        this.currentState = newState;
-    }
+    scene.wipeGraphics();
+    this.currentState = newState;
+  }
 
   /**
    * Draw.
+   *
+   * @param scene the scene
    */
   public void draw(Window scene) {
-        currentState.draw(scene);
-    }
+    currentState.draw(scene);
+  }
 
   /**
    * Clicked boolean.
@@ -50,7 +52,7 @@ public class Menu {
    * @return the boolean
    */
   public boolean clicked(int xpos, int ypos) {
-        return currentState.clicked(xpos, ypos);
-    }
+    return currentState.clicked(xpos, ypos);
+  }
 
- }
+}
