@@ -147,17 +147,17 @@ Once the settings are chosen, click on the "Start" button to start the game.
 
 **Left Side**: Your selected units stats.
 
-***1.*** Gathered materials.
+  ***1.*** Gathered materials.
 
-***2.*** Unit health.
+  ***2.*** Unit health.
 
-***3.*** Unit attack damage.
+  ***3.*** Unit attack damage.
 
-***4.*** Unit attack range.
+  ***4.*** Unit attack range.
 
-***5.*** Unit movement range.
+  ***5.*** Unit movement range.
 
-***6.*** Unit cost.
+  ***6.*** Unit cost.
 
 **Right Side**: Keybinds.
 
