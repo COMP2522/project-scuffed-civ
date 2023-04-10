@@ -27,7 +27,7 @@ public class LoadingMenuState extends MenuState {
 
 
     @Override
-    public void draw() {
+    public void draw(Window scene) {
         scene.background(200);
         scene.fill(0);
         scene.textSize(24);

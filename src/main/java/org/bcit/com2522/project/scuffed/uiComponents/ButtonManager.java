@@ -47,7 +47,7 @@ public class ButtonManager{
   /**
    * Draw.
    */
-  public void draw() {
+  public void draw(Window scene) {
     for (Button button : buttons) {
       button.draw(scene);
     }

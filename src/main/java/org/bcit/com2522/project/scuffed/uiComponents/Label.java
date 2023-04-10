@@ -123,11 +123,11 @@ public class Label{
   /**
    * Draw.
    */
-  public void draw() {
-        scene.pushStyle();
-        scene.fill(255, 255, 255);
-        scene.textSize(textSize);
-        scene.text(text, x, y);
-        scene.popStyle();
+  public void draw(Window scene) {
+        this.scene.pushStyle();
+        this.scene.fill(255, 255, 255);
+        this.scene.textSize(textSize);
+        this.scene.text(text, x, y);
+        this.scene.popStyle();
     }
 }

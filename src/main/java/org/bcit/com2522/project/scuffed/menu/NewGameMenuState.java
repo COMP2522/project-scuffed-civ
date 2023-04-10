@@ -60,17 +60,17 @@ public class NewGameMenuState extends MenuState {
     }
 
     @Override
-    public void draw() {
-        super.draw();
-        mapWidthInput.draw();
-        mapHeightInput.draw();
-        numPlayersInput.draw();
-        mapWidthLabel.draw();
-        mapHeightLabel.draw();
-        numPlayersLabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        mapWidthInput.draw(scene);
+        mapHeightInput.draw(scene);
+        numPlayersInput.draw(scene);
+        mapWidthLabel.draw(scene);
+        mapHeightLabel.draw(scene);
+        numPlayersLabel.draw(scene);
 
         if(showError) {
-            errorMessageLabel.draw();
+            errorMessageLabel.draw(scene);
         }
         drawHollowGrid(mapWidthInput.getIntValue(), mapHeightInput.getIntValue(), 400, 100, 800, 500);
     }

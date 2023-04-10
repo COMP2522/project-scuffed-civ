@@ -46,7 +46,7 @@ public class Graphic {
   /**
    * Draw.
    */
-  public void draw() {
+  public void draw(Window scene) {
     scene.image(texture, x, y);
   }
 

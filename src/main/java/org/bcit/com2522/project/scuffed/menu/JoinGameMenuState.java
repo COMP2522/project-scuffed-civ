@@ -55,17 +55,17 @@ public class JoinGameMenuState extends MenuState {
 
 
     @Override
-    public void draw() {
-        super.draw();
-        portInput.draw();
-        portInputLabel.draw();
-        hostIPInput.draw();
-        hostIPInputLabel.draw();
-        usernameInput.draw();
-        usernameInputLabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        portInput.draw(scene);
+        portInputLabel.draw(scene);
+        hostIPInput.draw(scene);
+        hostIPInputLabel.draw(scene);
+        usernameInput.draw(scene);
+        usernameInputLabel.draw(scene);
 
         if (showError) {
-            errorMessageLabel.draw();
+            errorMessageLabel.draw(scene);
         }
     }
 

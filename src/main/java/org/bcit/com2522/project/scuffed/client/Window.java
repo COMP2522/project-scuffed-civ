@@ -200,11 +200,11 @@ public class Window extends PApplet {
       gameInstance.draw(this);
     } else {
       background(222);
-      menu.draw();
+      menu.draw(this);
     }
     // Debug Info - Can be added to
     if(debugMode) {
-      debugMenu.draw();
+      debugMenu.draw(this);
     }
     graphicManager.drawGraphics();
   }

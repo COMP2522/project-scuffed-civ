@@ -43,11 +43,11 @@ public class ServerLobbyMenuState extends MenuState {
     }
 
     @Override
-    public void draw() {
-        super.draw();
-        titleLabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        titleLabel.draw(scene);
         playersLabel.setText("Players Currently Connected: " + scene.getConnectedPlayers().size());
-        playersLabel.draw();
+        playersLabel.draw(scene);
     }
 
     public void onBackClicked() {

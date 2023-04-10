@@ -28,7 +28,7 @@ public class HostGameMenuState extends MenuState {
    * @param scene the scene
    * @param menu  the menu
    */
-  public HostGameMenuState(Window scene, Menu menu) {
+  public HostGameMenuState(Window scene,Menu menu) {
         super(scene, menu, new ButtonManager(scene));
         setup();
     }
@@ -54,19 +54,19 @@ public class HostGameMenuState extends MenuState {
     }
 
     @Override
-    public void draw() {
-        super.draw();
-        portInput.draw();
-        mapWidthInput.draw();
-        mapHeightInput.draw();
-        numPlayersInput.draw();
-        portInputLabel.draw();
-        mapWidthLabel.draw();
-        mapHeightLabel.draw();
-        numPlayersLabel.draw();
+    public void draw(Window scene) {
+        super.draw(scene);
+        portInput.draw(scene);
+        mapWidthInput.draw(scene);
+        mapHeightInput.draw(scene);
+        numPlayersInput.draw(scene);
+        portInputLabel.draw(scene);
+        mapWidthLabel.draw(scene);
+        mapHeightLabel.draw(scene);
+        numPlayersLabel.draw(scene);
 
         if(showError) {
-            errorMessageLabel.draw();
+            errorMessageLabel.draw(scene);
         }
     }
 

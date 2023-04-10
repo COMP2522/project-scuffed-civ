@@ -38,8 +38,8 @@ public class Menu {
   /**
    * Draw.
    */
-  public void draw() {
-        currentState.draw();
+  public void draw(Window scene) {
+        currentState.draw(scene);
     }
 
   /**

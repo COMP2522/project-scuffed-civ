@@ -105,7 +105,7 @@ public class MainMenuMenuState extends MenuState implements PConstants {
             menu.setState(new MainMenuMenuState(scene, menu));
 
         } else {
-            errorMessage.draw();
+            errorMessage.draw(scene);
         }
     }
 

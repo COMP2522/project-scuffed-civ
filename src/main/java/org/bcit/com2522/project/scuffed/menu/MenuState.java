@@ -38,8 +38,8 @@ public abstract class MenuState {
   /**
    * Draw.
    */
-  public void draw() {
-        buttonManager.draw();
+  public void draw(Window scene) {
+        buttonManager.draw(scene);
     }
 
   /**

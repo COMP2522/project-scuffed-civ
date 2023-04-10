@@ -63,7 +63,7 @@ public class GraphicManager {
    */
   public void drawGraphics() {
     for (Graphic graphic : graphicArrayList) {
-      graphic.draw();
+      graphic.draw(scene);
     }
   }
 

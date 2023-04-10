@@ -112,7 +112,7 @@ public class InputBox {
   /**
    * Draw.
    */
-  public void draw() {
+  public void draw(Window scene) {
 
         scene.pushStyle();
         scene.stroke(0);
