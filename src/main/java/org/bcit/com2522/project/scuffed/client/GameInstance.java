@@ -167,6 +167,13 @@ public class GameInstance {
         gameState.init();
     }
 
+    public void nextTurn(){
+        gameState.nextTurn();
+        if(isOnline){
+            sendGameState(gameState);
+        }
+    }
+
     /**
      * Send game state.
      *
@@ -174,12 +181,19 @@ public class GameInstance {
      */
     public void sendGameState(GameState gameState) {
         try {
-            oos.writeObject(gameState.toJSONObject());
+            // Send endturn message
+            oos.writeObject("nextTurn");
+            oos.flush();
+
+            // Send updated game state
+            JSONObject gameStateJSON = gameState.toJSONObject();
+            oos.writeObject(gameStateJSON.toJSONString());
             oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Receive game state.
@@ -215,26 +229,53 @@ public class GameInstance {
             clientID = (int)ois.readObject();
             System.out.println("Client ID: " + clientID);
 
-            // Continuously send and receive messages
-            while (true) {
-                String serverMessage = (String) ois.readObject();
-                if(serverMessage.equals("start")){
-                    System.out.println("Starting game");
-                    break;
-                }
-                System.out.println("Received message from server: " + serverMessage);
+            // Continuously send and receive
+            Thread serverListener = new Thread(() -> {
+                try {
+                    while (true) {
+                        String serverMessage = (String) ois.readObject();
+                        if(serverMessage.equals("start")){
+                            System.out.println("Starting game");
+                            break;
+                        }
+                        System.out.println("Received message from server: " + serverMessage);
 
-                oos.writeObject("Hello, server! This is a message from " + clientUsername + ".");
-                oos.flush();
-            }
-            oos.writeObject("received");
-            oos.flush();
-            receiveGameState();
+                        oos.writeObject("Hello, server! This is a message from " + clientUsername + ".");
+                        oos.flush();
+                    }
+
+                    // Receive initial game state from server after all clients connect
+                    oos.writeObject("received");
+                    oos.flush();
+                    receiveGameState();
+
+                    // Continuously receive game state updates from server
+                    while (true) {
+                        String serverMessage = (String) ois.readObject();
+                        if (serverMessage.equals("Your turn!")) {
+                            System.out.println("It's my turn!");
+                            // Handle the turn on the client-side
+                        } else if (serverMessage.equals("Waiting for other players...")) {
+                            System.out.println("Waiting for other players to finish...");
+                        } else if (serverMessage.equals("update")) {
+                            System.out.println("Received update message on client: " + clientID);
+                            receiveGameState();
+                            hud.setState(new InGameHud(hud));
+                        }
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
+            serverListener.start();
+
         } catch (Exception e) {
             System.out.println("Error connecting to server at " + hostIP + ":" + port);
             e.printStackTrace();
         }
     }
+
+
 
 
     /**

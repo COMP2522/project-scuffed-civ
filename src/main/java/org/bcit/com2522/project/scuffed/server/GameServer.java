@@ -2,6 +2,8 @@ package org.bcit.com2522.project.scuffed.server;
 
 import org.bcit.com2522.project.scuffed.client.GameState;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -41,35 +43,6 @@ public class GameServer implements Runnable {
         this.hostIP = getLocalIpAddress();
     }
 
-//    public void run() {
-//        try {
-//            serverSocket = new ServerSocket(port);
-//            System.out.println("Server started on " + hostIP + ":" + port);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        while (!allPlayersConnected()) {
-//            System.out.println("Waiting for client connections on port " + port + "...");
-//            try {
-//                Socket clientSocket = serverSocket.accept();
-//                ObjectInputStream tempOis = new ObjectInputStream(clientSocket.getInputStream());
-//                String clientUsername = (String) tempOis.readObject();
-//                ClientHandler client = new ClientHandler(clientSocket, clientUsername, clients.size());
-//                System.out.println("Client connected from " + client.clientSocket.getInetAddress().getHostAddress() + " with username " + clientUsername + " ID: " + clients.size());
-//                clients.add(client);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            } catch (ClassNotFoundException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        System.out.println("All players connected! Press 'Start Game' to begin.");
-//
-//        for (ClientHandler client : clients) {
-//            sendInitialGameState(client);
-//        }
-//    }
-
     public void run() {
         gameState.init();
         try {
@@ -106,7 +79,10 @@ public class GameServer implements Runnable {
         synchronized (clients) {
             for (ClientHandler client : clients) {
                 if (client != currentPlayer) {
+                    client.sendMessage("update");
                     client.sendGameState(updatedGameState);
+                } else {
+                    client.sendMessage("Your turn!");
                 }
             }
         }
@@ -230,15 +206,13 @@ public class GameServer implements Runnable {
 
                 // Game loop
                 while (true) {
-                    if (gameState.currentPlayer.getPlayerNum() == playerID) {
-                        oos.writeObject("Your turn!");
-                        oos.flush();
-                        System.out.println("Sent message to client " + clientUsername + ": Your turn!");
-                        clientMessage = (String) ois.readObject();
-                        if (clientMessage.equals("received")) {
-                            System.out.println("Client received game state.");
+                    String serverMessage = (String) ois.readObject();
+                    if (serverMessage.equals("nextTurn")) {
+                        GameState updatedGameState = receiveUpdatedGameState();
+                        if (updatedGameState != null) {
+                            gameState = updatedGameState;
+                            broadcastGameState(gameState, this);
                         }
-
                     }
                 }
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
@@ -250,6 +224,18 @@ public class GameServer implements Runnable {
                     e.printStackTrace();
                 }
             }
+        }
+
+        public GameState receiveUpdatedGameState() {
+            try {
+                String gameStateString = (String) ois.readObject();
+                JSONObject gameStateJSON = (JSONObject) new JSONParser().parse(gameStateString);
+                System.out.println("Received updated game state: " + gameStateJSON.toJSONString());
+                return GameState.fromJSONObject(gameStateJSON);
+            } catch (IOException | ClassNotFoundException | ParseException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         /**

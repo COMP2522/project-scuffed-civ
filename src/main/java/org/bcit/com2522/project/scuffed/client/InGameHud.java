@@ -234,8 +234,12 @@ public class InGameHud extends HudState {
         centerX + MENU_BUTTON_X2, centerY - MENU_BUTTON_Y,
         centerX + MENU_BUTTON_X, centerY - MENU_BUTTON_Y2,
         () -> {
-          hud.scene.gameInstance.gameState.nextTurn();
-          System.out.println("ending turn - inGameHud");
+          if(hud.scene.gameInstance.isOnline && hud.scene.gameInstance.clientID != hud.scene.getCurrentPlayer().getPlayerNum()){
+            System.out.println("Not your turn");
+          }else{
+            hud.scene.gameInstance.nextTurn();
+            //System.out.println("ending turn - inGameHud");
+          }
         }, "End Turn", panel, panel, panel, hud.scene,
         rivetPanel, true, BUTTON_FONT_SIZE, END_BUTTON_FONT_X, BUTTON_FONT_Y);
   }
@@ -247,6 +251,7 @@ public class InGameHud extends HudState {
    */
   @Override
   public void draw(Window scene) {
+
     drawUiPanels(scene);
     drawIcons(scene);
     drawPlayerInfo(scene);
